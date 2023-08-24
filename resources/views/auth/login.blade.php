@@ -10,11 +10,11 @@
     <div class="row h-100">
         <div class="col-lg-6 col-12">
             <div id="auth-left">
-                <div class="auth-logo">
+                {{-- <div class="auth-logo">
                     <a href="/">
                         <img src="{{ asset('mazer') }}/images/logo/logo.svg" alt="Logo">
                     </a>
-                </div>
+                </div> --}}
 
                 <h1 class="auth-title">{{ __('Log in.') }}</h1>
                 <p class="auth-subtitle mb-3">{{ __('Log in with your data that you entered during registration.') }}</p>

@@ -10,9 +10,9 @@
     <div class="row h-100">
         <div class="col-lg-7 col-12">
             <div id="auth-left">
-                <div class="auth-logo" class="mb-0">
+                {{-- <div class="auth-logo" class="mb-0">
                     <a href="/"><img src="{{ asset('mazer') }}/images/logo/logo.svg" alt="Logo"></a>
-                </div>
+                </div> --}}
 
                 <h1 class="auth-title">{{ __('Forgot Password.') }}</h1>
 
