@@ -109,65 +109,96 @@ return [
      * This code below always changes when you use a generator and maybe you must lint or format the code.
      */
     'sidebars' => [
-        [
-            'header' => 'Setting',
-            'permissions' => [
-                'company view'
-            ],
-            'menus' => [
-                [
-                    'title' => 'Setting Apps',
-                    'icon' => '<i class="bi bi-gear"></i>',
-                    'route' => null,
-                    'permission' => null,
-                    'permissions' => [
-                        'company view'
-                    ],
-                    'submenus' => [
-                        [
-                            'title' => 'Tests',
-                            'route' => '/tests',
-                            'permission' => 'test view'
-                        ],
-                        [
-                            'title' => 'Companies',
-                            'route' => '/companies',
-                            'permission' => 'company view'
-                        ]
+    [
+        'header' => 'Main',
+        'permissions' => [
+            'bank view'
+        ],
+        'menus' => [
+            [
+                'title' => 'Main Data',
+                'icon' => '<i class="bi bi-list-ul"></i>',
+                'route' => null,
+                'permission' => null,
+                'permissions' => [
+                    'bank view'
+                ],
+                'submenus' => [
+                    [
+                        'title' => 'Banks',
+                        'route' => '/banks',
+                        'permission' => 'bank view'
                     ]
                 ]
             ]
+        ]
+    ],
+    [
+        'header' => 'Setting',
+        'permissions' => [
+            'company view',
+            'bank account view'
         ],
-        [
-            'header' => 'Utilities',
-            'permissions' => [
-                'user view',
-                'role & permission view'
-            ],
-            'menus' => [
-                [
-                    'title' => 'Users & Roles',
-                    'icon' => '<i class="bi bi-people"></i>',
-                    'route' => null,
-                    'permission' => null,
-                    'permissions' => [
-                        'user view',
-                        'role & permission view'
+        'menus' => [
+            [
+                'title' => 'Setting Apps',
+                'icon' => '<i class="bi bi-gear"></i>',
+                'route' => null,
+                'permission' => null,
+                'permissions' => [
+                    'company view',
+                    'bank account view'
+                ],
+                'submenus' => [
+                    [
+                        'title' => 'Tests',
+                        'route' => '/tests',
+                        'permission' => 'test view'
                     ],
-                    'submenus' => [
-                        [
-                            'title' => 'Users',
-                            'route' => '/users',
-                            'permission' => 'user view'
-                        ],
-                        [
-                            'title' => 'Roles & permissions',
-                            'route' => '/roles',
-                            'permission' => 'role & permission view'
-                        ]
+                    [
+                        'title' => 'Companies',
+                        'route' => '/companies',
+                        'permission' => 'company view'
+                    ],
+                    [
+                        'title' => 'Bank Accounts',
+                        'route' => '/bank-accounts',
+                        'permission' => 'bank account view'
+                    ]
+                ]
+            ]
+        ]
+    ],
+    [
+        'header' => 'Utilities',
+        'permissions' => [
+            'user view',
+            'role & permission view'
+        ],
+        'menus' => [
+            [
+                'title' => 'Users & Roles',
+                'icon' => '<i class="bi bi-people"></i>',
+                'route' => null,
+                'permission' => null,
+                'permissions' => [
+                    'user view',
+                    'role & permission view'
+                ],
+                'submenus' => [
+                    [
+                        'title' => 'Users',
+                        'route' => '/users',
+                        'permission' => 'user view'
+                    ],
+                    [
+                        'title' => 'Roles & permissions',
+                        'route' => '/roles',
+                        'permission' => 'role & permission view'
                     ]
                 ]
             ]
         ]
     ]
+]
 ];

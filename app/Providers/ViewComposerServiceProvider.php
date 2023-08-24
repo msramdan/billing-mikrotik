@@ -31,5 +31,14 @@ class ViewComposerServiceProvider extends ServiceProvider
                 Role::select('id', 'name')->get()
             );
         });
-    }
+
+
+		View::composer(['bank-accounts.create', 'bank-accounts.edit'], function ($view) {
+            return $view->with(
+                'banks',
+                \App\Models\Bank::select('id', 'nama_bank')->get()
+            );
+        });
+
+	}
 }

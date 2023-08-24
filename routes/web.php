@@ -28,3 +28,6 @@ Route::middleware(['auth', 'web'])->group(function () {
 });
 
 Route::resource('companies', App\Http\Controllers\CompanyController::class)->middleware('auth');
+
+Route::resource('banks', App\Http\Controllers\BankController::class)->middleware('auth');
+Route::resource('bank-accounts', App\Http\Controllers\BankAccountController::class)->middleware('auth');

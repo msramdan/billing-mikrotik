@@ -182,5 +182,5 @@ return [
             ]
         ],
         ['group' => 'companies', 'access' => ['company view','company edit']],
-    ],
-];
+  ['group' => 'banks', 'access' => ['bank view', 'bank create', 'bank edit', 'bank delete']],['group' => 'bank accounts', 'access' => ['bank account view', 'bank account create', 'bank account edit', 'bank account delete']], 
+		],];
