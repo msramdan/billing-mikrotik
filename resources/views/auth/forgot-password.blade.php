@@ -55,12 +55,6 @@
                 </form>
 
                 <div class="text-center mt-4 text-lg fs-4">
-                    <p class="text-gray-600">{{ __("Don't have an account") }}?
-                        <a href="/register" class="font-bold">
-                            {{ __('Sign up.') }}
-                        </a>
-                    </p>
-
                     <p class="text-gray-600">{{ __('Already have an account') }}?
                         <a href="/login" class="font-bold">{{ __('Log in.') }}</a>
                     </p>

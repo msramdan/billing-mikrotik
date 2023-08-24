@@ -100,7 +100,7 @@
             <div class="col-md-4 text-center">
                 @if ($company->logo == null)
                     <img src="https://via.placeholder.com/350?text=No+Image+Avaiable" alt="Logo"
-                        class="rounded mb-2 mt-2" alt="Logo" width="150" height="150"
+                        class="rounded mb-2 mt-2" alt="Logo" style="width: 100%"
                         style="object-fit: cover">
                 @else
                     <img src="{{ asset('storage/uploads/logos/' . $company->logo) }}" alt="Logo"
@@ -130,7 +130,7 @@
             <div class="col-md-2 text-center">
                 @if ($company->favicon == null)
                     <img src="https://via.placeholder.com/350?text=No+Image+Avaiable" alt="Favicon"
-                        class="rounded mb-2 mt-2" alt="Favicon" width="150" height="150"
+                        class="rounded mb-2 mt-2" alt="Favicon" style="width: 100%"
                         style="object-fit: cover">
                 @else
                     <img src="{{ asset('storage/uploads/favicons/' . $company->favicon) }}" alt="Favicon"

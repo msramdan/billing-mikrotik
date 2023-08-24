@@ -70,12 +70,6 @@
                 </form>
 
                 <div class="text-center mt-4 text-lg fs-4">
-                    <p class="text-gray-600">{{ __("Don't have an account") }}?
-                        <a href="/register" class="font-bold">
-                            {{ __('Sign up.') }}
-                        </a>
-                    </p>
-
                     @if (Route::has('password.request'))
                         <p>
                             <a class="font-bold" href="{{ route('password.request') }}">

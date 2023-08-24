@@ -22,8 +22,8 @@ return new class extends Migration
 			$table->string('email')->unique();
 			$table->text('alamat');
 			$table->text('deskripsi_perusahaan');
-			$table->string('logo');
-			$table->string('favicon');
+			$table->string('logo')->nullable();
+			$table->string('favicon')->nullable();
             $table->timestamps();
         });
     }
