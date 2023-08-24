@@ -169,7 +169,7 @@ return [
                     ],
                     [
                         'title' => 'Wa Gateway',
-                        'route' => '/was',
+                        'route' => '/wa-gateways',
                         'permission' => 'wa gateway view'
                     ]
                 ]
