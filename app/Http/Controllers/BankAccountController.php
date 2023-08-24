@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BankAccount;
 use App\Http\Requests\{StoreBankAccountRequest, UpdateBankAccountRequest};
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\DB;
 
 class BankAccountController extends Controller
 {
@@ -24,11 +25,13 @@ class BankAccountController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $bankAccounts = BankAccount::with('bank:id,nama_bank');
-
+            $bankAccounts = DB::table('bank_accounts')
+            ->leftJoin('banks', 'bank_accounts.bank_id', '=', 'banks.id')
+            ->select('bank_accounts.*', 'banks.nama_bank')
+            ->get();
             return DataTables::of($bankAccounts)
                 ->addColumn('bank', function ($row) {
-                    return $row->bank ? $row->bank->nama_bank : '';
+                    return $row->nama_bank;
                 })->addColumn('action', 'bank-accounts.include.action')
                 ->toJson();
         }
