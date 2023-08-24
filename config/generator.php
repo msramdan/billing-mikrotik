@@ -110,53 +110,64 @@ return [
      */
     'sidebars' => [
         [
-            'header' => 'Main',
+            'header' => 'Setting',
             'permissions' => [
-                'test view'
+                'company view'
             ],
             'menus' => [
                 [
-                    'title' => 'Main Data',
-                    'icon' => '<i class="bi bi-collection-fill"></i>',
+                    'title' => 'Setting Apps',
+                    'icon' => '<i class="bi bi-gear"></i>',
                     'route' => null,
                     'permission' => null,
                     'permissions' => [
-                        'test view'
+                        'company view'
                     ],
                     'submenus' => [
                         [
                             'title' => 'Tests',
                             'route' => '/tests',
                             'permission' => 'test view'
+                        ],
+                        [
+                            'title' => 'Companies',
+                            'route' => '/companies',
+                            'permission' => 'company view'
                         ]
                     ]
                 ]
             ]
         ],
         [
-            'header' => 'Users',
+            'header' => 'Utilities',
             'permissions' => [
                 'user view',
                 'role & permission view'
             ],
             'menus' => [
                 [
-                    'title' => 'Users',
-                    'icon' => '<i class="bi bi-people-fill"></i>',
-                    'route' => '/users',
-                    'permission' => 'user view',
-                    'permissions' => [],
-                    'submenus' => []
-                ],
-                [
-                    'title' => 'Roles & permissions',
-                    'icon' => '<i class="bi bi-person-check-fill"></i>',
-                    'route' => '/roles',
-                    'permission' => 'role & permission view',
-                    'permissions' => [],
-                    'submenus' => []
-                ],
+                    'title' => 'Users & Roles',
+                    'icon' => '<i class="bi bi-people"></i>',
+                    'route' => null,
+                    'permission' => null,
+                    'permissions' => [
+                        'user view',
+                        'role & permission view'
+                    ],
+                    'submenus' => [
+                        [
+                            'title' => 'Users',
+                            'route' => '/users',
+                            'permission' => 'user view'
+                        ],
+                        [
+                            'title' => 'Roles & permissions',
+                            'route' => '/roles',
+                            'permission' => 'role & permission view'
+                        ]
+                    ]
+                ]
             ]
-        ],
-    ],
+        ]
+    ]
 ];

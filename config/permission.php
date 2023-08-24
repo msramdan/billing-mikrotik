@@ -181,11 +181,6 @@ return [
                 'role & permission delete',
             ]
         ],
-        [
-            'group' => 'tests',
-            'access' => [
-                'test view',
-            ]
-        ],
+        ['group' => 'companies', 'access' => ['company view','company edit']],
     ],
 ];
