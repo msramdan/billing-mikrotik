@@ -53,8 +53,6 @@
                 @foreach (config('generator.sidebars') as $sidebar)
                     @if (isset($sidebar['permissions']))
                         @canany($sidebar['permissions'])
-                            <li class="sidebar-title">{{ $sidebar['header'] }}</li>
-
                             @foreach ($sidebar['menus'] as $menu)
                                 @php
                                     $permissions = empty($menu['permission']) ? $menu['permissions'] : [$menu['permission']];
@@ -96,20 +94,6 @@
                         @endcanany
                     @endif
                 @endforeach
-
-                @if (env('APP_ENV') === 'local')
-                    <li class="sidebar-title">{{ __('Generators') }}</li>
-
-                    <li class="sidebar-item{{ request()->is('generators/create') ? ' active' : '' }}">
-                        <a class="sidebar-link" href="{{ route('generators.create') }}">
-                            <i class="bi bi-grid-fill"></i>
-                            <span> {{ __('CRUD Generator') }}</span>
-                        </a>
-                    </li>
-                @endif
-
-                <li class="sidebar-title">Account</li>
-
                 <li class="sidebar-item{{ request()->is('profile') ? ' active' : '' }}">
                     <a class="sidebar-link" href="{{ route('profile') }}">
                         <i class="bi bi-person-badge-fill"></i>

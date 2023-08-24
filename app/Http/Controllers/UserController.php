@@ -82,7 +82,7 @@ class UserController extends Controller
             Image::make($request->file('avatar')->getRealPath())->resize(500, 500, function ($constraint) {
                 $constraint->aspectRatio();
                 $constraint->upsize();
-            })->save($this->avatarPath . $filename);
+            })->save(public_path($this->avatarPath) . $filename);
 
             $attr['avatar'] = $filename;
         }
