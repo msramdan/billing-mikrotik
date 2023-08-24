@@ -137,7 +137,8 @@ return [
         'header' => 'Setting',
         'permissions' => [
             'company view',
-            'bank account view'
+            'bank account view',
+            'wa gateway view'
         ],
         'menus' => [
             [
@@ -147,7 +148,8 @@ return [
                 'permission' => null,
                 'permissions' => [
                     'company view',
-                    'bank account view'
+                    'bank account view',
+                    'wa gateway view'
                 ],
                 'submenus' => [
                     [
@@ -164,6 +166,11 @@ return [
                         'title' => 'Bank Accounts',
                         'route' => '/bank-accounts',
                         'permission' => 'bank account view'
+                    ],
+                    [
+                        'title' => 'Wa Gateway',
+                        'route' => '/wa-gateways',
+                        'permission' => 'wa gateway view'
                     ]
                 ]
             ]
