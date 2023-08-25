@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Package;
 use App\Http\Requests\{StorePackageRequest, UpdatePackageRequest};
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\DB;
+
 
 class PackageController extends Controller
 {
@@ -24,14 +26,17 @@ class PackageController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $packages = Package::with('package_category:id,nama_kategori');
+            $packages = DB::table('packages')
+            ->leftJoin('package_categories', 'packages.kategori_paket_id', '=', 'package_categories.id')
+            ->select('packages.*', 'package_categories.nama_kategori')
+            ->get();
 
             return DataTables::of($packages)
                 ->addColumn('keterangan', function($row){
                     return str($row->keterangan)->limit(100);
                 })
 				->addColumn('package_category', function ($row) {
-                    return $row->package_category ? $row->package_category->nama_kategori : '';
+                    return $row->nama_kategori;
                 })->addColumn('action', 'packages.include.action')
                 ->toJson();
         }
@@ -57,7 +62,7 @@ class PackageController extends Controller
      */
     public function store(StorePackageRequest $request)
     {
-        
+
         Package::create($request->validated());
 
         return redirect()
@@ -100,7 +105,7 @@ class PackageController extends Controller
      */
     public function update(UpdatePackageRequest $request, Package $package)
     {
-        
+
         $package->update($request->validated());
 
         return redirect()
