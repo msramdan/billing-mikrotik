@@ -181,12 +181,12 @@ return [
                 'role & permission delete',
             ]
         ],
-        ['group' => 'companies', 'access' => ['company view', 'company edit']],
-        ['group' => 'privacy policies', 'access' => ['privacy policy view','privacy policy edit']],
-        ['group' => 'wa gateways', 'access' => ['wa gateway view', 'wa gateway edit',]],
         ['group' => 'banks', 'access' => ['bank view', 'bank create', 'bank edit', 'bank delete']],
         ['group' => 'bank accounts', 'access' => ['bank account view', 'bank account create', 'bank account edit', 'bank account delete']],
         ['group' => 'package categories', 'access' => ['package category view', 'package category create', 'package category edit', 'package category delete']],
         ['group' => 'packages', 'access' => ['package view', 'package create', 'package edit', 'package delete']],
+        ['group' => 'companies', 'access' => ['company view', 'company edit']],
+        ['group' => 'privacy policies', 'access' => ['privacy policy view','privacy policy edit']],
+        ['group' => 'wa gateways', 'access' => ['wa gateway view', 'wa gateway edit',]],
     ],
 ];
