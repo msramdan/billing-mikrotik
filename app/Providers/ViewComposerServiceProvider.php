@@ -40,5 +40,13 @@ class ViewComposerServiceProvider extends ServiceProvider
             );
         });
 
+
+				View::composer(['packages.create', 'packages.edit'], function ($view) {
+            return $view->with(
+                'packageCategories',
+                \App\Models\PackageCategory::select('id', 'nama_kategori')->get()
+            );
+        });
+
 	}
 }

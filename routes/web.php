@@ -32,3 +32,7 @@ Route::resource('companies', App\Http\Controllers\CompanyController::class)->mid
 Route::resource('banks', App\Http\Controllers\BankController::class)->middleware('auth');
 Route::resource('bank-accounts', App\Http\Controllers\BankAccountController::class)->middleware('auth');
 Route::resource('wa-gateways', App\Http\Controllers\WaGatewayController::class)->middleware('auth');
+
+Route::resource('package-categories', App\Http\Controllers\PackageCategoryController::class)->middleware('auth');
+Route::resource('packages', App\Http\Controllers\PackageController::class)->middleware('auth');
+Route::resource('privacy-policies', App\Http\Controllers\PrivacyPolicyController::class)->middleware('auth');

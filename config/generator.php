@@ -134,11 +134,43 @@ return [
         ]
     ],
     [
+        'header' => 'Package',
+        'permissions' => [
+            'package view',
+            'package category view'
+        ],
+        'menus' => [
+            [
+                'title' => 'Package',
+                'icon' => '<i class="bi bi-boxes"></i>',
+                'route' => null,
+                'permission' => null,
+                'permissions' => [
+                    'package view',
+                    'package category view'
+                ],
+                'submenus' => [
+                    [
+                        'title' => 'Packages',
+                        'route' => '/packages',
+                        'permission' => 'package view'
+                    ],
+                    [
+                        'title' => 'Package Categories',
+                        'route' => '/package-categories',
+                        'permission' => 'package category view'
+                    ]
+                ]
+            ]
+        ]
+    ],
+    [
         'header' => 'Setting',
         'permissions' => [
             'company view',
             'bank account view',
-            'wa gateway view'
+            'wa gateway view',
+            'privacy policy view'
         ],
         'menus' => [
             [
@@ -149,18 +181,19 @@ return [
                 'permissions' => [
                     'company view',
                     'bank account view',
-                    'wa gateway view'
+                    'wa gateway view',
+                    'privacy policy view'
                 ],
                 'submenus' => [
-                    [
-                        'title' => 'Tests',
-                        'route' => '/tests',
-                        'permission' => 'test view'
-                    ],
                     [
                         'title' => 'Companies',
                         'route' => '/companies',
                         'permission' => 'company view'
+                    ],
+                    [
+                        'title' => 'Privacy Policies',
+                        'route' => '/privacy-policies',
+                        'permission' => 'privacy policy view'
                     ],
                     [
                         'title' => 'Bank Accounts',
