@@ -186,7 +186,9 @@ return [
         ['group' => 'package categories', 'access' => ['package category view', 'package category create', 'package category edit', 'package category delete']],
         ['group' => 'packages', 'access' => ['package view', 'package create', 'package edit', 'package delete']],
         ['group' => 'companies', 'access' => ['company view', 'company edit']],
-        ['group' => 'privacy policies', 'access' => ['privacy policy view','privacy policy edit']],
+        ['group' => 'privacy policies', 'access' => ['privacy policy view', 'privacy policy edit']],
         ['group' => 'wa gateways', 'access' => ['wa gateway view', 'wa gateway edit',]],
-  ['group' => 'area coverages', 'access' => ['area coverage view', 'area coverage create', 'area coverage edit', 'area coverage delete']], 
-		],];
+        ['group' => 'area coverages', 'access' => ['area coverage view', 'area coverage create', 'area coverage edit', 'area coverage delete']],
+        ['group' => 'profile pppoes', 'access' => ['profile pppoe view']],
+    ],
+];

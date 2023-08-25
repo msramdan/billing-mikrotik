@@ -134,6 +134,31 @@ return [
             ]
         ],
         [
+            'header' => 'PPpOE',
+            'permissions' => [
+                'profile pppoe view'
+            ],
+            'menus' => [
+                [
+                    'title' => 'PPPOE & Static',
+                    'icon' => '<i class="bi bi-list-ul"></i>',
+                    'route' => null,
+                    'permission' => null,
+                    'permissions' => [
+                        'profile pppoe view'
+                    ],
+                    'submenus' => [
+                        [
+                            'title' => 'Profile PPP',
+                            'route' => '/profile-pppoes',
+                            'permission' => 'profile pppoe view'
+                        ]
+                    ]
+                ]
+            ]
+        ],
+
+        [
             'header' => 'Package',
             'permissions' => [
                 'package view',

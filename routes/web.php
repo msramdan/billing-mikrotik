@@ -37,3 +37,4 @@ Route::resource('package-categories', App\Http\Controllers\PackageCategoryContro
 Route::resource('packages', App\Http\Controllers\PackageController::class)->middleware('auth');
 Route::resource('privacy-policies', App\Http\Controllers\PrivacyPolicyController::class)->middleware('auth');
 Route::resource('area-coverages', App\Http\Controllers\AreaCoverageController::class)->middleware('auth');
+Route::resource('profile-pppoes', App\Http\Controllers\ProfilePppoeController::class)->middleware('auth');
