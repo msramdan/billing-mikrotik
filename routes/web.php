@@ -36,3 +36,4 @@ Route::resource('wa-gateways', App\Http\Controllers\WaGatewayController::class)-
 Route::resource('package-categories', App\Http\Controllers\PackageCategoryController::class)->middleware('auth');
 Route::resource('packages', App\Http\Controllers\PackageController::class)->middleware('auth');
 Route::resource('privacy-policies', App\Http\Controllers\PrivacyPolicyController::class)->middleware('auth');
+Route::resource('area-coverages', App\Http\Controllers\AreaCoverageController::class)->middleware('auth');

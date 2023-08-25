@@ -188,5 +188,5 @@ return [
         ['group' => 'companies', 'access' => ['company view', 'company edit']],
         ['group' => 'privacy policies', 'access' => ['privacy policy view','privacy policy edit']],
         ['group' => 'wa gateways', 'access' => ['wa gateway view', 'wa gateway edit',]],
-    ],
-];
+  ['group' => 'area coverages', 'access' => ['area coverage view', 'area coverage create', 'area coverage edit', 'area coverage delete']], 
+		],];

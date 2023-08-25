@@ -109,136 +109,152 @@ return [
      * This code below always changes when you use a generator and maybe you must lint or format the code.
      */
     'sidebars' => [
-    [
-        'header' => 'Main',
-        'permissions' => [
-            'bank view'
-        ],
-        'menus' => [
-            [
-                'title' => 'Main Data',
-                'icon' => '<i class="bi bi-list-ul"></i>',
-                'route' => null,
-                'permission' => null,
-                'permissions' => [
-                    'bank view'
-                ],
-                'submenus' => [
-                    [
-                        'title' => 'Banks',
-                        'route' => '/banks',
-                        'permission' => 'bank view'
+        [
+            'header' => 'Main',
+            'permissions' => [
+                'bank view'
+            ],
+            'menus' => [
+                [
+                    'title' => 'Main Data',
+                    'icon' => '<i class="bi bi-list-ul"></i>',
+                    'route' => null,
+                    'permission' => null,
+                    'permissions' => [
+                        'bank view'
+                    ],
+                    'submenus' => [
+                        [
+                            'title' => 'Banks',
+                            'route' => '/banks',
+                            'permission' => 'bank view'
+                        ]
                     ]
                 ]
             ]
-        ]
-    ],
-    [
-        'header' => 'Package',
-        'permissions' => [
-            'package view',
-            'package category view'
         ],
-        'menus' => [
-            [
-                'title' => 'Package',
-                'icon' => '<i class="bi bi-boxes"></i>',
-                'route' => null,
-                'permission' => null,
-                'permissions' => [
-                    'package view',
-                    'package category view'
-                ],
-                'submenus' => [
-                    [
-                        'title' => 'Packages',
-                        'route' => '/packages',
-                        'permission' => 'package view'
+        [
+            'header' => 'Package',
+            'permissions' => [
+                'package view',
+                'package category view'
+            ],
+            'menus' => [
+                [
+                    'title' => 'Package',
+                    'icon' => '<i class="bi bi-boxes"></i>',
+                    'route' => null,
+                    'permission' => null,
+                    'permissions' => [
+                        'package view',
+                        'package category view'
                     ],
-                    [
-                        'title' => 'Package Categories',
-                        'route' => '/package-categories',
-                        'permission' => 'package category view'
+                    'submenus' => [
+                        [
+                            'title' => 'Packages',
+                            'route' => '/packages',
+                            'permission' => 'package view'
+                        ],
+                        [
+                            'title' => 'Package Categories',
+                            'route' => '/package-categories',
+                            'permission' => 'package category view'
+                        ]
                     ]
                 ]
             ]
-        ]
-    ],
-    [
-        'header' => 'Setting',
-        'permissions' => [
-            'company view',
-            'bank account view',
-            'wa gateway view',
-            'privacy policy view'
         ],
-        'menus' => [
-            [
-                'title' => 'Setting Apps',
-                'icon' => '<i class="bi bi-gear"></i>',
-                'route' => null,
-                'permission' => null,
-                'permissions' => [
-                    'company view',
-                    'bank account view',
-                    'wa gateway view',
-                    'privacy policy view'
-                ],
-                'submenus' => [
-                    [
-                        'title' => 'Companies',
-                        'route' => '/companies',
-                        'permission' => 'company view'
+        [
+            'header' => 'Area Coverages',
+            'permissions' => [
+                'area coverage view'
+            ],
+            'menus' => [
+                [
+                    'title' => 'Area Coverages',
+                    'icon' => '<i class="bi bi-geo-alt-fill"></i>',
+                    'route' => '/area-coverages',
+                    'permission' => 'area coverage view',
+                    'permissions' => [],
+                    'submenus' => []
+                ]
+            ]
+        ],
+        [
+            'header' => 'Setting',
+            'permissions' => [
+                'company view',
+                'bank account view',
+                'wa gateway view',
+                'privacy policy view'
+            ],
+            'menus' => [
+                [
+                    'title' => 'Setting Apps',
+                    'icon' => '<i class="bi bi-gear"></i>',
+                    'route' => null,
+                    'permission' => null,
+                    'permissions' => [
+                        'company view',
+                        'bank account view',
+                        'wa gateway view',
+                        'privacy policy view'
                     ],
-                    [
-                        'title' => 'Privacy Policies',
-                        'route' => '/privacy-policies',
-                        'permission' => 'privacy policy view'
-                    ],
-                    [
-                        'title' => 'Bank Accounts',
-                        'route' => '/bank-accounts',
-                        'permission' => 'bank account view'
-                    ],
-                    [
-                        'title' => 'Wa Gateway',
-                        'route' => '/wa-gateways',
-                        'permission' => 'wa gateway view'
+                    'submenus' => [
+                        [
+                            'title' => 'Companies',
+                            'route' => '/companies',
+                            'permission' => 'company view'
+                        ],
+                        [
+                            'title' => 'Privacy Policies',
+                            'route' => '/privacy-policies',
+                            'permission' => 'privacy policy view'
+                        ],
+                        [
+                            'title' => 'Bank Accounts',
+                            'route' => '/bank-accounts',
+                            'permission' => 'bank account view'
+                        ],
+                        [
+                            'title' => 'Wa Gateway',
+                            'route' => '/wa-gateways',
+                            'permission' => 'wa gateway view'
+                        ]
                     ]
                 ]
             ]
-        ]
-    ],
-    [
-        'header' => 'Utilities',
-        'permissions' => [
-            'user view',
-            'role & permission view'
         ],
-        'menus' => [
-            [
-                'title' => 'Users & Roles',
-                'icon' => '<i class="bi bi-people"></i>',
-                'route' => null,
-                'permission' => null,
-                'permissions' => [
-                    'user view',
-                    'role & permission view'
-                ],
-                'submenus' => [
-                    [
-                        'title' => 'Users',
-                        'route' => '/users',
-                        'permission' => 'user view'
+        [
+            'header' => 'Utilities',
+            'permissions' => [
+                'user view',
+                'role & permission view'
+            ],
+            'menus' => [
+                [
+                    'title' => 'Users & Roles',
+                    'icon' => '<i class="bi bi-people"></i>',
+                    'route' => null,
+                    'permission' => null,
+                    'permissions' => [
+                        'user view',
+                        'role & permission view'
                     ],
-                    [
-                        'title' => 'Roles & permissions',
-                        'route' => '/roles',
-                        'permission' => 'role & permission view'
+                    'submenus' => [
+                        [
+                            'title' => 'Users',
+                            'route' => '/users',
+                            'permission' => 'user view'
+                        ],
+                        [
+                            'title' => 'Roles & permissions',
+                            'route' => '/roles',
+                            'permission' => 'role & permission view'
+                        ]
                     ]
                 ]
             ]
         ]
     ]
-]
 ];
