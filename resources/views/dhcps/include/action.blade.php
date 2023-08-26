@@ -1,6 +1,6 @@
 <td>
-    @can('log delete')
-        <form action="{{ route('logs.destroy', $model->id) }}" method="post" class="d-inline"
+    @can('dhcp delete')
+        <form action="{{ route('dhcps.destroy', $model['.id']) }}" method="post" class="d-inline"
             onsubmit="return confirm('Are you sure to delete this record?')">
             @csrf
             @method('delete')
