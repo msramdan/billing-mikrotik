@@ -110,24 +110,24 @@ return [
      */
     'sidebars' => [
         [
-            'header' => 'Main',
+            'header' => 'Mikrotik',
             'permissions' => [
-                'bank view'
+                'log view'
             ],
             'menus' => [
                 [
-                    'title' => 'Main Data',
-                    'icon' => '<i class="bi bi-list-ul"></i>',
+                    'title' => 'Mikrotik',
+                    'icon' => '<i class="bi bi-device-ssd"></i>',
                     'route' => null,
                     'permission' => null,
                     'permissions' => [
-                        'bank view'
+                        'log view'
                     ],
                     'submenus' => [
                         [
-                            'title' => 'Banks',
-                            'route' => '/banks',
-                            'permission' => 'bank view'
+                            'title' => 'Log Router',
+                            'route' => '/logs',
+                            'permission' => 'log view'
                         ]
                     ]
                 ]
@@ -223,6 +223,7 @@ return [
             'permissions' => [
                 'company view',
                 'bank account view',
+                'bank view',
                 'wa gateway view',
                 'privacy policy view'
             ],
@@ -235,6 +236,7 @@ return [
                     'permissions' => [
                         'company view',
                         'bank account view',
+                        'bank view',
                         'wa gateway view',
                         'privacy policy view'
                     ],
@@ -253,6 +255,11 @@ return [
                             'title' => 'Bank Accounts',
                             'route' => '/bank-accounts',
                             'permission' => 'bank account view'
+                        ],
+                        [
+                            'title' => 'Banks',
+                            'route' => '/banks',
+                            'permission' => 'bank view'
                         ],
                         [
                             'title' => 'Wa Gateway',
