@@ -47,4 +47,19 @@ class ActivePppController extends Controller
     {
         return view('active-ppps.show', compact('activePpp'));
     }
+
+    public function destroy(ActivePpp $activePpp)
+    {
+        try {
+            $activePpp->delete();
+
+            return redirect()
+                ->route('active-ppps.index')
+                ->with('success', __('The activePpp was deleted successfully.'));
+        } catch (\Throwable $th) {
+            return redirect()
+                ->route('active-ppps.index')
+                ->with('error', __("The activePpp can't be deleted because it's related to another table."));
+        }
+    }
 }
