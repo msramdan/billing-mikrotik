@@ -71,46 +71,67 @@
             @enderror
         </div>
     </div>
-    <div class="col-md-2">
-        <div class="form-group">
-            <label for="jangkauan">{{ __('Jangkauan') }}</label>
-            <input type="number" name="jangkauan" id="jangkauan"
-                class="form-control @error('jangkauan') is-invalid @enderror"
-                value="{{ isset($areaCoverage) ? $areaCoverage->jangkauan : old('jangkauan') }}"
-                placeholder="{{ __('Jangkauan') }}" required />
-            @error('jangkauan')
-                <span class="text-danger">
-                    {{ $message }}
-                </span>
-            @enderror
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="radius">{{ __('Radius') }}</label>
+                    <input type="number" name="radius" id="radius"
+                        class="form-control @error('radius') is-invalid @enderror"
+                        value="{{ isset($areaCoverage) ? $areaCoverage->jangkauan : old('radius') }}"
+                        placeholder="{{ __('Radius') }}" required />
+                    @error('radius')
+                        <span class="text-danger">
+                            {{ $message }}
+                        </span>
+                    @enderror
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="latitude">{{ __('Latitude') }}</label>
+                    <input type="text" name="latitude" id="latitude"
+                        class="form-control @error('latitude') is-invalid @enderror"
+                        value="{{ isset($areaCoverage) ? $areaCoverage->latitude : old('latitude') }}"
+                        placeholder="{{ __('Latitude') }}" required readonly />
+                    @error('latitude')
+                        <span class="text-danger">
+                            {{ $message }}
+                        </span>
+                    @enderror
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="longitude">{{ __('Longitude') }}</label>
+                    <input type="text" name="longitude" id="longitude"
+                        class="form-control @error('longitude') is-invalid @enderror"
+                        value="{{ isset($areaCoverage) ? $areaCoverage->longitude : old('longitude') }}"
+                        placeholder="{{ __('Longitude') }}" required readonly />
+                    @error('longitude')
+                        <span class="text-danger">
+                            {{ $message }}
+                        </span>
+                    @enderror
+                </div>
+            </div>
+            <div class="card px-2 py-1">
+                <div class="mb-3 search-box">
+                    <input type="text" class="form-control @error('place') is-invalid @enderror" name="place"
+                        id="search_place" placeholder="Cari Lokasi" value="{{ old('place') }}" autocomplete="off">
+                    <span class="d-none" style="color: red;" id="error-place"></span>
+                    @error('place')
+                        <span style="color: red;">{{ $message }}</span>
+                    @enderror
+                    <ul class="results">
+                        <li style="text-align: center;padding: 50% 0; max-height: 25hv;">Masukan Pencarian</li>
+                    </ul>
+                </div>
+                <div class="map-embed" id="map" style="border-radius: 5px"></div>
+            </div>
         </div>
+
     </div>
-    <div class="col-md-2">
-        <div class="form-group">
-            <label for="latitude">{{ __('Latitude') }}</label>
-            <input type="text" name="latitude" id="latitude"
-                class="form-control @error('latitude') is-invalid @enderror"
-                value="{{ isset($areaCoverage) ? $areaCoverage->latitude : old('latitude') }}"
-                placeholder="{{ __('Latitude') }}" required />
-            @error('latitude')
-                <span class="text-danger">
-                    {{ $message }}
-                </span>
-            @enderror
-        </div>
-    </div>
-    <div class="col-md-2">
-        <div class="form-group">
-            <label for="longitude">{{ __('Longitude') }}</label>
-            <input type="text" name="longitude" id="longitude"
-                class="form-control @error('longitude') is-invalid @enderror"
-                value="{{ isset($areaCoverage) ? $areaCoverage->longitude : old('longitude') }}"
-                placeholder="{{ __('Longitude') }}" required />
-            @error('longitude')
-                <span class="text-danger">
-                    {{ $message }}
-                </span>
-            @enderror
-        </div>
-    </div>
+
+
 </div>

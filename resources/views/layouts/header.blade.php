@@ -11,6 +11,11 @@
     <link rel="shortcut icon" href="{{ asset('mazer') }}/images/logo/favicon.svg" type="image/x-icon">
     <link rel="shortcut icon" href="{{ asset('mazer') }}/images/logo/favicon.png" type="image/png">
     <link rel="stylesheet" href="{{ asset('mazer') }}/css/shared/iconly.css">
+    <!-- JQVMap -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+        crossorigin="" />
+    <link href="{{ asset('mazer/assets/jqvmap/dist/jqvmap.min.css') }}" rel="stylesheet" />
     @stack('css')
 </head>
 

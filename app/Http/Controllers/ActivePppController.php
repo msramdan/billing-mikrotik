@@ -35,7 +35,6 @@ class ActivePppController extends Controller
             $query = new Query('/ppp/active/print');
             $activePpps = $client->query($query)->read();
             return DataTables::of($activePpps)
-
                 ->addColumn('action', 'active-ppps.include.action')
                 ->toJson();
         }

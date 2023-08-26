@@ -108,8 +108,8 @@
                     }
                 },
                 {
-                    data: 'status',
-                    name: 'status',
+                    data: 'name',
+                    name: 'name',
                     render: function(data, type, full, meta) {
                         if (typeof data !== 'undefined') {
                             return `${data}`;
