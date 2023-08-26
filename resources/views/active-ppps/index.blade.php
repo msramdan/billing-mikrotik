@@ -36,7 +36,7 @@
                                             <th>{{ __('Ip Address') }}</th>
                                             <th>{{ __('Uptime') }}</th>
                                             <th>{{ __('Komentar') }}</th>
-                                            {{-- <th>{{ __('Action') }}</th> --}}
+                                            <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -96,14 +96,13 @@
                             return '-';
                         }
                     }
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
                 }
-                // ,
-                // {
-                //     data: 'action',
-                //     name: 'action',
-                //     orderable: false,
-                //     searchable: false
-                // }
             ],
         });
     </script>

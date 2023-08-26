@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ActivePpp;
+use App\Http\Requests\{StoreActivePppRequest, UpdateActivePppRequest};
 use Yajra\DataTables\Facades\DataTables;
 use \RouterOS\Client;
 use \RouterOS\Query;
@@ -34,6 +35,7 @@ class ActivePppController extends Controller
             $query = new Query('/ppp/active/print');
             $activePpps = $client->query($query)->read();
             return DataTables::of($activePpps)
+
                 ->addColumn('action', 'active-ppps.include.action')
                 ->toJson();
         }
@@ -41,89 +43,8 @@ class ActivePppController extends Controller
         return view('active-ppps.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('active-ppps.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreActivePppRequest $request)
-    {
-
-        ActivePpp::create($request->validated());
-
-        return redirect()
-            ->route('active-ppps.index')
-            ->with('success', __('The activePpp was created successfully.'));
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\ActivePpp  $activePpp
-     * @return \Illuminate\Http\Response
-     */
     public function show(ActivePpp $activePpp)
     {
         return view('active-ppps.show', compact('activePpp'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\ActivePpp  $activePpp
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(ActivePpp $activePpp)
-    {
-        return view('active-ppps.edit', compact('activePpp'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ActivePpp  $activePpp
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateActivePppRequest $request, ActivePpp $activePpp)
-    {
-
-        $activePpp->update($request->validated());
-
-        return redirect()
-            ->route('active-ppps.index')
-            ->with('success', __('The activePpp was updated successfully.'));
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\ActivePpp  $activePpp
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(ActivePpp $activePpp)
-    {
-        try {
-            $activePpp->delete();
-
-            return redirect()
-                ->route('active-ppps.index')
-                ->with('success', __('The activePpp was deleted successfully.'));
-        } catch (\Throwable $th) {
-            return redirect()
-                ->route('active-ppps.index')
-                ->with('error', __("The activePpp can't be deleted because it's related to another table."));
-        }
     }
 }
