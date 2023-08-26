@@ -46,7 +46,7 @@
                                             <th>{{ __('Last Logout') }}</th>
                                             <th>{{ __('Komentar') }}</th>
                                             <th>{{ __('Status') }}</th>
-                                            <th>{{ __('Action') }}</th>
+                                            <th style="width: 120px">{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
                                 </table>
