@@ -137,7 +137,8 @@ return [
             'header' => 'PppOE',
             'permissions' => [
                 'profile pppoe view',
-                'active ppp view'
+                'active ppp view',
+                'secret ppp view'
             ],
             'menus' => [
                 [
@@ -147,13 +148,19 @@ return [
                     'permission' => null,
                     'permissions' => [
                         'profile pppoe view',
-                        'active ppp view'
+                        'active ppp view',
+                        'secret ppp view'
                     ],
                     'submenus' => [
                         [
                             'title' => 'Profile PPP',
                             'route' => '/profile-pppoes',
                             'permission' => 'profile pppoe view'
+                        ],
+                        [
+                            'title' => 'Secret PPP',
+                            'route' => '/secret-ppps',
+                            'permission' => 'secret ppp view'
                         ],
                         [
                             'title' => 'Active PPP',
