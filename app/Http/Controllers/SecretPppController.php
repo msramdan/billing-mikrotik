@@ -69,56 +69,64 @@ class SecretPppController extends Controller
             ->with('success', __('The secretPpp was created successfully.'));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\SecretPpp  $secretPpp
-     * @return \Illuminate\Http\Response
-     */
     public function show(SecretPpp $secretPpp)
     {
         return view('secret-ppps.show', compact('secretPpp'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\SecretPpp  $secretPpp
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(SecretPpp $secretPpp)
+    public function enable($id)
     {
-        return view('secret-ppps.edit', compact('secretPpp'));
+        $client = new Client([
+            'host' => '103.122.65.234',
+            'user' => 'sawitskylink',
+            'pass' => 'sawit064199',
+            'port' => 83,
+        ]);
+
+        // set komen
+        $comment = 'Di Aktifkan Tanggal : ' . date('Y-m-d H:i:s');
+        $queryComment = (new Query('/ppp/secret/set'))
+            ->equal('.id', $id)
+            ->equal('comment', $comment);
+        $client->query($queryComment)->read();
+
+        // set enable
+        $query = (new Query('/ppp/secret/enable'))
+            ->equal('.id', $id);
+        $client->query($query)->read();
+        return redirect()
+            ->route('secret-ppps.index')
+            ->with('success', __('The Secret PPP was enable successfully.'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\SecretPpp  $secretPpp
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateSecretPppRequest $request, SecretPpp $secretPpp)
+    public function disable($id)
     {
-
-        $secretPpp->update($request->validated());
+        $client = new Client([
+            'host' => '103.122.65.234',
+            'user' => 'sawitskylink',
+            'pass' => 'sawit064199',
+            'port' => 83,
+        ]);
+        // set disable
+        $comment = 'Di Non-Aktifkan Tanggal : ' . date('Y-m-d H:i:s');
+        $queryComment = (new Query('/ppp/secret/set'))
+            ->equal('.id', $id)
+            ->equal('comment', $comment);
+        $client->query($queryComment)->read();
+        // set disable
+        $query = (new Query('/ppp/secret/disable'))
+            ->equal('.id', $id);
+        $client->query($query)->read();
 
         return redirect()
             ->route('secret-ppps.index')
-            ->with('success', __('The secretPpp was updated successfully.'));
+            ->with('success', __('The Secret PPP was disable successfully.'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\SecretPpp  $secretPpp
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(SecretPpp $secretPpp)
     {
         try {
             $secretPpp->delete();
-
             return redirect()
                 ->route('secret-ppps.index')
                 ->with('success', __('The secretPpp was deleted successfully.'));
