@@ -134,9 +134,10 @@ return [
             ]
         ],
         [
-            'header' => 'PPpOE',
+            'header' => 'PppOE',
             'permissions' => [
-                'profile pppoe view'
+                'profile pppoe view',
+                'active ppp view'
             ],
             'menus' => [
                 [
@@ -145,19 +146,24 @@ return [
                     'route' => null,
                     'permission' => null,
                     'permissions' => [
-                        'profile pppoe view'
+                        'profile pppoe view',
+                        'active ppp view'
                     ],
                     'submenus' => [
                         [
                             'title' => 'Profile PPP',
                             'route' => '/profile-pppoes',
                             'permission' => 'profile pppoe view'
+                        ],
+                        [
+                            'title' => 'Active PPP',
+                            'route' => '/active-ppps',
+                            'permission' => 'active ppp view'
                         ]
                     ]
                 ]
             ]
         ],
-
         [
             'header' => 'Package',
             'permissions' => [

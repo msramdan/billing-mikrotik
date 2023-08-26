@@ -38,3 +38,4 @@ Route::resource('packages', App\Http\Controllers\PackageController::class)->midd
 Route::resource('privacy-policies', App\Http\Controllers\PrivacyPolicyController::class)->middleware('auth');
 Route::resource('area-coverages', App\Http\Controllers\AreaCoverageController::class)->middleware('auth');
 Route::resource('profile-pppoes', App\Http\Controllers\ProfilePppoeController::class)->middleware('auth');
+Route::resource('active-ppps', App\Http\Controllers\ActivePppController::class)->middleware('auth');

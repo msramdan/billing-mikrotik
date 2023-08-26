@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProfilePppoe;
-use App\Http\Requests\{StoreProfilePppoeRequest, UpdateProfilePppoeRequest};
 use Yajra\DataTables\Facades\DataTables;
 use \RouterOS\Client;
 use \RouterOS\Query;
@@ -30,8 +29,8 @@ class ProfilePppoeController extends Controller
                 'port' => 83,
             ]);
             $query = new Query('/ppp/profile/print');
-            $secrets = $client->query($query)->read();
-            return DataTables::of($secrets)
+            $profile = $client->query($query)->read();
+            return DataTables::of($profile)
                 ->addColumn('action', 'profile-pppoes.include.action')
                 ->toJson();
         }
