@@ -47,8 +47,6 @@
                                             <th>{{ __('Jangkauan') }}</th>
                                             <th>{{ __('Latitude') }}</th>
                                             <th>{{ __('Longitude') }}</th>
-                                            <th>{{ __('Created At') }}</th>
-                                            <th>{{ __('Updated At') }}</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
@@ -110,14 +108,6 @@
                 {
                     data: 'longitude',
                     name: 'longitude',
-                },
-                {
-                    data: 'created_at',
-                    name: 'created_at'
-                },
-                {
-                    data: 'updated_at',
-                    name: 'updated_at'
                 },
                 {
                     data: 'action',
