@@ -108,13 +108,13 @@
                     }
                 },
                 {
-                    data: 'name',
-                    name: 'name',
+                    data: 'disabled',
+                    name: 'disabled',
                     render: function(data, type, full, meta) {
-                        if (typeof data !== 'undefined') {
-                            return `${data}`;
+                        if (data == 'true') {
+                            return '<button type="button" class="btn btn-danger">Offline</button>';
                         } else {
-                            return '-';
+                            return '<button type="button" class="btn btn-success">Online</button>';
                         }
                     }
                 },
