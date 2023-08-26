@@ -107,20 +107,24 @@ class SecretPppController extends Controller
             'pass' => 'sawit064199',
             'port' => 83,
         ]);
-        // set disable
+        // set komen
         $comment = 'Di Non-Aktifkan Tanggal : ' . date('Y-m-d H:i:s');
         $queryComment = (new Query('/ppp/secret/set'))
             ->equal('.id', $id)
             ->equal('comment', $comment);
         $client->query($queryComment)->read();
+
         // set disable
         $query = (new Query('/ppp/secret/disable'))
             ->equal('.id', $id);
         $client->query($query)->read();
+
         // delete aktive ppp
         $queryDelete = (new Query('/ppp/active/remove'))
-            ->equal('.id', $id);
+            ->equal('name', '11');
         $client->query($queryDelete)->read();
+
+
         return redirect()
             ->route('secret-ppps.index')
             ->with('success', __('The Secret PPP was disable successfully.'));

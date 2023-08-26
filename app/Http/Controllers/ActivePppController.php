@@ -47,18 +47,25 @@ class ActivePppController extends Controller
         return view('active-ppps.show', compact('activePpp'));
     }
 
-    public function destroy(ActivePpp $activePpp)
+    public function destroy($id)
     {
         try {
-            $activePpp->delete();
-
+            $client = new Client([
+                'host' => '103.122.65.234',
+                'user' => 'sawitskylink',
+                'pass' => 'sawit064199',
+                'port' => 83,
+            ]);
+            $queryDelete = (new Query('/ppp/active/remove'))
+                ->equal('.id', $id);
+            $client->query($queryDelete)->read();
             return redirect()
                 ->route('active-ppps.index')
-                ->with('success', __('The activePpp was deleted successfully.'));
+                ->with('success', __('The active PPP was deleted successfully.'));
         } catch (\Throwable $th) {
             return redirect()
                 ->route('active-ppps.index')
-                ->with('error', __("The activePpp can't be deleted because it's related to another table."));
+                ->with('error', __("The active PPP can't be deleted because it's related to another table."));
         }
     }
 }
