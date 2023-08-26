@@ -193,5 +193,6 @@ return [
         ['group' => 'active ppps', 'access' => ['active ppp view', 'active ppp delete']],
         ['group' => 'secret ppps', 'access' => ['secret ppp view', 'secret ppp create', 'secret ppp disable', 'secret ppp enable', 'secret ppp delete']],
         ['group' => 'logs', 'access' => ['log view']],
+        ['group' => 'dhcps', 'access' => ['dhcp view', 'dhcp delete']],
     ],
 ];
