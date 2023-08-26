@@ -113,7 +113,8 @@ return [
             'header' => 'Mikrotik',
             'permissions' => [
                 'log view',
-                'dhcp view'
+                'dhcp view',
+                'interface view'
             ],
             'menus' => [
                 [
@@ -123,7 +124,8 @@ return [
                     'permission' => null,
                     'permissions' => [
                         'log view',
-                        'dhcp view'
+                        'dhcp view',
+                        'interface view'
                     ],
                     'submenus' => [
                         [
@@ -135,6 +137,11 @@ return [
                             'title' => 'DHCP Leases',
                             'route' => '/dhcps',
                             'permission' => 'dhcp view'
+                        ],
+                        [
+                            'title' => 'All Interface',
+                            'route' => '/interfaces',
+                            'permission' => 'interface view'
                         ]
                     ]
                 ]

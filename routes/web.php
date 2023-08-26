@@ -48,3 +48,4 @@ Route::resource('secret-ppps', App\Http\Controllers\SecretPppController::class)-
 
 Route::resource('logs', App\Http\Controllers\LogController::class)->middleware('auth');
 Route::resource('dhcps', App\Http\Controllers\DhcpController::class)->middleware('auth');
+Route::resource('interfaces', App\Http\Controllers\InterfaceController::class)->middleware('auth');
