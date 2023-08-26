@@ -119,28 +119,30 @@ class SecretPppController extends Controller
             ->equal('.id', $id);
         $client->query($query)->read();
 
-        // delete aktive ppp
-        $queryDelete = (new Query('/ppp/active/remove'))
-            ->equal('name', '11');
-        $client->query($queryDelete)->read();
-
-
         return redirect()
             ->route('secret-ppps.index')
             ->with('success', __('The Secret PPP was disable successfully.'));
     }
 
-    public function destroy(SecretPpp $secretPpp)
+    public function destroy($id)
     {
         try {
-            $secretPpp->delete();
+            $client = new Client([
+                'host' => '103.122.65.234',
+                'user' => 'sawitskylink',
+                'pass' => 'sawit064199',
+                'port' => 83,
+            ]);
+            $queryDelete = (new Query('/ppp/secret/remove'))
+                ->equal('.id', $id);
+            $client->query($queryDelete)->read();
             return redirect()
                 ->route('secret-ppps.index')
-                ->with('success', __('The secretPpp was deleted successfully.'));
+                ->with('success', __('The active PPP was deleted successfully.'));
         } catch (\Throwable $th) {
             return redirect()
                 ->route('secret-ppps.index')
-                ->with('error', __("The secretPpp can't be deleted because it's related to another table."));
+                ->with('error', __("The active PPP can't be deleted because it's related to another table."));
         }
     }
 }
