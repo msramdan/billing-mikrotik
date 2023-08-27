@@ -11,7 +11,7 @@
     @endcan
 
     @can('secret ppp disable')
-        <form action="{{ route('secret-ppps.disable', $model['.id']) }}" method="post" class="d-inline"
+        <form action="{{ route('secret-ppps.disable',  ['id' => $model['.id'], 'name' => $model['name']] ) }}" method="post" class="d-inline"
             onsubmit="return confirm('Are you sure to disable this secret ?')">
             @csrf
             @method('PUT')
@@ -22,7 +22,7 @@
     @endcan
 
     @can('secret ppp delete')
-        <form action="{{ route('secret-ppps.destroy', $model['.id']) }}" method="post" class="d-inline"
+        <form action="{{ route('secret-ppps.deleteSecret', ['id' => $model['.id'], 'name' => $model['name']]) }}" method="post" class="d-inline"
             onsubmit="return confirm('Are you sure to delete this secret ?')">
             @csrf
             @method('delete')

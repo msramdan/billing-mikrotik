@@ -87,7 +87,7 @@ class SecretPppController extends Controller
             ->with('success', __('The Secret PPP was enable successfully.'));
     }
 
-    public function disable($id)
+    public function disable($id, $name)
     {
         $client = setRoute();
         // set komen
@@ -98,26 +98,41 @@ class SecretPppController extends Controller
         $client->query($queryComment)->read();
 
         // set disable
-        $query = (new Query('/ppp/secret/disable'))
+        $queryDisable = (new Query('/ppp/secret/disable'))
             ->equal('.id', $id);
-        $client->query($query)->read();
+        $client->query($queryDisable)->read();
 
+        // get id
+        $queryGet = (new Query('/ppp/active/print'))
+            ->where('name', $name);
+        $data = $client->query($queryGet)->read();
         // remove session
-        // $queryDelete = (new Query('/ppp/active/remove'))
-        //     ->equal('name', '11');
-        // $client->query($queryDelete)->read();
+        $idActive = $data[0]['.id'];
+        $queryDelete = (new Query('/ppp/active/remove'))
+            ->equal('.id', $idActive);
+        $client->query($queryDelete)->read();
+
         return redirect()
             ->route('secret-ppps.index')
             ->with('success', __('The Secret PPP was disable successfully.'));
     }
 
-    public function destroy($id)
+    public function deleteSecret($id, $name)
     {
         try {
             $client = setRoute();
             $queryDelete = (new Query('/ppp/secret/remove'))
                 ->equal('.id', $id);
             $client->query($queryDelete)->read();
+            // get id
+            $queryGet = (new Query('/ppp/active/print'))
+                ->where('name', $name);
+            $data = $client->query($queryGet)->read();
+            // remove session
+            $idActive = $data[0]['.id'];
+            $removeSession = (new Query('/ppp/active/remove'))
+                ->equal('.id', $idActive);
+            $client->query($removeSession)->read();
             return redirect()
                 ->route('secret-ppps.index')
                 ->with('success', __('The active PPP was deleted successfully.'));

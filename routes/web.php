@@ -41,10 +41,12 @@ Route::resource('profile-pppoes', App\Http\Controllers\ProfilePppoeController::c
 Route::resource('active-ppps', App\Http\Controllers\ActivePppController::class)->middleware('auth');
 Route::controller(App\Http\Controllers\SecretPppController::class)->group(function () {
     Route::put('enableSecret/{id}', 'enable')->name('secret-ppps.enable');
-    Route::put('disableSecret/{id}', 'disable')->name('secret-ppps.disable');
+    Route::put('disableSecret/{id}/{name}', 'disable')->name('secret-ppps.disable');
+    Route::delete('deleteSecret/{id}/{name}', 'deleteSecret')->name('secret-ppps.deleteSecret');
 });
 
 Route::resource('secret-ppps', App\Http\Controllers\SecretPppController::class)->middleware('auth');
+
 
 Route::resource('logs', App\Http\Controllers\LogController::class)->middleware('auth');
 Route::resource('dhcps', App\Http\Controllers\DhcpController::class)->middleware('auth');
