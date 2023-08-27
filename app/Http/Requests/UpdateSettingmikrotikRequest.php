@@ -29,7 +29,6 @@ class UpdateSettingmikrotikRequest extends FormRequest
             'port' => 'required|numeric',
             'username' => 'required|string|max:100',
             'password' => 'nullable|confirmed',
-            'is_active' => 'required|in:Yes,No',
         ];
     }
 }

@@ -29,7 +29,6 @@ class StoreSettingmikrotikRequest extends FormRequest
             'port' => 'required|numeric',
             'username' => 'required|string|max:100',
             'password' => 'required|confirmed',
-            'is_active' => 'required|in:Yes,No',
         ];
     }
 }

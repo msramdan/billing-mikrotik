@@ -79,7 +79,7 @@
                 placeholder="{{ __('Password Confirmation') }}" {{ empty($settingmikrotik) ? ' required' : '' }} />
         </div>
     </div>
-    <div class="col-md-6">
+    {{-- <div class="col-md-6">
         <div class="form-group">
             <label for="is-active">{{ __('Is Active') }}</label>
             <select class="form-select @error('is_active') is-invalid @enderror" name="is_active" id="is-active"
@@ -98,5 +98,5 @@
                 </span>
             @enderror
         </div>
-    </div>
+    </div> --}}
 </div>

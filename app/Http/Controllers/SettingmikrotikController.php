@@ -50,13 +50,8 @@ class SettingmikrotikController extends Controller
     {
         $attr = $request->validated();
         $attr['password'] = $request->password;
-        if ($request->is_active == 'Yes') {
-            // update all route jadi no
-            DB::table('settingmikrotiks')
-                ->update(['is_active' => 'No']);
-        }
+        $attr['is_active'] = 'No';
         Settingmikrotik::create($attr);
-
         return redirect()
             ->route('settingmikrotiks.index')
             ->with('success', __('The settingmikrotik was created successfully.'));
@@ -94,10 +89,6 @@ class SettingmikrotikController extends Controller
     public function update(UpdateSettingmikrotikRequest $request, Settingmikrotik $settingmikrotik)
     {
         $attr = $request->validated();
-        if ($request->is_active == 'Yes') {
-            DB::table('settingmikrotiks')
-                ->update(['is_active' => 'No']);
-        }
         if ($request->password == null) {
             DB::table('settingmikrotiks')
                 ->where('id', $settingmikrotik->id)
@@ -106,7 +97,6 @@ class SettingmikrotikController extends Controller
                     'host' => $request->host,
                     'port' => $request->port,
                     'username' => $request->username,
-                    'is_active' => $request->is_active,
                     'updated_at' =>  date('Y-m-d H:i:s'),
                 ]);
         } else {
@@ -118,7 +108,6 @@ class SettingmikrotikController extends Controller
                     'port' => $request->port,
                     'username' => $request->username,
                     'password' => $request->password,
-                    'is_active' => $request->is_active,
                     'updated_at' =>  date('Y-m-d H:i:s'),
                 ]);
         }
