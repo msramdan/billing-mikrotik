@@ -179,15 +179,16 @@ return [
                 ],
                 'submenus' => [
                     [
-                        'title' => 'Active',
-                        'route' => '/hotspotactives',
-                        'permission' => 'hotspotactive view'
-                    ],
-                    [
-                        'title' => 'Hotspot Users',
+                        'title' => 'Users Hotspot',
                         'route' => '/hotspotusers',
                         'permission' => 'hotspotuser view'
+                    ],
+                    [
+                        'title' => 'Active Hotspot',
+                        'route' => '/hotspotactives',
+                        'permission' => 'hotspotactive view'
                     ]
+
                 ]
             ]
         ]

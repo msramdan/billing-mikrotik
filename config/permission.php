@@ -199,6 +199,6 @@ return [
         ['group' => 'settingmikrotiks', 'access' => ['settingmikrotik view', 'settingmikrotik create', 'settingmikrotik edit', 'settingmikrotik delete']],
         ['group' => 'statusrouters', 'access' => ['statusrouter view']],
         ['group' => 'hotspotactives', 'access' => ['hotspotactive view', 'hotspotactive delete']],
-        ['group' => 'hotspotusers', 'access' => ['hotspotuser view', 'hotspotuser create']],
+        ['group' => 'hotspotusers', 'access' => ['hotspotuser view','hotspotuser create','hotspotuser enable','hotspotuser disable','hotspotuser reset','hotspotuser delete']],
     ],
 ];
