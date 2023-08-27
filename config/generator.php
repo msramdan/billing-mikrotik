@@ -115,7 +115,8 @@ return [
                 'log view',
                 'dhcp view',
                 'interface view',
-                'settingmikrotik view'
+                'settingmikrotik view',
+                'statusrouter view'
             ],
             'menus' => [
                 [
@@ -127,9 +128,15 @@ return [
                         'log view',
                         'dhcp view',
                         'interface view',
-                        'settingmikrotik view'
+                        'settingmikrotik view',
+                        'statusrouter view'
                     ],
                     'submenus' => [
+                        [
+                            'title' => 'Status Router',
+                            'route' => '/statusrouters',
+                            'permission' => 'statusrouter view'
+                        ],
                         [
                             'title' => 'Log Router',
                             'route' => '/logs',
