@@ -25,3 +25,9 @@ function setRoute()
     ]);
     return $client;
 }
+
+function getRoute()
+{
+    $router = DB::table('settingmikrotiks')->where('is_active', 'Yes')->first();
+    return $router;
+}
