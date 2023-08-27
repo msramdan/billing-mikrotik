@@ -37,3 +37,28 @@ Route::resource('package-categories', App\Http\Controllers\PackageCategoryContro
 Route::resource('packages', App\Http\Controllers\PackageController::class)->middleware('auth');
 Route::resource('privacy-policies', App\Http\Controllers\PrivacyPolicyController::class)->middleware('auth');
 Route::resource('area-coverages', App\Http\Controllers\AreaCoverageController::class)->middleware('auth');
+Route::resource('profile-pppoes', App\Http\Controllers\ProfilePppoeController::class)->middleware('auth');
+Route::resource('active-ppps', App\Http\Controllers\ActivePppController::class)->middleware('auth');
+Route::controller(App\Http\Controllers\SecretPppController::class)->group(function () {
+    Route::put('enableSecret/{id}', 'enable')->name('secret-ppps.enable');
+    Route::put('disableSecret/{id}', 'disable')->name('secret-ppps.disable');
+});
+
+Route::resource('secret-ppps', App\Http\Controllers\SecretPppController::class)->middleware('auth');
+
+Route::resource('logs', App\Http\Controllers\LogController::class)->middleware('auth');
+Route::resource('dhcps', App\Http\Controllers\DhcpController::class)->middleware('auth');
+Route::resource('interfaces', App\Http\Controllers\InterfaceController::class)->middleware('auth');
+Route::resource('statics', App\Http\Controllers\StaticController::class)->middleware('auth');
+Route::resource('settingmikrotiks', App\Http\Controllers\SettingmikrotikController::class)->middleware('auth');
+Route::controller(App\Http\Controllers\SettingmikrotikController::class)->group(function () {
+    Route::get('setActive', 'setActive')->name('setActive');
+});
+Route::resource('statusrouters', App\Http\Controllers\StatusrouterController::class)->middleware('auth');
+
+
+Route::controller(App\Http\Controllers\StatusrouterController::class)->group(function () {
+    Route::get('reboot', 'reboot')->name('reboot');
+});
+
+Route::resource('hotspotactives', App\Http\Controllers\HotspotactiveController::class)->middleware('auth');

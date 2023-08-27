@@ -35,25 +35,26 @@
                             <div class="table-responsive">
                                 <table class="table table-hover table-striped">
                                     <tr>
-                                            <td class="fw-bold">{{ __('Nama Layanan') }}</td>
-                                            <td>{{ $package->nama_layanan }}</td>
-                                        </tr>
-									<tr>
-                                            <td class="fw-bold">{{ __('Harga') }}</td>
-                                            <td>{{ $package->harga }}</td>
-                                        </tr>
-									<tr>
-                                        <td class="fw-bold">{{ __('Package Category') }}</td>
-                                        <td>{{ $package->package_category ? $package->package_category->nama_kategori : '' }}</td>
+                                        <td class="fw-bold">{{ __('Nama Layanan') }}</td>
+                                        <td>{{ $package->nama_layanan }}</td>
                                     </tr>
-									<tr>
-                                            <td class="fw-bold">{{ __('Keterangan') }}</td>
-                                            <td>{{ $package->keterangan }}</td>
-                                        </tr>
-									<tr>
-                                            <td class="fw-bold">{{ __('Is Active') }}</td>
-                                            <td>{{ $package->is_active }}</td>
-                                        </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Harga') }}</td>
+                                        <td>{{ $package->harga }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Package Category') }}</td>
+                                        <td>{{ $package->package_category ? $package->package_category->nama_kategori : '' }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Keterangan') }}</td>
+                                        <td>{{ $package->keterangan }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Is Active') }}</td>
+                                        <td>{{ $package->is_active }}</td>
+                                    </tr>
                                     <tr>
                                         <td class="fw-bold">{{ __('Created at') }}</td>
                                         <td>{{ $package->created_at->format('d/m/Y H:i') }}</td>

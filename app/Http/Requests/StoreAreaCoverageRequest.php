@@ -25,13 +25,13 @@ class StoreAreaCoverageRequest extends FormRequest
     {
         return [
             'kode_area' => 'required|string|max:50',
-			'tampilkan_register' => 'required|in:Yes,No',
-			'nama' => 'required|string|max:255',
-			'alamat' => 'required|string',
-			'keterangan' => 'required|string',
-			'jangkauan' => 'required|numeric',
-			'latitude' => 'required|string|max:50',
-			'longitude' => 'required|string|max:50',
+            'tampilkan_register' => 'required|in:Yes,No',
+            'nama' => 'required|string|max:255',
+            'alamat' => 'required|string',
+            'keterangan' => 'required|string',
+            'radius' => 'required|numeric',
+            'latitude' => 'required|string|max:50',
+            'longitude' => 'required|string|max:50',
         ];
     }
 }

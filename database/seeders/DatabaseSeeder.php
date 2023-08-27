@@ -18,5 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CompanySeeder::class);
         $this->call(WaGatewaySeeder::class);
         $this->call(PrivacyPolicySeeder::class);
+        $this->call(RouterMikrotikSeeder::class);
     }
 }

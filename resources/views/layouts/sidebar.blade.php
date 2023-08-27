@@ -8,9 +8,9 @@
                     </a>
                 </div>
                 <div class="theme-toggle d-flex gap-2  align-items-center mt-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                        aria-hidden="true" role="img" class="iconify iconify--system-uicons" width="20"
-                        height="20" preserveAspectRatio="xMidYMid meet" viewBox="0 0 21 21">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
+                        role="img" class="iconify iconify--system-uicons" width="20" height="20"
+                        preserveAspectRatio="xMidYMid meet" viewBox="0 0 21 21">
                         <g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round"
                             stroke-linejoin="round">
                             <path
@@ -42,7 +42,9 @@
             </div>
         </div>
         <div class="sidebar-menu">
+
             <ul class="menu">
+                <b>Router : {{ getRouteName() }}</b>
                 <li class="sidebar-item{{ request()->is('/') || request()->is('dashboard') ? ' active' : '' }}">
                     <a class="sidebar-link" href="/">
                         <i class="bi bi-speedometer"></i>
@@ -62,7 +64,8 @@
                                     @if (empty($menu['submenus']))
                                         @can($menu['permission'])
                                             <li class="sidebar-item{{ is_active_menu($menu['route']) }}">
-                                                <a href="{{ route(str($menu['route'])->remove('/')->plural() . '.index') }}" class="sidebar-link">
+                                                <a href="{{ route(str($menu['route'])->remove('/')->plural() . '.index') }}"
+                                                    class="sidebar-link">
                                                     {!! $menu['icon'] !!}
                                                     <span>{{ __($menu['title']) }}</span>
                                                 </a>
@@ -78,8 +81,9 @@
                                                 @canany($menu['permissions'])
                                                     @foreach ($menu['submenus'] as $submenu)
                                                         @can($submenu['permission'])
-                                                            <li class="submenu-item{{  is_active_menu($submenu['route']) }}">
-                                                                <a href="{{ route(str($submenu['route'])->remove('/')->plural() . '.index') }}">
+                                                            <li class="submenu-item{{ is_active_menu($submenu['route']) }}">
+                                                                <a
+                                                                    href="{{ route(str($submenu['route'])->remove('/')->plural() . '.index') }}">
                                                                     {{ __($submenu['title']) }}
                                                                 </a>
                                                             </li>

@@ -27,10 +27,10 @@ class PackageCategoryController extends Controller
             $packageCategories = PackageCategory::query();
 
             return DataTables::of($packageCategories)
-                ->addColumn('keterangan', function($row){
+                ->addColumn('keterangan', function ($row) {
                     return str($row->keterangan)->limit(100);
                 })
-				->addColumn('action', 'package-categories.include.action')
+                ->addColumn('action', 'package-categories.include.action')
                 ->toJson();
         }
 
@@ -55,7 +55,7 @@ class PackageCategoryController extends Controller
      */
     public function store(StorePackageCategoryRequest $request)
     {
-        
+
         PackageCategory::create($request->validated());
 
         return redirect()
@@ -94,7 +94,7 @@ class PackageCategoryController extends Controller
      */
     public function update(UpdatePackageCategoryRequest $request, PackageCategory $packageCategory)
     {
-        
+
         $packageCategory->update($request->validated());
 
         return redirect()

@@ -110,24 +110,121 @@ return [
      */
     'sidebars' => [
         [
-            'header' => 'Main',
+            'header' => 'Mikrotik',
             'permissions' => [
-                'bank view'
+                'log view',
+                'dhcp view',
+                'interface view',
+                'settingmikrotik view',
+                'statusrouter view'
             ],
             'menus' => [
                 [
-                    'title' => 'Main Data',
+                    'title' => 'Mikrotik',
+                    'icon' => '<i class="bi bi-device-ssd"></i>',
+                    'route' => null,
+                    'permission' => null,
+                    'permissions' => [
+                        'log view',
+                        'dhcp view',
+                        'interface view',
+                        'settingmikrotik view',
+                        'statusrouter view'
+                    ],
+                    'submenus' => [
+                        [
+                            'title' => 'Status Router',
+                            'route' => '/statusrouters',
+                            'permission' => 'statusrouter view'
+                        ],
+                        [
+                            'title' => 'Log Router',
+                            'route' => '/logs',
+                            'permission' => 'log view'
+                        ],
+                        [
+                            'title' => 'DHCP Leases',
+                            'route' => '/dhcps',
+                            'permission' => 'dhcp view'
+                        ],
+                        [
+                            'title' => 'All Interface',
+                            'route' => '/interfaces',
+                            'permission' => 'interface view'
+                        ],
+                        [
+                            'title' => 'Setting Router',
+                            'route' => '/settingmikrotiks',
+                            'permission' => 'settingmikrotik view'
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        [
+            'header' => 'Hotspot',
+            'permissions' => [
+                'hotspotactive view'
+            ],
+            'menus' => [
+                [
+                    'title' => 'Hotspot',
+                    'icon' => '<i class="bi bi-wifi"></i>',
+                    'route' => null,
+                    'permission' => null,
+                    'permissions' => [
+                        'hotspotactive view'
+                    ],
+                    'submenus' => [
+                        [
+                            'title' => 'Active',
+                            'route' => '/hotspotactives',
+                            'permission' => 'hotspotactive view'
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        [
+            'header' => 'PppOE',
+            'permissions' => [
+                'profile pppoe view',
+                'active ppp view',
+                'secret ppp view',
+                'static view'
+            ],
+            'menus' => [
+                [
+                    'title' => 'PPPOE & Static',
                     'icon' => '<i class="bi bi-list-ul"></i>',
                     'route' => null,
                     'permission' => null,
                     'permissions' => [
-                        'bank view'
+                        'profile pppoe view',
+                        'active ppp view',
+                        'secret ppp view',
+                        'static view'
                     ],
                     'submenus' => [
                         [
-                            'title' => 'Banks',
-                            'route' => '/banks',
-                            'permission' => 'bank view'
+                            'title' => 'Profile PPP',
+                            'route' => '/profile-pppoes',
+                            'permission' => 'profile pppoe view'
+                        ],
+                        [
+                            'title' => 'Secret PPP',
+                            'route' => '/secret-ppps',
+                            'permission' => 'secret ppp view'
+                        ],
+                        [
+                            'title' => 'Active PPP',
+                            'route' => '/active-ppps',
+                            'permission' => 'active ppp view'
+                        ],
+                        [
+                            'title' => 'User Static',
+                            'route' => '/statics',
+                            'permission' => 'static view'
                         ]
                     ]
                 ]
@@ -185,6 +282,7 @@ return [
             'permissions' => [
                 'company view',
                 'bank account view',
+                'bank view',
                 'wa gateway view',
                 'privacy policy view'
             ],
@@ -197,6 +295,7 @@ return [
                     'permissions' => [
                         'company view',
                         'bank account view',
+                        'bank view',
                         'wa gateway view',
                         'privacy policy view'
                     ],
@@ -215,6 +314,11 @@ return [
                             'title' => 'Bank Accounts',
                             'route' => '/bank-accounts',
                             'permission' => 'bank account view'
+                        ],
+                        [
+                            'title' => 'Banks',
+                            'route' => '/banks',
+                            'permission' => 'bank view'
                         ],
                         [
                             'title' => 'Wa Gateway',
