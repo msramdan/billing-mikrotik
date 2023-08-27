@@ -76,6 +76,13 @@
                 {
                     data: 'host-name',
                     name: 'host-name',
+                    render: function(data, type, full, meta) {
+                        if (typeof data !== 'undefined') {
+                            return `${data}`;
+                        } else {
+                            return '-';
+                        }
+                    }
                 },
                 {
                     data: 'server',

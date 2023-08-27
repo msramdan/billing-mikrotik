@@ -31,9 +31,21 @@ class ActivePppController extends Controller
         return view('active-ppps.index');
     }
 
-    public function show(ActivePpp $activePpp)
+    public function show($name)
     {
-        return view('active-ppps.show', compact('activePpp'));
+        $client = setRoute();
+        $pppuser = (new Query('/ppp/secret/print'))
+            ->where('name', $name);
+        $pppuser = $client->query($pppuser)->read();
+
+
+        $pppactive = (new Query('/ppp/active/print'))
+            ->where('name', $name);
+        $pppactive = $client->query($pppactive)->read();
+        return view('active-ppps.show',[
+            'pppuser' =>$pppuser,
+            'pppactive' =>$pppactive
+        ]);
     }
 
     public function destroy($id)

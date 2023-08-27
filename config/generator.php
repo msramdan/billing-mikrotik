@@ -187,6 +187,11 @@ return [
                         'title' => 'Active Hotspot',
                         'route' => '/hotspotactives',
                         'permission' => 'hotspotactive view'
+                    ],
+                    [
+                        'title' => 'MIKHMON',
+                        'route' => '/hotspotactives',
+                        'permission' => 'hotspotactive view'
                     ]
 
                 ]

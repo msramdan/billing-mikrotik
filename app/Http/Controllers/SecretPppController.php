@@ -102,7 +102,7 @@ class SecretPppController extends Controller
             ->equal('.id', $id);
         $client->query($queryDisable)->read();
 
-        // get id
+        // get name
         $queryGet = (new Query('/ppp/active/print'))
             ->where('name', $name);
         $data = $client->query($queryGet)->read();
