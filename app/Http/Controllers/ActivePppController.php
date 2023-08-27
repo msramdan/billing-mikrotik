@@ -18,11 +18,6 @@ class ActivePppController extends Controller
         $this->middleware('permission:active ppp delete')->only('destroy');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         if (request()->ajax()) {
@@ -38,7 +33,6 @@ class ActivePppController extends Controller
                 ->addColumn('action', 'active-ppps.include.action')
                 ->toJson();
         }
-
         return view('active-ppps.index');
     }
 

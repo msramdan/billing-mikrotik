@@ -6,17 +6,20 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class WaGatewaySeeder extends Seeder
+class RouterMikrotikSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        DB::table('wa_gateways')->insert([
-            'url' => 'https://wagw.sitarsius.com/api/',
-            'api_key' => '3e655e6433d5b73e7ce91fbcd0e07974d9e288c0',
-            'is_active' => 'No',
+        DB::table('settingmikrotiks')->insert([
+            'identitas_router' => 'CCR1016-12G',
+            'host' => '103.122.65.234',
+            'port' => 83,
+            'username' => 'sawitskylink',
+            'password' => 'sawit064199',
+            'is_active' => 'Yes',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);

@@ -195,5 +195,6 @@ return [
         ['group' => 'logs', 'access' => ['log view']],
         ['group' => 'dhcps', 'access' => ['dhcp view', 'dhcp delete']],
         ['group' => 'interfaces', 'access' => ['interface view']],
-    ],
-];
+        ['group' => 'statics', 'access' => ['static view']],
+  ['group' => 'settingmikrotiks', 'access' => ['settingmikrotik view', 'settingmikrotik create', 'settingmikrotik edit', 'settingmikrotik delete']], 
+		],];

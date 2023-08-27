@@ -34,7 +34,6 @@ class SecretPppController extends Controller
             ]);
             $query = new Query('/ppp/secret/print');
             $secretPpps = $client->query($query)->read();
-            // dd($secretPpps);
             return DataTables::of($secretPpps)
                 ->addColumn('action', 'secret-ppps.include.action')
                 ->toJson();

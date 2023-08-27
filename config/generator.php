@@ -114,7 +114,8 @@ return [
             'permissions' => [
                 'log view',
                 'dhcp view',
-                'interface view'
+                'interface view',
+                'settingmikrotik view'
             ],
             'menus' => [
                 [
@@ -125,7 +126,8 @@ return [
                     'permissions' => [
                         'log view',
                         'dhcp view',
-                        'interface view'
+                        'interface view',
+                        'settingmikrotik view'
                     ],
                     'submenus' => [
                         [
@@ -142,6 +144,11 @@ return [
                             'title' => 'All Interface',
                             'route' => '/interfaces',
                             'permission' => 'interface view'
+                        ],
+                        [
+                            'title' => 'Setting Router',
+                            'route' => '/settingmikrotiks',
+                            'permission' => 'settingmikrotik view'
                         ]
                     ]
                 ]
@@ -152,7 +159,8 @@ return [
             'permissions' => [
                 'profile pppoe view',
                 'active ppp view',
-                'secret ppp view'
+                'secret ppp view',
+                'static view'
             ],
             'menus' => [
                 [
@@ -163,7 +171,8 @@ return [
                     'permissions' => [
                         'profile pppoe view',
                         'active ppp view',
-                        'secret ppp view'
+                        'secret ppp view',
+                        'static view'
                     ],
                     'submenus' => [
                         [
@@ -180,6 +189,11 @@ return [
                             'title' => 'Active PPP',
                             'route' => '/active-ppps',
                             'permission' => 'active ppp view'
+                        ],
+                        [
+                            'title' => 'User Static',
+                            'route' => '/statics',
+                            'permission' => 'static view'
                         ]
                     ]
                 ]
