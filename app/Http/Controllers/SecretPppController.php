@@ -26,12 +26,7 @@ class SecretPppController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $client = new Client([
-                'host' => '103.122.65.234',
-                'user' => 'sawitskylink',
-                'pass' => 'sawit064199',
-                'port' => 83,
-            ]);
+            $client = setRoute();
             $query = new Query('/ppp/secret/print');
             $secretPpps = $client->query($query)->read();
             return DataTables::of($secretPpps)
@@ -75,13 +70,7 @@ class SecretPppController extends Controller
 
     public function enable($id)
     {
-        $client = new Client([
-            'host' => '103.122.65.234',
-            'user' => 'sawitskylink',
-            'pass' => 'sawit064199',
-            'port' => 83,
-        ]);
-
+        $client = setRoute();
         // set komen
         $comment = 'Di Aktifkan Tanggal : ' . date('Y-m-d H:i:s');
         $queryComment = (new Query('/ppp/secret/set'))
@@ -100,12 +89,7 @@ class SecretPppController extends Controller
 
     public function disable($id)
     {
-        $client = new Client([
-            'host' => '103.122.65.234',
-            'user' => 'sawitskylink',
-            'pass' => 'sawit064199',
-            'port' => 83,
-        ]);
+        $client = setRoute();
         // set komen
         $comment = 'Di Non-Aktifkan Tanggal : ' . date('Y-m-d H:i:s');
         $queryComment = (new Query('/ppp/secret/set'))
@@ -126,12 +110,7 @@ class SecretPppController extends Controller
     public function destroy($id)
     {
         try {
-            $client = new Client([
-                'host' => '103.122.65.234',
-                'user' => 'sawitskylink',
-                'pass' => 'sawit064199',
-                'port' => 83,
-            ]);
+            $client = setRoute();
             $queryDelete = (new Query('/ppp/secret/remove'))
                 ->equal('.id', $id);
             $client->query($queryDelete)->read();

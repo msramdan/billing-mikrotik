@@ -19,12 +19,7 @@ class DhcpController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $client = new Client([
-                'host' => '103.122.65.234',
-                'user' => 'sawitskylink',
-                'pass' => 'sawit064199',
-                'port' => 83,
-            ]);
+            $client = setRoute();
             $query = new Query('/ip/dhcp-server/lease/print');
             $dhcps = $client->query($query)->read();
             return DataTables::of($dhcps)
@@ -37,12 +32,7 @@ class DhcpController extends Controller
     public function destroy($id)
     {
         try {
-            $client = new Client([
-                'host' => '103.122.65.234',
-                'user' => 'sawitskylink',
-                'pass' => 'sawit064199',
-                'port' => 83,
-            ]);
+            $client = setRoute();
             $queryDelete = (new Query('/ip/dhcp-server/lease/remove'))
                 ->equal('.id', $id);
             $client->query($queryDelete)->read();

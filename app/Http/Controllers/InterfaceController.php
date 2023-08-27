@@ -18,12 +18,7 @@ class InterfaceController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $client = new Client([
-                'host' => '103.122.65.234',
-                'user' => 'sawitskylink',
-                'pass' => 'sawit064199',
-                'port' => 83,
-            ]);
+            $client = setRoute();
             $query = (new Query('/interface/print'))
                 ->where('mtu', 1500);
             $interfaces = $client->query($query)->read();
