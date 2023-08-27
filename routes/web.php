@@ -52,3 +52,8 @@ Route::resource('interfaces', App\Http\Controllers\InterfaceController::class)->
 Route::resource('statics', App\Http\Controllers\StaticController::class)->middleware('auth');
 Route::resource('settingmikrotiks', App\Http\Controllers\SettingmikrotikController::class)->middleware('auth');
 Route::resource('statusrouters', App\Http\Controllers\StatusrouterController::class)->middleware('auth');
+
+
+Route::controller(App\Http\Controllers\StatusrouterController::class)->group(function () {
+    Route::get('reboot', 'reboot')->name('reboot');
+});

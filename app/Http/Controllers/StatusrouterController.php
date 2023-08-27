@@ -92,4 +92,20 @@ class StatusrouterController extends Controller
 
         return view('statusrouters.show', $dataku);
     }
+
+
+    public function reboot()
+    {
+        try {
+            $client = setRoute();
+            $reboot = (new Query('/system/reboot\ny'));
+            $client->query($reboot)->read();
+            return redirect()->back()
+                ->with('success', __('Reboot router was successfully.'));
+        } catch (\Throwable $th) {
+            return redirect()
+                ->back()
+                ->with('error', __("'Reboot router was Failed."));
+        }
+    }
 }

@@ -28,6 +28,8 @@
         </div>
 
         <section class="section">
+            <x-alert></x-alert>
+
             <div class="row">
                 <div class="col-md-8">
                     <div class="card">
@@ -118,7 +120,7 @@
                                     style="width: 100%">
                                 <br>
                                 <br>
-                                <a href=""
+                                <a href="{{ route('reboot') }}"
                                     onclick="return confirm('Apakah anda yakin akan merestart Router <?= $identity ?> ?')"
                                     class="d-sm-inline-block btn btn-primary shadow-sm">
                                     <i class="fa fa-power-off fa-sm text-white-50"></i><i class="fa fa-refresh"
