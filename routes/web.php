@@ -51,6 +51,9 @@ Route::resource('dhcps', App\Http\Controllers\DhcpController::class)->middleware
 Route::resource('interfaces', App\Http\Controllers\InterfaceController::class)->middleware('auth');
 Route::resource('statics', App\Http\Controllers\StaticController::class)->middleware('auth');
 Route::resource('settingmikrotiks', App\Http\Controllers\SettingmikrotikController::class)->middleware('auth');
+Route::controller(App\Http\Controllers\SettingmikrotikController::class)->group(function () {
+    Route::get('setActive', 'setActive')->name('setActive');
+});
 Route::resource('statusrouters', App\Http\Controllers\StatusrouterController::class)->middleware('auth');
 
 

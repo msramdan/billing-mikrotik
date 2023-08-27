@@ -126,7 +126,7 @@
                                     <i class="fa fa-power-off fa-sm text-white-50"></i><i class="fa fa-refresh"
                                         aria-hidden="true"></i> Reboot MikroTik Now
                                 </a>
-                                <h4 style="margin-top: 10px">{{ getRoute()->identitas_router }}</h4>
+                                <h4 style="margin-top: 10px">{{ getRouteName() }}</h4>
                             </center>
                         </div>
                     </div>

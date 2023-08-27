@@ -6,6 +6,7 @@ use App\Models\Settingmikrotik;
 use App\Http\Requests\{StoreSettingmikrotikRequest, UpdateSettingmikrotikRequest};
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class SettingmikrotikController extends Controller
 {
@@ -23,7 +24,15 @@ class SettingmikrotikController extends Controller
             $settingmikrotiks = Settingmikrotik::query();
 
             return DataTables::of($settingmikrotiks)
+                ->addColumn('is_active', function ($row) {
+                    if ($row->is_active == 'Yes') {
+                        return '<a href="' . url('/setActive?id=' . $row->id) . '" class="btn btn-success btn-block">Aktive</a>';
+                    } else {
+                        return '<a href="' . url('/setActive?id=' . $row->id) . '" class="btn btn-danger btn-block">Non Aktive</a>';
+                    }
+                })
                 ->addColumn('action', 'settingmikrotiks.include.action')
+                ->rawColumns(['is_active', 'action'])
                 ->toJson();
         }
 
@@ -135,6 +144,22 @@ class SettingmikrotikController extends Controller
             return redirect()
                 ->route('settingmikrotiks.index')
                 ->with('error', __("The settingmikrotik can't be deleted because it's related to another table."));
+        }
+    }
+
+    public function setActive(Request $request)
+    {
+        try {
+            DB::table('settingmikrotiks')
+                ->where('id', $request->id)
+                ->update(['is_active' => 'Yes']);
+            return redirect()
+                ->route('settingmikrotiks.index')
+                ->with('success', __('The Router was activated successfully.'));
+        } catch (\Throwable $th) {
+            return redirect()
+                ->route('settingmikrotiks.index')
+                ->with('error', __("The Router can't be activated because error"));
         }
     }
 }

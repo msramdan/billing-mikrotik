@@ -41,7 +41,7 @@ function getRouteName()
 {
     $router = DB::table('settingmikrotiks')->where('is_active', 'Yes')->first();
     if ($router) {
-        return $router;
+        return $router->identitas_router;
     } else {
         return '-';
     }
