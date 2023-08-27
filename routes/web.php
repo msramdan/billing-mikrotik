@@ -62,3 +62,5 @@ Route::controller(App\Http\Controllers\StatusrouterController::class)->group(fun
 });
 
 Route::resource('hotspotactives', App\Http\Controllers\HotspotactiveController::class)->middleware('auth');
+
+Route::resource('hotspotusers', App\Http\Controllers\HotspotuserController::class)->middleware('auth');

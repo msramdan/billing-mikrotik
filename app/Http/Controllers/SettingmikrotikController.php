@@ -151,6 +151,8 @@ class SettingmikrotikController extends Controller
     {
         try {
             DB::table('settingmikrotiks')
+                ->update(['is_active' => 'No']);
+            DB::table('settingmikrotiks')
                 ->where('id', $request->id)
                 ->update(['is_active' => 'Yes']);
             return redirect()

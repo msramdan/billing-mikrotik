@@ -12,8 +12,6 @@ class HotspotactiveController extends Controller
     public function __construct()
     {
         $this->middleware('permission:hotspotactive view')->only('index', 'show');
-        $this->middleware('permission:hotspotactive create')->only('create', 'store');
-        $this->middleware('permission:hotspotactive edit')->only('edit', 'update');
         $this->middleware('permission:hotspotactive delete')->only('destroy');
     }
 
@@ -38,11 +36,13 @@ class HotspotactiveController extends Controller
     }
 
 
-    public function destroy(Hotspotactive $hotspotactive)
+    public function destroy($id)
     {
         try {
-            $hotspotactive->delete();
-
+            $client = setRoute();
+            $queryDelete = (new Query('/ip/hotspot/active/remove'))
+                ->equal('.id', $id);
+            $client->query($queryDelete)->read();
             return redirect()
                 ->route('hotspotactives.index')
                 ->with('success', __('The hotspotactive was deleted successfully.'));
