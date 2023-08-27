@@ -98,6 +98,13 @@
                         @endcanany
                     @endif
                 @endforeach
+                <li class="sidebar-item">
+                    <a class="sidebar-link" target="_blank" href="http://localhost:8000/mikhmon/admin.php?id=login">
+                        <i class="bi bi-tags"></i>
+                        <span> {{ __('Mikhmon') }}</span>
+                    </a>
+                </li>
+
                 <li class="sidebar-item{{ request()->is('profile') ? ' active' : '' }}">
                     <a class="sidebar-link" href="{{ route('profile') }}">
                         <i class="bi bi-person-badge-fill"></i>
