@@ -198,5 +198,6 @@ return [
         ['group' => 'statics', 'access' => ['static view']],
         ['group' => 'settingmikrotiks', 'access' => ['settingmikrotik view', 'settingmikrotik create', 'settingmikrotik edit', 'settingmikrotik delete']],
         ['group' => 'statusrouters', 'access' => ['statusrouter view']],
+        ['group' => 'hotspotactives', 'access' => ['hotspotactive view', 'hotspotactive delete']],
     ],
 ];

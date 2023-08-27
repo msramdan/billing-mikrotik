@@ -57,3 +57,5 @@ Route::resource('statusrouters', App\Http\Controllers\StatusrouterController::cl
 Route::controller(App\Http\Controllers\StatusrouterController::class)->group(function () {
     Route::get('reboot', 'reboot')->name('reboot');
 });
+
+Route::resource('hotspotactives', App\Http\Controllers\HotspotactiveController::class)->middleware('auth');

@@ -162,6 +162,30 @@ return [
             ]
         ],
         [
+            'header' => 'Hotspot',
+            'permissions' => [
+                'hotspotactive view'
+            ],
+            'menus' => [
+                [
+                    'title' => 'Hotspot',
+                    'icon' => '<i class="bi bi-wifi"></i>',
+                    'route' => null,
+                    'permission' => null,
+                    'permissions' => [
+                        'hotspotactive view'
+                    ],
+                    'submenus' => [
+                        [
+                            'title' => 'Active',
+                            'route' => '/hotspotactives',
+                            'permission' => 'hotspotactive view'
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        [
             'header' => 'PppOE',
             'permissions' => [
                 'profile pppoe view',
