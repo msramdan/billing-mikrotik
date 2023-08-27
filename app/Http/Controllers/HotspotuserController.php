@@ -50,7 +50,15 @@ class HotspotuserController extends Controller
      */
     public function create()
     {
-        return view('hotspotusers.create');
+        $client = setRoute();
+        $hotspotprofile = new Query('/ip/hotspot/user/profile/print');
+        $hotspotprofile = $client->query($hotspotprofile)->read();
+        $hotspotserver = new Query('/ip/hotspot/print');
+        $hotspotserver = $client->query($hotspotserver)->read();
+        return view('hotspotusers.create', [
+            'hotspotprofile' => $hotspotprofile,
+            'hotspotserver' => $hotspotserver,
+        ]);
     }
 
     /**
@@ -61,12 +69,18 @@ class HotspotuserController extends Controller
      */
     public function store(StoreHotspotuserRequest $request)
     {
-
-        Hotspotuser::create($request->validated());
-
+        $attr = $request->validated();
+        $client = setRoute();
+        $query = (new Query('/ip/hotspot/user/add'))
+            ->equal('name',  $request->name)
+            ->equal('password', $request->password)
+            ->equal('profile', $request->profile)
+            ->equal('server', $request->server_hotspot)
+            ->equal('comment', $request->comment);
+        $client->query($query)->read();
         return redirect()
             ->route('hotspotusers.index')
-            ->with('success', __('The hotspotuser was created successfully.'));
+            ->with('success', __('The Hotspot User was created successfully.'));
     }
 
     /**
@@ -86,9 +100,23 @@ class HotspotuserController extends Controller
      * @param  \App\Models\Hotspotuser  $hotspotuser
      * @return \Illuminate\Http\Response
      */
-    public function edit(Hotspotuser $hotspotuser)
+    public function edit($id)
     {
-        return view('hotspotusers.edit', compact('hotspotuser'));
+        $client = setRoute();
+        $query = (new Query('/ip/hotspot/user/print'))
+            ->where('.id', $id);
+        $hotspotuser = $client->query($query)->read();
+
+        $hotspotprofile = new Query('/ip/hotspot/user/profile/print');
+        $hotspotprofile = $client->query($hotspotprofile)->read();
+
+        $hotspotserver = new Query('/ip/hotspot/print');
+        $hotspotserver = $client->query($hotspotserver)->read();
+        return view('hotspotusers.edit', [
+            'hotspotuser' => $hotspotuser,
+            'hotspotprofile' => $hotspotprofile,
+            'hotspotserver' => $hotspotserver,
+        ]);
     }
 
     /**
@@ -105,7 +133,7 @@ class HotspotuserController extends Controller
 
         return redirect()
             ->route('hotspotusers.index')
-            ->with('success', __('The hotspotuser was updated successfully.'));
+            ->with('success', __('The Hotspot User was updated successfully.'));
     }
 
     /**
@@ -114,18 +142,20 @@ class HotspotuserController extends Controller
      * @param  \App\Models\Hotspotuser  $hotspotuser
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Hotspotuser $hotspotuser)
+    public function destroy($id)
     {
         try {
-            $hotspotuser->delete();
-
+            $client = setRoute();
+            $queryDelete = (new Query('/ip/hotspot/user/remove'))
+                ->equal('.id',  $id);
+            $client->query($queryDelete)->read();
             return redirect()
                 ->route('hotspotusers.index')
-                ->with('success', __('The hotspotuser was deleted successfully.'));
+                ->with('success', __('The Hotspot User was deleted successfully.'));
         } catch (\Throwable $th) {
             return redirect()
                 ->route('hotspotusers.index')
-                ->with('error', __("The hotspotuser can't be deleted because it's related to another table."));
+                ->with('error', __("The Hotspot User can't be deleted because it's related to another table."));
         }
     }
 }

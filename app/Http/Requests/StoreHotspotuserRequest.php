@@ -27,9 +27,8 @@ class StoreHotspotuserRequest extends FormRequest
             'name' => 'required|string|max:255',
 			'password' => 'required|string|max:255',
 			'profile' => 'required|string|max:255',
-			'uptime' => 'required|string|max:255',
-			'bytes_out' => 'required|string|max:255',
-			'bytes_in' => 'required|string|max:255',
+			'server_hotspot' => 'required|string|max:255',
+			'comment' => 'required|string|max:255',
         ];
     }
 }

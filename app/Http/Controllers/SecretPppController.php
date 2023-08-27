@@ -102,6 +102,10 @@ class SecretPppController extends Controller
             ->equal('.id', $id);
         $client->query($query)->read();
 
+        // remove session
+        // $queryDelete = (new Query('/ppp/active/remove'))
+        //     ->equal('name', '11');
+        // $client->query($queryDelete)->read();
         return redirect()
             ->route('secret-ppps.index')
             ->with('success', __('The Secret PPP was disable successfully.'));

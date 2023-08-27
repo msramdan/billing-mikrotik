@@ -32,7 +32,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <form action="{{ route('hotspotusers.update', $hotspotuser->id) }}" method="POST">
+                            <form action="" method="POST">
                                 @csrf
                                 @method('PUT')
 

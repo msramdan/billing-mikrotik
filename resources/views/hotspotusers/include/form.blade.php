@@ -1,8 +1,8 @@
 <div class="row mb-2">
     <div class="col-md-6">
         <div class="form-group">
-            <label for="name">{{ __('Name') }}</label>
-            <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" value="{{ isset($hotspotuser) ? $hotspotuser->name : old('name') }}" placeholder="{{ __('Name') }}" required />
+            <label for="name">{{ __('Username') }}</label>
+            <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" value="{{ isset($hotspotuser) ? $hotspotuser->name : old('name') }}" placeholder="{{ __('Username') }}" required />
             @error('name')
                 <span class="text-danger">
                     {{ $message }}
@@ -21,10 +21,20 @@
             @enderror
         </div>
     </div>
+
     <div class="col-md-6">
         <div class="form-group">
             <label for="profile">{{ __('Profile') }}</label>
-            <input type="text" name="profile" id="profile" class="form-control @error('profile') is-invalid @enderror" value="{{ isset($hotspotuser) ? $hotspotuser->profile : old('profile') }}" placeholder="{{ __('Profile') }}" required />
+            <select class="form-select @error('profile') is-invalid @enderror" name="profile" id="profile"
+                class="form-control" required>
+                <option value="" selected disabled>-- {{ __('Select Profile') }} --</option>
+                @foreach ($hotspotprofile as $datagua)
+                    <option value="{{ $datagua['name'] }}"
+                        {{ isset($hotspotuser) && $hotspotuser->profile == $datagua['name'] ? 'selected' : (old('profile') == $datagua['name'] ? 'selected' : '') }}>
+                        {{ $datagua['name'] }}
+                    </option>
+                @endforeach
+            </select>
             @error('profile')
                 <span class="text-danger">
                     {{ $message }}
@@ -32,33 +42,35 @@
             @enderror
         </div>
     </div>
+
     <div class="col-md-6">
         <div class="form-group">
-            <label for="uptime">{{ __('Uptime') }}</label>
-            <input type="text" name="uptime" id="uptime" class="form-control @error('uptime') is-invalid @enderror" value="{{ isset($hotspotuser) ? $hotspotuser->uptime : old('uptime') }}" placeholder="{{ __('Uptime') }}" required />
-            @error('uptime')
+            <label for="server_hotspot">{{ __('Server') }}</label>
+            <select class="form-select @error('server_hotspot') is-invalid @enderror" name="server_hotspot" id="server"
+                class="form-control" required>
+                <option value="" selected disabled>-- {{ __('Select Server') }} --</option>
+                @foreach ($hotspotserver as $mydata)
+                    <option value="{{ $mydata['name'] }}"
+                        {{ isset($hotspotuser) && $hotspotuser->server_hotspot == $mydata['name'] ? 'selected' : (old('server_hotspot') == $mydata['name'] ? 'selected' : '') }}>
+                        {{ $mydata['name'] }}
+                    </option>
+                @endforeach
+            </select>
+            @error('server_hotspot')
                 <span class="text-danger">
                     {{ $message }}
                 </span>
             @enderror
         </div>
     </div>
+
+
+
     <div class="col-md-6">
         <div class="form-group">
-            <label for="bytes-out">{{ __('Bytes Out') }}</label>
-            <input type="text" name="bytes_out" id="bytes-out" class="form-control @error('bytes_out') is-invalid @enderror" value="{{ isset($hotspotuser) ? $hotspotuser->bytes_out : old('bytes_out') }}" placeholder="{{ __('Bytes Out') }}" required />
-            @error('bytes_out')
-                <span class="text-danger">
-                    {{ $message }}
-                </span>
-            @enderror
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="form-group">
-            <label for="bytes-in">{{ __('Bytes In') }}</label>
-            <input type="text" name="bytes_in" id="bytes-in" class="form-control @error('bytes_in') is-invalid @enderror" value="{{ isset($hotspotuser) ? $hotspotuser->bytes_in : old('bytes_in') }}" placeholder="{{ __('Bytes In') }}" required />
-            @error('bytes_in')
+            <label for="comment">{{ __('Komentar') }}</label>
+            <input type="text" name="comment" id="comment" class="form-control @error('comment') is-invalid @enderror" value="{{ isset($hotspotuser) ? $hotspotuser->comment : old('comment') }}" placeholder="{{ __('Komentar') }}" required />
+            @error('comment')
                 <span class="text-danger">
                     {{ $message }}
                 </span>
