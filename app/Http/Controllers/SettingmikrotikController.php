@@ -102,7 +102,7 @@ class SettingmikrotikController extends Controller
             DB::table('settingmikrotiks')
                 ->where('id', $settingmikrotik->id)
                 ->update([
-                    'identitas_router' => 'Yes',
+                    'identitas_router' => $request->identitas_router,
                     'host' => $request->host,
                     'port' => $request->port,
                     'username' => $request->username,
@@ -113,7 +113,7 @@ class SettingmikrotikController extends Controller
             DB::table('settingmikrotiks')
                 ->where('id', $settingmikrotik->id)
                 ->update([
-                    'identitas_router' => 'Yes',
+                    'identitas_router' => $request->identitas_router,
                     'host' => $request->host,
                     'port' => $request->port,
                     'username' => $request->username,
