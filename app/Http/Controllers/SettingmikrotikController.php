@@ -95,20 +95,33 @@ class SettingmikrotikController extends Controller
     {
         $attr = $request->validated();
         if ($request->is_active == 'Yes') {
-            // update all route jadi no
             DB::table('settingmikrotiks')
                 ->update(['is_active' => 'No']);
         }
-        switch (is_null($request->password)) {
-            case true:
-                unset($attr['password']);
-                break;
-            default:
-                $attr['password'] = $request->password;
-                break;
+        if ($request->password == null) {
+            DB::table('settingmikrotiks')
+                ->where('id', $settingmikrotik->id)
+                ->update([
+                    'identitas_router' => 'Yes',
+                    'host' => $request->host,
+                    'port' => $request->port,
+                    'username' => $request->username,
+                    'is_active' => $request->is_active,
+                    'updated_at' =>  date('Y-m-d H:i:s'),
+                ]);
+        } else {
+            DB::table('settingmikrotiks')
+                ->where('id', $settingmikrotik->id)
+                ->update([
+                    'identitas_router' => 'Yes',
+                    'host' => $request->host,
+                    'port' => $request->port,
+                    'username' => $request->username,
+                    'password' => $request->password,
+                    'is_active' => $request->is_active,
+                    'updated_at' =>  date('Y-m-d H:i:s'),
+                ]);
         }
-
-        $settingmikrotik->update($attr);
 
         return redirect()
             ->route('settingmikrotiks.index')
