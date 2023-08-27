@@ -1,7 +1,7 @@
 <?php
 
 use \RouterOS\Client;
-use \RouterOS\Query;
+use Illuminate\Support\Facades\DB;
 
 function formatBytes($bytes, $decimal = null)
 {
@@ -16,11 +16,12 @@ function formatBytes($bytes, $decimal = null)
 
 function setRoute()
 {
+    $router = DB::table('settingmikrotiks')->where('is_active', 'Yes')->first();
     $client = new Client([
-        'host' => '103.122.65.234',
-        'user' => 'sawitskylink',
-        'pass' => 'sawit064199',
-        'port' => 83,
+        'host' => $router->host,
+        'user' => $router->username,
+        'pass' => $router->password,
+        'port' => $router->port,
     ]);
     return $client;
 }
