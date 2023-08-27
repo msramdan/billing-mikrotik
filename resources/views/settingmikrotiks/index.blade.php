@@ -107,9 +107,9 @@
                     name: 'is_active',
                     render: function(data, type, full, meta) {
                         if (data == 'Yes') {
-                            return '<button type="button" class="btn btn-success">Aktive</button>';
+                            return '<button type="button" class="btn btn-success btn-block">Aktive</button>';
                         } else {
-                            return '<button type="button" class="btn btn-danger">Non Aktive</button>';
+                            return '<button type="button" class="btn btn-danger btn-block">Non Aktive</button>';
                         }
                     }
                 },

@@ -86,10 +86,10 @@
                 class="form-control" required>
                 <option value="" selected disabled>-- {{ __('Select is active') }} --</option>
                 <option value="Yes"
-                    {{ isset($package) && $package->is_active == 'Yes' ? 'selected' : (old('is_active') == 'Yes' ? 'selected' : '') }}>
+                    {{ isset($settingmikrotik) && $settingmikrotik->is_active == 'Yes' ? 'selected' : (old('is_active') == 'Yes' ? 'selected' : '') }}>
                     Yes</option>
                 <option value="No"
-                    {{ isset($package) && $package->is_active == 'No' ? 'selected' : (old('is_active') == 'No' ? 'selected' : '') }}>
+                    {{ isset($settingmikrotik) && $settingmikrotik->is_active == 'No' ? 'selected' : (old('is_active') == 'No' ? 'selected' : '') }}>
                     No</option>
             </select>
             @error('is_active')

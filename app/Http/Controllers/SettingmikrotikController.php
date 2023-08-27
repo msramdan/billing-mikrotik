@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Settingmikrotik;
 use App\Http\Requests\{StoreSettingmikrotikRequest, UpdateSettingmikrotikRequest};
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\DB;
 
 class SettingmikrotikController extends Controller
 {
@@ -48,8 +49,12 @@ class SettingmikrotikController extends Controller
     public function store(StoreSettingmikrotikRequest $request)
     {
         $attr = $request->validated();
-        $attr['password'] = bcrypt($request->password);
-
+        $attr['password'] = $request->password;
+        if ($request->is_active == 'Yes') {
+            // update all route jadi no
+            DB::table('settingmikrotiks')
+                ->update(['is_active' => 'No']);
+        }
         Settingmikrotik::create($attr);
 
         return redirect()
@@ -89,13 +94,17 @@ class SettingmikrotikController extends Controller
     public function update(UpdateSettingmikrotikRequest $request, Settingmikrotik $settingmikrotik)
     {
         $attr = $request->validated();
-
+        if ($request->is_active == 'Yes') {
+            // update all route jadi no
+            DB::table('settingmikrotiks')
+                ->update(['is_active' => 'No']);
+        }
         switch (is_null($request->password)) {
             case true:
                 unset($attr['password']);
                 break;
             default:
-                $attr['password'] = bcrypt($request->password);
+                $attr['password'] = $request->password;
                 break;
         }
 
