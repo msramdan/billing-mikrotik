@@ -44,7 +44,7 @@
         <div class="sidebar-menu">
 
             <ul class="menu">
-                <b>Router : {{ getRoute()->identitas_router }}</b>
+                <b>Router : {{ getRouteName() }}</b>
                 <li class="sidebar-item{{ request()->is('/') || request()->is('dashboard') ? ' active' : '' }}">
                     <a class="sidebar-link" href="/">
                         <i class="bi bi-speedometer"></i>
