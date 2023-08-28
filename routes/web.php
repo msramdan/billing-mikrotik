@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,19 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-
 Route::middleware(['auth', 'web'])->group(function () {
-    Route::get('/', fn () => view('dashboard'));
-    Route::get('/dashboard', fn () => view('dashboard'));
-
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/profile', App\Http\Controllers\ProfileController::class)->name('profile');
-
     Route::resource('users', App\Http\Controllers\UserController::class);
     Route::resource('roles', App\Http\Controllers\RoleAndPermissionController::class);
+});
+
+Route::get('/dashboard', function () {
+    return redirect()->route('dashboard');
 });
 
 Route::resource('companies', App\Http\Controllers\CompanyController::class)->middleware('auth');
