@@ -65,5 +65,10 @@ Route::controller(App\Http\Controllers\StatusrouterController::class)->group(fun
 });
 
 Route::resource('hotspotactives', App\Http\Controllers\HotspotactiveController::class)->middleware('auth');
-
 Route::resource('hotspotusers', App\Http\Controllers\HotspotuserController::class)->middleware('auth');
+Route::controller(App\Http\Controllers\HotspotuserController::class)->group(function () {
+    Route::put('enableHotspot/{id}', 'enable')->name('hotspotusers.enable');
+    Route::put('disableHotspot/{id}/{user}', 'disable')->name('hotspotusers.disable');
+    Route::put('resetHotspot/{id}', 'reset')->name('hotspotusers.reset');
+    Route::delete('deleteHotspot/{id}/{user}', 'deleteHotspot')->name('hotspotusers.delete');
+});

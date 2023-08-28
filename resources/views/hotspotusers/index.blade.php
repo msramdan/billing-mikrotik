@@ -45,6 +45,7 @@
 											<th>{{ __('Uptime') }}</th>
 											<th>{{ __('Download') }}</th>
 											<th>{{ __('Upload') }}</th>
+                                            <th>{{ __('Disable') }}</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
@@ -102,6 +103,17 @@
 				{
                     data: 'bytes_in',
                     name: 'bytes_in',
+                },
+                {
+                    data: 'disabled',
+                    name: 'disabled',
+                    render: function(data, type, full, meta) {
+                        if (data == 'true') {
+                            return '<button type="button" class="btn btn-danger btn-sm">Ya</button>';
+                        } else {
+                            return '<button type="button" class="btn btn-success btn-sm">Tidak</button>';
+                        }
+                    }
                 },
                 {
                     data: 'action',

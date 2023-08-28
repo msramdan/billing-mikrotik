@@ -1,6 +1,6 @@
 <td>
     @can('hotspotuser enable')
-        <form action="{{ route('secret-ppps.enable', $model['.id']) }}" method="post" class="d-inline"
+        <form action="{{ route('hotspotusers.enable', $model['.id']) }}" method="post" class="d-inline"
             onsubmit="return confirm('Are you sure to enable this hotspot ?')">
             @csrf
             @method('PUT')
@@ -9,8 +9,11 @@
             </button>
         </form>
     @endcan
+    <?php
+    $dataUser = $model['name'] ? $model['name'] : ' ';
+    ?>
     @can('hotspotuser disable')
-        <form action="{{ route('secret-ppps.disable', ['id' => $model['.id'], 'name' => $model['name']]) }}" method="post"
+        <form action="{{ route('hotspotusers.disable', ['id' => $model['.id'], 'user' =>$dataUser]) }}" method="post"
             class="d-inline" onsubmit="return confirm('Are you sure to disable this hotspot ?')">
             @csrf
             @method('PUT')
@@ -20,7 +23,7 @@
         </form>
     @endcan
     @can('hotspotuser reset')
-        <form action="{{ route('secret-ppps.enable', $model['.id']) }}" method="post" class="d-inline"
+        <form action="{{ route('hotspotusers.reset', $model['.id']) }}" method="post" class="d-inline"
             onsubmit="return confirm('Are you sure to reset this hotspot ?')">
             @csrf
             @method('PUT')
@@ -30,7 +33,7 @@
         </form>
     @endcan
     @can('hotspotuser delete')
-        <form action="{{ route('hotspotusers.destroy', $model['.id']) }}" method="post" class="d-inline"
+        <form action="{{ route('hotspotusers.delete',['id' => $model['.id'], 'user' =>$dataUser]) }}" method="post" class="d-inline"
             onsubmit="return confirm('Are you sure to delete this record?')">
             @csrf
             @method('delete')

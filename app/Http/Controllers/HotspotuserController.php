@@ -142,13 +142,23 @@ class HotspotuserController extends Controller
      * @param  \App\Models\Hotspotuser  $hotspotuser
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function deleteHotspot($id, $user)
     {
         try {
             $client = setRoute();
             $queryDelete = (new Query('/ip/hotspot/user/remove'))
                 ->equal('.id',  $id);
             $client->query($queryDelete)->read();
+
+            $queryGet = (new Query('/ip/hotspot/active/print'))
+                ->where('user', $user);
+            $data = $client->query($queryGet)->read();
+            if ($data) {
+                $idActive = $data[0]['.id'];
+                $queryDelete = (new Query('/ip/hotspot/active/remove'))
+                    ->equal('.id', $idActive);
+                $client->query($queryDelete)->read();
+            }
             return redirect()
                 ->route('hotspotusers.index')
                 ->with('success', __('The Hotspot User was deleted successfully.'));
@@ -157,5 +167,49 @@ class HotspotuserController extends Controller
                 ->route('hotspotusers.index')
                 ->with('error', __("The Hotspot User can't be deleted because it's related to another table."));
         }
+    }
+
+    public function disable($id, $user)
+    {
+        $client = setRoute();
+        // set disable
+        $queryDisable = (new Query('/ip/hotspot/user/disable'))
+            ->equal('.id', $id);
+        $client->query($queryDisable)->read();
+        // get name
+        $queryGet = (new Query('/ip/hotspot/active/print'))
+            ->where('user', $user);
+        $data = $client->query($queryGet)->read();
+        if ($data) {
+            $idActive = $data[0]['.id'];
+            $queryDelete = (new Query('/ip/hotspot/active/remove'))
+                ->equal('.id', $idActive);
+            $client->query($queryDelete)->read();
+        }
+        return redirect()
+            ->route('hotspotusers.index')
+            ->with('success', __('The Hotspot was disable successfully.'));
+    }
+
+    public function enable($id)
+    {
+        $client = setRoute();
+        $query = (new Query('/ip/hotspot/user/enable'))
+            ->equal('.id', $id);
+        $client->query($query)->read();
+        return redirect()
+            ->route('hotspotusers.index')
+            ->with('success', __('The Hotspot was enable successfully.'));
+    }
+
+    public function reset($id)
+    {
+        $client = setRoute();
+        $query = (new Query('/ip/hotspot/user/enable'))
+            ->equal('.id', $id);
+        $client->query($query)->read();
+        return redirect()
+            ->route('hotspotusers.index')
+            ->with('success', __('The Hotspot was enable successfully.'));
     }
 }

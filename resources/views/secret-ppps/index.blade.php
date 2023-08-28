@@ -45,7 +45,7 @@
                                             <th>{{ __('Profile') }}</th>
                                             <th>{{ __('Last Logout') }}</th>
                                             <th>{{ __('Komentar') }}</th>
-                                            <th>{{ __('Status') }}</th>
+                                            <th>{{ __('Disable') }}</th>
                                             <th style="width: 120px">{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
@@ -112,9 +112,9 @@
                     name: 'disabled',
                     render: function(data, type, full, meta) {
                         if (data == 'true') {
-                            return '<button type="button" class="btn btn-danger btn-sm">Offline</button>';
+                            return '<button type="button" class="btn btn-danger btn-sm">Ya</button>';
                         } else {
-                            return '<button type="button" class="btn btn-success btn-sm">Online</button>';
+                            return '<button type="button" class="btn btn-success btn-sm">Tidak</button>';
                         }
                     }
                 },
