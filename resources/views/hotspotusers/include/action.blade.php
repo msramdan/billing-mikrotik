@@ -24,7 +24,7 @@
     @endcan
     @can('hotspotuser reset')
         <form action="{{ route('hotspotusers.reset', $model['.id']) }}" method="post" class="d-inline"
-            onsubmit="return confirm('Are you sure to reset this hotspot ?')">
+            onsubmit="return confirm('Are you sure to reset counter this hotspot ?')">
             @csrf
             @method('PUT')
             <button class="btn btn-outline-secondary btn-sm" title="Reset">

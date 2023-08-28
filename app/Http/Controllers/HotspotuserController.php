@@ -205,11 +205,11 @@ class HotspotuserController extends Controller
     public function reset($id)
     {
         $client = setRoute();
-        $query = (new Query('/ip/hotspot/user/enable'))
+        $query = (new Query('/ip/hotspot/user/reset-counters'))
             ->equal('.id', $id);
         $client->query($query)->read();
         return redirect()
             ->route('hotspotusers.index')
-            ->with('success', __('The Hotspot was enable successfully.'));
+            ->with('success', __('The Hotspot was reset counter successfully.'));
     }
 }
