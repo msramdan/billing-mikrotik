@@ -46,3 +46,9 @@ function getRouteName()
         return '-';
     }
 }
+
+function getCompany()
+{
+    $data = DB::table('companies')->first();
+    return $data;
+}

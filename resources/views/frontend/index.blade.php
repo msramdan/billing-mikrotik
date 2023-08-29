@@ -15,7 +15,7 @@
         <link rel="stylesheet" href="{{ asset('frontend') }}/assets/css/style.css">
         <link rel="stylesheet" href="{{ asset('frontend') }}/assets/css/responsive.css">
         <link rel="stylesheet" href="{{ asset('frontend') }}/assets/css/dark-style.css">
-        <title>SawitSkyLink</title>
+        <title> {{ getCompany()->nama_perusahaan}} </title>
         <link rel="icon" type="image/png" href="{{ asset('frontend') }}/assets/img/favicon.png">
     </head>
     <body>
@@ -25,7 +25,7 @@
                     <div class="row align-items-center">
                         <div class="col-lg-5 col-md-5">
                             <div class="top-header-left">
-                                <p><span>Telpon / Wa :</span> <a href="#">0838-7473-1480</a></p>
+                                <p><span>Telpon / Wa :</span> <a href="#">{{ getCompany()->telepon_perusahaan}} / {{ getCompany()->no_wa}}</a></p>
                             </div>
                         </div>
 
@@ -85,9 +85,9 @@
                 <div class="row align-items-center m-0">
                     <div class="col-lg-6 p-0">
                         <div class="main-banner-content">
-                            <span class="sub-title"><i class="flaticon-wifi-signal"></i> SawitSkyLink Broadband Service</span>
+                            <span class="sub-title"><i class="flaticon-wifi-signal"></i> {{ getCompany()->nama_perusahaan}} Broadband Service</span>
                             <h1>Built for Internet Service</h1>
-                            <p>Dapatkan layanan internet murah berkualitas hanya di SawitSkyLink</p>
+                            <p>Dapatkan layanan internet murah berkualitas hanya di {{ getCompany()->nama_perusahaan}}</p>
                             <div class="price">
                                 Rp 165.00 <span>/Bulan</span>
                             </div>
@@ -115,7 +115,7 @@
                             <i class="flaticon-wifi"></i>
                         </span>
 
-                        <span>SawitSkyLink Isp Features</span>
+                        <span>{{ getCompany()->nama_perusahaan}} Isp Features</span>
                     </span>
                     <h2>
                         Kami adalah perusahaan penyedia layanan internet di Bali</h2>
@@ -195,7 +195,7 @@
                 <div class="row align-items-center">
                     <div class="col-lg-6 col-md-12">
                         <div class="about-content">
-                            <span class="sub-title"><i class="flaticon-care-about-environment"></i> Tentang SawitSkyLink</span>
+                            <span class="sub-title"><i class="flaticon-care-about-environment"></i> Tentang {{ getCompany()->nama_perusahaan}}</span>
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisseLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
                         </div>
                     </div>
@@ -216,7 +216,7 @@
                     <div class="col-lg-8 col-md-12">
                         <div class="cta-content">
                             <h3>Telpon / Wa</h3>
-                            <a href="#">0838-7473-1480</a>
+                            <a href="#">{{ getCompany()->telepon_perusahaan}} / {{ getCompany()->no_wa}}</a>
                         </div>
                     </div>
 
@@ -237,9 +237,9 @@
             <div class="container">
                 <div class="section-title">
                     <span>
-                        <span>Pilihan Paket SawitSkyLink</span>
+                        <span>Pilihan Paket {{ getCompany()->nama_perusahaan}}</span>
                     </span>
-                    <h5>Daftar Harga Layanan Paket Internet SawitSkyLink, Pilih sesuai keinginan dan kebutuhan Anda</h5>
+                    <h5>Daftar Harga Layanan Paket Internet {{ getCompany()->nama_perusahaan}}, Pilih sesuai keinginan dan kebutuhan Anda</h5>
                 </div>
 
                 <div class="row">
