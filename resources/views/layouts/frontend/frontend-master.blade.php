@@ -53,7 +53,7 @@
             <div class="navbar-area">
                 <div class="bahama-mobile-nav">
                     <div class="logo">
-                        <a href="index.html">
+                        <a href="/">
                             <img src="{{ asset('frontend') }}/assets/img/logo.png" alt="logo">
                         </a>
                     </div>
@@ -62,7 +62,7 @@
                 <div class="bahama-nav">
                     <div class="container">
                         <nav class="navbar navbar-expand-md navbar-light">
-                            <a class="navbar-brand" href="index.html">
+                            <a class="navbar-brand" href="/">
                                 <h1 ><b style="color: #FA8185">Sawit</b><b>SkyLink</b></h1>
                             </a>
 
