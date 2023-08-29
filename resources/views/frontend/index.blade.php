@@ -67,19 +67,11 @@
                             <div class="collapse navbar-collapse mean-menu" id="navbarSupportedContent">
                                 <ul class="navbar-nav">
                                     <li class="nav-item"><a href="" class="nav-link">Home</a></li>
-                                    <li class="nav-item"><a href="" class="nav-link">Contact</a></li>
+                                    <li class="nav-item"><a href="" class="nav-link">Cek Tagihan</a></li>
+                                    <li class="nav-item"><a href="" class="nav-link">Area Coverage</a></li>
+                                    <li class="nav-item"><a href="" class="nav-link">Speed Test</a></li>
                                 </ul>
                             </div>
-                            {{-- <div class="others-options">
-                                <div class="d-flex align-items-center">
-                                    <div class="dark-version-btn">
-                                        <label id="switch" class="switch">
-                                            <input type="checkbox" onchange="toggleTheme()" id="slider">
-                                            <span class="slider round"></span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div> --}}
                         </nav>
                     </div>
                 </div>

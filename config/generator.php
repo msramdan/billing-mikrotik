@@ -269,7 +269,7 @@ return [
                     [
                         'title' => 'Area Coverages',
                         'route' => '/area-coverages',
-                        'permission' => 'package view'
+                        'permission' => 'area coverage view'
                     ],
                     [
                         'title' => 'ODC',
@@ -284,7 +284,7 @@ return [
                     [
                         'title' => 'Packages',
                         'route' => '/packages',
-                        'permission' => 'area coverage view'
+                        'permission' => 'package view'
                     ],
                     [
                         'title' => 'Package Categories',
