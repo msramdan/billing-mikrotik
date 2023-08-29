@@ -11,4 +11,29 @@ class WebController extends Controller
     {
         return view('frontend.index');
     }
+
+    public function loginClient()
+    {
+        return view('frontend.login');
+    }
+
+    public function registerClient()
+    {
+        return view('frontend.register');
+    }
+
+    public function cekTagihan()
+    {
+        return view('frontend.tagihan');
+    }
+
+    public function areaCoverage()
+    {
+        return view('frontend.coverage');
+    }
+
+    public function speedTest()
+    {
+        return view('frontend.speed');
+    }
 }
