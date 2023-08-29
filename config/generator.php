@@ -194,7 +194,6 @@ return [
                         'permission' => 'mikhmon view',
                         'target' => '_blank'
                     ]
-
                 ]
             ]
         ]
@@ -245,49 +244,55 @@ return [
         ]
     ],
     [
-        'header' => 'Package',
+        'header' => 'layanan',
         'permissions' => [
+            'area coverage view',
             'package view',
-            'package category view'
+            'package category view',
+            'odc view',
+            'odp view'
         ],
         'menus' => [
             [
-                'title' => 'Package',
+                'title' => 'Kelola Layanan',
                 'icon' => '<i class="bi bi-boxes"></i>',
                 'route' => null,
                 'permission' => null,
                 'permissions' => [
+                    'area coverage view',
                     'package view',
-                    'package category view'
+                    'package category view',
+                    'odc view',
+                    'odp view'
                 ],
                 'submenus' => [
                     [
+                        'title' => 'Area Coverages',
+                        'route' => '/area-coverages',
+                        'permission' => 'package view'
+                    ],
+                    [
+                        'title' => 'ODC',
+                        'route' => '/odcs',
+                        'permission' => 'odc view'
+                    ],
+                    [
+                        'title' => 'ODP',
+                        'route' => '/odps',
+                        'permission' => 'odp view'
+                    ],
+                    [
                         'title' => 'Packages',
                         'route' => '/packages',
-                        'permission' => 'package view'
+                        'permission' => 'area coverage view'
                     ],
                     [
                         'title' => 'Package Categories',
                         'route' => '/package-categories',
                         'permission' => 'package category view'
                     ]
+
                 ]
-            ]
-        ]
-    ],
-    [
-        'header' => 'Area Coverages',
-        'permissions' => [
-            'area coverage view'
-        ],
-        'menus' => [
-            [
-                'title' => 'Area Coverages',
-                'icon' => '<i class="bi bi-geo-alt-fill"></i>',
-                'route' => '/area-coverages',
-                'permission' => 'area coverage view',
-                'permissions' => [],
-                'submenus' => []
             ]
         ]
     ],

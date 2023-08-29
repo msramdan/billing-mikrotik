@@ -201,5 +201,5 @@ return [
         ['group' => 'mikhmon', 'access' => ['mikhmon view']],
         ['group' => 'hotspotactives', 'access' => ['hotspotactive view', 'hotspotactive delete']],
         ['group' => 'hotspotusers', 'access' => ['hotspotuser view','hotspotuser create','hotspotuser enable','hotspotuser disable','hotspotuser reset','hotspotuser delete']],
-    ],
-];
+  ['group' => 'odcs', 'access' => ['odc view', 'odc create', 'odc edit', 'odc delete']],['group' => 'odps', 'access' => ['odp view', 'odp create', 'odp edit', 'odp delete']], 
+		],];

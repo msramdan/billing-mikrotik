@@ -74,3 +74,6 @@ Route::controller(App\Http\Controllers\HotspotuserController::class)->group(func
     Route::delete('deleteHotspot/{id}/{user}', 'deleteHotspot')->name('hotspotusers.delete');
     Route::get('mikhmon', 'mikhmon')->name('mikhmons.index');
 });
+
+Route::resource('odcs', App\Http\Controllers\OdcController::class)->middleware('auth');
+Route::resource('odps', App\Http\Controllers\OdpController::class)->middleware('auth');
