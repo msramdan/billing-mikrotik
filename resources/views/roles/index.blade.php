@@ -13,7 +13,7 @@
                     </p>
                 </div>
                 <x-breadcrumb>
-                    <li class="breadcrumb-item"><a href="/">{{ __('Dashboard') }}</a></li>
+                    <li class="breadcrumb-item"><a href="/dashboard">{{ __('Dashboard') }}</a></li>
                     <li class="breadcrumb-item active" aria-current="page">{{ __('Role') }}</li>
                 </x-breadcrumb>
             </div>
