@@ -72,4 +72,5 @@ Route::controller(App\Http\Controllers\HotspotuserController::class)->group(func
     Route::put('disableHotspot/{id}/{user}', 'disable')->name('hotspotusers.disable');
     Route::put('resetHotspot/{id}', 'reset')->name('hotspotusers.reset');
     Route::delete('deleteHotspot/{id}/{user}', 'deleteHotspot')->name('hotspotusers.delete');
+    Route::get('mikhmon', 'mikhmon')->name('mikhmons.index');
 });

@@ -212,4 +212,9 @@ class HotspotuserController extends Controller
             ->route('hotspotusers.index')
             ->with('success', __('The Hotspot was reset counter successfully.'));
     }
+
+    public function mikhmon()
+    {
+        return redirect('https://mikhmon.easytopup.my.id');
+    }
 }
