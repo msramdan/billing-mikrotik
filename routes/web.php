@@ -37,6 +37,10 @@ Route::resource('privacy-policies', App\Http\Controllers\PrivacyPolicyController
 Route::resource('area-coverages', App\Http\Controllers\AreaCoverageController::class)->middleware('auth');
 Route::resource('profile-pppoes', App\Http\Controllers\ProfilePppoeController::class)->middleware('auth');
 Route::resource('active-ppps', App\Http\Controllers\ActivePppController::class)->middleware('auth');
+Route::controller(App\Http\Controllers\ActivePppController::class)->group(function () {
+    Route::get('monitoring', 'monitoring')->name('monitoring');
+});
+
 Route::controller(App\Http\Controllers\SecretPppController::class)->group(function () {
     Route::put('enableSecret/{id}', 'enable')->name('secret-ppps.enable');
     Route::put('disableSecret/{id}/{name}', 'disable')->name('secret-ppps.disable');

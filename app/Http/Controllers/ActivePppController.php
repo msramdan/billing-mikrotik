@@ -42,9 +42,9 @@ class ActivePppController extends Controller
         $pppactive = (new Query('/ppp/active/print'))
             ->where('name', $name);
         $pppactive = $client->query($pppactive)->read();
-        return view('active-ppps.show',[
-            'pppuser' =>$pppuser,
-            'pppactive' =>$pppactive
+        return view('active-ppps.show', [
+            'pppuser' => $pppuser,
+            'pppactive' => $pppactive
         ]);
     }
 
@@ -63,5 +63,29 @@ class ActivePppController extends Controller
                 ->route('active-ppps.index')
                 ->with('error', __("The active PPP can't be deleted because it's related to another table."));
         }
+    }
+
+    public function monitoring()
+    {
+
+        $interface = "<pppoe-" . $_GET["interface"] . ">";
+
+        $client = setRoute();
+        $query = (new Query('/interface/monitor-traffic'))
+            ->equal('interface', $interface)
+            ->equal('once', "");
+        $getinterfacetraffic = $client->query($query)->read();
+        $rows = array();
+        $rows2 = array();
+        $ftx = $getinterfacetraffic[0]['tx-bits-per-second'];
+        $frx = $getinterfacetraffic[0]['rx-bits-per-second'];
+        $rows['name'] = 'Tx';
+        $rows['data'][] = $ftx;
+        $rows2['name'] = 'Rx';
+        $rows2['data'][] = $frx;
+        $result = array();
+        array_push($result, $rows);
+        array_push($result, $rows2);
+        print json_encode($result);
     }
 }
