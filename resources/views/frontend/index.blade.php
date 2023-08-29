@@ -60,7 +60,8 @@
                     <div class="container">
                         <nav class="navbar navbar-expand-md navbar-light">
                             <a class="navbar-brand" href="index.html">
-                                <img src="{{ asset('frontend') }}/assets/img/logo.png" alt="logo">
+                                {{-- <img src="{{ asset('frontend') }}/assets/img/logo.png" alt="logo"> --}}
+                                <h1 ><b style="color: #FA8185">Sawit</b><b>SkyLink</b></h1>
                             </a>
 
                             <div class="collapse navbar-collapse mean-menu" id="navbarSupportedContent">
@@ -272,8 +273,8 @@
                             </ul>
 
                             <div class="price">
-                                <span>From</span>
-                                <span>$</span>
+                                <span>Harga</span>
+                                <span>Rp</span>
                                 67.99
                                 <span>/mo</span>
                             </div>
@@ -304,8 +305,8 @@
                             </ul>
 
                             <div class="price">
-                                <span>From</span>
-                                <span>$</span>
+                                <span>Harga</span>
+                                <span>Rp</span>
                                 79.99
                                 <span>/mo</span>
                             </div>
@@ -336,8 +337,105 @@
                             </ul>
 
                             <div class="price">
-                                <span>From</span>
-                                <span>$</span>
+                                <span>Harga</span>
+                                <span>Rp</span>
+                                99.99
+                                <span>/mo</span>
+                            </div>
+
+                            <div class="image-box">
+                                <img src="{{ asset('frontend') }}/assets/img/shape-image/2.png" alt="image">
+                                <img src="{{ asset('frontend') }}/assets/img/shape-image/2.png" alt="image">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-6">
+                        <div class="single-pricing-table">
+                            <div class="pricing-header">
+                                <div class="icon">
+                                    <i class="flaticon-online-shop"></i>
+                                </div>
+
+                                <span>TV + Internet</span>
+                                <h3>Player Bundle</h3>
+                            </div>
+
+                            <ul class="pricing-features-list">
+                                <li><i class="flaticon-check-mark"></i> 150+ channels</li>
+                                <li><i class="flaticon-check-mark"></i> Catch Up & On Demand</li>
+                                <li><i class="flaticon-check-mark"></i> Cell Phone Connection</li>
+                                <li><i class="flaticon-check-mark"></i> Up to 100Mbps fibre</li>
+                                <li><i class="flaticon-check-mark"></i> Made for 1-4 devices</li>
+                            </ul>
+
+                            <div class="price">
+                                <span>Harga</span>
+                                <span>Rp</span>
+                                67.99
+                                <span>/mo</span>
+                            </div>
+                            <div class="image-box">
+                                <img src="{{ asset('frontend') }}/assets/img/shape-image/2.png" alt="image">
+                                <img src="{{ asset('frontend') }}/assets/img/shape-image/2.png" alt="image">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-6">
+                        <div class="single-pricing-table active">
+                            <div class="pricing-header">
+                                <div class="icon">
+                                    <i class="flaticon-online-shop"></i>
+                                </div>
+
+                                <span>TV + Internet</span>
+                                <h3>Bahama TV Box</h3>
+                            </div>
+
+                            <ul class="pricing-features-list">
+                                <li><i class="flaticon-check-mark"></i> 150+ channels</li>
+                                <li><i class="flaticon-check-mark"></i> Catch Up & On Demand</li>
+                                <li><i class="flaticon-check-mark"></i> Cell Phone Connection</li>
+                                <li><i class="flaticon-check-mark"></i> Up to 100Mbps fibre</li>
+                                <li><i class="flaticon-check-mark"></i> Made for 1-4 devices</li>
+                            </ul>
+
+                            <div class="price">
+                                <span>Harga</span>
+                                <span>Rp</span>
+                                79.99
+                                <span>/mo</span>
+                            </div>
+                            <div class="image-box">
+                                <img src="{{ asset('frontend') }}/assets/img/shape-image/2.png" alt="image">
+                                <img src="{{ asset('frontend') }}/assets/img/shape-image/2.png" alt="image">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-6 offset-lg-0 offset-md-3 offset-sm-3">
+                        <div class="single-pricing-table">
+                            <div class="pricing-header">
+                                <div class="icon">
+                                    <i class="flaticon-online-shop"></i>
+                                </div>
+
+                                <span>TV + Internet</span>
+                                <h3>Broadband & WIFI</h3>
+                            </div>
+
+                            <ul class="pricing-features-list">
+                                <li><i class="flaticon-check-mark"></i> 150+ channels</li>
+                                <li><i class="flaticon-check-mark"></i> Catch Up & On Demand</li>
+                                <li><i class="flaticon-check-mark"></i> Cell Phone Connection</li>
+                                <li><i class="flaticon-check-mark"></i> Up to 100Mbps fibre</li>
+                                <li><i class="flaticon-check-mark"></i> Made for 1-4 devices</li>
+                            </ul>
+
+                            <div class="price">
+                                <span>Harga</span>
+                                <span>Rp</span>
                                 99.99
                                 <span>/mo</span>
                             </div>

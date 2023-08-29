@@ -46,12 +46,11 @@
             <ul class="menu">
                 <b>Router : {{ getRouteName() }}</b>
                 <li class="sidebar-item{{ request()->is('/') || request()->is('dashboard') ? ' active' : '' }}">
-                    <a class="sidebar-link" href="/">
+                    <a class="sidebar-link" href="/dashboard">
                         <i class="bi bi-speedometer"></i>
                         <span> {{ __('Dashboard') }}</span>
                     </a>
                 </li>
-
                 @foreach (config('generator.sidebars') as $sidebar)
                     @if (isset($sidebar['permissions']))
                         @canany($sidebar['permissions'])

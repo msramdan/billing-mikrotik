@@ -28,9 +28,14 @@ Route::middleware(['auth', 'web'])->group(function () {
     Route::resource('roles', App\Http\Controllers\RoleAndPermissionController::class);
 });
 
-Route::get('/dashboard', function () {
-    return redirect()->route('dashboard');
+// Route::get('/dashboard', function () {
+//     return redirect()->route('dashboard');
+// });
+
+Route::controller(DashboardController::class)->group(function () {
+    Route::get('/dashboard', 'index')->name('dashboard');
 });
+
 
 Route::resource('companies', App\Http\Controllers\CompanyController::class)->middleware('auth');
 
