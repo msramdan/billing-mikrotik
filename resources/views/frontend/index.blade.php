@@ -60,7 +60,6 @@
                     <div class="container">
                         <nav class="navbar navbar-expand-md navbar-light">
                             <a class="navbar-brand" href="index.html">
-                                {{-- <img src="{{ asset('frontend') }}/assets/img/logo.png" alt="logo"> --}}
                                 <h1 ><b style="color: #FA8185">Sawit</b><b>SkyLink</b></h1>
                             </a>
 
@@ -88,10 +87,9 @@
                         <div class="main-banner-content">
                             <span class="sub-title"><i class="flaticon-wifi-signal"></i> SawitSkyLink Broadband Service</span>
                             <h1>Built for Internet Service</h1>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua quis.</p>
-
+                            <p>Dapatkan layanan internet murah berkualitas hanya di SawitSkyLink</p>
                             <div class="price">
-                                $45 <span>/mo</span>
+                                Rp 165.00 <span>/Bulan</span>
                             </div>
                         </div>
                     </div>
