@@ -4,7 +4,7 @@
             <div class="d-flex justify-content-between align-items-center">
                 <div class="logo">
                     <a href="/" style="font-size: 20px">
-                        SawitSkyLink
+                        {{getCompany()->nama_perusahaan}}
                     </a>
                 </div>
                 <div class="theme-toggle d-flex gap-2  align-items-center mt-2">

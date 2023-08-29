@@ -16,7 +16,10 @@
         <link rel="stylesheet" href="{{ asset('frontend') }}/assets/css/responsive.css">
         <link rel="stylesheet" href="{{ asset('frontend') }}/assets/css/dark-style.css">
         <title> {{ getCompany()->nama_perusahaan}} </title>
-        <link rel="icon" type="image/png" href="{{ asset('frontend') }}/assets/img/favicon.png">
+        <link rel="icon"
+        @if (getCompany()->favicon != null) href="{{ Storage::url('public/uploads/favicons/') . getCompany()->favicon }}" @endif
+        type="image/x-icon">
+
     </head>
     <body>
         <header class="header-area">
@@ -196,7 +199,7 @@
                     <div class="col-lg-6 col-md-12">
                         <div class="about-content">
                             <span class="sub-title"><i class="flaticon-care-about-environment"></i> Tentang {{ getCompany()->nama_perusahaan}}</span>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisseLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
+                            <p style="text-align: justify"> {{ getCompany()->deskripsi_perusahaan}}</p>
                         </div>
                     </div>
 
