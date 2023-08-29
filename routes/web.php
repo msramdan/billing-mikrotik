@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,8 +15,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+// FRONT END
+Route::controller(App\Http\Controllers\Frontend\WebController::class)->group(function () {
+    Route::get('/', 'index')->name('website');
+});
+
 Route::middleware(['auth', 'web'])->group(function () {
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    // Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/profile', App\Http\Controllers\ProfileController::class)->name('profile');
     Route::resource('users', App\Http\Controllers\UserController::class);
     Route::resource('roles', App\Http\Controllers\RoleAndPermissionController::class);
