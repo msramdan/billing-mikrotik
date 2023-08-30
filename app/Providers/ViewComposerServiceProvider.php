@@ -69,5 +69,40 @@ class ViewComposerServiceProvider extends ServiceProvider
             );
         });
 
+		View::composer(['pelanggans.create', 'pelanggans.edit'], function ($view) {
+            return $view->with(
+                'areaCoverages',
+                \App\Models\AreaCoverage::select('id', 'kode_area')->get()
+            );
+        });
+
+View::composer(['pelanggans.create', 'pelanggans.edit'], function ($view) {
+            return $view->with(
+                'odcs',
+                \App\Models\Odc::select('id', 'kode_odc')->get()
+            );
+        });
+
+		View::composer(['pelanggans.create', 'pelanggans.edit'], function ($view) {
+            return $view->with(
+                'odps',
+                \App\Models\Odp::select('id', 'kode_odc')->get()
+            );
+        });
+
+		View::composer(['pelanggans.create', 'pelanggans.edit'], function ($view) {
+            return $view->with(
+                'packages',
+                \App\Models\Package::select('id', 'nama_layanan')->get()
+            );
+        });
+
+		View::composer(['pelanggans.create', 'pelanggans.edit'], function ($view) {
+            return $view->with(
+                'settingmikrotiks',
+                \App\Models\Settingmikrotik::select('id', 'identitas_router')->get()
+            );
+        });
+
 	}
 }

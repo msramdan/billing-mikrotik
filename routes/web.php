@@ -80,3 +80,5 @@ Route::middleware(['auth', 'web'])->group(function () {
     Route::resource('odcs', App\Http\Controllers\OdcController::class);
 });
 Route::resource('odps', App\Http\Controllers\OdpController::class)->middleware('auth');
+
+Route::resource('pelanggans', App\Http\Controllers\PelangganController::class)->middleware('auth');

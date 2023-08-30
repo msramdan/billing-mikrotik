@@ -19,5 +19,10 @@ class DatabaseSeeder extends Seeder
         $this->call(WaGatewaySeeder::class);
         $this->call(PrivacyPolicySeeder::class);
         $this->call(RouterMikrotikSeeder::class);
+        $this->call(AreaSeeder::class);
+        $this->call(PacageKategoriSeeder::class);
+        $this->call(PacageSeeder::class);
+        $this->call(OdcSeeder::class);
+        $this->call(OdpSeeder::class);
     }
 }
