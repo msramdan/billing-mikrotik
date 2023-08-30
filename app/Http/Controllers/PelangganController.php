@@ -6,6 +6,7 @@ use App\Models\Pelanggan;
 use App\Http\Requests\{StorePelangganRequest, UpdatePelangganRequest};
 use Yajra\DataTables\Facades\DataTables;
 use Image;
+use Illuminate\Support\Facades\DB;
 
 class PelangganController extends Controller
 {
@@ -25,34 +26,33 @@ class PelangganController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $pelanggans = Pelanggan::with('area_coverage:id,kode_area', 'odc:id,kode_odc', 'odp:id,kode_odc', 'package:id,nama_layanan', 'settingmikrotik:id,identitas_router', );
-
+            $pelanggans = DB::table('pelanggans')
+                ->leftJoin('area_coverages', 'pelanggans.coverage_area', '=', 'area_coverages.id')
+                ->leftJoin('odcs', 'pelanggans.odc', '=', 'odcs.id')
+                ->leftJoin('odps', 'pelanggans.odp', '=', 'odps.id')
+                ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
+                ->leftJoin('settingmikrotiks', 'pelanggans.router', '=', 'settingmikrotiks.id')
+                ->select('pelanggans.*', 'area_coverages.kode_area','area_coverages.nama as nama_area','odcs.kode_odc'
+                        ,'odps.kode_odp','packages.nama_layanan','packages.harga','settingmikrotiks.identitas_router')
+                ->get();
             return Datatables::of($pelanggans)
-                ->addColumn('alamat', function($row){
+                ->addColumn('alamat', function ($row) {
                     return str($row->alamat)->limit(100);
                 })
-				->addColumn('area_coverage', function ($row) {
-                    return $row->area_coverage ? $row->area_coverage->kode_area : '';
+                ->addColumn('area_coverage', function ($row) {
+                    return $row->kode_area. '-' .$row->nama_area;
                 })->addColumn('odc', function ($row) {
-                    return $row->odc ? $row->odc->kode_odc : '';
+                    return $row->kode_odc;
                 })->addColumn('odp', function ($row) {
-                    return $row->odp ? $row->odp->kode_odc : '';
+                    return $row->kode_odp;
                 })->addColumn('package', function ($row) {
-                    return $row->package ? $row->package->nama_layanan : '';
+                    return $row->nama_layanan. '-' .$row->harga;
                 })->addColumn('settingmikrotik', function ($row) {
-                    return $row->settingmikrotik ? $row->settingmikrotik->identitas_router : '';
+                    return $row->identitas_router;
                 })
-                ->addColumn('photo_ktp', function ($row) {
-                    if ($row->photo_ktp == null) {
-                    return 'https://via.placeholder.com/350?text=No+Image+Avaiable';
-                }
-                    return asset('storage/uploads/photo-ktps/' . $row->photo_ktp);
-                })
-
                 ->addColumn('action', 'pelanggans.include.action')
                 ->toJson();
         }
-
         return view('pelanggans.index');
     }
 
@@ -75,8 +75,8 @@ class PelangganController extends Controller
     public function store(StorePelangganRequest $request)
     {
         $attr = $request->validated();
-        
-		$attr['password'] = bcrypt($request->password);
+
+        $attr['password'] = bcrypt($request->password);
 
         if ($request->file('photo_ktp') && $request->file('photo_ktp')->isValid()) {
 
@@ -89,7 +89,7 @@ class PelangganController extends Controller
 
             Image::make($request->file('photo_ktp')->getRealPath())->resize(500, 500, function ($constraint) {
                 $constraint->upsize();
-				$constraint->aspectRatio();
+                $constraint->aspectRatio();
             })->save($path . $filename);
 
             $attr['photo_ktp'] = $filename;
@@ -110,9 +110,16 @@ class PelangganController extends Controller
      */
     public function show(Pelanggan $pelanggan)
     {
-        $pelanggan->load('area_coverage:id,kode_area', 'odc:id,kode_odc', 'odp:id,kode_odc', 'package:id,nama_layanan', 'settingmikrotik:id,identitas_router', );
+        $pelanggan = DB::table('pelanggans')
+                ->leftJoin('area_coverages', 'pelanggans.coverage_area', '=', 'area_coverages.id')
+                ->leftJoin('odcs', 'pelanggans.odc', '=', 'odcs.id')
+                ->leftJoin('odps', 'pelanggans.odp', '=', 'odps.id')
+                ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
+                ->leftJoin('settingmikrotiks', 'pelanggans.router', '=', 'settingmikrotiks.id')
+                ->select('pelanggans.*', 'area_coverages.kode_area','area_coverages.nama as nama_area','odcs.kode_odc'
+                        ,'odps.kode_odp','packages.nama_layanan','packages.harga','settingmikrotiks.identitas_router')->where('pelanggans.id', $pelanggan->id)->first();;
 
-		return view('pelanggans.show', compact('pelanggan'));
+        return view('pelanggans.show', compact('pelanggan'));
     }
 
     /**
@@ -123,9 +130,9 @@ class PelangganController extends Controller
      */
     public function edit(Pelanggan $pelanggan)
     {
-        $pelanggan->load('area_coverage:id,kode_area', 'odc:id,kode_odc', 'odp:id,kode_odc', 'package:id,nama_layanan', 'settingmikrotik:id,identitas_router', );
+        $pelanggan->load('area_coverage:id,kode_area', 'odc:id,kode_odc', 'odp:id,kode_odc', 'package:id,nama_layanan', 'settingmikrotik:id,identitas_router',);
 
-		return view('pelanggans.edit', compact('pelanggan'));
+        return view('pelanggans.edit', compact('pelanggan'));
     }
 
     /**
@@ -138,7 +145,7 @@ class PelangganController extends Controller
     public function update(UpdatePelangganRequest $request, Pelanggan $pelanggan)
     {
         $attr = $request->validated();
-        
+
 
         switch (is_null($request->password)) {
             case true:
@@ -160,7 +167,7 @@ class PelangganController extends Controller
 
             Image::make($request->file('photo_ktp')->getRealPath())->resize(500, 500, function ($constraint) {
                 $constraint->upsize();
-				$constraint->aspectRatio();
+                $constraint->aspectRatio();
             })->save($path . $filename);
 
             // delete old photo_ktp from storage

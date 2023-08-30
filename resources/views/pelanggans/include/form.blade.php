@@ -4,10 +4,10 @@
             <label for="coverage-area">{{ __('Area Coverage') }}</label>
             <select class="form-select @error('coverage_area') is-invalid @enderror" name="coverage_area" id="coverage-area" class="form-control" required>
                 <option value="" selected disabled>-- {{ __('Select area coverage') }} --</option>
-                
+
                         @foreach ($areaCoverages as $areaCoverage)
                             <option value="{{ $areaCoverage->id }}" {{ isset($pelanggan) && $pelanggan->coverage_area == $areaCoverage->id ? 'selected' : (old('coverage_area') == $areaCoverage->id ? 'selected' : '') }}>
-                                {{ $areaCoverage->kode_area }}
+                                {{ $areaCoverage->kode_area }} - {{ $areaCoverage->nama }}
                             </option>
                         @endforeach
             </select>
@@ -23,7 +23,7 @@
             <label for="odc">{{ __('Odc') }}</label>
             <select class="form-select @error('odc') is-invalid @enderror" name="odc" id="odc" class="form-control" required>
                 <option value="" selected disabled>-- {{ __('Select odc') }} --</option>
-                
+
                         @foreach ($odcs as $odc)
                             <option value="{{ $odc->id }}" {{ isset($pelanggan) && $pelanggan->odc == $odc->id ? 'selected' : (old('odc') == $odc->id ? 'selected' : '') }}>
                                 {{ $odc->kode_odc }}
@@ -42,10 +42,10 @@
             <label for="odp">{{ __('Odp') }}</label>
             <select class="form-select @error('odp') is-invalid @enderror" name="odp" id="odp" class="form-control" required>
                 <option value="" selected disabled>-- {{ __('Select odp') }} --</option>
-                
+
                         @foreach ($odps as $odp)
                             <option value="{{ $odp->id }}" {{ isset($pelanggan) && $pelanggan->odp == $odp->id ? 'selected' : (old('odp') == $odp->id ? 'selected' : '') }}>
-                                {{ $odp->kode_odc }}
+                                {{ $odp->kode_odp }}
                             </option>
                         @endforeach
             </select>
@@ -62,7 +62,7 @@
             <select class="form-select @error('no_port_odp') is-invalid @enderror" name="no_port_odp" id="no-port-odp" class="form-control">
                 <option value="" selected disabled>-- {{ __('Select no port odp') }} --</option>
                 <option value="1" {{ isset($pelanggan) && $pelanggan->no_port_odp == '1' ? 'selected' : (old('no_port_odp') == '1' ? 'selected' : '') }}>1</option>
-		<option value="2" {{ isset($pelanggan) && $pelanggan->no_port_odp == '2' ? 'selected' : (old('no_port_odp') == '2' ? 'selected' : '') }}>2</option>			
+		<option value="2" {{ isset($pelanggan) && $pelanggan->no_port_odp == '2' ? 'selected' : (old('no_port_odp') == '2' ? 'selected' : '') }}>2</option>
             </select>
             @error('no_port_odp')
                 <span class="text-danger">
@@ -219,7 +219,7 @@
             <select class="form-select @error('ppn') is-invalid @enderror" name="ppn" id="ppn" class="form-control">
                 <option value="" selected disabled>-- {{ __('Select ppn') }} --</option>
                 <option value="Yes" {{ isset($pelanggan) && $pelanggan->ppn == 'Yes' ? 'selected' : (old('ppn') == 'Yes' ? 'selected' : '') }}>Yes</option>
-		<option value="No" {{ isset($pelanggan) && $pelanggan->ppn == 'No' ? 'selected' : (old('ppn') == 'No' ? 'selected' : '') }}>No</option>			
+		<option value="No" {{ isset($pelanggan) && $pelanggan->ppn == 'No' ? 'selected' : (old('ppn') == 'No' ? 'selected' : '') }}>No</option>
             </select>
             @error('ppn')
                 <span class="text-danger">
@@ -235,7 +235,7 @@
                 <option value="" selected disabled>-- {{ __('Select status berlangganan') }} --</option>
                 <option value="Aktif" {{ isset($pelanggan) && $pelanggan->status_berlangganan == 'Aktif' ? 'selected' : (old('status_berlangganan') == 'Aktif' ? 'selected' : '') }}>Aktif</option>
 		<option value="Non Aktif" {{ isset($pelanggan) && $pelanggan->status_berlangganan == 'Non Aktif' ? 'selected' : (old('status_berlangganan') == 'Non Aktif' ? 'selected' : '') }}>Non Aktif</option>
-		<option value="Menungu" {{ isset($pelanggan) && $pelanggan->status_berlangganan == 'Menungu' ? 'selected' : (old('status_berlangganan') == 'Menungu' ? 'selected' : '') }}>Menungu</option>			
+		<option value="Menungu" {{ isset($pelanggan) && $pelanggan->status_berlangganan == 'Menungu' ? 'selected' : (old('status_berlangganan') == 'Menungu' ? 'selected' : '') }}>Menungu</option>
             </select>
             @error('status_berlangganan')
                 <span class="text-danger">
@@ -249,10 +249,10 @@
             <label for="paket-layanan">{{ __('Package') }}</label>
             <select class="form-select @error('paket_layanan') is-invalid @enderror" name="paket_layanan" id="paket-layanan" class="form-control" required>
                 <option value="" selected disabled>-- {{ __('Select package') }} --</option>
-                
+
                         @foreach ($packages as $package)
                             <option value="{{ $package->id }}" {{ isset($pelanggan) && $pelanggan->paket_layanan == $package->id ? 'selected' : (old('paket_layanan') == $package->id ? 'selected' : '') }}>
-                                {{ $package->nama_layanan }}
+                                {{ $package->nama_layanan }} - {{ $package->harga }}
                             </option>
                         @endforeach
             </select>
@@ -280,7 +280,7 @@
             <select class="form-select @error('kirim_tagihan_wa') is-invalid @enderror" name="kirim_tagihan_wa" id="kirim-tagihan-wa" class="form-control">
                 <option value="" selected disabled>-- {{ __('Select kirim tagihan wa') }} --</option>
                 <option value="Yes" {{ isset($pelanggan) && $pelanggan->kirim_tagihan_wa == 'Yes' ? 'selected' : (old('kirim_tagihan_wa') == 'Yes' ? 'selected' : '') }}>Yes</option>
-		<option value="No" {{ isset($pelanggan) && $pelanggan->kirim_tagihan_wa == 'No' ? 'selected' : (old('kirim_tagihan_wa') == 'No' ? 'selected' : '') }}>No</option>			
+		<option value="No" {{ isset($pelanggan) && $pelanggan->kirim_tagihan_wa == 'No' ? 'selected' : (old('kirim_tagihan_wa') == 'No' ? 'selected' : '') }}>No</option>
             </select>
             @error('kirim_tagihan_wa')
                 <span class="text-danger">
@@ -317,7 +317,7 @@
             <select class="form-select @error('auto_isolir') is-invalid @enderror" name="auto_isolir" id="auto-isolir" class="form-control">
                 <option value="" selected disabled>-- {{ __('Select auto isolir') }} --</option>
                 <option value="Yes" {{ isset($pelanggan) && $pelanggan->auto_isolir == 'Yes' ? 'selected' : (old('auto_isolir') == 'Yes' ? 'selected' : '') }}>Yes</option>
-		<option value="No" {{ isset($pelanggan) && $pelanggan->auto_isolir == 'No' ? 'selected' : (old('auto_isolir') == 'No' ? 'selected' : '') }}>No</option>			
+		<option value="No" {{ isset($pelanggan) && $pelanggan->auto_isolir == 'No' ? 'selected' : (old('auto_isolir') == 'No' ? 'selected' : '') }}>No</option>
             </select>
             @error('auto_isolir')
                 <span class="text-danger">
@@ -342,7 +342,7 @@
             <label for="router">{{ __('Settingmikrotik') }}</label>
             <select class="form-select @error('router') is-invalid @enderror" name="router" id="router" class="form-control">
                 <option value="" selected disabled>-- {{ __('Select settingmikrotik') }} --</option>
-                
+
                         @foreach ($settingmikrotiks as $settingmikrotik)
                             <option value="{{ $settingmikrotik->id }}" {{ isset($pelanggan) && $pelanggan->router == $settingmikrotik->id ? 'selected' : (old('router') == $settingmikrotik->id ? 'selected' : '') }}>
                                 {{ $settingmikrotik->identitas_router }}

@@ -14,7 +14,7 @@ class OdcSeeder extends Seeder
     public function run(): void
     {
         DB::table('odcs')->insert([
-            'nama_layanan' => 'Gofiber5Mbps',
+            'kode_odc' => 'ODC-001',
             'wilayah_odc' => 1,
             'nomor_port_olt' => 1,
             'warna_tube_fo' => 'Merah',

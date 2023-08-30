@@ -19,11 +19,11 @@ return new class extends Migration
 			$table->foreignId('odc')->nullable()->constrained('odcs')->restrictOnUpdate()->nullOnDelete();
 			$table->foreignId('odp')->nullable()->constrained('odps')->restrictOnUpdate()->nullOnDelete();
 			$table->enum('no_port_odp', ['1', '2'])->nullable();
-			$table->integer('no_layanan')->nullable();
+			$table->string('no_layanan', 12)->nullable();
 			$table->string('nama', 255);
 			$table->date('tanggal_daftar');
 			$table->string('email')->unique();
-			$table->integer('no_wa');
+			$table->string('no_wa', 15);
 			$table->string('no_ktp', 50);
 			$table->string('photo_ktp');
 			$table->text('alamat');

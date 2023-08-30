@@ -36,15 +36,15 @@
                                 <table class="table table-hover table-striped">
                                     <tr>
                                         <td class="fw-bold">{{ __('Area Coverage') }}</td>
-                                        <td>{{ $pelanggan->area_coverage ? $pelanggan->area_coverage->kode_area : '' }}</td>
+                                        <td>{{ $pelanggan->kode_area }} - {{ $pelanggan->nama_area }}</td>
                                     </tr>
 									<tr>
                                         <td class="fw-bold">{{ __('Odc') }}</td>
-                                        <td>{{ $pelanggan->odc ? $pelanggan->odc->kode_odc : '' }}</td>
+                                        <td>{{ $pelanggan->kode_odc }}</td>
                                     </tr>
 									<tr>
                                         <td class="fw-bold">{{ __('Odp') }}</td>
-                                        <td>{{ $pelanggan->odp ? $pelanggan->odp->kode_odc : '' }}</td>
+                                        <td>{{ $pelanggan->kode_odp }}</td>
                                     </tr>
 									<tr>
                                             <td class="fw-bold">{{ __('No Port Odp') }}</td>
@@ -60,7 +60,7 @@
                                         </tr>
 									<tr>
                                             <td class="fw-bold">{{ __('Tanggal Daftar') }}</td>
-                                            <td>{{ isset($pelanggan->tanggal_daftar) ? $pelanggan->tanggal_daftar->format('d/m/Y') : ''  }}</td>
+                                            <td>{{ $pelanggan->tanggal_daftar  }}</td>
                                         </tr>
 									<tr>
                                             <td class="fw-bold">{{ __('Email') }}</td>
@@ -98,7 +98,7 @@
                                         </tr>
 									<tr>
                                         <td class="fw-bold">{{ __('Package') }}</td>
-                                        <td>{{ $pelanggan->package ? $pelanggan->package->nama_layanan : '' }}</td>
+                                        <td>{{ $pelanggan->nama_layanan }} - {{ $pelanggan->harga }}</td>
                                     </tr>
 									<tr>
                                             <td class="fw-bold">{{ __('Jatuh Tempo') }}</td>
@@ -126,7 +126,7 @@
                                         </tr>
 									<tr>
                                         <td class="fw-bold">{{ __('Settingmikrotik') }}</td>
-                                        <td>{{ $pelanggan->settingmikrotik ? $pelanggan->settingmikrotik->identitas_router : '' }}</td>
+                                        <td>{{ $pelanggan->identitas_router }}</td>
                                     </tr>
 									<tr>
                                             <td class="fw-bold">{{ __('User Pppoe') }}</td>
@@ -134,11 +134,11 @@
                                         </tr>
                                     <tr>
                                         <td class="fw-bold">{{ __('Created at') }}</td>
-                                        <td>{{ $pelanggan->created_at->format('d/m/Y H:i') }}</td>
+                                        <td>{{ $pelanggan->created_at }}</td>
                                     </tr>
                                     <tr>
                                         <td class="fw-bold">{{ __('Updated at') }}</td>
-                                        <td>{{ $pelanggan->updated_at->format('d/m/Y H:i') }}</td>
+                                        <td>{{ $pelanggan->updated_at }}</td>
                                     </tr>
                                 </table>
                             </div>
