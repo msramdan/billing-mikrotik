@@ -21,6 +21,7 @@ Route::controller(App\Http\Controllers\Frontend\WebController::class)->group(fun
     Route::get('/', 'index')->name('website');
     Route::get('/loginClient', 'loginClient')->name('loginClient');
     Route::get('/registerClient', 'registerClient')->name('registerClient');
+    Route::post('/submitRegister', 'submitRegister')->name('submitRegister');
 
     Route::get('/speedTest', 'speedTest')->name('speedTest');
     Route::get('/cekTagihan', 'cekTagihan')->name('cekTagihan');
