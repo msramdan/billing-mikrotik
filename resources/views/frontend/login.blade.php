@@ -23,9 +23,10 @@
             </div>
             <div class="card-body">
                 <p class="login-box-msg">Halaman Login</p>
-                <form action="../../index3.html" method="post">
+                <form action="{{ route('submitLogin') }}" method="post">
+                    {{ csrf_field() }}
                     <div class="input-group mb-3">
-                        <input type="email" class="form-control" placeholder="Email">
+                        <input type="email" class="form-control" placeholder="Email" name="email" required>
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>
@@ -33,7 +34,7 @@
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="password" class="form-control" placeholder="Password">
+                        <input type="password" class="form-control" id="password" placeholder="Password" name="password" required>
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
@@ -42,9 +43,15 @@
                     </div>
                     <div class="row">
                         <div class="col-8">
+                            <div class="icheck-primary">
+                                <input type="checkbox" id="remember" onclick="myFunction()">
+                                <label for="remember">
+                                    Show Password
+                                </label>
+                            </div>
                         </div>
                         <div class="col-4">
-                            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                            <button type="submit" class="btn btn-primary btn-block">Login</button>
                         </div>
                     </div>
                 </form>
@@ -57,6 +64,17 @@
     <script src="{{ asset('frontend/admin') }}/plugins/jquery/jquery.min.js"></script>
     <script src="{{ asset('frontend/admin') }}/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('frontend/admin') }}/dist/js/adminlte.min.js"></script>
+    @include('sweetalert::alert')
+    <script>
+        function myFunction() {
+            var x = document.getElementById("password");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+    </script>
 </body>
 
 </html>

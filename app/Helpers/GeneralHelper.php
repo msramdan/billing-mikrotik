@@ -3,6 +3,7 @@
 use \RouterOS\Client;
 use Illuminate\Support\Facades\DB;
 use \RouterOS\Exceptions\ConnectException;
+use Illuminate\Support\Facades\Session;
 
 function formatBytes($bytes, $decimal = null)
 {
@@ -50,6 +51,12 @@ function getRouteName()
 function getCompany()
 {
     $data = DB::table('companies')->first();
+    return $data;
+}
+
+function getCustomer()
+{
+    $data = DB::table('pelanggans')->where('id',Session::get('id-customer') )->first();
     return $data;
 }
 

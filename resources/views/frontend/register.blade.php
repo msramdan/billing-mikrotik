@@ -87,7 +87,7 @@
                         </div>
                     </div>
 
-                    {{-- @error('photo_ktp')
+                    @error('photo_ktp')
                         <span class="text-danger">
                             {{ $message }}
                         </span>
@@ -99,7 +99,7 @@
                                 <label class="custom-file-label" for="">Photo KTP</label>
                             </div>
                         </div>
-                    </div> --}}
+                    </div>
 
                     @error('alamat')
                         <span class="text-danger">
@@ -148,7 +148,7 @@
                         <div class="col-8">
                         </div>
                         <div class="col-4">
-                            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                            <button type="submit" class="btn btn-primary btn-block">Daftar</button>
                         </div>
                     </div>
                 </form>
@@ -171,6 +171,7 @@
             theme: 'bootstrap4'
         })
     </script>
+    @include('sweetalert::alert')
 </body>
 
 </html>

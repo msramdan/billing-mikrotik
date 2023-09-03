@@ -1,40 +1,37 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PanelCustomer\DashboardController as PanelCustomerDashboardController;
 use Illuminate\Support\Facades\Route;
 
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
-
-// FRONT END
+// FRONT END - LANDING PAGE Public
 Route::controller(App\Http\Controllers\Frontend\WebController::class)->group(function () {
     Route::get('/', 'index')->name('website');
     Route::get('/loginClient', 'loginClient')->name('loginClient');
     Route::get('/registerClient', 'registerClient')->name('registerClient');
     Route::post('/submitRegister', 'submitRegister')->name('submitRegister');
-
+    Route::post('/submitLogin', 'submitLogin')->name('submitLogin');
     Route::get('/speedTest', 'speedTest')->name('speedTest');
     Route::get('/cekTagihan', 'cekTagihan')->name('cekTagihan');
     Route::get('/areaCoverage', 'areaCoverage')->name('areaCoverage');
 });
+// PANEL CUSTOMER Need Session
+Route::middleware(['login-customer'])->group(function () {
+    Route::controller(PanelCustomerDashboardController::class)->group(function () {
+        Route::get('/dashboardCustomer', 'index')->name('dashboardCustomer');
+    });
+    Route::controller(App\Http\Controllers\Frontend\WebController::class)->group(function () {
+        Route::get('/logoutCustomer', 'logoutCustomer')->name('logoutCustomer');
+    });
 
+});
+
+// PANEL ADMIN
 Route::middleware(['auth', 'web'])->group(function () {
-    // Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/profile', App\Http\Controllers\ProfileController::class)->name('profile');
     Route::resource('users', App\Http\Controllers\UserController::class);
     Route::resource('roles', App\Http\Controllers\RoleAndPermissionController::class);
-
-
     Route::controller(DashboardController::class)->group(function () {
         Route::get('/dashboard', 'index')->name('dashboard');
     });
@@ -81,5 +78,4 @@ Route::middleware(['auth', 'web'])->group(function () {
     Route::resource('odcs', App\Http\Controllers\OdcController::class);
 });
 Route::resource('odps', App\Http\Controllers\OdpController::class)->middleware('auth');
-
 Route::resource('pelanggans', App\Http\Controllers\PelangganController::class)->middleware('auth');
