@@ -35,6 +35,37 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="row g-3">
+                                        <div class="col-md-3">
+                                            <select name="teknisi" id="teknisi" class="form-control select2-form">
+                                                <option value="All">All Area Coverage
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <select name="faskes" id="faskes" class="form-control select2-form">
+                                                <option value="All">All Status Berlangganan
+                                                </option>
+
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <select name="status" id="status" class="form-control select2-form">
+                                                <option value="All">All Package</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <select name="status" id="status" class="form-control select2-form">
+                                                <option value="All">All Route Mikrotik</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+
                             <div class="table-responsive p-1">
                                 <table class="table table-striped" id="data-table" width="100%">
                                     <thead>
@@ -47,6 +78,7 @@
                                             <th>{{ __('No Ktp') }}</th>
                                             <th>{{ __('Status Berlangganan') }}</th>
                                             <th>{{ __('Package') }}</th>
+                                            <th>{{ __('Router') }}</th>
                                             <th>{{ __('User Pppoe') }}</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
@@ -109,6 +141,10 @@
                 {
                     data: 'package',
                     name: 'package.nama_layanan'
+                },
+                {
+                    data: 'settingmikrotik',
+                    name: 'settingmikrotik',
                 },
                 {
                     data: 'user_pppoe',

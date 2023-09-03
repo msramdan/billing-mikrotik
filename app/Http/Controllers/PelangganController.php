@@ -32,21 +32,30 @@ class PelangganController extends Controller
                 ->leftJoin('odps', 'pelanggans.odp', '=', 'odps.id')
                 ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
                 ->leftJoin('settingmikrotiks', 'pelanggans.router', '=', 'settingmikrotiks.id')
-                ->select('pelanggans.*', 'area_coverages.kode_area','area_coverages.nama as nama_area','odcs.kode_odc'
-                        ,'odps.kode_odp','packages.nama_layanan','packages.harga','settingmikrotiks.identitas_router')
+                ->select(
+                    'pelanggans.*',
+                    'area_coverages.kode_area',
+                    'area_coverages.nama as nama_area',
+                    'odcs.kode_odc',
+                    'odps.kode_odp',
+                    'packages.nama_layanan',
+                    'packages.harga',
+                    'settingmikrotiks.identitas_router'
+                )
+                ->orderBy('pelanggans.id', 'desc')
                 ->get();
             return Datatables::of($pelanggans)
                 ->addColumn('alamat', function ($row) {
                     return str($row->alamat)->limit(100);
                 })
                 ->addColumn('area_coverage', function ($row) {
-                    return $row->kode_area. '-' .$row->nama_area;
+                    return $row->kode_area . '-' . $row->nama_area;
                 })->addColumn('odc', function ($row) {
                     return $row->kode_odc;
                 })->addColumn('odp', function ($row) {
                     return $row->kode_odp;
                 })->addColumn('package', function ($row) {
-                    return $row->nama_layanan. '-' .$row->harga;
+                    return $row->nama_layanan . '-' . $row->harga;
                 })->addColumn('settingmikrotik', function ($row) {
                     return $row->identitas_router;
                 })
@@ -111,13 +120,21 @@ class PelangganController extends Controller
     public function show(Pelanggan $pelanggan)
     {
         $pelanggan = DB::table('pelanggans')
-                ->leftJoin('area_coverages', 'pelanggans.coverage_area', '=', 'area_coverages.id')
-                ->leftJoin('odcs', 'pelanggans.odc', '=', 'odcs.id')
-                ->leftJoin('odps', 'pelanggans.odp', '=', 'odps.id')
-                ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
-                ->leftJoin('settingmikrotiks', 'pelanggans.router', '=', 'settingmikrotiks.id')
-                ->select('pelanggans.*', 'area_coverages.kode_area','area_coverages.nama as nama_area','odcs.kode_odc'
-                        ,'odps.kode_odp','packages.nama_layanan','packages.harga','settingmikrotiks.identitas_router')->where('pelanggans.id', $pelanggan->id)->first();;
+            ->leftJoin('area_coverages', 'pelanggans.coverage_area', '=', 'area_coverages.id')
+            ->leftJoin('odcs', 'pelanggans.odc', '=', 'odcs.id')
+            ->leftJoin('odps', 'pelanggans.odp', '=', 'odps.id')
+            ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
+            ->leftJoin('settingmikrotiks', 'pelanggans.router', '=', 'settingmikrotiks.id')
+            ->select(
+                'pelanggans.*',
+                'area_coverages.kode_area',
+                'area_coverages.nama as nama_area',
+                'odcs.kode_odc',
+                'odps.kode_odp',
+                'packages.nama_layanan',
+                'packages.harga',
+                'settingmikrotiks.identitas_router'
+            )->where('pelanggans.id', $pelanggan->id)->first();;
 
         return view('pelanggans.show', compact('pelanggan'));
     }

@@ -28,7 +28,7 @@ class UpdatePelangganRequest extends FormRequest
 			'odc' => 'required|exists:App\Models\Odc,id',
 			'odp' => 'required|exists:App\Models\Odp,id',
 			'no_port_odp' => 'nullable|in:1,2',
-			'no_layanan' => 'nullable|string|max:12',
+			'no_layanan' => 'required|string|max:12',
 			'nama' => 'required|string|max:255',
 			'tanggal_daftar' => 'required|date',
 			'email' => 'required|email|unique:pelanggans,email,' . $this->pelanggan->id,

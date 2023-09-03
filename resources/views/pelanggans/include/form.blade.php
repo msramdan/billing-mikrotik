@@ -74,8 +74,13 @@
     <div class="col-md-6">
         <div class="form-group">
             <label for="no-layanan">{{ __('No Layanan') }}</label>
-            <input type="number" name="no_layanan" id="no-layanan" class="form-control @error('no_layanan') is-invalid @enderror" value="{{ isset($pelanggan) ? $pelanggan->no_layanan : old('no_layanan') }}" placeholder="{{ __('No Layanan') }}" />
-            @error('no_layanan')
+            <div class="input-group mb-3">
+                <input type="text" name="no_layanan" required readonly id="no-layanan" class="form-control @error('no_layanan') is-invalid @enderror" value="{{ isset($pelanggan) ? $pelanggan->no_layanan : old('no_layanan') }}" placeholder="{{ __('No Layanan') }}" />
+                <div class="input-group-prepend">
+                    <button class="btn btn-success" type="button" onclick="generateNoLayanan()">Generate</button>
+                  </div>
+              </div>
+              @error('no_layanan')
                 <span class="text-danger">
                     {{ $message }}
                 </span>
@@ -118,7 +123,7 @@
     <div class="col-md-6">
         <div class="form-group">
             <label for="no-wa">{{ __('No Wa') }}</label>
-            <input type="number" name="no_wa" id="no-wa" class="form-control @error('no_wa') is-invalid @enderror" value="{{ isset($pelanggan) ? $pelanggan->no_wa : old('no_wa') }}" placeholder="{{ __('No Wa') }}" required />
+            <input type="number" name="no_wa" id="no-wa" class="form-control @error('no_wa') is-invalid @enderror" value="{{ isset($pelanggan) ? $pelanggan->no_wa : old('no_wa') }}" placeholder="{{ __('No Wa (Harus diawali 62)') }}" required />
             @error('no_wa')
                 <span class="text-danger">
                     {{ $message }}
@@ -140,15 +145,15 @@
     @isset($pelanggan)
         <div class="col-md-6">
             <div class="row">
-                <div class="col-md-4 text-center">
+                <div class="col-md-5 text-center">
                     @if ($pelanggan->photo_ktp == null)
                         <img src="https://via.placeholder.com/350?text=No+Image+Avaiable" alt="Photo Ktp" class="rounded mb-2 mt-2" alt="Photo Ktp" width="200" height="150" style="object-fit: cover">
                     @else
-                        <img src="{{ asset('storage/uploads/photo_ktps/' . $pelanggan->photo_ktp) }}" alt="Photo Ktp" class="rounded mb-2 mt-2" width="200" height="150" style="object-fit: cover">
+                        <img src="{{ asset('storage/uploads/photo_ktps/' . $pelanggan->photo_ktp) }}" alt="Photo Ktp" class="rounded mb-2 mt-2" width="100%" height="150" style="object-fit: cover">
                     @endif
                 </div>
 
-                <div class="col-md-8">
+                <div class="col-md-7">
                     <div class="form-group ms-3">
                         <label for="photo_ktp">{{ __('Photo Ktp') }}</label>
                         <input type="file" name="photo_ktp" class="form-control @error('photo_ktp') is-invalid @enderror" id="photo_ktp">
@@ -368,3 +373,21 @@
         </div>
     </div>
 </div>
+
+@push('js')
+    <script>
+        function generateNoLayanan() {
+            let password = "";
+            const allChars = "0123456789";
+            passwordLength = 12;
+            for (let i = 0; i < passwordLength; i++) {
+                const randomNumber = Math.floor(Math.random() * allChars.length);
+                password += allChars.substring(randomNumber, randomNumber + 1);
+            }
+
+            const shuffled = password.split('').sort(function() {
+                return 0.5 - Math.random()
+            }).join('');
+            $('#no-layanan').val(shuffled);
+        }
+    </script>
