@@ -65,7 +65,7 @@
                         </span>
                     @enderror
                     <div class="input-group mb-3">
-                        <input type="number" class="form-control @error('no_wa') is-invalid @enderror"  placeholder="No Wa" name="no_wa"  value="{{ old('no_wa') }}" required>
+                        <input type="number" class="form-control @error('no_wa') is-invalid @enderror"  placeholder="No Wa (Awali dengan 62)" name="no_wa"  value="{{ old('no_wa') }}" required>
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fa fa-whatsapp" style="width: 15px"></span>

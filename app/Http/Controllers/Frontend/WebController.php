@@ -48,7 +48,7 @@ class WebController extends Controller
                     Alert::success('Success', 'Login Berhasil');
                     return redirect()->route('dashboardCustomer');
                 } else {
-                    Alert::error('Failed', 'Email atau Password anda salah!');
+                    Alert::error('Failed', 'Password anda salah!');
                     return redirect()->back()->withInput($request->all())->withErrors($validator);
                 }
             }else{
@@ -57,7 +57,7 @@ class WebController extends Controller
             }
 
         } else {
-            Alert::error('Failed', 'Email atau Password anda salah!');
+            Alert::error('Failed', 'Email tidak terdaftar!');
             return redirect()->back()->withInput($request->all())->withErrors($validator);
         }
     }
@@ -71,7 +71,7 @@ class WebController extends Controller
 
     public function registerClient()
     {
-        $paket = DB::table('packages')->get();
+        $paket = DB::table('packages')->where('is_active', 'Yes')->get();
         return view('frontend.register', [
             'paket' => $paket
         ]);
