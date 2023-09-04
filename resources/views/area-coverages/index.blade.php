@@ -45,8 +45,6 @@
                                             <th>{{ __('Alamat') }}</th>
                                             <th>{{ __('Keterangan') }}</th>
                                             <th>{{ __('Jangkauan') }}</th>
-                                            <th>{{ __('Latitude') }}</th>
-                                            <th>{{ __('Longitude') }}</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
@@ -100,14 +98,6 @@
                 {
                     data: 'radius',
                     name: 'radius',
-                },
-                {
-                    data: 'latitude',
-                    name: 'latitude',
-                },
-                {
-                    data: 'longitude',
-                    name: 'longitude',
                 },
                 {
                     data: 'action',

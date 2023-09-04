@@ -55,8 +55,8 @@
                                             <td>{{ $areaCoverage->keterangan }}</td>
                                         </tr>
 									<tr>
-                                            <td class="fw-bold">{{ __('Jangkauan') }}</td>
-                                            <td>{{ $areaCoverage->jangkauan }}</td>
+                                            <td class="fw-bold">{{ __('Radius') }}</td>
+                                            <td>{{ $areaCoverage->radius }}</td>
                                         </tr>
 									<tr>
                                             <td class="fw-bold">{{ __('Latitude') }}</td>

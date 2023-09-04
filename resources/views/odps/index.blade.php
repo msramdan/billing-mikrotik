@@ -47,10 +47,6 @@
 											<th>{{ __('Nomor Tiang') }}</th>
 											<th>{{ __('Jumlah Port') }}</th>
 											<th>{{ __('Description') }}</th>
-											<th>{{ __('Latitude') }}</th>
-											<th>{{ __('Longitude') }}</th>
-                                            <th>{{ __('Created At') }}</th>
-                                            <th>{{ __('Updated At') }}</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
@@ -109,22 +105,6 @@
 				{
                     data: 'description',
                     name: 'description',
-                },
-				{
-                    data: 'latitude',
-                    name: 'latitude',
-                },
-				{
-                    data: 'longitude',
-                    name: 'longitude',
-                },
-                {
-                    data: 'created_at',
-                    name: 'created_at'
-                },
-                {
-                    data: 'updated_at',
-                    name: 'updated_at'
                 },
                 {
                     data: 'action',
