@@ -387,6 +387,13 @@
             }
         })
 
+        $('#router').change(function() {
+            $('#user_pppoe').html(options_temp);
+            if ($(this).val() != "") {
+                getProfile($(this).val());
+            }
+        })
+
         function getOdc(areaId) {
             let url = '{{ route('api.odc', ':id') }}';
             url = url.replace(':id', areaId)
@@ -446,8 +453,6 @@
                 success: function(res) {
                     dataArray = res.array
                     const options =  $.each(dataArray, function(key, value) {
-                        // return `<option value="${value}">${value}</option>`
-
                         if(value=='Kosong'){
                             $('#no_port_odp').append('<option value="'+key+'">Port '+key+ ' || ' +value+'</option>');
                         }else{
@@ -455,15 +460,34 @@
                         }
 
                     });
-                    // console.log(options);
-                    // $('#no_port_odp').append('<option value="five" selected="selected">Five</option>');
-
-                    // $('#no_port_odp').html(options_temp + options);
                     $('#no_port_odp').prop('disabled', false);
                 },
                 error: function(err) {
                     alert(JSON.stringify(err))
                     $('#no_port_odp').prop('disabled', false);
+                }
+            })
+        }
+
+        function getProfile(router) {
+            let url = '{{ route('api.getProfile', ':id') }}';
+            url = url.replace(':id', router)
+            $.ajax({
+                url,
+                method: 'GET',
+                beforeSend: function() {
+                    $('#user_pppoe').prop('disabled', true);
+                },
+                success: function(res) {
+                    const options = res.data.map(value => {
+                        return `<option value="${value.name}">${value.name}</option>`
+                    });
+                    $('#user_pppoe').html(options_temp + options);
+                    $('#user_pppoe').prop('disabled', false);
+                },
+                error: function(err) {
+                    alert(JSON.stringify(err))
+                    $('#user_pppoe').prop('disabled', false);
                 }
             })
         }

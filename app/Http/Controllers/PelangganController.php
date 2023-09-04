@@ -11,6 +11,9 @@ use App\Models\AreaCoverage;
 use App\Models\Package;
 use App\Models\Settingmikrotik;
 use Illuminate\Http\Request;
+use \RouterOS\Query;
+use \RouterOS\Client;
+use \RouterOS\Exceptions\ConnectException;
 
 class PelangganController extends Controller
 {
@@ -52,31 +55,31 @@ class PelangganController extends Controller
                     'settingmikrotiks.identitas_router'
                 );
 
-                if (isset($area_coverage) && !empty($area_coverage)) {
-                    if ($area_coverage != 'All') {
-                        $pelanggans = $pelanggans->where('pelanggans.coverage_area', $area_coverage);
-                    }
+            if (isset($area_coverage) && !empty($area_coverage)) {
+                if ($area_coverage != 'All') {
+                    $pelanggans = $pelanggans->where('pelanggans.coverage_area', $area_coverage);
                 }
+            }
 
-                if (isset($packagePilihan) && !empty($packagePilihan)) {
-                    if ($packagePilihan != 'All') {
-                        $pelanggans = $pelanggans->where('pelanggans.paket_layanan', $packagePilihan);
-                    }
+            if (isset($packagePilihan) && !empty($packagePilihan)) {
+                if ($packagePilihan != 'All') {
+                    $pelanggans = $pelanggans->where('pelanggans.paket_layanan', $packagePilihan);
                 }
+            }
 
-                if (isset($mikrotik) && !empty($mikrotik)) {
-                    if ($mikrotik != 'All') {
-                        $pelanggans = $pelanggans->where('pelanggans.router', $mikrotik);
-                    }
+            if (isset($mikrotik) && !empty($mikrotik)) {
+                if ($mikrotik != 'All') {
+                    $pelanggans = $pelanggans->where('pelanggans.router', $mikrotik);
                 }
+            }
 
-                if (isset($status) && !empty($status)) {
-                    if ($status != 'All') {
-                        $pelanggans = $pelanggans->where('pelanggans.status_berlangganan', $status);
-                    }
+            if (isset($status) && !empty($status)) {
+                if ($status != 'All') {
+                    $pelanggans = $pelanggans->where('pelanggans.status_berlangganan', $status);
                 }
+            }
 
-                $pelanggans = $pelanggans->orderBy('pelanggans.id', 'DESC')->get();
+            $pelanggans = $pelanggans->orderBy('pelanggans.id', 'DESC')->get();
             return Datatables::of($pelanggans)
                 ->addColumn('alamat', function ($row) {
                     return str($row->alamat)->limit(100);
@@ -98,7 +101,7 @@ class PelangganController extends Controller
         $areaCoverages = AreaCoverage::all();
         $package = Package::all();
         $router = Settingmikrotik::all();
-        return view('pelanggans.index',[
+        return view('pelanggans.index', [
             'areaCoverages' => $areaCoverages,
             'package' => $package,
             'router' => $router
@@ -187,9 +190,41 @@ class PelangganController extends Controller
      */
     public function edit(Pelanggan $pelanggan)
     {
-        $pelanggan->load('area_coverage:id,kode_area', 'odc:id,kode_odc', 'odp:id,kode_odc', 'package:id,nama_layanan', 'settingmikrotik:id,identitas_router',);
+        $pelanggan->load('area_coverage:id,kode_area', 'odc:id,kode_odc', 'odp:id,kode_odc', 'package:id,nama_layanan', 'settingmikrotik:id,identitas_router');
+        $dataOdcs = DB::table('odcs')->where('wilayah_odc',  $pelanggan->coverage_area)->get();
+        $dataodps = DB::table('odps')->where('kode_odc',  $pelanggan->odc)->get();
+        $dataPort = DB::table('odps')->where('id', $pelanggan->odp)->first();
+        $jmlPort = $dataPort->jumlah_port;
+        $array = [];
+        for ($x = 1; $x <=  $jmlPort; $x++) {
+            // find customer
+            $cek = DB::table('pelanggans')
+                ->where('odp', $pelanggan->odp)
+                ->where('no_port_odp', $x)
+                ->first();
+            if ($cek) {
+                $array[$x] = $cek->no_layanan . ' - ' . $cek->nama;
+            } else {
+                $array[$x] = 'Kosong';
+            }
+        }
 
-        return view('pelanggans.edit', compact('pelanggan'));
+        $router = DB::table('settingmikrotiks')->where('id', $pelanggan->router)->first();
+        try {
+            $client = new Client([
+                'host' => $router->host,
+                'user' => $router->username,
+                'pass' => $router->password,
+                'port' => $router->port,
+            ]);
+        } catch (ConnectException $e) {
+            echo $e->getMessage() . PHP_EOL;
+            die();
+        }
+        $query = new Query('/ppp/secret/print');
+        $secretPPoe = $client->query($query)->read();
+
+        return view('pelanggans.edit', compact('pelanggan', 'dataOdcs', 'dataodps', 'array', 'secretPPoe'));
     }
 
     /**

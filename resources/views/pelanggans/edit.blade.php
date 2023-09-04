@@ -207,7 +207,7 @@
                                 @csrf
                                 @method('PUT')
 
-                                @include('pelanggans.include.form')
+                                @include('pelanggans.include.form_edit')
 
                                 <a href="{{ url()->previous() }}" class="btn btn-secondary">{{ __('Back') }}</a>
 
@@ -369,5 +369,136 @@
             $('#search_place').on('paste', doSearching($(this)))
         });
     </script>
+
+    <script>
+        const options_temp = '<option value="" selected disabled>-- Select --</option>';
+        $('#coverage-area').change(function() {
+            $('#odc, #odp, #no_port_odp').html(options_temp);
+            if ($(this).val() != "") {
+                getOdc($(this).val());
+            }
+        })
+
+        $('#odc').change(function() {
+            $('#odp, #no_port_odp').html(options_temp);
+            if ($(this).val() != "") {
+                getOdp($(this).val());
+            }
+        })
+
+
+        $('#odp').change(function() {
+            $('#no_port_odp').html(options_temp);
+            if ($(this).val() != "") {
+                getPort($(this).val());
+            }
+        })
+
+        $('#router').change(function() {
+            $('#user_pppoe').html(options_temp);
+            if ($(this).val() != "") {
+                getProfile($(this).val());
+            }
+        })
+
+        function getOdc(areaId) {
+            let url = '{{ route('api.odc', ':id') }}';
+            url = url.replace(':id', areaId)
+            $.ajax({
+                url,
+                method: 'GET',
+                beforeSend: function() {
+                    $('#odc').prop('disabled', true);
+                },
+                success: function(res) {
+                    const options = res.data.map(value => {
+                        return `<option value="${value.id}">${value.kode_odc}</option>`
+                    });
+                    $('#odc').html(options_temp + options)
+                    $('#odc').prop('disabled', false);
+                },
+                error: function(err) {
+                    $('#odc').prop('disabled', false);
+                    alert(JSON.stringify(err))
+                }
+
+            })
+        }
+
+        function getOdp(odcId) {
+            let url = '{{ route('api.odp', ':id') }}';
+            url = url.replace(':id', odcId)
+            $.ajax({
+                url,
+                method: 'GET',
+                beforeSend: function() {
+                    $('#odp').prop('disabled', true);
+                },
+                success: function(res) {
+                    const options = res.data.map(value => {
+                        return `<option value="${value.id}">${value.kode_odp}</option>`
+                    });
+                    $('#odp').html(options_temp + options);
+                    $('#odp').prop('disabled', false);
+                },
+                error: function(err) {
+                    alert(JSON.stringify(err))
+                    $('#odp').prop('disabled', false);
+                }
+            })
+        }
+
+        function getPort(odpId) {
+            let url = '{{ route('api.getPort', ':id') }}';
+            url = url.replace(':id', odpId)
+            $.ajax({
+                url,
+                method: 'GET',
+                beforeSend: function() {
+                    $('#no_port_odp').prop('disabled', true);
+                },
+                success: function(res) {
+                    dataArray = res.array
+                    const options =  $.each(dataArray, function(key, value) {
+                        if(value=='Kosong'){
+                            $('#no_port_odp').append('<option value="'+key+'">Port '+key+ ' || ' +value+'</option>');
+                        }else{
+                            $('#no_port_odp').append('<option disabled value="'+key+'">Port '+key+ ' || ' +value+'</option>');
+                        }
+
+                    });
+                    $('#no_port_odp').prop('disabled', false);
+                },
+                error: function(err) {
+                    alert(JSON.stringify(err))
+                    $('#no_port_odp').prop('disabled', false);
+                }
+            })
+        }
+
+        function getProfile(router) {
+            let url = '{{ route('api.getProfile', ':id') }}';
+            url = url.replace(':id', router)
+            $.ajax({
+                url,
+                method: 'GET',
+                beforeSend: function() {
+                    $('#user_pppoe').prop('disabled', true);
+                },
+                success: function(res) {
+                    const options = res.data.map(value => {
+                        return `<option value="${value.name}">${value.name}</option>`
+                    });
+                    $('#user_pppoe').html(options_temp + options);
+                    $('#user_pppoe').prop('disabled', false);
+                },
+                error: function(err) {
+                    alert(JSON.stringify(err))
+                    $('#user_pppoe').prop('disabled', false);
+                }
+            })
+        }
+    </script>
+
 @endpush
 

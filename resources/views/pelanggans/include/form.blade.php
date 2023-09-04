@@ -25,7 +25,7 @@
             <label for="odc">{{ __('Odc') }}</label>
             <select class="form-select @error('odc') is-invalid @enderror" name="odc" id="odc"
                 class="form-control" required>
-                <option value="" selected disabled>-- {{ __('Select odc') }} --</option>
+                <option value="" selected disabled>-- {{ __('Select') }} --</option>
             </select>
             @error('odc')
                 <span class="text-danger">
@@ -39,7 +39,7 @@
             <label for="odp">{{ __('Odp') }}</label>
             <select class="form-select @error('odp') is-invalid @enderror" name="odp" id="odp"
                 class="form-control" required>
-                <option value="" selected disabled>-- {{ __('Select odp') }} --</option>
+                <option value="" selected disabled>-- {{ __('Select') }} --</option>
             </select>
             @error('odp')
                 <span class="text-danger">
@@ -53,7 +53,7 @@
             <label for="no_port_odp">{{ __('No Port Odp') }}</label>
             <select class="form-select @error('no_port_odp') is-invalid @enderror" name="no_port_odp" id="no_port_odp"
                 class="form-control">
-                <option value="" selected disabled>-- {{ __('Select no port odp') }} --</option>
+                <option value="" selected disabled>-- {{ __('Select') }} --</option>
             </select>
             @error('no_port_odp')
                 <span class="text-danger">
@@ -391,10 +391,12 @@
     <div class="col-md-3">
         <div class="form-group">
             <label for="user-pppoe">{{ __('User Pppoe') }}</label>
-            <input type="text" name="user_pppoe" id="user-pppoe"
-                class="form-control @error('user_pppoe') is-invalid @enderror"
-                value="{{ isset($pelanggan) ? $pelanggan->user_pppoe : old('user_pppoe') }}"
-                placeholder="{{ __('User Pppoe') }}" />
+                <select class="form-select @error('user_pppoe') is-invalid @enderror" name="user_pppoe" id="user_pppoe"
+                class="form-control" required>
+                <option value="" selected disabled>-- {{ __('Select') }} --</option>
+            </select>
+
+
             @error('user_pppoe')
                 <span class="text-danger">
                     {{ $message }}

@@ -43,8 +43,6 @@
                                             <th>{{ __('Host') }}</th>
                                             <th>{{ __('Port') }}</th>
                                             <th>{{ __('Username') }}</th>
-                                            <th>{{ __('Created At') }}</th>
-                                            <th>{{ __('Updated At') }}</th>
                                             <th>{{ __('Is Active') }}</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
@@ -91,16 +89,6 @@
                 {
                     data: 'username',
                     name: 'username',
-                },
-
-
-                {
-                    data: 'created_at',
-                    name: 'created_at'
-                },
-                {
-                    data: 'updated_at',
-                    name: 'updated_at'
                 },
                 {
                     data: 'is_active',

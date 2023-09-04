@@ -7,6 +7,9 @@ use App\Http\Requests\{StoreOdpRequest, UpdateOdpRequest};
 use Yajra\DataTables\Facades\DataTables;
 use Image;
 use Illuminate\Support\Facades\DB;
+use \RouterOS\Query;
+use \RouterOS\Client;
+use \RouterOS\Exceptions\ConnectException;
 
 class OdpController extends Controller
 {
@@ -199,6 +202,26 @@ class OdpController extends Controller
         return response()->json(compact('message', 'data'));
     }
 
+    public function getProfile($id)
+    {
+        $router = DB::table('settingmikrotiks')->where('id',$id)->first();
+        try {
+            $client = new Client([
+                'host' => $router->host,
+                'user' => $router->username,
+                'pass' => $router->password,
+                'port' => $router->port,
+            ]);
+        } catch (ConnectException $e) {
+            echo $e->getMessage() . PHP_EOL;
+            die();
+        }
+        $query = new Query('/ppp/secret/print');
+        $data = $client->query($query)->read();
+        $message = 'Berhasil mengambil data kota';
+        return response()->json(compact('message', 'data'));
+    }
+
     public function getPort($id)
     {
         $data = DB::table('odps')->where('id', $id)->first();
@@ -211,9 +234,9 @@ class OdpController extends Controller
                 ->where('odp', $id)
                 ->where('no_port_odp', $x)
                 ->first();
-            if($cek){
-                $array[$x] = $cek->no_layanan.' - '.$cek->nama;
-            }else{
+            if ($cek) {
+                $array[$x] = $cek->no_layanan . ' - ' . $cek->nama;
+            } else {
                 $array[$x] = 'Kosong';
             }
         }

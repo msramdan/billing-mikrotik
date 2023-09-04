@@ -27,7 +27,7 @@
                 class="form-control" required>
                 <option value="" selected disabled>-- {{ __('Select odc') }} --</option>
 
-                @foreach ($odcs as $odc)
+                @foreach ($dataOdcs as $odc)
                     <option value="{{ $odc->id }}"
                         {{ isset($pelanggan) && $pelanggan->odc == $odc->id ? 'selected' : (old('odc') == $odc->id ? 'selected' : '') }}>
                         {{ $odc->kode_odc }}
@@ -48,7 +48,7 @@
                 class="form-control" required>
                 <option value="" selected disabled>-- {{ __('Select odp') }} --</option>
 
-                @foreach ($odps as $odp)
+                @foreach ($dataodps as $odp)
                     <option value="{{ $odp->id }}"
                         {{ isset($pelanggan) && $pelanggan->odp == $odp->id ? 'selected' : (old('odp') == $odp->id ? 'selected' : '') }}>
                         {{ $odp->kode_odp }}
@@ -65,15 +65,32 @@
     <div class="col-md-6">
         <div class="form-group">
             <label for="no-port-odp">{{ __('No Port Odp') }}</label>
-            <select class="form-select @error('no_port_odp') is-invalid @enderror" name="no_port_odp" id="no-port-odp"
+            <select class="form-select @error('no_port_odp') is-invalid @enderror" name="no_port_odp" id="no_port_odp"
                 class="form-control">
                 <option value="" selected disabled>-- {{ __('Select no port odp') }} --</option>
-                <option value="1"
-                    {{ isset($pelanggan) && $pelanggan->no_port_odp == '1' ? 'selected' : (old('no_port_odp') == '1' ? 'selected' : '') }}>
-                    1</option>
-                <option value="2"
-                    {{ isset($pelanggan) && $pelanggan->no_port_odp == '2' ? 'selected' : (old('no_port_odp') == '2' ? 'selected' : '') }}>
-                    2</option>
+                @foreach ($array as $key => $port)
+                    @if ($port == 'Kosong')
+                        <option value="{{ $key }}"
+                            {{ isset($pelanggan) && $pelanggan->no_port_odp == $key ? 'selected' : (old('no_port_odp') == $key ? 'selected' : '') }}>
+                            Port {{ $key }} || {{ $port }}
+                        </option>
+                    @else
+
+                        @if ($key == $pelanggan->no_port_odp )
+                        <option value="{{ $key }}"
+                            {{ isset($pelanggan) && $pelanggan->no_port_odp == $key ? 'selected' : (old('no_port_odp') == $key ? 'selected' : '') }}>
+                            Port {{ $key }} || {{ $port }}
+                        </option>
+                        @else
+                            <option disabled value="{{ $key }}"
+                            {{ isset($pelanggan) && $pelanggan->no_port_odp == $key ? 'selected' : (old('no_port_odp') == $key ? 'selected' : '') }}>
+                            Port {{ $key }} || {{ $port }}
+                        </option>
+                        @endif
+
+                    @endif
+                @endforeach
+
             </select>
             @error('no_port_odp')
                 <span class="text-danger">
@@ -411,10 +428,16 @@
     <div class="col-md-3">
         <div class="form-group">
             <label for="user-pppoe">{{ __('User Pppoe') }}</label>
-            <input type="text" name="user_pppoe" id="user-pppoe"
-                class="form-control @error('user_pppoe') is-invalid @enderror"
-                value="{{ isset($pelanggan) ? $pelanggan->user_pppoe : old('user_pppoe') }}"
-                placeholder="{{ __('User Pppoe') }}" />
+            <select class="form-select @error('user_pppoe') is-invalid @enderror" name="user_pppoe" id="user_pppoe"
+                class="form-control">
+                <option value="" selected disabled>-- {{ __('Select') }} --</option>
+                @foreach ($secretPPoe as $settingmikrotik)
+                    <option value="{{ $settingmikrotik['name'] }}"
+                        {{ isset($pelanggan) && $pelanggan->user_pppoe == $settingmikrotik['name'] ? 'selected' : (old('user_pppoe') == $settingmikrotik['name'] ? 'selected' : '') }}>
+                        {{ $settingmikrotik['name'] }}
+                    </option>
+                @endforeach
+            </select>
             @error('user_pppoe')
                 <span class="text-danger">
                     {{ $message }}
