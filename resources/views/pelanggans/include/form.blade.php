@@ -20,7 +20,7 @@
             @enderror
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-3">
         <div class="form-group">
             <label for="odc">{{ __('Odc') }}</label>
             <select class="form-select @error('odc') is-invalid @enderror" name="odc" id="odc"
@@ -41,7 +41,7 @@
             @enderror
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-3">
         <div class="form-group">
             <label for="odp">{{ __('Odp') }}</label>
             <select class="form-select @error('odp') is-invalid @enderror" name="odp" id="odp"
@@ -128,7 +128,7 @@
             @enderror
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-3">
         <div class="form-group">
             <label for="email">{{ __('Email') }}</label>
             <input type="email" name="email" id="email"
@@ -142,13 +142,13 @@
             @enderror
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-3">
         <div class="form-group">
             <label for="no-wa">{{ __('No Wa') }}</label>
             <input type="number" name="no_wa" id="no-wa"
                 class="form-control @error('no_wa') is-invalid @enderror"
                 value="{{ isset($pelanggan) ? $pelanggan->no_wa : old('no_wa') }}"
-                placeholder="{{ __('No Wa (Harus diawali 62)') }}" required />
+                placeholder="{{ __('No Wa (Diawali 62)') }}" required />
             @error('no_wa')
                 <span class="text-danger">
                     {{ $message }}
@@ -229,7 +229,7 @@
             @enderror
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-3">
         <div class="form-group">
             <label for="password">{{ __('Password') }}</label>
             <input type="password" name="password" id="password"
@@ -248,14 +248,14 @@
         </div>
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-3">
         <div class="form-group">
             <label for="password-confirmation">{{ __('Password Confirmation') }}</label>
             <input type="password" name="password_confirmation" id="password-confirmation" class="form-control"
                 placeholder="{{ __('Password Confirmation') }}" {{ empty($pelanggan) ? ' required' : '' }} />
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-3">
         <div class="form-group">
             <label for="ppn">{{ __('Ppn') }}</label>
             <select class="form-select @error('ppn') is-invalid @enderror" name="ppn" id="ppn"
@@ -275,7 +275,7 @@
             @enderror
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-3">
         <div class="form-group">
             <label for="status-berlangganan">{{ __('Status Berlangganan') }}</label>
             <select class="form-select @error('status_berlangganan') is-invalid @enderror" name="status_berlangganan"
@@ -353,7 +353,7 @@
             @enderror
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-3">
         <div class="form-group">
             <label for="auto-isolir">{{ __('Auto Isolir') }}</label>
             <select class="form-select @error('auto_isolir') is-invalid @enderror" name="auto_isolir"
@@ -373,7 +373,7 @@
             @enderror
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-3">
         <div class="form-group">
             <label for="tempo-isolir">{{ __('Tempo Isolir') }}</label>
             <input type="number" name="tempo_isolir" id="tempo-isolir"
@@ -387,7 +387,7 @@
             @enderror
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-3">
         <div class="form-group">
             <label for="router">{{ __('Settingmikrotik') }}</label>
             <select class="form-select @error('router') is-invalid @enderror" name="router" id="router"
@@ -408,7 +408,7 @@
             @enderror
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-3">
         <div class="form-group">
             <label for="user-pppoe">{{ __('User Pppoe') }}</label>
             <input type="text" name="user_pppoe" id="user-pppoe"
