@@ -151,7 +151,7 @@
 
             <div class="col-lg-4 col-md-12">
                 <div class="cta-btn">
-                    <a href="#" class="btn btn-primary">Periksa cakupan area</a>
+                    <a href="/areaCoverage" class="btn btn-primary">Periksa cakupan area</a>
                 </div>
             </div>
         </div>

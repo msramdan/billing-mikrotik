@@ -7,6 +7,10 @@ use App\Http\Requests\{StorePelangganRequest, UpdatePelangganRequest};
 use Yajra\DataTables\Facades\DataTables;
 use Image;
 use Illuminate\Support\Facades\DB;
+use App\Models\AreaCoverage;
+use App\Models\Package;
+use App\Models\Settingmikrotik;
+use Illuminate\Http\Request;
 
 class PelangganController extends Controller
 {
@@ -23,9 +27,14 @@ class PelangganController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         if (request()->ajax()) {
+            $area_coverage = intval($request->query('area_coverage'));
+            $packagePilihan = intval($request->query('packagePilihan'));
+            $mikrotik = intval($request->query('mikrotik'));
+            $status = $request->query('status');
+
             $pelanggans = DB::table('pelanggans')
                 ->leftJoin('area_coverages', 'pelanggans.coverage_area', '=', 'area_coverages.id')
                 ->leftJoin('odcs', 'pelanggans.odc', '=', 'odcs.id')
@@ -41,9 +50,33 @@ class PelangganController extends Controller
                     'packages.nama_layanan',
                     'packages.harga',
                     'settingmikrotiks.identitas_router'
-                )
-                ->orderBy('pelanggans.id', 'desc')
-                ->get();
+                );
+
+                if (isset($area_coverage) && !empty($area_coverage)) {
+                    if ($area_coverage != 'All') {
+                        $pelanggans = $pelanggans->where('pelanggans.coverage_area', $area_coverage);
+                    }
+                }
+
+                if (isset($packagePilihan) && !empty($packagePilihan)) {
+                    if ($packagePilihan != 'All') {
+                        $pelanggans = $pelanggans->where('pelanggans.paket_layanan', $packagePilihan);
+                    }
+                }
+
+                if (isset($mikrotik) && !empty($mikrotik)) {
+                    if ($mikrotik != 'All') {
+                        $pelanggans = $pelanggans->where('pelanggans.router', $mikrotik);
+                    }
+                }
+
+                if (isset($status) && !empty($status)) {
+                    if ($status != 'All') {
+                        $pelanggans = $pelanggans->where('pelanggans.status_berlangganan', $status);
+                    }
+                }
+
+                $pelanggans = $pelanggans->orderBy('pelanggans.id', 'DESC')->get();
             return Datatables::of($pelanggans)
                 ->addColumn('alamat', function ($row) {
                     return str($row->alamat)->limit(100);
@@ -62,7 +95,14 @@ class PelangganController extends Controller
                 ->addColumn('action', 'pelanggans.include.action')
                 ->toJson();
         }
-        return view('pelanggans.index');
+        $areaCoverages = AreaCoverage::all();
+        $package = Package::all();
+        $router = Settingmikrotik::all();
+        return view('pelanggans.index',[
+            'areaCoverages' => $areaCoverages,
+            'package' => $package,
+            'router' => $router
+        ]);
     }
 
     /**

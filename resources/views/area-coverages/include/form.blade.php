@@ -78,7 +78,7 @@
                     <label for="radius">{{ __('Radius') }}</label>
                     <input type="number" name="radius" id="radius"
                         class="form-control @error('radius') is-invalid @enderror"
-                        value="{{ isset($areaCoverage) ? $areaCoverage->jangkauan : old('radius') }}"
+                        value="{{ isset($areaCoverage) ? $areaCoverage->radius : old('radius') }}"
                         placeholder="{{ __('Radius') }}" required />
                     @error('radius')
                         <span class="text-danger">

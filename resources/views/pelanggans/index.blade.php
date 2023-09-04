@@ -39,26 +39,42 @@
                                 <div class="row">
                                     <div class="row g-3">
                                         <div class="col-md-3">
-                                            <select name="teknisi" id="teknisi" class="form-control select2-form">
+                                            <select name="area_coverage" id="area_coverage"
+                                                class="form-control select2-form">
                                                 <option value="All">All Area Coverage
                                                 </option>
+                                                @foreach ($areaCoverages as $row)
+                                                    <option value="{{ $row->id }}">{{ $row->kode_area }} - {{ $row->nama }}
+                                                    </option>
+                                                @endforeach
                                             </select>
                                         </div>
                                         <div class="col-md-3">
-                                            <select name="faskes" id="faskes" class="form-control select2-form">
+                                            <select name="status" id="status" class="form-control select2-form">
                                                 <option value="All">All Status Berlangganan
                                                 </option>
-
+                                                <option value="Aktif">Aktif</option>
+                                                <option value="Non Aktif">Non Aktif</option>
+                                                <option value="Menungu">Menungu</option>
                                             </select>
                                         </div>
                                         <div class="col-md-3">
-                                            <select name="status" id="status" class="form-control select2-form">
+                                            <select name="packagePilihan" id="packagePilihan"
+                                                class="form-control select2-form">
                                                 <option value="All">All Package</option>
+                                                @foreach ($package as $row)
+                                                    <option value="{{ $row->id }}">{{ $row->nama_layanan }}
+                                                    </option>
+                                                @endforeach
                                             </select>
                                         </div>
                                         <div class="col-md-3">
-                                            <select name="status" id="status" class="form-control select2-form">
+                                            <select name="mikrotik" id="mikrotik" class="form-control select2-form">
                                                 <option value="All">All Route Mikrotik</option>
+                                                @foreach ($router as $row)
+                                                    <option value="{{ $row->id }}">{{ $row->identitas_router }}
+                                                    </option>
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -106,57 +122,80 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.12.0/datatables.min.js"></script>
     <script>
-        $('#data-table').DataTable({
+        let columns = [{
+                data: 'area_coverage',
+                name: 'area_coverage.kode_area'
+            },
+            {
+                data: 'no_layanan',
+                name: 'no_layanan',
+            },
+            {
+                data: 'nama',
+                name: 'nama',
+            },
+            {
+                data: 'tanggal_daftar',
+                name: 'tanggal_daftar',
+            },
+            {
+                data: 'no_wa',
+                name: 'no_wa',
+            },
+            {
+                data: 'no_ktp',
+                name: 'no_ktp',
+            },
+            {
+                data: 'status_berlangganan',
+                name: 'status_berlangganan',
+            },
+            {
+                data: 'package',
+                name: 'package.nama_layanan'
+            },
+            {
+                data: 'settingmikrotik',
+                name: 'settingmikrotik',
+            },
+            {
+                data: 'user_pppoe',
+                name: 'user_pppoe',
+            },
+            {
+                data: 'action',
+                name: 'action',
+                orderable: false,
+                searchable: false
+            }
+        ];
+
+        var table = $('#data-table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('pelanggans.index') }}",
-            columns: [{
-                    data: 'area_coverage',
-                    name: 'area_coverage.kode_area'
-                },
-                {
-                    data: 'no_layanan',
-                    name: 'no_layanan',
-                },
-                {
-                    data: 'nama',
-                    name: 'nama',
-                },
-                {
-                    data: 'tanggal_daftar',
-                    name: 'tanggal_daftar',
-                },
-                {
-                    data: 'no_wa',
-                    name: 'no_wa',
-                },
-                {
-                    data: 'no_ktp',
-                    name: 'no_ktp',
-                },
-                {
-                    data: 'status_berlangganan',
-                    name: 'status_berlangganan',
-                },
-                {
-                    data: 'package',
-                    name: 'package.nama_layanan'
-                },
-                {
-                    data: 'settingmikrotik',
-                    name: 'settingmikrotik',
-                },
-                {
-                    data: 'user_pppoe',
-                    name: 'user_pppoe',
-                },
-                {
-                    data: 'action',
-                    name: 'action',
-                    orderable: false,
-                    searchable: false
+            ajax: {
+                url: "{{ route('pelanggans.index') }}",
+                data: function(s) {
+                    s.area_coverage = $('select[name=area_coverage] option').filter(':selected').val()
+                    s.status = $('select[name=status] option').filter(':selected').val()
+                    s.packagePilihan = $('select[name=packagePilihan] option').filter(':selected').val()
+                    s.mikrotik = $('select[name=mikrotik] option').filter(':selected').val()
                 }
-            ],
+            },
+            columns: columns
         });
+
+        $('#area_coverage').change(function() {
+            table.draw();
+        })
+        $('#status').change(function() {
+            table.draw();
+        })
+        $('#packagePilihan').change(function() {
+            table.draw();
+        })
+        $('#mikrotik').change(function() {
+            table.draw();
+        })
     </script>
 @endpush
