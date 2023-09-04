@@ -376,8 +376,6 @@
                         list_of_location_html += `<b>${result.display_name}</b><br>`;
                         list_of_location_html += `<span>latitude : ${result.lat}</span><br>`;
                         list_of_location_html += `<span>longitude: ${result.lon}</span><br>`;
-                        list_of_location_html +=
-                            `<a href="${url_edit}" target="_blank" class="btn btn-primary" style="color: white; margin-top: 1rem;">Edit</a>`;
                         list_of_location_html += '</div>';
                         marker.bindPopup(list_of_location_html);
                     }
