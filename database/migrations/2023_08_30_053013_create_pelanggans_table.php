@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('coverage_area')->nullable()->constrained('area_coverages')->restrictOnUpdate()->nullOnDelete();
 			$table->foreignId('odc')->nullable()->constrained('odcs')->restrictOnUpdate()->nullOnDelete();
 			$table->foreignId('odp')->nullable()->constrained('odps')->restrictOnUpdate()->nullOnDelete();
-			$table->enum('no_port_odp', ['1', '2'])->nullable();
+			$table->integer('no_port_odp')->nullable();
 			$table->string('no_layanan', 12)->nullable();
 			$table->string('nama', 255);
 			$table->date('tanggal_daftar');
