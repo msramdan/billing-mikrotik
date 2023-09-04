@@ -4,6 +4,9 @@ use \RouterOS\Client;
 use Illuminate\Support\Facades\DB;
 use \RouterOS\Exceptions\ConnectException;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Http;
+use App\Models\Package;
+use App\Models\Pelanggan;
 
 function formatBytes($bytes, $decimal = null)
 {
@@ -56,13 +59,40 @@ function getCompany()
 
 function getCustomer()
 {
-    $data = DB::table('pelanggans')->where('id',Session::get('id-customer') )->first();
+    $data = DB::table('pelanggans')->where('id', Session::get('id-customer'))->first();
     return $data;
 }
 
-function rupiah($angka){
+function rupiah($angka)
+{
 
-	$hasil_rupiah = "Rp " . number_format($angka,2,',','.');
-	return $hasil_rupiah;
+    $hasil_rupiah = "Rp " . number_format($angka, 2, ',', '.');
+    return $hasil_rupiah;
+}
 
+function sendNotifWa($url,$api_key, $request, $typePesan, $no_wa_owner)
+{
+    if ($typePesan == 'daftar') {
+        $paket = Package::findOrFail($request->paket_layanan)->first();
+        $customer = Pelanggan::where('email', $request->email)->firstOrFail();
+        $url_detail = url('/pelanggans/'.$customer->id);
+        $message = 'Hello. admin ' . getCompany()->nama_perusahaan . "\n\n";
+        $message .= "Ada calon customer baru yang melakukan pendaftaran \n\n";
+        $message .= "*Nama :* " . $request->nama . "\n";
+        $message .= '*Email :* ' . $request->email . "\n";
+        $message .= '*No Wa :* ' . $request->no_wa . "\n";
+        $message .= '*No KTP :* ' .  $request->no_ktp . " \n";
+        $message .= '*Alamat :* ' .  $request->alamat . "\n";
+        $message .= '*Paket pilihan :* ' . $paket->nama_layanan . "\n\n";
+        $message .= "Detail pendaftaran bisa admin lihat disini : $url_detail \n\n";
+    }
+    $endpoint_wa = $url . 'send-message';
+    $response = Http::post($endpoint_wa, [
+        'api_key' => $api_key,
+        'receiver' => $no_wa_owner,
+        'data' => [
+            "message" => $message,
+        ]
+    ]);
+    \Log::info($response);
 }

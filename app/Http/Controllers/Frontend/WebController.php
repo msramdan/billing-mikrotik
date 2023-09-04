@@ -10,6 +10,8 @@ use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Pelanggan;
+use App\Models\WaGateway;
+use App\Models\Company;
 use Image;
 
 class WebController extends Controller
@@ -110,7 +112,7 @@ class WebController extends Controller
                 $constraint->aspectRatio();
             })->save($path . $filename);
 
-            DB::table('pelanggans')->insert([
+            $customer = DB::table('pelanggans')->insert([
                 'nama' => $request->nama,
                 'email' => $request->email,
                 'no_wa' => $request->no_wa,
@@ -125,6 +127,13 @@ class WebController extends Controller
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ]);
+            if ($customer) {
+                $waGateway = WaGateway::findOrFail(1)->first();
+                $company = Company::findOrFail(1)->first();
+                if($waGateway->is_active=='Yes'){
+                    sendNotifWa($waGateway->url, $waGateway->api_key,$request,'daftar',$company->no_wa);
+                }
+            }
         } catch (\Exception $e) {
 
             return $e->getMessage();
