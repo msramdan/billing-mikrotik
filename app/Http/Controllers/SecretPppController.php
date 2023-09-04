@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\SecretPpp;
 use App\Http\Requests\{StoreSecretPppRequest, UpdateSecretPppRequest};
 use Yajra\DataTables\Facades\DataTables;
-use \RouterOS\Client;
 use \RouterOS\Query;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
 
 class SecretPppController extends Controller
 {
@@ -37,27 +38,40 @@ class SecretPppController extends Controller
         return view('secret-ppps.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        return view('secret-ppps.create');
+        $client = setRoute();
+        $query = new Query('/ppp/profile/print');
+        $profile = $client->query($query)->read();
+        return view('secret-ppps.create', [
+            'profiles' => $profile
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreSecretPppRequest $request)
+    public function store(Request $request)
     {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'username' => 'required|string|max:255',
+                'password' => 'required|string|max:255',
+                'service' => 'required|string|max:255',
+                'profile' => 'required|string|max:255',
+                'komentar' => 'required|string|max:255',
+            ],
+        );
 
-        SecretPpp::create($request->validated());
-
+        if ($validator->fails()) {
+            return redirect()->back()->withInput($request->all())->withErrors($validator);
+        }
+        $client = setRoute();
+        $queryAdd = (new Query('/ppp/secret/add'))
+            ->equal('name', $request->username)
+            ->equal('password', $request->password)
+            ->equal('service', $request->service)
+            ->equal('profile', $request->profile)
+            ->equal('comment',  $request->komentar);
+        $client->query($queryAdd)->read();
         return redirect()
             ->route('secret-ppps.index')
             ->with('success', __('The secretPpp was created successfully.'));
@@ -128,11 +142,14 @@ class SecretPppController extends Controller
             $queryGet = (new Query('/ppp/active/print'))
                 ->where('name', $name);
             $data = $client->query($queryGet)->read();
-            // remove session
-            $idActive = $data[0]['.id'];
-            $removeSession = (new Query('/ppp/active/remove'))
-                ->equal('.id', $idActive);
-            $client->query($removeSession)->read();
+            if ($data) {
+                // remove session
+                $idActive = $data[0]['.id'];
+                $removeSession = (new Query('/ppp/active/remove'))
+                    ->equal('.id', $idActive);
+                $client->query($removeSession)->read();
+            }
+
             return redirect()
                 ->route('secret-ppps.index')
                 ->with('success', __('The active PPP was deleted successfully.'));
