@@ -26,6 +26,13 @@
             <select class="form-select @error('odc') is-invalid @enderror" name="odc" id="odc"
                 class="form-control" required>
                 <option value="" selected disabled>-- {{ __('Select odc') }} --</option>
+
+                @foreach ($odcs as $odc)
+                    <option value="{{ $odc->id }}"
+                        {{ isset($pelanggan) && $pelanggan->odc == $odc->id ? 'selected' : (old('odc') == $odc->id ? 'selected' : '') }}>
+                        {{ $odc->kode_odc }}
+                    </option>
+                @endforeach
             </select>
             @error('odc')
                 <span class="text-danger">
@@ -40,6 +47,13 @@
             <select class="form-select @error('odp') is-invalid @enderror" name="odp" id="odp"
                 class="form-control" required>
                 <option value="" selected disabled>-- {{ __('Select odp') }} --</option>
+
+                @foreach ($odps as $odp)
+                    <option value="{{ $odp->id }}"
+                        {{ isset($pelanggan) && $pelanggan->odp == $odp->id ? 'selected' : (old('odp') == $odp->id ? 'selected' : '') }}>
+                        {{ $odp->kode_odp }}
+                    </option>
+                @endforeach
             </select>
             @error('odp')
                 <span class="text-danger">
@@ -50,10 +64,16 @@
     </div>
     <div class="col-md-6">
         <div class="form-group">
-            <label for="no_port_odp">{{ __('No Port Odp') }}</label>
-            <select class="form-select @error('no_port_odp') is-invalid @enderror" name="no_port_odp" id="no_port_odp"
+            <label for="no-port-odp">{{ __('No Port Odp') }}</label>
+            <select class="form-select @error('no_port_odp') is-invalid @enderror" name="no_port_odp" id="no-port-odp"
                 class="form-control">
                 <option value="" selected disabled>-- {{ __('Select no port odp') }} --</option>
+                <option value="1"
+                    {{ isset($pelanggan) && $pelanggan->no_port_odp == '1' ? 'selected' : (old('no_port_odp') == '1' ? 'selected' : '') }}>
+                    1</option>
+                <option value="2"
+                    {{ isset($pelanggan) && $pelanggan->no_port_odp == '2' ? 'selected' : (old('no_port_odp') == '2' ? 'selected' : '') }}>
+                    2</option>
             </select>
             @error('no_port_odp')
                 <span class="text-danger">

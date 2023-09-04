@@ -27,24 +27,24 @@ class OdpController extends Controller
     {
         if (request()->ajax()) {
             $odps = DB::table('odps')
-            ->leftJoin('odcs', 'odps.kode_odc', '=', 'odcs.id')
-            ->leftJoin('area_coverages', 'odps.wilayah_odp', '=', 'area_coverages.id')
-            ->select('odps.*', 'area_coverages.nama', 'odcs.kode_odc')
-            ->get();
+                ->leftJoin('odcs', 'odps.kode_odc', '=', 'odcs.id')
+                ->leftJoin('area_coverages', 'odps.wilayah_odp', '=', 'area_coverages.id')
+                ->select('odps.*', 'area_coverages.nama', 'odcs.kode_odc')
+                ->get();
 
             return Datatables::of($odps)
-                ->addColumn('description', function($row){
+                ->addColumn('description', function ($row) {
                     return str($row->description)->limit(100);
                 })
-				->addColumn('odc', function ($row) {
+                ->addColumn('odc', function ($row) {
                     return $row->kode_odc;
                 })->addColumn('area_coverage', function ($row) {
                     return $row->nama;
                 })
                 ->addColumn('document', function ($row) {
                     if ($row->document == null) {
-                    return 'https://via.placeholder.com/350?text=No+Image+Avaiable';
-                }
+                        return 'https://via.placeholder.com/350?text=No+Image+Avaiable';
+                    }
                     return asset('storage/uploads/documents/' . $row->document);
                 })
 
@@ -86,7 +86,7 @@ class OdpController extends Controller
 
             Image::make($request->file('document')->getRealPath())->resize(500, 500, function ($constraint) {
                 $constraint->upsize();
-				$constraint->aspectRatio();
+                $constraint->aspectRatio();
             })->save($path . $filename);
 
             $attr['document'] = $filename;
@@ -109,7 +109,7 @@ class OdpController extends Controller
     {
         $odp->load('odc:id,kode_odc', 'area_coverage:id,kode_area');
 
-		return view('odps.show', compact('odp'));
+        return view('odps.show', compact('odp'));
     }
 
     /**
@@ -122,7 +122,7 @@ class OdpController extends Controller
     {
         $odp->load('odc:id,kode_odc', 'area_coverage:id,kode_area');
 
-		return view('odps.edit', compact('odp'));
+        return view('odps.edit', compact('odp'));
     }
 
     /**
@@ -147,7 +147,7 @@ class OdpController extends Controller
 
             Image::make($request->file('document')->getRealPath())->resize(500, 500, function ($constraint) {
                 $constraint->upsize();
-				$constraint->aspectRatio();
+                $constraint->aspectRatio();
             })->save($path . $filename);
 
             // delete old document from storage
@@ -190,5 +190,34 @@ class OdpController extends Controller
                 ->route('odps.index')
                 ->with('error', __("The odp can't be deleted because it's related to another table."));
         }
+    }
+
+    public function odp($id)
+    {
+        $data = DB::table('odps')->where('kode_odc', $id)->get();
+        $message = 'Berhasil mengambil data kota';
+        return response()->json(compact('message', 'data'));
+    }
+
+    public function getPort($id)
+    {
+        $data = DB::table('odps')->where('id', $id)->first();
+        $jmlPort = $data->jumlah_port;
+
+        $array = [];
+        for ($x = 1; $x <=  $jmlPort; $x++) {
+            // find customer
+            $cek = DB::table('pelanggans')
+                ->where('odp', $id)
+                ->where('no_port_odp', $x)
+                ->first();
+            if($cek){
+                $array[$x] = $cek->no_layanan.' - '.$cek->nama;
+            }else{
+                $array[$x] = 'Kosong';
+            }
+        }
+        $message = 'Berhasil mengambil data kota';
+        return response()->json(compact('message', 'array'));
     }
 }

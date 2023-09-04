@@ -182,4 +182,12 @@ class OdcController extends Controller
                 ->with('error', __("The odc can't be deleted because it's related to another table."));
         }
     }
+
+    public function odc($id)
+    {
+        $data = DB::table('odcs')->where('wilayah_odc', $id)->get();
+        $message = 'Berhasil mengambil data kota';
+        return response()->json(compact('message', 'data'));
+    }
+
 }
