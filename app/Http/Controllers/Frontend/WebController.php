@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Pelanggan;
 use App\Models\WaGateway;
 use App\Models\Company;
+use App\Models\AreaCoverage;
 use Image;
 
 class WebController extends Controller
@@ -149,7 +150,10 @@ class WebController extends Controller
 
     public function areaCoverage()
     {
-        return view('frontend.coverage');
+        $areaCoverages = DB::table('area_coverages')->get();
+        return view('frontend.coverage',[
+            'areaCoverages' =>$areaCoverages
+        ]);
     }
 
     public function speedTest()
