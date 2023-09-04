@@ -23,5 +23,16 @@ class RouterMikrotikSeeder extends Seeder
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
+
+        DB::table('settingmikrotiks')->insert([
+            'identitas_router' => 'Router Test',
+            'host' => '	103.122.65.234:86',
+            'port' => 8728,
+            'username' => 'sawitskylink',
+            'password' => 'sawit064199',
+            'is_active' => 'No',
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ]);
     }
 }
