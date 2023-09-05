@@ -2,6 +2,7 @@
 
 @section('title', __('Pelanggans'))
 
+
 @section('content')
     <div class="page-heading">
         <div class="page-title">
@@ -40,17 +41,18 @@
                                     <div class="row g-3">
                                         <div class="col-md-3">
                                             <select name="area_coverage" id="area_coverage"
-                                                class="form-control select2-form">
+                                                class="form-control  js-example-basic-single">
                                                 <option value="All">All Area Coverage
                                                 </option>
                                                 @foreach ($areaCoverages as $row)
-                                                    <option value="{{ $row->id }}">{{ $row->kode_area }} - {{ $row->nama }}
+                                                    <option value="{{ $row->id }}">{{ $row->kode_area }} -
+                                                        {{ $row->nama }}
                                                     </option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div class="col-md-3">
-                                            <select name="status" id="status" class="form-control select2-form">
+                                            <select name="status" id="status" class="form-control  js-example-basic-single">
                                                 <option value="All">All Status Berlangganan
                                                 </option>
                                                 <option value="Aktif">Aktif</option>
@@ -60,7 +62,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <select name="packagePilihan" id="packagePilihan"
-                                                class="form-control select2-form">
+                                                class="form-control  js-example-basic-single">
                                                 <option value="All">All Package</option>
                                                 @foreach ($package as $row)
                                                     <option value="{{ $row->id }}">{{ $row->nama_layanan }}
@@ -69,7 +71,7 @@
                                             </select>
                                         </div>
                                         <div class="col-md-3">
-                                            <select name="mikrotik" id="mikrotik" class="form-control select2-form">
+                                            <select name="mikrotik" id="mikrotik" class="form-control  js-example-basic-single">
                                                 <option value="All">All Route Mikrotik</option>
                                                 @foreach ($router as $row)
                                                     <option value="{{ $row->id }}">{{ $row->identitas_router }}
@@ -117,9 +119,6 @@
 @endpush
 
 @push('js')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
-        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.12.0/datatables.min.js"></script>
     <script>
         let columns = [{

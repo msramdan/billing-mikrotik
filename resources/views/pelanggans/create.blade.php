@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
 @section('title', __('Create Pelanggans'))
+
 @push('css')
+
     <style>
         .map-embed {
             width: 100%;
@@ -492,4 +494,6 @@
             })
         }
     </script>
+
+
 @endpush

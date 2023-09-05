@@ -2,7 +2,7 @@
     <div class="col-md-6">
         <div class="form-group">
             <label for="coverage-area">{{ __('Area Coverage') }}</label>
-            <select class="form-select @error('coverage_area') is-invalid @enderror" name="coverage_area"
+            <select class="form-select js-example-basic-single @error('coverage_area') is-invalid @enderror" name="coverage_area"
                 id="coverage-area" class="form-control" required>
                 <option value="" selected disabled>-- {{ __('Select area coverage') }} --</option>
 
@@ -23,7 +23,7 @@
     <div class="col-md-3">
         <div class="form-group">
             <label for="odc">{{ __('Odc') }}</label>
-            <select class="form-select @error('odc') is-invalid @enderror" name="odc" id="odc"
+            <select class="form-select js-example-basic-single @error('odc') is-invalid @enderror" name="odc" id="odc"
                 class="form-control" required>
                 <option value="" selected disabled>-- {{ __('Select') }} --</option>
             </select>
@@ -37,7 +37,7 @@
     <div class="col-md-3">
         <div class="form-group">
             <label for="odp">{{ __('Odp') }}</label>
-            <select class="form-select @error('odp') is-invalid @enderror" name="odp" id="odp"
+            <select class="form-select js-example-basic-single @error('odp') is-invalid @enderror" name="odp" id="odp"
                 class="form-control" required>
                 <option value="" selected disabled>-- {{ __('Select') }} --</option>
             </select>
@@ -51,7 +51,7 @@
     <div class="col-md-6">
         <div class="form-group">
             <label for="no_port_odp">{{ __('No Port Odp') }}</label>
-            <select class="form-select @error('no_port_odp') is-invalid @enderror" name="no_port_odp" id="no_port_odp"
+            <select class="form-select js-example-basic-single @error('no_port_odp') is-invalid @enderror" name="no_port_odp" id="no_port_odp"
                 class="form-control">
                 <option value="" selected disabled>-- {{ __('Select') }} --</option>
             </select>
@@ -238,7 +238,7 @@
     <div class="col-md-3">
         <div class="form-group">
             <label for="ppn">{{ __('Ppn') }}</label>
-            <select class="form-select @error('ppn') is-invalid @enderror" name="ppn" id="ppn"
+            <select class="form-select js-example-basic-single @error('ppn') is-invalid @enderror" name="ppn" id="ppn"
                 class="form-control">
                 <option value="" selected disabled>-- {{ __('Select ppn') }} --</option>
                 <option value="Yes"
@@ -258,7 +258,7 @@
     <div class="col-md-3">
         <div class="form-group">
             <label for="status-berlangganan">{{ __('Status Berlangganan') }}</label>
-            <select class="form-select @error('status_berlangganan') is-invalid @enderror" name="status_berlangganan"
+            <select class="form-select js-example-basic-single @error('status_berlangganan') is-invalid @enderror" name="status_berlangganan"
                 id="status-berlangganan" class="form-control" required>
                 <option value="" selected disabled>-- {{ __('Select status berlangganan') }} --</option>
                 <option value="Aktif"
@@ -281,7 +281,7 @@
     <div class="col-md-6">
         <div class="form-group">
             <label for="paket-layanan">{{ __('Package') }}</label>
-            <select class="form-select @error('paket_layanan') is-invalid @enderror" name="paket_layanan"
+            <select class="form-select js-example-basic-single @error('paket_layanan') is-invalid @enderror" name="paket_layanan"
                 id="paket-layanan" class="form-control" required>
                 <option value="" selected disabled>-- {{ __('Select package') }} --</option>
 
@@ -316,7 +316,7 @@
     <div class="col-md-6">
         <div class="form-group">
             <label for="kirim-tagihan-wa">{{ __('Kirim Tagihan Wa') }}</label>
-            <select class="form-select @error('kirim_tagihan_wa') is-invalid @enderror" name="kirim_tagihan_wa"
+            <select class="form-select js-example-basic-single @error('kirim_tagihan_wa') is-invalid @enderror" name="kirim_tagihan_wa"
                 id="kirim-tagihan-wa" class="form-control">
                 <option value="" selected disabled>-- {{ __('Select kirim tagihan wa') }} --</option>
                 <option value="Yes"
@@ -336,7 +336,7 @@
     <div class="col-md-3">
         <div class="form-group">
             <label for="auto-isolir">{{ __('Auto Isolir') }}</label>
-            <select class="form-select @error('auto_isolir') is-invalid @enderror" name="auto_isolir"
+            <select class="form-select js-example-basic-single @error('auto_isolir') is-invalid @enderror" name="auto_isolir"
                 id="auto-isolir" class="form-control">
                 <option value="" selected disabled>-- {{ __('Select auto isolir') }} --</option>
                 <option value="Yes"
@@ -370,7 +370,7 @@
     <div class="col-md-3">
         <div class="form-group">
             <label for="router">{{ __('Settingmikrotik') }}</label>
-            <select class="form-select @error('router') is-invalid @enderror" name="router" id="router"
+            <select class="form-select js-example-basic-single @error('router') is-invalid @enderror" name="router" id="router"
                 class="form-control">
                 <option value="" selected disabled>-- {{ __('Select settingmikrotik') }} --</option>
 
@@ -391,7 +391,7 @@
     <div class="col-md-3">
         <div class="form-group">
             <label for="user-pppoe">{{ __('User Pppoe') }}</label>
-                <select class="form-select @error('user_pppoe') is-invalid @enderror" name="user_pppoe" id="user_pppoe"
+                <select class="form-select js-example-basic-single @error('user_pppoe') is-invalid @enderror" name="user_pppoe" id="user_pppoe"
                 class="form-control" required>
                 <option value="" selected disabled>-- {{ __('Select') }} --</option>
             </select>

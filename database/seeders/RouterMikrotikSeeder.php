@@ -26,7 +26,7 @@ class RouterMikrotikSeeder extends Seeder
 
         DB::table('settingmikrotiks')->insert([
             'identitas_router' => 'Router Test',
-            'host' => '	103.122.65.234:86',
+            'host' => '103.122.65.234:86',
             'port' => 8728,
             'username' => 'sawitskylink',
             'password' => 'sawit064199',
