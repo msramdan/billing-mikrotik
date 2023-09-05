@@ -28,6 +28,7 @@
         </div>
 
         <section class="section">
+            <x-alert></x-alert>
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">

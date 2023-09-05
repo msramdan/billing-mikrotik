@@ -24,5 +24,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PacageSeeder::class);
         $this->call(OdcSeeder::class);
         $this->call(OdpSeeder::class);
+        $this->call(TripaySeeder::class);
+
     }
 }

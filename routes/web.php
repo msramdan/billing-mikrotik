@@ -84,3 +84,5 @@ Route::get('apiodc/{id}', [App\Http\Controllers\OdcController::class, 'odc'])->n
 Route::get('apiodp/{id}', [App\Http\Controllers\OdpController::class, 'odp'])->name('api.odp');
 Route::get('getPort/{id}', [App\Http\Controllers\OdpController::class, 'getPort'])->name('api.getPort');
 Route::get('getProfile/{id}', [App\Http\Controllers\OdpController::class, 'getProfile'])->name('api.getProfile');
+
+Route::resource('payment-tripays', App\Http\Controllers\PaymentTripayController::class)->middleware('auth');

@@ -11,8 +11,8 @@ class CompanyController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:company view')->only('index', 'show');
-        $this->middleware('permission:company edit')->only('edit', 'update');
+        $this->middleware('permission:company view')->only('index');
+        $this->middleware('permission:company edit')->only('update');
     }
 
     /**

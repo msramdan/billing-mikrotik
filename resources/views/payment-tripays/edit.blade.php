@@ -1,24 +1,24 @@
 @extends('layouts.app')
 
-@section('title', __('Edit Companies'))
+@section('title', __('Edit Payment Tripays'))
 
 @section('content')
     <div class="page-heading">
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-8 order-md-1 order-last">
-                    <h3>{{ __('Companies') }}</h3>
+                    <h3>{{ __('Payment Tripays') }}</h3>
                     <p class="text-subtitle text-muted">
-                        {{ __('Edit a company.') }}
+                        {{ __('Edit a payment tripay.') }}
                     </p>
                 </div>
 
                 <x-breadcrumb>
                     <li class="breadcrumb-item">
-                        <a href="/dashboard">{{ __('Dashboard') }}</a>
+                        <a href="/">{{ __('Dashboard') }}</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="{{ route('companies.index') }}">{{ __('Companies') }}</a>
+                        <a href="{{ route('payment-tripays.index') }}">{{ __('Payment Tripays') }}</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
                         {{ __('Edit') }}
@@ -33,11 +33,14 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <form action="{{ route('companies.update', $company->id) }}" method="POST"
-                                enctype="multipart/form-data">
+                            <form action="{{ route('payment-tripays.update', $paymentTripay->id) }}" method="POST">
                                 @csrf
                                 @method('PUT')
-                                @include('companies.include.form')
+
+                                @include('payment-tripays.include.form')
+
+                                <a href="{{ url()->previous() }}" class="btn btn-secondary">{{ __('Back') }}</a>
+
                                 <button type="submit" class="btn btn-primary">{{ __('Update') }}</button>
                             </form>
                         </div>
