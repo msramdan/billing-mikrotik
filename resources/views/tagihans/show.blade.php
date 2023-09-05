@@ -43,6 +43,10 @@
                                         <td>{{ $tagihan->nama }}</td>
                                     </tr>
                                     <tr>
+                                        <td class="fw-bold">{{ __('Periode') }}</td>
+                                        <td>{{ $tagihan->periode }}</td>
+                                    </tr>
+                                    <tr>
                                         <td class="fw-bold">{{ __('Metode Bayar') }}</td>
                                         <td>{{ $tagihan->metode_bayar }}</td>
                                     </tr>
