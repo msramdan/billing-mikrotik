@@ -86,3 +86,5 @@ Route::get('getPort/{id}', [App\Http\Controllers\OdpController::class, 'getPort'
 Route::get('getProfile/{id}', [App\Http\Controllers\OdpController::class, 'getProfile'])->name('api.getProfile');
 
 Route::resource('payment-tripays', App\Http\Controllers\PaymentTripayController::class)->middleware('auth');
+Route::resource('pemasukans', App\Http\Controllers\PemasukanController::class)->middleware('auth');
+Route::resource('pengeluarans', App\Http\Controllers\PengeluaranController::class)->middleware('auth');

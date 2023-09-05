@@ -109,321 +109,328 @@ return [
      * This code below always changes when you use a generator and maybe you must lint or format the code.
      */
     'sidebars' => [
-        [
-            'header' => 'Keuangan',
-            'permissions' => [
-                'statusrouter view'
-            ],
-            'menus' => [
-                [
-                    'title' => 'Keuangan',
-                    'icon' => '<i class="bi bi-cash-stack"></i>',
-                    'route' => null,
-                    'permission' => null,
-                    'permissions' => [
-                        'statusrouter view'
+    [
+        'header' => 'Keuangan',
+        'permissions' => [
+            'pemasukan view',
+            'pengeluaran view'
+        ],
+        'menus' => [
+            [
+                'title' => 'Keuangan',
+                'icon' => '<i class="bi bi-cash-stack"></i>',
+                'route' => null,
+                'permission' => null,
+                'permissions' => [
+                    'pemasukan view',
+                    'pengeluaran view'
+                ],
+                'submenus' => [
+                    [
+                        'title' => 'Pemasukan',
+                        'route' => '/pemasukans',
+                        'permission' => 'pemasukan view'
                     ],
-                    'submenus' => [
-                        [
-                            'title' => 'Setting Router',
-                            'route' => '/settingmikrotiks',
-                            'permission' => 'settingmikrotik view'
-                        ]
+                    [
+                        'title' => 'Pengeluaran',
+                        'route' => '/pengeluarans',
+                        'permission' => 'pengeluaran view'
                     ]
                 ]
             ]
+        ]
+    ],
+    [
+        'header' => 'Pelanggans',
+        'permissions' => [
+            'pelanggan view'
         ],
-        [
-            'header' => 'Pelanggans',
-            'permissions' => [
-                'pelanggan view'
-            ],
-            'menus' => [
-                [
-                    'title' => 'Pelanggan',
-                    'icon' => '<i class="bi bi-people"></i>',
-                    'route' => '/pelanggans',
-                    'permission' => 'pelanggan view',
-                    'permissions' => [],
-                    'submenus' => []
-                ]
+        'menus' => [
+            [
+                'title' => 'Pelanggan',
+                'icon' => '<i class="bi bi-people"></i>',
+                'route' => '/pelanggans',
+                'permission' => 'pelanggan view',
+                'permissions' => [],
+                'submenus' => []
             ]
+        ]
+    ],
+    [
+        'header' => 'Mikrotik',
+        'permissions' => [
+            'log view',
+            'dhcp view',
+            'interface view',
+            'settingmikrotik view',
+            'statusrouter view'
         ],
-        [
-            'header' => 'Mikrotik',
-            'permissions' => [
-                'log view',
-                'dhcp view',
-                'interface view',
-                'settingmikrotik view',
-                'statusrouter view'
-            ],
-            'menus' => [
-                [
-                    'title' => 'Mikrotik',
-                    'icon' => '<i class="bi bi-device-ssd"></i>',
-                    'route' => null,
-                    'permission' => null,
-                    'permissions' => [
-                        'log view',
-                        'dhcp view',
-                        'interface view',
-                        'settingmikrotik view',
-                        'statusrouter view'
+        'menus' => [
+            [
+                'title' => 'Mikrotik',
+                'icon' => '<i class="bi bi-device-ssd"></i>',
+                'route' => null,
+                'permission' => null,
+                'permissions' => [
+                    'log view',
+                    'dhcp view',
+                    'interface view',
+                    'settingmikrotik view',
+                    'statusrouter view'
+                ],
+                'submenus' => [
+                    [
+                        'title' => 'Status Router',
+                        'route' => '/statusrouters',
+                        'permission' => 'statusrouter view'
                     ],
-                    'submenus' => [
-                        [
-                            'title' => 'Status Router',
-                            'route' => '/statusrouters',
-                            'permission' => 'statusrouter view'
-                        ],
-                        [
-                            'title' => 'Log Router',
-                            'route' => '/logs',
-                            'permission' => 'log view'
-                        ],
-                        [
-                            'title' => 'DHCP Leases',
-                            'route' => '/dhcps',
-                            'permission' => 'dhcp view'
-                        ],
-                        [
-                            'title' => 'All Interface',
-                            'route' => '/interfaces',
-                            'permission' => 'interface view'
-                        ],
-                        [
-                            'title' => 'Setting Router',
-                            'route' => '/settingmikrotiks',
-                            'permission' => 'settingmikrotik view'
-                        ]
+                    [
+                        'title' => 'Log Router',
+                        'route' => '/logs',
+                        'permission' => 'log view'
+                    ],
+                    [
+                        'title' => 'DHCP Leases',
+                        'route' => '/dhcps',
+                        'permission' => 'dhcp view'
+                    ],
+                    [
+                        'title' => 'All Interface',
+                        'route' => '/interfaces',
+                        'permission' => 'interface view'
+                    ],
+                    [
+                        'title' => 'Setting Router',
+                        'route' => '/settingmikrotiks',
+                        'permission' => 'settingmikrotik view'
                     ]
                 ]
             ]
+        ]
+    ],
+    [
+        'header' => 'Hotspot',
+        'permissions' => [
+            'hotspotactive view',
+            'hotspotuser view'
         ],
-        [
-            'header' => 'Hotspot',
-            'permissions' => [
-                'hotspotactive view',
-                'hotspotuser view'
-            ],
-            'menus' => [
-                [
-                    'title' => 'Hotspot',
-                    'icon' => '<i class="bi bi-wifi"></i>',
-                    'route' => null,
-                    'permission' => null,
-                    'permissions' => [
-                        'hotspotactive view',
-                        'hotspotuser view'
+        'menus' => [
+            [
+                'title' => 'Hotspot',
+                'icon' => '<i class="bi bi-wifi"></i>',
+                'route' => null,
+                'permission' => null,
+                'permissions' => [
+                    'hotspotactive view',
+                    'hotspotuser view'
+                ],
+                'submenus' => [
+                    [
+                        'title' => 'Users Hotspot',
+                        'route' => '/hotspotusers',
+                        'permission' => 'hotspotuser view'
                     ],
-                    'submenus' => [
-                        [
-                            'title' => 'Users Hotspot',
-                            'route' => '/hotspotusers',
-                            'permission' => 'hotspotuser view'
-                        ],
-                        [
-                            'title' => 'Active Hotspot',
-                            'route' => '/hotspotactives',
-                            'permission' => 'hotspotactive view'
-                        ],
-                        [
-                            'title' => 'Mikhmon',
-                            'route' => '/mikhmon',
-                            'permission' => 'mikhmon view',
-                            'target' => '_blank'
-                        ]
+                    [
+                        'title' => 'Active Hotspot',
+                        'route' => '/hotspotactives',
+                        'permission' => 'hotspotactive view'
+                    ],
+                    [
+                        'title' => 'Mikhmon',
+                        'route' => '/mikhmon',
+                        'permission' => 'mikhmon view',
+                        'target' => '_blank'
                     ]
                 ]
             ]
+        ]
+    ],
+    [
+        'header' => 'PppOE',
+        'permissions' => [
+            'profile pppoe view',
+            'active ppp view',
+            'secret ppp view',
+            'static view'
         ],
-        [
-            'header' => 'PppOE',
-            'permissions' => [
-                'profile pppoe view',
-                'active ppp view',
-                'secret ppp view',
-                'static view'
-            ],
-            'menus' => [
-                [
-                    'title' => 'PPPOE & Static',
-                    'icon' => '<i class="bi bi-list-ul"></i>',
-                    'route' => null,
-                    'permission' => null,
-                    'permissions' => [
-                        'profile pppoe view',
-                        'active ppp view',
-                        'secret ppp view',
-                        'static view'
+        'menus' => [
+            [
+                'title' => 'PPPOE & Static',
+                'icon' => '<i class="bi bi-list-ul"></i>',
+                'route' => null,
+                'permission' => null,
+                'permissions' => [
+                    'profile pppoe view',
+                    'active ppp view',
+                    'secret ppp view',
+                    'static view'
+                ],
+                'submenus' => [
+                    [
+                        'title' => 'Profile PPP',
+                        'route' => '/profile-pppoes',
+                        'permission' => 'profile pppoe view'
                     ],
-                    'submenus' => [
-                        [
-                            'title' => 'Profile PPP',
-                            'route' => '/profile-pppoes',
-                            'permission' => 'profile pppoe view'
-                        ],
-                        [
-                            'title' => 'Secret PPP',
-                            'route' => '/secret-ppps',
-                            'permission' => 'secret ppp view'
-                        ],
-                        [
-                            'title' => 'Active PPP',
-                            'route' => '/active-ppps',
-                            'permission' => 'active ppp view'
-                        ],
-                        [
-                            'title' => 'User Static',
-                            'route' => '/statics',
-                            'permission' => 'static view'
-                        ]
+                    [
+                        'title' => 'Secret PPP',
+                        'route' => '/secret-ppps',
+                        'permission' => 'secret ppp view'
+                    ],
+                    [
+                        'title' => 'Active PPP',
+                        'route' => '/active-ppps',
+                        'permission' => 'active ppp view'
+                    ],
+                    [
+                        'title' => 'User Static',
+                        'route' => '/statics',
+                        'permission' => 'static view'
                     ]
                 ]
             ]
+        ]
+    ],
+    [
+        'header' => 'layanan',
+        'permissions' => [
+            'area coverage view',
+            'package view',
+            'package category view',
+            'odc view',
+            'odp view'
         ],
-        [
-            'header' => 'layanan',
-            'permissions' => [
-                'area coverage view',
-                'package view',
-                'package category view',
-                'odc view',
-                'odp view'
-            ],
-            'menus' => [
-                [
-                    'title' => 'Kelola Layanan',
-                    'icon' => '<i class="bi bi-boxes"></i>',
-                    'route' => null,
-                    'permission' => null,
-                    'permissions' => [
-                        'area coverage view',
-                        'package view',
-                        'package category view',
-                        'odc view',
-                        'odp view'
+        'menus' => [
+            [
+                'title' => 'Kelola Layanan',
+                'icon' => '<i class="bi bi-boxes"></i>',
+                'route' => null,
+                'permission' => null,
+                'permissions' => [
+                    'area coverage view',
+                    'package view',
+                    'package category view',
+                    'odc view',
+                    'odp view'
+                ],
+                'submenus' => [
+                    [
+                        'title' => 'Area Coverages',
+                        'route' => '/area-coverages',
+                        'permission' => 'area coverage view'
                     ],
-                    'submenus' => [
-                        [
-                            'title' => 'Area Coverages',
-                            'route' => '/area-coverages',
-                            'permission' => 'area coverage view'
-                        ],
-                        [
-                            'title' => 'ODC',
-                            'route' => '/odcs',
-                            'permission' => 'odc view'
-                        ],
-                        [
-                            'title' => 'ODP',
-                            'route' => '/odps',
-                            'permission' => 'odp view'
-                        ],
-                        [
-                            'title' => 'Packages',
-                            'route' => '/packages',
-                            'permission' => 'package view'
-                        ],
-                        [
-                            'title' => 'Package Categories',
-                            'route' => '/package-categories',
-                            'permission' => 'package category view'
-                        ]
+                    [
+                        'title' => 'ODC',
+                        'route' => '/odcs',
+                        'permission' => 'odc view'
+                    ],
+                    [
+                        'title' => 'ODP',
+                        'route' => '/odps',
+                        'permission' => 'odp view'
+                    ],
+                    [
+                        'title' => 'Packages',
+                        'route' => '/packages',
+                        'permission' => 'package view'
+                    ],
+                    [
+                        'title' => 'Package Categories',
+                        'route' => '/package-categories',
+                        'permission' => 'package category view'
                     ]
                 ]
             ]
+        ]
+    ],
+    [
+        'header' => 'Setting',
+        'permissions' => [
+            'company view',
+            'bank account view',
+            'bank view',
+            'wa gateway view',
+            'privacy policy view',
+            'payment tripay view'
         ],
-        [
-            'header' => 'Setting',
-            'permissions' => [
-                'company view',
-                'bank account view',
-                'bank view',
-                'wa gateway view',
-                'privacy policy view',
-                'payment tripay view'
-            ],
-            'menus' => [
-                [
-                    'title' => 'Setting Apps',
-                    'icon' => '<i class="bi bi-gear"></i>',
-                    'route' => null,
-                    'permission' => null,
-                    'permissions' => [
-                        'company view',
-                        'bank account view',
-                        'bank view',
-                        'wa gateway view',
-                        'privacy policy view',
-                        'payment tripay view'
+        'menus' => [
+            [
+                'title' => 'Setting Apps',
+                'icon' => '<i class="bi bi-gear"></i>',
+                'route' => null,
+                'permission' => null,
+                'permissions' => [
+                    'company view',
+                    'bank account view',
+                    'bank view',
+                    'wa gateway view',
+                    'privacy policy view',
+                    'payment tripay view'
+                ],
+                'submenus' => [
+                    [
+                        'title' => 'Companies',
+                        'route' => '/companies',
+                        'permission' => 'company view'
                     ],
-                    'submenus' => [
-                        [
-                            'title' => 'Companies',
-                            'route' => '/companies',
-                            'permission' => 'company view'
-                        ],
-                        [
-                            'title' => 'Privacy Policies',
-                            'route' => '/privacy-policies',
-                            'permission' => 'privacy policy view'
-                        ],
-                        [
-                            'title' => 'Bank Accounts',
-                            'route' => '/bank-accounts',
-                            'permission' => 'bank account view'
-                        ],
-                        [
-                            'title' => 'Banks',
-                            'route' => '/banks',
-                            'permission' => 'bank view'
-                        ],
-                        [
-                            'title' => 'Wa Gateway',
-                            'route' => '/wa-gateways',
-                            'permission' => 'wa gateway view'
-                        ],
-                        [
-                            'title' => 'Payment Tripay',
-                            'route' => '/payment-tripays',
-                            'permission' => 'payment tripay view'
-                        ]
+                    [
+                        'title' => 'Privacy Policies',
+                        'route' => '/privacy-policies',
+                        'permission' => 'privacy policy view'
+                    ],
+                    [
+                        'title' => 'Bank Accounts',
+                        'route' => '/bank-accounts',
+                        'permission' => 'bank account view'
+                    ],
+                    [
+                        'title' => 'Banks',
+                        'route' => '/banks',
+                        'permission' => 'bank view'
+                    ],
+                    [
+                        'title' => 'Wa Gateway',
+                        'route' => '/wa-gateways',
+                        'permission' => 'wa gateway view'
+                    ],
+                    [
+                        'title' => 'Payment Tripay',
+                        'route' => '/payment-tripays',
+                        'permission' => 'payment tripay view'
                     ]
                 ]
             ]
+        ]
+    ],
+    [
+        'header' => 'Utilities',
+        'permissions' => [
+            'user view',
+            'role & permission view'
         ],
-        [
-            'header' => 'Utilities',
-            'permissions' => [
-                'user view',
-                'role & permission view'
-            ],
-            'menus' => [
-                [
-                    'title' => 'Users & Roles',
-                    'icon' => '<i class="bi bi-people"></i>',
-                    'route' => null,
-                    'permission' => null,
-                    'permissions' => [
-                        'user view',
-                        'role & permission view'
+        'menus' => [
+            [
+                'title' => 'Users & Roles',
+                'icon' => '<i class="bi bi-people"></i>',
+                'route' => null,
+                'permission' => null,
+                'permissions' => [
+                    'user view',
+                    'role & permission view'
+                ],
+                'submenus' => [
+                    [
+                        'title' => 'Users',
+                        'route' => '/users',
+                        'permission' => 'user view'
                     ],
-                    'submenus' => [
-                        [
-                            'title' => 'Users',
-                            'route' => '/users',
-                            'permission' => 'user view'
-                        ],
-                        [
-                            'title' => 'Roles & permissions',
-                            'route' => '/roles',
-                            'permission' => 'role & permission view'
-                        ]
+                    [
+                        'title' => 'Roles & permissions',
+                        'route' => '/roles',
+                        'permission' => 'role & permission view'
                     ]
                 ]
             ]
         ]
     ]
+]
 ];
