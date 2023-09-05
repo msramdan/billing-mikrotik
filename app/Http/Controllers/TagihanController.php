@@ -19,11 +19,6 @@ class TagihanController extends Controller
         $this->middleware('permission:tagihan delete')->only('destroy');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         if (request()->ajax()) {
@@ -53,6 +48,13 @@ class TagihanController extends Controller
                     $tagihans = $tagihans->where('tagihans.status_bayar', $status_bayar);
                 }
             }
+
+            if (isset($tanggal) && !empty($tanggal)) {
+                if ($tanggal != 'All') {
+                    $tagihans = $tagihans->where('tagihans.periode', $tanggal);
+                }
+            }
+
             $tagihans = $tagihans->orderBy('tagihans.id', 'DESC')->get();
             return DataTables::of($tagihans)
                 ->addColumn('nominal_bayar', function ($row) {
@@ -77,22 +79,11 @@ class TagihanController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('tagihans.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
 
@@ -113,7 +104,7 @@ class TagihanController extends Controller
         }
 
         DB::table('tagihans')->insert([
-            'no_tagihan' => $request->no_tagihan,
+            'no_tagihan' => 'INV-SSL-'.$request->no_tagihan,
             'pelanggan_id' => $request->pelanggan_id,
             'nominal_bayar' => $request->nominal_bayar,
             'potongan_bayar' => $request->potongan_bayar,
@@ -129,12 +120,6 @@ class TagihanController extends Controller
             ->with('success', __('The tagihan was created successfully.'));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Tagihan  $tagihan
-     * @return \Illuminate\Http\Response
-     */
     public function show(Tagihan $tagihan)
     {
         $tagihan = DB::table('tagihans')
@@ -185,7 +170,7 @@ class TagihanController extends Controller
             ->where('id', $tagihan->id)
             ->update(
                 [
-                    'no_tagihan' => $request->no_tagihan,
+                    'no_tagihan' => 'INV-SSL-'. $request->no_tagihan,
                     'pelanggan_id' => $request->pelanggan_id,
                     'nominal_bayar' => $request->nominal_bayar,
                     'potongan_bayar' => $request->potongan_bayar,

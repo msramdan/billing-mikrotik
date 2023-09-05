@@ -88,11 +88,12 @@
                                         <tr>
                                             <th>{{ __('No Tagihan') }}</th>
                                             <th>{{ __('Pelanggan') }}</th>
+                                            <th>{{ __('Periode') }}</th>
                                             <th>{{ __('Metode Bayar') }}</th>
-                                            <th>{{ __('Status Bayar') }}</th>
                                             <th>{{ __('Nominal Bayar') }}</th>
                                             <th>{{ __('Potongan Bayar') }}</th>
                                             <th>{{ __('Total Bayar') }}</th>
+                                            <th>{{ __('Status Bayar') }}</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
@@ -125,13 +126,14 @@
                 name: 'pelanggan.coverage_area'
             },
             {
+                data: 'periode',
+                name: 'periode',
+            },
+            {
                 data: 'metode_bayar',
                 name: 'metode_bayar',
             },
-            {
-                data: 'status_bayar',
-                name: 'status_bayar',
-            },
+
             {
                 data: 'nominal_bayar',
                 name: 'nominal_bayar',
@@ -143,6 +145,17 @@
             {
                 data: 'total_bayar',
                 name: 'total_bayar',
+            },
+            {
+                data: 'status_bayar',
+                name: 'status_bayar',
+                render: function(data, type, full, meta) {
+                    if (data == 'Belum Bayar') {
+                        return '<button type="button" class="btn btn-danger btn-sm">Belum Bayar</button>';
+                    } else {
+                        return '<button type="button" class="btn btn-success btn-sm">Sudah Bayar</button>';
+                    }
+                }
             },
             {
                 data: 'action',
