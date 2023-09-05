@@ -3,6 +3,32 @@
         <a href="{{ route('tagihans.show', $model->id) }}" class="btn btn-outline-success btn-sm">
             <i class="fa fa-eye"></i>
         </a>
+
+        @if ($model->status_bayar == 'Sudah Bayar')
+            <form action="#" method="post" class="d-inline"
+                onsubmit="return confirm('Kirim Wa Notifikasi sudah bayar tagihan ?')">
+                @csrf
+                @method('delete')
+
+                <button class="btn btn-success btn-sm">
+                    <span class="bi bi-whatsapp"></span>
+                </button>
+            </form>
+        @else
+            <form action="#" method="post" class="d-inline"
+                onsubmit="return confirm('Kirim Wa Notifikasi belum bayar tagihan ?')">
+                @csrf
+                @method('delete')
+
+                <button class="btn btn-success btn-sm">
+                    <span class="bi bi-whatsapp"></span>
+                </button>
+            </form>
+        @endif
+
+        <a href="#" class="btn btn-secondary btn-sm">
+            <i class="fa fa-print"></i>
+        </a>
     @endcan
     @if ($model->status_bayar == 'Sudah Bayar')
         @can('tagihan edit')
