@@ -113,7 +113,8 @@ return [
         'header' => 'Keuangan',
         'permissions' => [
             'pemasukan view',
-            'pengeluaran view'
+            'pengeluaran view',
+            'tagihan view'
         ],
         'menus' => [
             [
@@ -123,9 +124,15 @@ return [
                 'permission' => null,
                 'permissions' => [
                     'pemasukan view',
-                    'pengeluaran view'
+                    'pengeluaran view',
+                    'tagihan view'
                 ],
                 'submenus' => [
+                    [
+                        'title' => 'Tagihan',
+                        'route' => '/tagihans',
+                        'permission' => 'tagihan view'
+                    ],
                     [
                         'title' => 'Pemasukan',
                         'route' => '/pemasukans',
@@ -136,6 +143,7 @@ return [
                         'route' => '/pengeluarans',
                         'permission' => 'pengeluaran view'
                     ]
+
                 ]
             ]
         ]

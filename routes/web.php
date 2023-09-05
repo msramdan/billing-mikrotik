@@ -88,3 +88,4 @@ Route::get('getProfile/{id}', [App\Http\Controllers\OdpController::class, 'getPr
 Route::resource('payment-tripays', App\Http\Controllers\PaymentTripayController::class)->middleware('auth');
 Route::resource('pemasukans', App\Http\Controllers\PemasukanController::class)->middleware('auth');
 Route::resource('pengeluarans', App\Http\Controllers\PengeluaranController::class)->middleware('auth');
+Route::resource('tagihans', App\Http\Controllers\TagihanController::class)->middleware('auth');

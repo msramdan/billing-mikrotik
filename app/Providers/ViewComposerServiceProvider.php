@@ -103,5 +103,14 @@ class ViewComposerServiceProvider extends ServiceProvider
                 \App\Models\Settingmikrotik::select('id', 'identitas_router')->get()
             );
         });
-    }
+  
+
+		View::composer(['tagihans.create', 'tagihans.edit'], function ($view) {
+            return $view->with(
+                'pelanggans',
+                \App\Models\Pelanggan::select('id', 'coverage_area')->get()
+            );
+        });
+
+	}
 }
