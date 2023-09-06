@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Http;
 use App\Models\Package;
 use App\Models\Pelanggan;
+use App\Models\Tagihan;
 
 function formatBytes($bytes, $decimal = null)
 {
@@ -107,4 +108,11 @@ function sendNotifWa($url,$api_key, $request, $typePesan, $no_penerima)
         ]
     ]);
     \Log::info($response);
+}
+
+function totalStatusBayar($status)
+{
+    $totalStatus = Tagihan::where('status_bayar', $status)
+        ->get();
+    return  $totalStatus->count();
 }
