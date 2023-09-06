@@ -11,6 +11,7 @@ $dateNow = date('Y-m-d H:i:s');
 $periode = date('Y-m');
 while ($d = mysqli_fetch_array($data)) {
     // cek udah ada tagihan di bulan ini blm
+    $permitted_chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $pelanggan_id = $d['id'];
     $harga = $d['harga'];
     $ppn = $d['ppn'];
@@ -25,10 +26,22 @@ while ($d = mysqli_fetch_array($data)) {
     $jml = mysqli_num_rows($cekTagihan);
     if ($jml < 1) {
         //    create tagihan
+        $noTag = generate_string($permitted_chars, 10);
         mysqli_query($koneksi, "INSERT INTO tagihans
         (no_tagihan,pelanggan_id,periode,status_bayar,nominal_bayar,potongan_bayar,ppn,nominal_ppn,total_bayar,tanggal_create_tagihan)
         VALUES
-        ('ramdan', '$pelanggan_id','$periode','Belum Bayar',$harga,0,'$ppn',$nominalPpn,$totalBayar,'$dateNow')");
+        ('$noTag', '$pelanggan_id','$periode','Belum Bayar',$harga,0,'$ppn',$nominalPpn,$totalBayar,'$dateNow')");
     }
 }
 echo "berhasil generate tagihan bulan " .$periode;
+
+
+function generate_string($input, $strength = 10) {
+    $input_length = strlen($input);
+    $random_string = '';
+    for($i = 0; $i < $strength; $i++) {
+        $random_character = $input[mt_rand(0, $input_length - 1)];
+        $random_string .= $random_character;
+    }
+    return 'INV-SSL-' .$random_string;
+}
