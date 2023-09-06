@@ -8,6 +8,7 @@ use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PDF;
 
 class TagihanController extends Controller
 {
@@ -57,6 +58,7 @@ class TagihanController extends Controller
 
             $tagihans = $tagihans->orderBy('tagihans.id', 'DESC')->get();
             return DataTables::of($tagihans)
+                ->addIndexColumn()
                 ->addColumn('nominal_bayar', function ($row) {
                     return rupiah($row->nominal_bayar);
                 })
@@ -65,6 +67,9 @@ class TagihanController extends Controller
                 })
                 ->addColumn('total_bayar', function ($row) {
                     return rupiah($row->total_bayar);
+                })
+                ->addColumn('nominal_ppn', function ($row) {
+                    return rupiah($row->nominal_ppn);
                 })
                 ->addColumn('pelanggan', function ($row) {
                     return $row->nama;
@@ -93,7 +98,7 @@ class TagihanController extends Controller
                 'no_tagihan' => 'required|string|max:50',
                 'pelanggan_id' => 'required|exists:App\Models\Pelanggan,id',
                 'nominal_bayar' => 'required|numeric',
-                'potongan_bayar' => 'nullable|numeric',
+                'potongan_bayar' => 'required|numeric',
                 'total_bayar' => 'required|numeric',
                 'periode' => 'required',
             ],
@@ -103,13 +108,20 @@ class TagihanController extends Controller
             return redirect()->back()->withInput($request->all())->withErrors($validator);
         }
 
+        if ($request->ppn == 'Yes') {
+            $nominal_ppn =  0.11 * ($request->nominal_bayar - $request->potongan_bayar);
+        } else {
+            $nominal_ppn =  0;
+        }
         DB::table('tagihans')->insert([
-            'no_tagihan' => 'INV-SSL-'.$request->no_tagihan,
+            'no_tagihan' => 'INV-SSL-' . $request->no_tagihan,
             'pelanggan_id' => $request->pelanggan_id,
             'nominal_bayar' => $request->nominal_bayar,
             'potongan_bayar' => $request->potongan_bayar,
             'total_bayar' => $request->total_bayar,
             'periode' => $request->periode,
+            'ppn' => $request->ppn,
+            'nominal_ppn' => $nominal_ppn,
             'status_bayar' => 'Belum Bayar',
             'tanggal_create_tagihan' => date('Y-m-d H:i:s'),
             'created_at' => date('Y-m-d H:i:s'),
@@ -160,30 +172,36 @@ class TagihanController extends Controller
                 'no_tagihan' => 'required|string|max:50',
                 'pelanggan_id' => 'required|exists:App\Models\Pelanggan,id',
                 'nominal_bayar' => 'required|numeric',
-                'potongan_bayar' => 'nullable|numeric',
+                'potongan_bayar' => 'required|numeric',
                 'total_bayar' => 'required|numeric',
                 'periode' => 'required',
             ],
         );
 
+        if ($validator->fails()) {
+            return redirect()->back()->withInput($request->all())->withErrors($validator);
+        }
+
+        if ($request->ppn == 'Yes') {
+            $nominal_ppn =  0.11 * ($request->nominal_bayar - $request->potongan_bayar);
+        } else {
+            $nominal_ppn =  0;
+        }
         DB::table('tagihans')
             ->where('id', $tagihan->id)
             ->update(
                 [
-                    'no_tagihan' => 'INV-SSL-'. $request->no_tagihan,
+                    'no_tagihan' => 'INV-SSL-' . $request->no_tagihan,
                     'pelanggan_id' => $request->pelanggan_id,
                     'nominal_bayar' => $request->nominal_bayar,
                     'potongan_bayar' => $request->potongan_bayar,
+                    'ppn' => $request->ppn,
+                    'nominal_ppn' =>  $nominal_ppn,
                     'total_bayar' => $request->total_bayar,
                     'periode' => $request->periode,
                     'status_bayar' => 'Belum Bayar',
                 ]
             );
-
-
-
-
-
         if ($validator->fails()) {
             return redirect()->back()->withInput($request->all())->withErrors($validator);
         }
@@ -212,5 +230,18 @@ class TagihanController extends Controller
                 ->route('tagihans.index')
                 ->with('error', __("The tagihan can't be deleted because it's related to another table."));
         }
+    }
+
+    public function invoice($id)
+    {
+        $data = DB::table('tagihans')
+            ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
+            ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
+            ->select('tagihans.*', 'pelanggans.nama','pelanggans.jatuh_tempo', 'pelanggans.email as email_customer', 'pelanggans.alamat as alamat_customer', 'packages.nama_layanan', 'pelanggans.no_layanan')
+            ->where('tagihans.id', '=', $id)
+            ->first();;
+        $pdf = PDF::loadView('tagihans.pdf', compact('data'));
+        // return $pdf->download('Invoice.pdf');
+        return $pdf->stream();
     }
 }

@@ -58,7 +58,7 @@
         </div>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="form-group">
             <label for="nominal-bayar">{{ __('Nominal Bayar') }}</label>
             <input type="number" name="nominal_bayar" id="nominal-bayar"
@@ -72,10 +72,10 @@
             @enderror
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="form-group">
             <label for="potongan-bayar">{{ __('Potongan Bayar') }}</label>
-            <input type="number" name="potongan_bayar" id="potongan-bayar"
+            <input type="number" name="potongan_bayar" id="potongan-bayar" required
                 class="form-control @error('potongan_bayar') is-invalid @enderror"
                 value="{{ isset($tagihan) ? $tagihan->potongan_bayar : old('potongan_bayar') }}"
                 placeholder="{{ __('Potongan Bayar') }}" />
@@ -86,7 +86,26 @@
             @enderror
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
+        <div class="form-group">
+            <label for="ppn">{{ __('Ppn') }}</label>
+            <select class="form-select @error('ppn') is-invalid @enderror" name="ppn" id="ppn" required
+                class="form-control">
+                <option value="" selected disabled>-- {{ __('Select ppn') }} --</option>
+                <option value="Yes"
+                    {{ isset($tagihan) && $tagihan->ppn == 'Yes' ? 'selected' : (old('ppn') == 'Yes' ? 'selected' : '') }}>Yes</option>
+                <option value="No"
+                    {{ isset($tagihan) && $tagihan->ppn == 'No' ? 'selected' : (old('ppn') == 'No' ? 'selected' : '') }}>No</option>
+            </select>
+            @error('ppn')
+                <span class="text-danger">
+                    {{ $message }}
+                </span>
+            @enderror
+        </div>
+    </div>
+
+    <div class="col-md-3">
         <div class="form-group">
             <label for="total-bayar">{{ __('Total Bayar') }}</label>
             <input readonly type="number" name="total_bayar" id="total-bayar"
@@ -123,9 +142,17 @@
 
     <script>
         function calculate() {
+            var ppn = $("#ppn option:selected").text();
             var nominal = $('#nominal-bayar').val()
             var potongan = $('#potongan-bayar').val()
-            var total_bayar = nominal - potongan
+
+            if(ppn=='Yes'){
+                var nominal_ppn = parseInt((0.11 * ( parseInt(nominal) - parseInt(potongan)) ));
+                var total_bayar = parseInt((nominal - potongan)) + parseInt(nominal_ppn);
+            }else{
+                var total_bayar = parseInt((nominal - potongan));
+            }
+
             if (isNaN(total_bayar)) {
                 $('#total-bayar').val(0)
             } else {
@@ -140,5 +167,9 @@
         $(document).on('keyup mouseup', '#nominal-bayar,#potongan-bayar', function() {
             calculate()
         })
+
+        $("#ppn").on("change", function() {
+            calculate()
+        });
     </script>
 @endpush

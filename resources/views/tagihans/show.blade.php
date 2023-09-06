@@ -63,8 +63,16 @@
                                         <td>{{ rupiah($tagihan->potongan_bayar) }}</td>
                                     </tr>
                                     <tr>
+                                        <td class="fw-bold">{{ __('PPN') }}</td>
+                                        <td>{{ $tagihan->ppn }} - {{ rupiah($tagihan->nominal_ppn) }}</td>
+                                    </tr>
+                                    <tr>
                                         <td class="fw-bold">{{ __('Total Bayar') }}</td>
-                                        <td>{{ rupiah($tagihan->total_bayar) }}</td>
+                                        <td>
+                                            (Nominal Bayar - Potongan Bayar) + PPN <br>
+                                            ({{ rupiah($tagihan->nominal_bayar) }} - {{ rupiah($tagihan->potongan_bayar) }}) + {{ rupiah($tagihan->nominal_ppn) }} <br>
+                                            <b>{{ rupiah($tagihan->total_bayar) }}</b>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td class="fw-bold">{{ __('Tanggal Bayar') }}</td>

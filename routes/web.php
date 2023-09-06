@@ -24,7 +24,6 @@ Route::middleware(['login-customer'])->group(function () {
     Route::controller(App\Http\Controllers\Frontend\WebController::class)->group(function () {
         Route::get('/logoutCustomer', 'logoutCustomer')->name('logoutCustomer');
     });
-
 });
 
 // PANEL ADMIN
@@ -76,16 +75,17 @@ Route::middleware(['auth', 'web'])->group(function () {
         Route::get('mikhmon', 'mikhmon')->name('mikhmons.index');
     });
     Route::resource('odcs', App\Http\Controllers\OdcController::class);
+    Route::resource('odps', App\Http\Controllers\OdpController::class);
+    Route::resource('pelanggans', App\Http\Controllers\PelangganController::class);
+    Route::get('apiodc/{id}', [App\Http\Controllers\OdcController::class, 'odc'])->name('api.odc');
+    Route::get('apiodp/{id}', [App\Http\Controllers\OdpController::class, 'odp'])->name('api.odp');
+    Route::get('getPort/{id}', [App\Http\Controllers\OdpController::class, 'getPort'])->name('api.getPort');
+    Route::get('getProfile/{id}', [App\Http\Controllers\OdpController::class, 'getProfile'])->name('api.getProfile');
+    Route::resource('payment-tripays', App\Http\Controllers\PaymentTripayController::class);
+    Route::resource('pemasukans', App\Http\Controllers\PemasukanController::class);
+    Route::resource('pengeluarans', App\Http\Controllers\PengeluaranController::class);
+    Route::resource('tagihans', App\Http\Controllers\TagihanController::class);
+    Route::controller(App\Http\Controllers\TagihanController::class)->group(function () {
+        Route::get('invoice/{id}', 'invoice')->name('invoice.pdf');
+    });
 });
-Route::resource('odps', App\Http\Controllers\OdpController::class)->middleware('auth');
-Route::resource('pelanggans', App\Http\Controllers\PelangganController::class)->middleware('auth');
-
-Route::get('apiodc/{id}', [App\Http\Controllers\OdcController::class, 'odc'])->name('api.odc');
-Route::get('apiodp/{id}', [App\Http\Controllers\OdpController::class, 'odp'])->name('api.odp');
-Route::get('getPort/{id}', [App\Http\Controllers\OdpController::class, 'getPort'])->name('api.getPort');
-Route::get('getProfile/{id}', [App\Http\Controllers\OdpController::class, 'getProfile'])->name('api.getProfile');
-
-Route::resource('payment-tripays', App\Http\Controllers\PaymentTripayController::class)->middleware('auth');
-Route::resource('pemasukans', App\Http\Controllers\PemasukanController::class)->middleware('auth');
-Route::resource('pengeluarans', App\Http\Controllers\PengeluaranController::class)->middleware('auth');
-Route::resource('tagihans', App\Http\Controllers\TagihanController::class)->middleware('auth');

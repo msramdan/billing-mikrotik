@@ -88,6 +88,7 @@
                                 <table class="table table-striped" id="data-table" width="100%">
                                     <thead>
                                         <tr>
+                                            <th>#</th>
                                             <th>{{ __('Area Coverage') }}</th>
                                             <th>{{ __('No Layanan') }}</th>
                                             <th>{{ __('Nama') }}</th>
@@ -121,7 +122,14 @@
 @push('js')
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.12.0/datatables.min.js"></script>
     <script>
-        let columns = [{
+        let columns = [
+            {
+                data: 'DT_RowIndex',
+                name: 'DT_RowIndex',
+                orderable: false,
+                searchable: false
+            },
+            {
                 data: 'area_coverage',
                 name: 'area_coverage.kode_area'
             },

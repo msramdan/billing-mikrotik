@@ -3,31 +3,9 @@
         <a href="{{ route('tagihans.show', $model->id) }}" class="btn btn-outline-success btn-sm" title="Detail Tagihan">
             <i class="fa fa-eye"></i>
         </a>
-        {{-- @if ($model->status_bayar == 'Sudah Bayar')
-            <form action="#" method="post" class="d-inline"
-                onsubmit="return confirm('Kirim Wa Notifikasi sudah bayar tagihan ?')">
-                @csrf
-                @method('delete')
-
-                <button class="btn btn-success btn-sm">
-                    <span class="bi bi-whatsapp"></span>
-                </button>
-            </form>
-        @else
-            <form action="#" method="post" class="d-inline"
-                onsubmit="return confirm('Kirim Wa Notifikasi belum bayar tagihan ?')">
-                @csrf
-                @method('delete')
-
-                <button class="btn btn-success btn-sm">
-                    <span class="bi bi-whatsapp"></span>
-                </button>
-            </form>
-        @endif --}}
-        <a href="#" class="btn btn-secondary btn-sm"  title="Cetak Invoice">
+        <a href="{{ route('invoice.pdf', $model->id) }}" class="btn btn-secondary btn-sm" target="_blank"  title="Cetak Invoice">
             <i class="fa fa-print"></i>
         </a>
-
         @if ($model->status_bayar == 'Sudah Bayar')
             <button disabled class="btn btn-outline-success btn-sm" title="Bayar Tagihan">
                 <i class="fa fa-money-bill" aria-hidden="true"></i>

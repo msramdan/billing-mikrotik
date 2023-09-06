@@ -86,12 +86,14 @@
                                 <table class="table table-striped" id="data-table" width="100%">
                                     <thead>
                                         <tr>
+                                            <th>#</th>
                                             <th>{{ __('No Tagihan') }}</th>
                                             <th>{{ __('Pelanggan') }}</th>
                                             <th>{{ __('Periode') }}</th>
                                             <th>{{ __('Metode Bayar') }}</th>
                                             <th>{{ __('Nominal Bayar') }}</th>
                                             <th>{{ __('Potongan Bayar') }}</th>
+                                            <th>{{ __('PPN') }}</th>
                                             <th>{{ __('Total Bayar') }}</th>
                                             <th>{{ __('Status Bayar') }}</th>
                                             <th>{{ __('Action') }}</th>
@@ -118,6 +120,12 @@
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.12.0/datatables.min.js"></script>
     <script>
         let columns = [{
+                data: 'DT_RowIndex',
+                name: 'DT_RowIndex',
+                orderable: false,
+                searchable: false
+            },
+            {
                 data: 'no_tagihan',
                 name: 'no_tagihan',
             },
@@ -138,9 +146,14 @@
                 data: 'nominal_bayar',
                 name: 'nominal_bayar',
             },
+
             {
                 data: 'potongan_bayar',
                 name: 'potongan_bayar',
+            },
+            {
+                data: 'nominal_ppn',
+                name: 'nominal_ppn',
             },
             {
                 data: 'total_bayar',

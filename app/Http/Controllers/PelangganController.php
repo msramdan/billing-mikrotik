@@ -81,6 +81,7 @@ class PelangganController extends Controller
 
             $pelanggans = $pelanggans->orderBy('pelanggans.id', 'DESC')->get();
             return Datatables::of($pelanggans)
+            ->addIndexColumn()
                 ->addColumn('alamat', function ($row) {
                     return str($row->alamat)->limit(100);
                 })

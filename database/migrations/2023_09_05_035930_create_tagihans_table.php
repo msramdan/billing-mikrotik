@@ -22,7 +22,9 @@ return new class extends Migration
 			$table->enum('status_bayar', ['Sudah Bayar', 'Belum Bayar']);
 			$table->integer('nominal_bayar');
 			$table->integer('potongan_bayar');
-			$table->integer('total_bayar');
+            $table->enum('ppn', ['Yes', 'No'])->nullable();
+			$table->integer('nominal_ppn');
+            $table->integer('total_bayar');
 			$table->dateTime('tanggal_bayar')->nullable();
 			$table->dateTime('tanggal_create_tagihan');
 			$table->dateTime('tanggal_kirim_notif_wa')->nullable();
@@ -30,11 +32,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('tagihans');
