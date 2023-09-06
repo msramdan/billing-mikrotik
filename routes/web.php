@@ -20,6 +20,9 @@ Route::controller(App\Http\Controllers\Frontend\WebController::class)->group(fun
 Route::middleware(['login-customer'])->group(function () {
     Route::controller(PanelCustomerDashboardController::class)->group(function () {
         Route::get('/dashboardCustomer', 'index')->name('dashboardCustomer');
+        Route::get('/caraPembayaran', 'caraPembayaran')->name('caraPembayaran');
+        Route::get('/showTagihan/{id}', 'showTagihan')->name('showTagihan');
+        Route::get('/invoiceTagihan/{id}', 'invoiceTagihan')->name('invoiceTagihan');
     });
     Route::controller(App\Http\Controllers\Frontend\WebController::class)->group(function () {
         Route::get('/logoutCustomer', 'logoutCustomer')->name('logoutCustomer');

@@ -12,6 +12,7 @@
     <link rel="icon"
         @if (getCompany()->favicon != null) href="{{ Storage::url('public/uploads/favicons/') . getCompany()->favicon }}" @endif
         type="image/x-icon">
+        @stack('css')
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -43,9 +44,15 @@
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-home"></i>
-                                <p>Dashboard</p>
+                            <a href="/dashboardCustomer" class="nav-link">
+                                <i class="nav-icon fa fa-money-bill"></i>
+                                <p>Tagihan</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/caraPembayaran" class="nav-link">
+                                <i class="nav-icon fa fa-info"></i>
+                                <p>Cara Pembayaran</p>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -68,6 +75,7 @@
     <script src="{{ asset('frontend') }}/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('frontend') }}/admin/dist/js/adminlte.min.js"></script>
     @include('sweetalert::alert')
+    @stack('js')
 </body>
 
 </html>
