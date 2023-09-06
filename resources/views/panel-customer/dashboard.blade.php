@@ -46,9 +46,6 @@
                                             <th>{{ __('Pelanggan') }}</th>
                                             <th>{{ __('Periode') }}</th>
                                             <th>{{ __('Metode Bayar') }}</th>
-                                            <th>{{ __('Nominal Bayar') }}</th>
-                                            <th>{{ __('Potongan Bayar') }}</th>
-                                            <th>{{ __('PPN') }}</th>
                                             <th>{{ __('Total Bayar') }}</th>
                                             <th>{{ __('Status Bayar') }}</th>
                                             <th>{{ __('Action') }}</th>
@@ -95,20 +92,6 @@
             {
                 data: 'metode_bayar',
                 name: 'metode_bayar',
-            },
-
-            {
-                data: 'nominal_bayar',
-                name: 'nominal_bayar',
-            },
-
-            {
-                data: 'potongan_bayar',
-                name: 'potongan_bayar',
-            },
-            {
-                data: 'nominal_ppn',
-                name: 'nominal_ppn',
             },
             {
                 data: 'total_bayar',
