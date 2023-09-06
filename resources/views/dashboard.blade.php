@@ -250,7 +250,7 @@
                                 <p class="mb-0 text-secondary">Area Coverage</p>
                                 <h4 class="my-1 text-primary"><a href="#" class="" data-bs-toggle="modal"
                                         data-bs-target="#modalBrancError">
-                                        XXXX Data </a>
+                                        {{ $countAreaCoverage}} Data </a>
                                 </h4>
 
                             </div>
@@ -270,7 +270,7 @@
                                 <p class="mb-0 text-secondary">Total Pelanggan</p>
                                 <h4 class="my-1 text-primary"><a href="#" class="" data-bs-toggle="modal"
                                         data-bs-target="#modalBrancError">
-                                        XXXX Data </a>
+                                        {{$countPelanggan}} Data </a>
                                 </h4>
 
                             </div>
@@ -289,7 +289,7 @@
                                 <p class="mb-0 text-secondary">Pelanggan Aktif</p>
                                 <h4 class="my-1 text-primary"><a href="#" class="" data-bs-toggle="modal"
                                         data-bs-target="#modalBrancError">
-                                        XXXX Data </a>
+                                        {{$countPelangganAktif}} Data </a>
                                 </h4>
 
                             </div>
@@ -308,7 +308,7 @@
                                 <p class="mb-0 text-secondary">Pelanggan Non Aktif</p>
                                 <h4 class="my-1 text-primary"><a href="#" class="" data-bs-toggle="modal"
                                         data-bs-target="#modalBrancError">
-                                        XXXX Data </a>
+                                        {{$countPelangganNon}} Data </a>
                                 </h4>
                             </div>
                             <div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto"><i
@@ -326,7 +326,7 @@
                                 <p class="mb-0 text-secondary">Pelanggan Menungu</p>
                                 <h4 class="my-1 text-primary"><a href="#" class="" data-bs-toggle="modal"
                                         data-bs-target="#modalBrancError">
-                                        XXXX Data </a>
+                                        {{$countPelangganMenunggu}} Data </a>
                                 </h4>
 
                             </div>
