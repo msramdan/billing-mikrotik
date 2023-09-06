@@ -87,5 +87,6 @@ Route::middleware(['auth', 'web'])->group(function () {
     Route::resource('tagihans', App\Http\Controllers\TagihanController::class);
     Route::controller(App\Http\Controllers\TagihanController::class)->group(function () {
         Route::get('invoice/{id}', 'invoice')->name('invoice.pdf');
+        Route::post('/bayarTagihan', 'bayarTagihan')->name('bayarTagihan');
     });
 });

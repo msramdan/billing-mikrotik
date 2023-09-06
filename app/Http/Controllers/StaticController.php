@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\{StoreStaticRequest, UpdateStaticRequest};
 use Yajra\DataTables\Facades\DataTables;
-use \RouterOS\Client;
 use \RouterOS\Query;
 
 class StaticController extends Controller

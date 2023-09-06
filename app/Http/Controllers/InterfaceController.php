@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Interface;
+use App\Models\Interfacedata;
 use Yajra\DataTables\Facades\DataTables;
 use \RouterOS\Client;
 use \RouterOS\Query;

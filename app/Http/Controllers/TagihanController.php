@@ -8,6 +8,8 @@ use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\WaGateway;
+use App\Models\Pelanggan;
 use PDF;
 
 class TagihanController extends Controller
@@ -30,7 +32,7 @@ class TagihanController extends Controller
 
             $tagihans = DB::table('tagihans')
                 ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
-                ->select('tagihans.*', 'pelanggans.nama');
+                ->select('tagihans.*', 'pelanggans.nama','pelanggans.id as pelanggan_id');
 
             if (isset($pelanggans) && !empty($pelanggans)) {
                 if ($pelanggans != 'All') {
@@ -237,11 +239,48 @@ class TagihanController extends Controller
         $data = DB::table('tagihans')
             ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
             ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
-            ->select('tagihans.*', 'pelanggans.nama','pelanggans.jatuh_tempo', 'pelanggans.email as email_customer', 'pelanggans.alamat as alamat_customer', 'packages.nama_layanan', 'pelanggans.no_layanan')
+            ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.jatuh_tempo', 'pelanggans.email as email_customer', 'pelanggans.alamat as alamat_customer', 'packages.nama_layanan', 'pelanggans.no_layanan')
             ->where('tagihans.id', '=', $id)
             ->first();;
         $pdf = PDF::loadView('tagihans.pdf', compact('data'));
         // return $pdf->download('Invoice.pdf');
         return $pdf->stream();
+    }
+
+    public function bayarTagihan(Request $request)
+    {
+        $tgl = date('Y-m-d H:i:s');
+        // update tagihan
+        DB::table('tagihans')
+        ->where('id', $request->tagihan_id)
+        ->update(
+            [
+                'tanggal_bayar' => $tgl,
+                'metode_bayar' => $request->metode_bayar,
+                'status_bayar' => 'Sudah Bayar',
+                'tanggal_kirim_notif_wa' => $tgl,
+            ]
+        );
+        // insert pemasukan
+        DB::table('pemasukans')->insert([
+            'nominal' => $request->nominal,
+            'tanggal' => $tgl,
+            'keterangan' => 'Pembayaran Tagihan no Tagihan ' .$request->no_tagihan. ' a/n ' .$request->nama_pelanggan. ' Periode ' .$request->periode_waktu,
+            'created_at' => $tgl,
+            'updated_at' => $tgl,
+        ]);
+
+        // id jika notif Yes kirim
+        if($request->notif=='Yes'){
+            $waGateway = WaGateway::findOrFail(1)->first();
+            $pelanggan = Pelanggan::findOrFail($request->pelanggan_id)->first();
+            if($waGateway->is_active=='Yes'){
+                sendNotifWa($waGateway->url, $waGateway->api_key,$request,'bayar',$pelanggan->no_wa);
+            }
+        }
+
+        return redirect()
+        ->route('tagihans.index')
+        ->with('success', __('Pembayran berhasil dilakukan'));
     }
 }

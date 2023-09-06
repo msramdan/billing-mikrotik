@@ -70,8 +70,10 @@ function rupiah($angka)
     return $hasil_rupiah;
 }
 
-function sendNotifWa($url,$api_key, $request, $typePesan, $no_wa_owner)
+function sendNotifWa($url,$api_key, $request, $typePesan, $no_penerima)
 {
+
+
     if ($typePesan == 'daftar') {
         $paket = Package::findOrFail($request->paket_layanan)->first();
         $customer = Pelanggan::where('email', $request->email)->firstOrFail();
@@ -85,11 +87,21 @@ function sendNotifWa($url,$api_key, $request, $typePesan, $no_wa_owner)
         $message .= '*Alamat :* ' .  $request->alamat . "\n";
         $message .= '*Paket pilihan :* ' . $paket->nama_layanan . "\n\n";
         $message .= "Detail pendaftaran bisa admin lihat disini : $url_detail \n\n";
+    }else if($typePesan == 'bayar'){
+        $message = 'Yth. ' . $request->nama_pelanggan . "\n\n";
+        $message .= "Berikut ini adalah data pembayaran yang telah kami terima : \n\n";
+        $message .= "*No Tagihan :* " . $request->no_tagihan . "\n";
+        $message .= '*Nama Pelanggan :* ' . $request->nama_pelanggan . "\n";
+        $message .= '*Nominal :* ' . rupiah($request->nominal ) . "\n";
+        $message .= '*Metode Pembayaran :* ' .  $request->metode_bayar . " \n";
+        $message .= '*Tanggal :* ' . date('Y-m-d H:i:s') . "\n\n";
+        $message .= "Terima Kasih.";
     }
+
     $endpoint_wa = $url . 'send-message';
     $response = Http::post($endpoint_wa, [
         'api_key' => $api_key,
-        'receiver' => $no_wa_owner,
+        'receiver' => strval($no_penerima) ,
         'data' => [
             "message" => $message,
         ]

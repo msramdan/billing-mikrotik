@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Static extends Model
+class Staticdata extends Model
 {
     use HasFactory;
 
@@ -29,6 +29,6 @@ class Static extends Model
      * @var string[]
      */
     protected $casts = ['name' => 'string', 'created_at' => 'datetime:d/m/Y H:i', 'updated_at' => 'datetime:d/m/Y H:i'];
-    
+
 
 }

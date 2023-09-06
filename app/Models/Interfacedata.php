@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Interface extends Model
+class Interfacedata extends Model
 {
     use HasFactory;
 
@@ -29,6 +29,6 @@ class Interface extends Model
      * @var string[]
      */
     protected $casts = ['name' => 'string', 'type' => 'string', 'mtu' => 'string', 'download' => 'string', 'upload' => 'string', 'mac_address' => 'string', 'created_at' => 'datetime:d/m/Y H:i', 'updated_at' => 'datetime:d/m/Y H:i'];
-    
+
 
 }
