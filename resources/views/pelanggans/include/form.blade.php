@@ -299,7 +299,7 @@
             @enderror
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-2">
         <div class="form-group">
             <label for="jatuh-tempo">{{ __('Jatuh Tempo') }}</label>
             <input type="number" name="jatuh_tempo" id="jatuh-tempo"
@@ -313,27 +313,7 @@
             @enderror
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="form-group">
-            <label for="kirim-tagihan-wa">{{ __('Kirim Tagihan Wa') }}</label>
-            <select class="form-select js-example-basic-single @error('kirim_tagihan_wa') is-invalid @enderror" name="kirim_tagihan_wa"
-                id="kirim-tagihan-wa" class="form-control">
-                <option value="" selected disabled>-- {{ __('Select kirim tagihan wa') }} --</option>
-                <option value="Yes"
-                    {{ isset($pelanggan) && $pelanggan->kirim_tagihan_wa == 'Yes' ? 'selected' : (old('kirim_tagihan_wa') == 'Yes' ? 'selected' : '') }}>
-                    Yes</option>
-                <option value="No"
-                    {{ isset($pelanggan) && $pelanggan->kirim_tagihan_wa == 'No' ? 'selected' : (old('kirim_tagihan_wa') == 'No' ? 'selected' : '') }}>
-                    No</option>
-            </select>
-            @error('kirim_tagihan_wa')
-                <span class="text-danger">
-                    {{ $message }}
-                </span>
-            @enderror
-        </div>
-    </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
         <div class="form-group">
             <label for="auto-isolir">{{ __('Auto Isolir') }}</label>
             <select class="form-select js-example-basic-single @error('auto_isolir') is-invalid @enderror" name="auto_isolir"
@@ -353,20 +333,27 @@
             @enderror
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
         <div class="form-group">
-            <label for="tempo-isolir">{{ __('Tempo Isolir') }}</label>
-            <input type="number" name="tempo_isolir" id="tempo-isolir"
-                class="form-control @error('tempo_isolir') is-invalid @enderror"
-                value="{{ isset($pelanggan) ? $pelanggan->tempo_isolir : old('tempo_isolir') }}"
-                placeholder="{{ __('Tempo Isolir') }}" />
-            @error('tempo_isolir')
+            <label for="kirim-tagihan-wa">{{ __('Kirim Tagihan Wa') }}</label>
+            <select class="form-select js-example-basic-single @error('kirim_tagihan_wa') is-invalid @enderror" name="kirim_tagihan_wa"
+                id="kirim-tagihan-wa" class="form-control">
+                <option value="" selected disabled>-- {{ __('Select kirim tagihan wa') }} --</option>
+                <option value="Yes"
+                    {{ isset($pelanggan) && $pelanggan->kirim_tagihan_wa == 'Yes' ? 'selected' : (old('kirim_tagihan_wa') == 'Yes' ? 'selected' : '') }}>
+                    Yes</option>
+                <option value="No"
+                    {{ isset($pelanggan) && $pelanggan->kirim_tagihan_wa == 'No' ? 'selected' : (old('kirim_tagihan_wa') == 'No' ? 'selected' : '') }}>
+                    No</option>
+            </select>
+            @error('kirim_tagihan_wa')
                 <span class="text-danger">
                     {{ $message }}
                 </span>
             @enderror
         </div>
     </div>
+
     <div class="col-md-3">
         <div class="form-group">
             <label for="router">{{ __('Settingmikrotik') }}</label>

@@ -44,8 +44,7 @@ class UpdatePelangganRequest extends FormRequest
 			'kirim_tagihan_wa' => 'required|in:Yes,No',
 			'latitude' => 'required|string|max:50',
 			'longitude' => 'required|string|max:50',
-			'auto_isolir' => 'nullable|in:Yes,No',
-			'tempo_isolir' => 'nullable|numeric',
+			'auto_isolir' => 'required|in:Yes,No',
 			'router' => 'required|exists:App\Models\Settingmikrotik,id',
 			'user_pppoe' => 'required|string|max:100',
         ];
