@@ -81,7 +81,7 @@ class PelangganController extends Controller
 
             $pelanggans = $pelanggans->orderBy('pelanggans.id', 'DESC')->get();
             return Datatables::of($pelanggans)
-            ->addIndexColumn()
+                ->addIndexColumn()
                 ->addColumn('alamat', function ($row) {
                     return str($row->alamat)->limit(100);
                 })
@@ -195,36 +195,41 @@ class PelangganController extends Controller
         $dataOdcs = DB::table('odcs')->where('wilayah_odc',  $pelanggan->coverage_area)->get();
         $dataodps = DB::table('odps')->where('kode_odc',  $pelanggan->odc)->get();
         $dataPort = DB::table('odps')->where('id', $pelanggan->odp)->first();
-        $jmlPort = $dataPort->jumlah_port;
         $array = [];
-        for ($x = 1; $x <=  $jmlPort; $x++) {
-            // find customer
-            $cek = DB::table('pelanggans')
-                ->where('odp', $pelanggan->odp)
-                ->where('no_port_odp', $x)
-                ->first();
-            if ($cek) {
-                $array[$x] = $cek->no_layanan . ' - ' . $cek->nama;
-            } else {
-                $array[$x] = 'Kosong';
+        if ($dataPort) {
+            $jmlPort = $dataPort->jumlah_port;
+            for ($x = 1; $x <=  $jmlPort; $x++) {
+                // find customer
+                $cek = DB::table('pelanggans')
+                    ->where('odp', $pelanggan->odp)
+                    ->where('no_port_odp', $x)
+                    ->first();
+                if ($cek) {
+                    $array[$x] = $cek->no_layanan . ' - ' . $cek->nama;
+                } else {
+                    $array[$x] = 'Kosong';
+                }
             }
         }
-
         $router = DB::table('settingmikrotiks')->where('id', $pelanggan->router)->first();
-        try {
-            $client = new Client([
-                'host' => $router->host,
-                'user' => $router->username,
-                'pass' => $router->password,
-                'port' => $router->port,
-            ]);
-        } catch (ConnectException $e) {
-            echo $e->getMessage() . PHP_EOL;
-            die();
-        }
-        $query = new Query('/ppp/secret/print');
-        $secretPPoe = $client->query($query)->read();
 
+        if ($router) {
+            try {
+                $client = new Client([
+                    'host' => $router->host,
+                    'user' => $router->username,
+                    'pass' => $router->password,
+                    'port' => $router->port,
+                ]);
+            } catch (ConnectException $e) {
+                echo $e->getMessage() . PHP_EOL;
+                die();
+            }
+            $query = new Query('/ppp/secret/print');
+            $secretPPoe = $client->query($query)->read();
+        } else {
+            $secretPPoe = [];
+        }
         return view('pelanggans.edit', compact('pelanggan', 'dataOdcs', 'dataodps', 'array', 'secretPPoe'));
     }
 
