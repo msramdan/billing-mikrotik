@@ -4,6 +4,11 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PanelCustomer\DashboardController as PanelCustomerDashboardController;
 use Illuminate\Support\Facades\Route;
 
+// Callback Payment Tripay
+
+Route::controller(App\Http\Controllers\PanelCustomer\TripayCallbackController::class)->group(function () {
+    Route::post('/handle', 'handle')->name('handle');
+});
 
 // FRONT END - LANDING PAGE Public
 Route::controller(App\Http\Controllers\Frontend\WebController::class)->group(function () {

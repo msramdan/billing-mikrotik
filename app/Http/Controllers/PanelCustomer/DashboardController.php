@@ -122,7 +122,7 @@ class DashboardController extends Controller
         $apiKey       = getTripay()->api_key;
         $privateKey   = getTripay()->private_key;
         $merchantCode = getTripay()->kode_merchant;
-        $merchantRef  = 'SSL' . time();
+        $merchantRef  = $tagihans->no_tagihan;
         $url =getTripay()->url. 'transaction/create';
         $amount       =  $tagihans->total_bayar;
         $data = [
@@ -142,7 +142,7 @@ class DashboardController extends Controller
                     'image_url'   => '',
                 ]
             ],
-            'expired_time' => (time() + (1 * 10 * 60)),
+            'expired_time' => (time() + (1 * 5 * 60)),
             'signature'    => hash_hmac('sha256', $merchantCode . $merchantRef . $amount, $privateKey)
         ];
         $curl = curl_init();
