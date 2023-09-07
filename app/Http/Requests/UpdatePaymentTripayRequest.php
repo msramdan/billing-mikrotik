@@ -24,6 +24,7 @@ class UpdatePaymentTripayRequest extends FormRequest
     public function rules()
     {
         return [
+            'url' => 'required|string|max:255',
             'kode_merchant' => 'required|string|max:255',
 			'api_key' => 'required|string|max:255',
 			'private_key' => 'required|string|max:255',

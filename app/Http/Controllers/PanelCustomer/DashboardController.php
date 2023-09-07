@@ -99,7 +99,7 @@ class DashboardController extends Controller
 
     public function paymentList($id)
     {
-        $url = 'https://tripay.co.id/api-sandbox/merchant/payment-channel';
+        $url =  getTripay()->url. 'merchant/payment-channel';
         $api_key = getTripay()->api_key;
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . $api_key
@@ -123,7 +123,7 @@ class DashboardController extends Controller
         $privateKey   = getTripay()->private_key;
         $merchantCode = getTripay()->kode_merchant;
         $merchantRef  = 'SSL' . time();
-        $url = 'https://tripay.co.id/api-sandbox/transaction/create';
+        $url =getTripay()->url. 'transaction/create';
         $amount       =  $tagihans->total_bayar;
         $data = [
             'method'         => $method,
@@ -173,7 +173,7 @@ class DashboardController extends Controller
 
         curl_setopt_array($curl, [
             CURLOPT_FRESH_CONNECT  => true,
-            CURLOPT_URL            => 'https://tripay.co.id/api-sandbox/transaction/detail?' . http_build_query($payload),
+            CURLOPT_URL            => getTripay()->url. 'transaction/detail?' . http_build_query($payload),
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HEADER         => false,
             CURLOPT_HTTPHEADER     => ['Authorization: Bearer ' . $apiKey],

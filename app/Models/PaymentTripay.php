@@ -21,7 +21,7 @@ class PaymentTripay extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['kode_merchant', 'api_key', 'private_key'];
+    protected $fillable = ['kode_merchant', 'api_key', 'private_key','url'];
 
     /**
      * The attributes that should be cast.
@@ -29,6 +29,6 @@ class PaymentTripay extends Model
      * @var string[]
      */
     protected $casts = ['kode_merchant' => 'string', 'api_key' => 'string', 'private_key' => 'string', 'created_at' => 'datetime:d/m/Y H:i', 'updated_at' => 'datetime:d/m/Y H:i'];
-    
+
 
 }

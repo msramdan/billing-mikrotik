@@ -1,4 +1,17 @@
 <div class="row mb-2">
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="kode-merchant">{{ __('URL') }}</label>
+            <input type="text" name="url" id="kode-merchant" class="form-control @error('url') is-invalid @enderror" value="{{ isset($paymentTripay) ? $paymentTripay->url : old('url') }}" placeholder="{{ __('URL') }}" required />
+            @error('url')
+                <span class="text-danger">
+                    {{ $message }}
+                </span>
+            @enderror
+        </div>
+    </div>
+
     <div class="col-md-6">
         <div class="form-group">
             <label for="kode-merchant">{{ __('Kode Merchant') }}</label>
