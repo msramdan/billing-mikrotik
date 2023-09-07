@@ -50,7 +50,7 @@ class TripayCallbackController extends Controller
                 ->where('status_bayar', '=', 'Belum Bayar')
                 ->first();
 
-            if (! $invoice) {
+            if (!$invoice) {
                 return Response::json([
                     'success' => false,
                     'message' => 'No invoice found or already paid: ' . $invoiceId,
@@ -59,15 +59,24 @@ class TripayCallbackController extends Controller
 
             switch ($status) {
                 case 'PAID':
-                    $invoice->update(['status_bayar' => 'Sudah Bayar']);
+                    $invoice->update([
+                        'status_bayar' => 'Sudah Bayar',
+                        'payload_tripay' =>  $data,
+                    ]);
                     break;
 
                 case 'EXPIRED':
-                    $invoice->update(['status_bayar' => 'Belum Bayar']);
+                    $invoice->update([
+                        'status_bayar' => 'Belum Bayar',
+                        'payload_tripay' =>  $data,
+                    ]);
                     break;
 
                 case 'FAILED':
-                    $invoice->update(['status_bayar' => 'Belum Bayar']);
+                    $invoice->update([
+                        'status_bayar' => 'Belum Bayar',
+                        'payload_tripay' =>  $data,
+                    ]);
                     break;
 
                 default:

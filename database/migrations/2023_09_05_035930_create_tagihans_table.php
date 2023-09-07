@@ -28,6 +28,7 @@ return new class extends Migration
 			$table->dateTime('tanggal_bayar')->nullable();
 			$table->dateTime('tanggal_create_tagihan');
 			$table->dateTime('tanggal_kirim_notif_wa')->nullable();
+            $table->text('payload_tripay')->nullable();
             $table->timestamps();
         });
     }
