@@ -61,7 +61,7 @@ class TripayCallbackController extends Controller
                 case 'PAID':
                     $invoice->update([
                         'status_bayar' => 'Sudah Bayar',
-                        'payload_tripay' =>  'oke',
+                        'payload_tripay' =>   $data,
                     ]);
                     break;
 
