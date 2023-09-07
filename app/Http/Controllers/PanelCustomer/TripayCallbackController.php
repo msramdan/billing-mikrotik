@@ -110,7 +110,6 @@ class TripayCallbackController extends Controller
                     sendNotifWa($waGateway->url, $waGateway->api_key, $invoice, 'bayar', $invoice->no_wa);
                 }
             }
-
             return Response::json(['success' => true]);
         }
     }
