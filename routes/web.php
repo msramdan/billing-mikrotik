@@ -92,4 +92,7 @@ Route::middleware(['auth', 'web'])->group(function () {
         Route::get('invoice/{id}', 'invoice')->name('invoice.pdf');
         Route::post('/bayarTagihan', 'bayarTagihan')->name('bayarTagihan');
     });
+    Route::resource('laporans', App\Http\Controllers\LaporanController::class);
+
 });
+

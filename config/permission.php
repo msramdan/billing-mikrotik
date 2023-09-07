@@ -205,5 +205,9 @@ return [
         ['group' => 'odps', 'access' => ['odp view', 'odp create', 'odp edit', 'odp delete']],
         ['group' => 'pelanggans', 'access' => ['pelanggan view', 'pelanggan create', 'pelanggan edit', 'pelanggan delete']],
         ['group' => 'payment tripays', 'access' => ['payment tripay view', 'payment tripay edit']],
-  ['group' => 'pemasukans', 'access' => ['pemasukan view', 'pemasukan create', 'pemasukan edit', 'pemasukan delete']],['group' => 'pengeluarans', 'access' => ['pengeluaran view', 'pengeluaran create', 'pengeluaran edit', 'pengeluaran delete']],['group' => 'tagihans', 'access' => ['tagihan view', 'tagihan create', 'tagihan edit', 'tagihan delete']], 
-		],];
+        ['group' => 'pemasukans', 'access' => ['pemasukan view', 'pemasukan create', 'pemasukan edit', 'pemasukan delete']],
+        ['group' => 'pengeluarans', 'access' => ['pengeluaran view', 'pengeluaran create', 'pengeluaran edit', 'pengeluaran delete']],
+        ['group' => 'tagihans', 'access' => ['tagihan view', 'tagihan create', 'tagihan edit', 'tagihan delete']],
+        ['group' => 'laporans', 'access' => ['laporan view']],
+    ],
+];

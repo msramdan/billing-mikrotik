@@ -114,7 +114,8 @@ return [
         'permissions' => [
             'pemasukan view',
             'pengeluaran view',
-            'tagihan view'
+            'tagihan view',
+            'laporan view'
         ],
         'menus' => [
             [
@@ -125,7 +126,8 @@ return [
                 'permissions' => [
                     'pemasukan view',
                     'pengeluaran view',
-                    'tagihan view'
+                    'tagihan view',
+                    'laporan view'
                 ],
                 'submenus' => [
                     [
@@ -142,8 +144,12 @@ return [
                         'title' => 'Pengeluaran',
                         'route' => '/pengeluarans',
                         'permission' => 'pengeluaran view'
+                    ],
+                    [
+                        'title' => 'Laporan',
+                        'route' => '/laporans',
+                        'permission' => 'laporan view'
                     ]
-
                 ]
             ]
         ]
