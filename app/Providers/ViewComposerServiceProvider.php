@@ -112,5 +112,27 @@ class ViewComposerServiceProvider extends ServiceProvider
             );
         });
 
+
+		View::composer(['sendnotifs.create', 'sendnotifs.edit'], function ($view) {
+            return $view->with(
+                'areaCoverages',
+                \App\Models\AreaCoverage::select('id', 'kode_area')->get()
+            );
+        });
+
+View::composer(['sendnotifs.create', 'sendnotifs.edit'], function ($view) {
+            return $view->with(
+                'odcs',
+                \App\Models\Odc::select('id', 'kode_odc')->get()
+            );
+        });
+
+		View::composer(['sendnotifs.create', 'sendnotifs.edit'], function ($view) {
+            return $view->with(
+                'odps',
+                \App\Models\Odp::select('id', 'kode_odc')->get()
+            );
+        });
+
 	}
 }

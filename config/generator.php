@@ -364,7 +364,8 @@ return [
             'bank view',
             'wa gateway view',
             'privacy policy view',
-            'payment tripay view'
+            'payment tripay view',
+            'sendnotif view'
         ],
         'menus' => [
             [
@@ -378,7 +379,8 @@ return [
                     'bank view',
                     'wa gateway view',
                     'privacy policy view',
-                    'payment tripay view'
+                    'payment tripay view',
+                    'sendnotif view'
                 ],
                 'submenus' => [
                     [
@@ -410,6 +412,11 @@ return [
                         'title' => 'Payment Tripay',
                         'route' => '/payment-tripays',
                         'permission' => 'payment tripay view'
+                    ],
+                    [
+                        'title' => 'Send Notif WA',
+                        'route' => '/sendnotifs',
+                        'permission' => 'sendnotif view'
                     ]
                 ]
             ]

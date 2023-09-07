@@ -24,8 +24,6 @@ class LaporanController extends Controller
             $month = date('Y-m');
         }
 
-
-
         $tagiahnBayar = Tagihan::where('periode', $month)
             ->where('status_bayar', 'Sudah Bayar')
             ->count();

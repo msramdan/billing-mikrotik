@@ -93,6 +93,12 @@ Route::middleware(['auth', 'web'])->group(function () {
         Route::post('/bayarTagihan', 'bayarTagihan')->name('bayarTagihan');
     });
     Route::resource('laporans', App\Http\Controllers\LaporanController::class);
+    Route::resource('sendnotifs', App\Http\Controllers\SendnotifController::class);
+    Route::controller(App\Http\Controllers\SendnotifController::class)->group(function () {
+        Route::post('/kirim_pesan', 'kirim_pesan')->name('kirim_pesan');
+    });
 
 });
+
+
 
