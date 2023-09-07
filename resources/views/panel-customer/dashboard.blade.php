@@ -45,7 +45,6 @@
                                             <th>{{ __('No Tagihan') }}</th>
                                             <th>{{ __('Pelanggan') }}</th>
                                             <th>{{ __('Periode') }}</th>
-                                            <th>{{ __('Metode Bayar') }}</th>
                                             <th>{{ __('Total Bayar') }}</th>
                                             <th>{{ __('Status Bayar') }}</th>
                                             <th>{{ __('Action') }}</th>
@@ -88,10 +87,6 @@
             {
                 data: 'periode',
                 name: 'periode',
-            },
-            {
-                data: 'metode_bayar',
-                name: 'metode_bayar',
             },
             {
                 data: 'total_bayar',

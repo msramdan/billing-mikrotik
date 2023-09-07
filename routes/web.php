@@ -23,6 +23,9 @@ Route::middleware(['login-customer'])->group(function () {
         Route::get('/caraPembayaran', 'caraPembayaran')->name('caraPembayaran');
         Route::get('/showTagihan/{id}', 'showTagihan')->name('showTagihan');
         Route::get('/invoiceTagihan/{id}', 'invoiceTagihan')->name('invoiceTagihan');
+        Route::get('/paymentList/{id}', 'paymentList')->name('paymentList');
+        Route::get('/doPayment/{tagihan_id}/{metode}', 'doPayment')->name('doPayment');
+        Route::get('/detailTagihan/{id}', 'detailTagihan')->name('detailTagihan');
     });
     Route::controller(App\Http\Controllers\Frontend\WebController::class)->group(function () {
         Route::get('/logoutCustomer', 'logoutCustomer')->name('logoutCustomer');

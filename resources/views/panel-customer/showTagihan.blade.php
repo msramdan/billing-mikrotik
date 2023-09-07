@@ -22,7 +22,7 @@
                                     </tr>
                                     <tr>
                                         <td class="fw-bold">{{ __('Periode') }}</td>
-                                        <td>{{ $tagihan->periode }}</td>
+                                        <td>{{ tanggal_indonesia($tagihan->periode)  }}</td>
                                     </tr>
                                     <tr>
                                         <td class="fw-bold">{{ __('Metode Bayar') }}</td>

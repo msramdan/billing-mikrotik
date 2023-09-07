@@ -58,6 +58,12 @@ function getCompany()
     return $data;
 }
 
+function getTripay()
+{
+    $data = DB::table('payment_tripays')->first();
+    return $data;
+}
+
 function getCustomer()
 {
     $data = DB::table('pelanggans')->where('id', Session::get('id-customer'))->first();
@@ -130,3 +136,25 @@ function hitungUang($type)
         return $pengeluaran;
     }
 }
+
+function tanggal_indonesia($tanggal)
+{
+    $bulan = array(
+        1 =>   'Januari',
+        'Februari',
+        'Maret',
+        'April',
+        'Mei',
+        'Juni',
+        'Juli',
+        'Agustus',
+        'September',
+        'Oktober',
+        'November',
+        'Desember'
+    );
+
+    $pecahkan = explode('-', $tanggal);
+    return $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
+}
+

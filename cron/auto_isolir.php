@@ -32,7 +32,6 @@ while ($data = mysqli_fetch_array($query)) {
 }
 
 echo "Auto isolir berjalan";
-
 function addHari($tgl, $jatuh_tempo)
 {
     $tgl    = date('Y-m-d', strtotime('+' . $jatuh_tempo . 'days', strtotime($tgl)));
