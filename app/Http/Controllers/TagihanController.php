@@ -32,7 +32,7 @@ class TagihanController extends Controller
 
             $tagihans = DB::table('tagihans')
                 ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
-                ->select('tagihans.*', 'pelanggans.nama','pelanggans.id as pelanggan_id');
+                ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.id as pelanggan_id');
 
             if (isset($pelanggans) && !empty($pelanggans)) {
                 if ($pelanggans != 'All') {
@@ -252,35 +252,50 @@ class TagihanController extends Controller
         $tgl = date('Y-m-d H:i:s');
         // update tagihan
         DB::table('tagihans')
-        ->where('id', $request->tagihan_id)
-        ->update(
-            [
-                'tanggal_bayar' => $tgl,
-                'metode_bayar' => $request->metode_bayar,
-                'status_bayar' => 'Sudah Bayar',
-                'tanggal_kirim_notif_wa' => $tgl,
-            ]
-        );
+            ->where('id', $request->tagihan_id)
+            ->update(
+                [
+                    'tanggal_bayar' => $tgl,
+                    'metode_bayar' => $request->metode_bayar,
+                    'status_bayar' => 'Sudah Bayar',
+                    'tanggal_kirim_notif_wa' => $tgl,
+                ]
+            );
         // insert pemasukan
         DB::table('pemasukans')->insert([
             'nominal' => $request->nominal,
             'tanggal' => $tgl,
-            'keterangan' => 'Pembayaran Tagihan no Tagihan ' .$request->no_tagihan. ' a/n ' .$request->nama_pelanggan. ' Periode ' .$request->periode_waktu,
+            'keterangan' => 'Pembayaran Tagihan no Tagihan ' . $request->no_tagihan . ' a/n ' . $request->nama_pelanggan . ' Periode ' . $request->periode_waktu,
             'created_at' => $tgl,
             'updated_at' => $tgl,
         ]);
 
+        // set status jadi aktif handle klo kena isolir duluan dan tidak ada tagihan belum di bayar lain nya
+        $cekTagihan = Tagihan::where('pelanggan_id', $request->pelanggan_id)
+            ->where('status_bayar', 'Belum Bayar')
+            ->count();
+
+        if ($cekTagihan < 1) {
+            DB::table('pelanggans')
+                ->where('id', $request->pelanggan_id)
+                ->update(
+                    [
+                        'status_berlangganan' => 'Aktif',
+                    ]
+                );
+        }
+
         // id jika notif Yes kirim
-        if($request->notif=='Yes'){
+        if ($request->notif == 'Yes') {
             $waGateway = WaGateway::findOrFail(1)->first();
             $pelanggan = Pelanggan::findOrFail($request->pelanggan_id)->first();
-            if($waGateway->is_active=='Yes'){
-                sendNotifWa($waGateway->url, $waGateway->api_key,$request,'bayar',$pelanggan->no_wa);
+            if ($waGateway->is_active == 'Yes') {
+                sendNotifWa($waGateway->url, $waGateway->api_key, $request, 'bayar', $pelanggan->no_wa);
             }
         }
 
         return redirect()
-        ->route('tagihans.index')
-        ->with('success', __('Pembayran berhasil dilakukan'));
+            ->route('tagihans.index')
+            ->with('success', __('Pembayran berhasil dilakukan'));
     }
 }

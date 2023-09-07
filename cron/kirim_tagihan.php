@@ -8,7 +8,6 @@ $cekNotifWa = "SELECT * FROM wa_gateways where id='1'";
 $queryCekNotifWa = mysqli_query($koneksi, $cekNotifWa);
 $datanya = mysqli_fetch_array($queryCekNotifWa);
 
-
 if ($datanya['is_active'] == 'Yes') {
     $sql = "SELECT tagihans.*,pelanggans.nama,pelanggans.no_wa, pelanggans.kirim_tagihan_wa,pelanggans.jatuh_tempo FROM tagihans
     join pelanggans on pelanggans.id = tagihans.pelanggan_id where tagihans.status_bayar='Belum Bayar'";
