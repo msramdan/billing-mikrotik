@@ -2,14 +2,6 @@
 
 @push('css')
     <style>
-        /*
-                    *
-                    * ==========================================
-                    * CUSTOM UTIL CLASSES
-                    * ==========================================
-                    *
-                    */
-        /* Horizontal line */
         .collapsible-link::before {
             content: '';
             width: 14px;
@@ -42,12 +34,6 @@
         .collapsible-link[aria-expanded='true']::before {
             transform: rotate(180deg);
         }
-        body {
-            background: #dd5e89;
-            background: -webkit-linear-gradient(to left, #dd5e89, #f7bb97);
-            background: linear-gradient(to left, #dd5e89, #f7bb97);
-            min-height: 100vh;
-        }
     </style>
 @endpush
 @section('content')
@@ -62,14 +48,28 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-lg-12">
-                                <table class="table table-bordered">
+                                <!-- The text field -->
+
+
+
+                                <table class="table table-bordered table-sm">
                                     <tbody>
                                         <tr>
-                                            <th scope="row">Kode Pembayaran</th>
-                                            <td> <b>{{ $detail->pay_code }}</b> </td>
+                                            <th scope="row">Kode Bayar</th>
+                                            <td>
+
+                                                <div class="input-group mb-3">
+                                                    <input type="text" class="form-control"
+                                                        value="{{ $detail->pay_code }}" id="copyText" readonly>
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id="copyBtn"><i class="fa fa-copy"></i></span>
+                                                        {{-- <button id="copyBtn"><i class="fa fa-copy"></i></button> --}}
+                                                    </div>
+                                                </div>
+                                            </td>
                                         </tr>
                                         <tr>
-                                            <th scope="row">Nama Customer</th>
+                                            <th scope="row">Nama</th>
                                             <td>{{ $detail->customer_name }}</td>
                                         </tr>
                                         <tr>
@@ -78,13 +78,13 @@
                                         </tr>
                                         <tr>
                                             <th scope="row">Nominal</th>
-                                            <td>{{ $detail->amount }}</td>
+                                            <td>{{ rupiah($detail->amount) }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
                                 <div class="alert alert-secondary" role="alert">
                                     Instruksi Pembayaran
-                                  </div>
+                                </div>
 
                                 <div id="accordionExample" class="accordion shadow">
                                     @foreach ($detail->instructions as $key => $row)
@@ -119,3 +119,21 @@
         </div>
     </div>
 @endsection
+
+@push('js')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+        const copyBtn = document.getElementById('copyBtn')
+        const copyText = document.getElementById('copyText')
+        copyBtn.onclick = () => {
+            copyText.select(); // Selects the text inside the input
+            document.execCommand('copy'); // Simply copies the selected text to clipboard
+            Swal.fire({ //displays a pop up with sweetalert
+                icon: 'success',
+                title: 'Berhasil di copy',
+                showConfirmButton: false,
+                timer: 1000
+            });
+        }
+    </script>
+@endpush
