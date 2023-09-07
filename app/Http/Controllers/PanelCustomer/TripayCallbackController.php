@@ -62,17 +62,17 @@ class TripayCallbackController extends Controller
                 case 'PAID':
                     $invoice->update([
                         'status_bayar' => 'Sudah Bayar',
-                        'status_bayar' => 'Sudah Bayar',
-                        'payload_tripay' => 'Payment Tripay',
+                        'payload_tripay' => $json,
+                        'metode_bayar' => 'Payment Tripay',
                         'tanggal_bayar' =>  date('Y-m-d H:i:s'),
-                        'tanggal_kirim_notif_wa' =>  date('Y-m-d H:i:s'),
+                        'tanggal_kirim_notif_wa' =>  date('Y-m-d H:i:s')
                     ]);
                     break;
 
                 case 'EXPIRED':
                     $invoice->update([
                         'status_bayar' => 'Belum Bayar',
-                        'payload_tripay' =>  $json,
+                        'payload_tripay' =>  $json
                     ]);
                     break;
 
