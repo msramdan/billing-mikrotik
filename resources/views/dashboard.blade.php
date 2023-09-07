@@ -2,7 +2,6 @@
 
 @section('title', __('Dashboard'))
 
-
 @push('css')
     <style>
         canvas {
@@ -13,7 +12,7 @@
     <style>
         .map-embed {
             width: 100%;
-            height: 400px;
+            height: 510px;
         }
 
         a.resultnya {
@@ -179,6 +178,140 @@
         .lt-ie9 .search input#search-loc {
             line-height: 26px
         }
+
+        .my-custom-scrollbar {
+            position: relative;
+            height: 270px;
+            overflow: auto;
+        }
+
+        .table-wrapper-scroll-y {
+            display: block;
+        }
+
+        .highcharts-figure,
+        .highcharts-data-table table {
+            min-width: 360px;
+            max-width: 800px;
+            margin: 1em auto;
+        }
+
+        .highcharts-data-table table {
+            font-family: Verdana, sans-serif;
+            border-collapse: collapse;
+            border: 1px solid #ebebeb;
+            margin: 10px auto;
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .highcharts-data-table caption {
+            padding: 1em 0;
+            font-size: 1.2em;
+            color: #555;
+        }
+
+        .highcharts-data-table th {
+            font-weight: 600;
+            padding: 0.5em;
+        }
+
+        .highcharts-data-table td,
+        .highcharts-data-table th,
+        .highcharts-data-table caption {
+            padding: 0.5em;
+        }
+
+        .highcharts-data-table thead tr,
+        .highcharts-data-table tr:nth-child(even) {
+            background: #f8f8f8;
+        }
+
+        .highcharts-data-table tr:hover {
+            background: #f1f7ff;
+        }
+
+        .radius-10 {
+            border-radius: 10px !important;
+        }
+
+        .border-info {
+            border-left: 5px solid #0dcaf0 !important;
+        }
+
+        .border-danger {
+            border-left: 5px solid #fd3550 !important;
+        }
+
+        .border-success {
+            border-left: 5px solid #24695c !important;
+        }
+
+        .border-warning {
+            border-left: 5px solid #ffc107 !important;
+        }
+
+        .card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            word-wrap: break-word;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 0px solid rgba(0, 0, 0, 0);
+            border-radius: .25rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 6px 0 rgb(218 218 253 / 65%), 0 2px 6px 0 rgb(206 206 238 / 54%);
+        }
+
+        .bg-gradient-scooter {
+            background: #17ead9;
+            background: -webkit-linear-gradient(45deg, #17ead9, #6078ea) !important;
+            background: linear-gradient(45deg, #17ead9, #6078ea) !important;
+        }
+
+        .widgets-icons-2 {
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #ededed;
+            font-size: 27px;
+            border-radius: 10px;
+        }
+
+        .rounded-circle {
+            border-radius: 50% !important;
+        }
+
+        .text-white {
+            color: #fff !important;
+        }
+
+        .ms-auto {
+            margin-left: auto !important;
+        }
+
+        .bg-gradient-bloody {
+            background: #f54ea2;
+            background: -webkit-linear-gradient(45deg, #f54ea2, #ff7676) !important;
+            background: linear-gradient(45deg, #f54ea2, #ff7676) !important;
+        }
+
+        .bg-gradient-ohhappiness {
+            background: #00b09b;
+            background: -webkit-linear-gradient(45deg, #00b09b, #96c93d) !important;
+            background: linear-gradient(45deg, #00b09b, #96c93d) !important;
+        }
+
+        .bg-gradient-blooker {
+            background: #ffdf40;
+            background: -webkit-linear-gradient(45deg, #ffdf40, #ff8359) !important;
+            background: linear-gradient(45deg, #ffdf40, #ff8359) !important;
+        }
     </style>
 @endpush
 
@@ -193,12 +326,12 @@
                                 <p class="mb-0 text-secondary">Hotspot aktif</p>
                                 <h4 class="my-1 text-primary"><a href="#" class="" data-bs-toggle="modal"
                                         data-bs-target="#modalBrancError">
-                                        XXXX Data </a>
+                                        {{ $hotspotactives }} Data </a>
                                 </h4>
 
                             </div>
                             <div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto"><i
-                                    class="fa fa-database"></i>
+                                    class="fa fa-wifi"></i>
                             </div>
                         </div>
                     </div>
@@ -212,12 +345,12 @@
                                 <p class="mb-0 text-secondary">Ppp aktif</p>
                                 <h4 class="my-1 text-primary"><a href="#" class="" data-bs-toggle="modal"
                                         data-bs-target="#modalBrancError">
-                                        XXXX Data </a>
+                                        {{ $activePpps }} Data </a>
                                 </h4>
 
                             </div>
                             <div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto"><i
-                                    class="fa fa-database"></i>
+                                    class="fa fa-check"></i>
                             </div>
                         </div>
                     </div>
@@ -231,12 +364,12 @@
                                 <p class="mb-0 text-secondary">Ppp tidak aktif</p>
                                 <h4 class="my-1 text-primary"><a href="#" class="" data-bs-toggle="modal"
                                         data-bs-target="#modalBrancError">
-                                        XXXX Data </a>
+                                        {{ $nonactivePpps }} Data </a>
                                 </h4>
 
                             </div>
                             <div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto"><i
-                                    class="fa fa-database"></i>
+                                    class="fa fa-times"></i>
                             </div>
                         </div>
                     </div>
@@ -250,12 +383,12 @@
                                 <p class="mb-0 text-secondary">Area Coverage</p>
                                 <h4 class="my-1 text-primary"><a href="#" class="" data-bs-toggle="modal"
                                         data-bs-target="#modalBrancError">
-                                        {{ $countAreaCoverage}} Data </a>
+                                        {{ $countAreaCoverage }} Data </a>
                                 </h4>
 
                             </div>
                             <div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto"><i
-                                    class="fa fa-database"></i>
+                                    class="fa fa-map"></i>
                             </div>
                         </div>
                     </div>
@@ -270,12 +403,12 @@
                                 <p class="mb-0 text-secondary">Total Pelanggan</p>
                                 <h4 class="my-1 text-primary"><a href="#" class="" data-bs-toggle="modal"
                                         data-bs-target="#modalBrancError">
-                                        {{$countPelanggan}} Data </a>
+                                        {{ $countPelanggan }} Data </a>
                                 </h4>
 
                             </div>
                             <div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto"><i
-                                    class="fa fa-database"></i>
+                                    class="fa fa-users"></i>
                             </div>
                         </div>
                     </div>
@@ -286,15 +419,15 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div>
-                                <p class="mb-0 text-secondary">Pelanggan Aktif</p>
+                                <p class="mb-0 text-secondary">P. Aktif</p>
                                 <h4 class="my-1 text-primary"><a href="#" class="" data-bs-toggle="modal"
                                         data-bs-target="#modalBrancError">
-                                        {{$countPelangganAktif}} Data </a>
+                                        {{ $countPelangganAktif }} Data </a>
                                 </h4>
 
                             </div>
                             <div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto"><i
-                                    class="fa fa-database"></i>
+                                    class="fa fa-check"></i>
                             </div>
                         </div>
                     </div>
@@ -305,14 +438,14 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div>
-                                <p class="mb-0 text-secondary">Pelanggan Non Aktif</p>
+                                <p class="mb-0 text-secondary">P. Non Aktif</p>
                                 <h4 class="my-1 text-primary"><a href="#" class="" data-bs-toggle="modal"
                                         data-bs-target="#modalBrancError">
-                                        {{$countPelangganNon}} Data </a>
+                                        {{ $countPelangganNon }} Data </a>
                                 </h4>
                             </div>
                             <div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto"><i
-                                    class="fa fa-database"></i>
+                                    class="fa fa-times"></i>
                             </div>
                         </div>
                     </div>
@@ -323,15 +456,15 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div>
-                                <p class="mb-0 text-secondary">Pelanggan Menungu</p>
+                                <p class="mb-0 text-secondary">P.Menungu</p>
                                 <h4 class="my-1 text-primary"><a href="#" class="" data-bs-toggle="modal"
                                         data-bs-target="#modalBrancError">
-                                        {{$countPelangganMenunggu}} Data </a>
+                                        {{ $countPelangganMenunggu }} Data </a>
                                 </h4>
 
                             </div>
                             <div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto"><i
-                                    class="fa fa-database"></i>
+                                    class="fa fa-spinner"></i>
                             </div>
                         </div>
                     </div>
@@ -340,7 +473,7 @@
         </section>
         <div class="row">
             <div class="col-sm-4 col-sm-4">
-                <div class="card"  style="height: 370px">
+                <div class="card" style="height: 370px">
                     <div class="card-header align-items-center d-flex">
                         <h4 class="card-title mb-0 flex-grow-1">
                             Status Tagihan
@@ -352,7 +485,7 @@
                 </div>
             </div>
             <div class="col-sm-4 col-sm-4">
-                <div class="card"  style="height: 370px">
+                <div class="card" style="height: 370px">
                     <div class="card-header align-items-center d-flex">
                         <h4 class="card-title mb-0 flex-grow-1">
                             Pemasukan VS Pengeluaran
@@ -372,15 +505,66 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive p-1">
-                            <table class="table table-striped" id="data-table" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>{{ __('Nominal') }}</th>
-                                        <th>{{ __('Tanggal') }}</th>
-                                        <th>{{ __('Keterangan') }}</th>
-                                    </tr>
-                                </thead>
-                            </table>
+                            <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                                <table class="table table-striped" id="data-table"
+                                    style="font-size: 10px;">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 38%">{{ __('Nominal') }}</th>
+                                            <th style="width: 58%">{{ __('Tanggal') }}</th>
+                                            <th style="width: 4%">{{ __('Ket') }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach ($pemasukans as $row)
+                                            <tr>
+                                                <td>{{ rupiah($row->nominal) }}</td>
+                                                <td>{{ $row->tanggal }}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-success btn-sm"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#exampleModal{{ $row->id }}">
+                                                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                                    </button>
+                                                </td>
+
+                                                <div class="modal fade" id="exampleModal{{ $row->id }}"
+                                                    tabindex="-1" aria-labelledby="exampleModallview"
+                                                    aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Detail
+                                                                    Pemasukan</h5>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group">
+                                                                        <label
+                                                                            for="no-tagihan">{{ __('Keterangan') }}</label>
+                                                                        <div class="input-group mb-3">
+                                                                            <textarea name="" class="form-control" id="" cols="30" rows="4" readonly>{{ $row->keterangan }}</textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                    data-bs-dismiss="modal">Close</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                            </tr>
+                                        @endforeach
+
+                                    </tbody>
+                                </table>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -445,12 +629,12 @@
         new Chart(ctx2, {
             type: 'pie',
             data: {
-                labels: ['Pemasukan', 'Pemasukan'],
+                labels: ['Pemasukan', 'Pengeluaran'],
                 datasets: [{
                     label: '# Total',
                     data: [
-                        {{ totalStatusBayar('Sudah Bayar') }},
-                        {{ totalStatusBayar('Belum Bayar') }}
+                        {{ hitungUang('Pemasukan') }},
+                        {{ hitungUang('Pengeluaran') }}
                     ],
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
@@ -473,41 +657,6 @@
         });
     </script>
 
-    <script>
-        const ctx3 = document.getElementById('myChart3');
-        new Chart(ctx3, {
-            type: 'pie',
-            data: {
-                labels: ['Aktif', 'Non Aktif', 'Menungu'],
-                datasets: [{
-                    label: '# Total',
-                    data: [
-                        {{ totalStatusBayar('Sudah Bayar') }},
-                        {{ totalStatusBayar('Belum Bayar') }},
-                        {{ totalStatusBayar('Belum Bayar') }}
-                    ],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(75, 192, 192, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255,99,132,1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(75, 192, 192, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    </script>
 
     <script>
         $(document).ready(function() {

@@ -71,14 +71,14 @@ function rupiah($angka)
     return $hasil_rupiah;
 }
 
-function sendNotifWa($url,$api_key, $request, $typePesan, $no_penerima)
+function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima)
 {
 
 
     if ($typePesan == 'daftar') {
         $paket = Package::findOrFail($request->paket_layanan)->first();
         $customer = Pelanggan::where('email', $request->email)->firstOrFail();
-        $url_detail = url('/pelanggans/'.$customer->id);
+        $url_detail = url('/pelanggans/' . $customer->id);
         $message = 'Hello. admin ' . getCompany()->nama_perusahaan . "\n\n";
         $message .= "Ada calon customer baru yang melakukan pendaftaran \n\n";
         $message .= "*Nama :* " . $request->nama . "\n";
@@ -88,12 +88,12 @@ function sendNotifWa($url,$api_key, $request, $typePesan, $no_penerima)
         $message .= '*Alamat :* ' .  $request->alamat . "\n";
         $message .= '*Paket pilihan :* ' . $paket->nama_layanan . "\n\n";
         $message .= "Detail pendaftaran bisa admin lihat disini : $url_detail \n\n";
-    }else if($typePesan == 'bayar'){
+    } else if ($typePesan == 'bayar') {
         $message = 'Yth. ' . $request->nama_pelanggan . "\n\n";
         $message .= "Berikut ini adalah data pembayaran yang telah kami terima : \n\n";
         $message .= "*No Tagihan :* " . $request->no_tagihan . "\n";
         $message .= '*Nama Pelanggan :* ' . $request->nama_pelanggan . "\n";
-        $message .= '*Nominal :* ' . rupiah($request->nominal ) . "\n";
+        $message .= '*Nominal :* ' . rupiah($request->nominal) . "\n";
         $message .= '*Metode Pembayaran :* ' .  $request->metode_bayar . " \n";
         $message .= '*Tanggal :* ' . date('Y-m-d H:i:s') . "\n\n";
         $message .= "Terima Kasih.";
@@ -102,7 +102,7 @@ function sendNotifWa($url,$api_key, $request, $typePesan, $no_penerima)
     $endpoint_wa = $url . 'send-message';
     $response = Http::post($endpoint_wa, [
         'api_key' => $api_key,
-        'receiver' => strval($no_penerima) ,
+        'receiver' => strval($no_penerima),
         'data' => [
             "message" => $message,
         ]
@@ -115,4 +115,18 @@ function totalStatusBayar($status)
     $totalStatus = Tagihan::where('status_bayar', $status)
         ->get();
     return  $totalStatus->count();
+}
+
+function hitungUang($type)
+{
+    if ($type == 'Pemasukan') {
+        $pemasukan = DB::table('pemasukans')
+        // ->where('categories.kind', '=', 1)
+            ->sum('pemasukans.nominal');
+        return $pemasukan;
+    } else {
+        $pengeluaran = DB::table('pengeluarans')
+            ->sum('pengeluarans.nominal');
+        return $pengeluaran;
+    }
 }

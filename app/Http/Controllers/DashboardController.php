@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Pelanggan;
 use App\Models\AreaCoverage;
+use \RouterOS\Query;
+use App\Models\Pemasukan;
 
 class DashboardController extends Controller
 {
@@ -18,13 +20,29 @@ class DashboardController extends Controller
         $countPelangganNon = Pelanggan::where('status_berlangganan', 'Non Aktif')->count();
         $countPelangganMenunggu = Pelanggan::where('status_berlangganan', 'Menungu')->count();
 
-        return view('dashboard',[
+        $client = setRoute();
+        $query = new Query('/ip/hotspot/active/print');
+        $hotspotactives = $client->query($query)->read();
+
+        $queryactivePpps = new Query('/ppp/active/print');
+        $activePpps = $client->query($queryactivePpps)->read();
+
+        $querysecretPpps = new Query('/ppp/secret/print');
+        $nonactivePpps = $client->query($querysecretPpps)->read();
+
+        $pemasukans = Pemasukan::orderBy('id', 'desc')->limit(10)->get();
+
+        return view('dashboard', [
             'pelanggan' => $pelanggan,
             'countAreaCoverage' => $countAreaCoverage,
             'countPelanggan' => $countPelanggan,
             'countPelangganAktif' => $countPelangganAktif,
             'countPelangganNon' => $countPelangganNon,
-            'countPelangganMenunggu' => $countPelangganMenunggu
+            'countPelangganMenunggu' => $countPelangganMenunggu,
+            'hotspotactives' => count($hotspotactives),
+            'activePpps' => count($activePpps),
+            'nonactivePpps' => count($nonactivePpps) - count($activePpps),
+            'pemasukans' => $pemasukans,
         ]);
     }
 }
