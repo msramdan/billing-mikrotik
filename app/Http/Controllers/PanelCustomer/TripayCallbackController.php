@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use App\Models\Tagihan;
+use App\Models\WaGateway;
+use Illuminate\Support\Facades\DB;
 
 class TripayCallbackController extends Controller
 {
@@ -85,6 +87,18 @@ class TripayCallbackController extends Controller
                         'success' => false,
                         'message' => 'Unrecognized payment status',
                     ]);
+            }
+            // kirim wa
+            $waGateway = WaGateway::findOrFail(1)->first();
+            if ($waGateway->is_active == 'Yes') {
+                $invoice = DB::table('tagihans')
+                    ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
+                    ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
+                    ->select('tagihans.no_tagihan','tagihans.total_bayar as nominal','tagihans.metode_bayar', 'pelanggans.nama as nama_pelanggan', 'pelanggans.jatuh_tempo', 'pelanggans.email as email_customer', 'pelanggans.no_wa', 'packages.nama_layanan', 'pelanggans.no_layanan')
+                    ->where('tagihans.no_tagihan', '=', $invoiceId)
+                    ->first();
+
+                sendNotifWa($waGateway->url, $waGateway->api_key, $invoice, 'bayar', $invoice->no_wa);
             }
             return Response::json(['success' => true]);
         }

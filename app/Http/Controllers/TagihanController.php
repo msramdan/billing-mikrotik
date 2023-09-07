@@ -241,7 +241,7 @@ class TagihanController extends Controller
             ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
             ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.jatuh_tempo', 'pelanggans.email as email_customer', 'pelanggans.alamat as alamat_customer', 'packages.nama_layanan', 'pelanggans.no_layanan')
             ->where('tagihans.id', '=', $id)
-            ->first();;
+            ->first();
         $pdf = PDF::loadView('tagihans.pdf', compact('data'));
         // return $pdf->download('Invoice.pdf');
         return $pdf->stream();
