@@ -16,7 +16,7 @@ class WaGatewaySeeder extends Seeder
         DB::table('wa_gateways')->insert([
             'url' => 'https://wagw.sitarsius.com/api/',
             'api_key' => '3e655e6433d5b73e7ce91fbcd0e07974d9e288c0',
-            'is_active' => 'No',
+            'is_active' => 'Yes',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);

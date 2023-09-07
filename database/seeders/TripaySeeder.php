@@ -12,10 +12,10 @@ class TripaySeeder extends Seeder
     public function run(): void
     {
         DB::table('payment_tripays')->insert([
-            'url' => 'https://tripay.co.id/api/',
-            'kode_merchant' => 'T13939',
-            'api_key' => 'DEV-bSvGlvc4N0uyV5Jd3jLQmO2G1rrjTVPxvndpkuk0',
-            'private_key' => 'kH1zF-vXeLC-xJIRu-R5koW-x4aIi',
+            'url' => 'https://tripay.co.id/api-sandbox/',
+            'kode_merchant' => 'T25329',
+            'api_key' => 'DEV-wdWWQLZNPbOLCrgCJYSOwdOxmPEbqMid6EaCcEfI',
+            'private_key' => 'AjWFE-HVt43-rEyO2-SOTw5-07X6d',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
