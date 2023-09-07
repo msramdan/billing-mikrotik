@@ -142,7 +142,7 @@ class DashboardController extends Controller
                     'image_url'   => '',
                 ]
             ],
-            'expired_time' => (time() + (1 * 5 * 60)),
+            'expired_time' => (time() + (1 * 10 * 60)),
             'signature'    => hash_hmac('sha256', $merchantCode . $merchantRef . $amount, $privateKey)
         ];
         $curl = curl_init();
