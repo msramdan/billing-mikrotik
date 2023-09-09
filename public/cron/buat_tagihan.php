@@ -6,7 +6,7 @@ include 'koneksi.php';
 // get data pelanggan aktif
 $data = mysqli_query($koneksi, "select pelanggans.*,packages.harga from pelanggans
 join packages on packages.id =pelanggans.paket_layanan
-where pelanggans.status_berlangganan='Aktif'");
+where pelanggans.status_berlangganan='Aktif' OR pelanggans.status_berlangganan='Tunggakan");
 $dateNow = date('Y-m-d H:i:s');
 $periode = date('Y-m');
 while ($d = mysqli_fetch_array($data)) {
