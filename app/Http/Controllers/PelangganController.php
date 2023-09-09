@@ -345,7 +345,6 @@ class PelangganController extends Controller
             ->where('name', $user_pppoe);
         $data = $client->query($queryGet)->read();
         $idSecret = $data[0]['.id'];
-
         // get paket asal
         $pelanggan = DB::table('pelanggans')
             ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
