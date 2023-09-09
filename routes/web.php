@@ -90,7 +90,7 @@ Route::middleware(['auth', 'web'])->group(function () {
     Route::resource('pelanggans', App\Http\Controllers\PelangganController::class);
     Route::controller(App\Http\Controllers\PelangganController::class)->group(function () {
         Route::get('setToExpired/{user_pppoe}', 'setToExpired')->name('pelanggans.setToExpired');
-        Route::get('setNonToExpired/{user_pppoe}', 'setNonToExpired')->name('pelanggans.setNonToExpired');
+        Route::get('setNonToExpired/{id}/{user_pppoe}', 'setNonToExpired')->name('pelanggans.setNonToExpired');
     });
 
     Route::get('apiodc/{id}', [App\Http\Controllers\OdcController::class, 'odc'])->name('api.odc');

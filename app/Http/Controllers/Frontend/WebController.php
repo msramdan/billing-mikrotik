@@ -44,7 +44,7 @@ class WebController extends Controller
         $password = $request->password;
         $data = Pelanggan::where('email', $email)->first();
         if ($data) {
-            if($data->status_berlangganan !='Menungu'){
+            if($data->status_berlangganan !='Menunggu'){
                 if (Hash::check($password, $data->password)) {
                     Session::put('id-customer', $data->id);
                     Session::put('login-customer', TRUE);
@@ -121,7 +121,7 @@ class WebController extends Controller
                 'photo_ktp' => $filename,
                 'alamat' => $request->alamat,
                 'password' => bcrypt($request->password),
-                'status_berlangganan' => 'Menungu',
+                'status_berlangganan' => 'Menunggu',
                 'paket_layanan' => $request->paket_layanan,
                 'kirim_tagihan_wa' => 'No',
                 'tanggal_daftar' => date('Y-m-d'),

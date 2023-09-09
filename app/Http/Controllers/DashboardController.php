@@ -18,7 +18,7 @@ class DashboardController extends Controller
         $countPelanggan = Pelanggan::count();
         $countPelangganAktif = Pelanggan::where('status_berlangganan', 'Aktif')->count();
         $countPelangganNon = Pelanggan::where('status_berlangganan', 'Non Aktif')->count();
-        $countPelangganMenunggu = Pelanggan::where('status_berlangganan', 'Menungu')->count();
+        $countPelangganMenunggu = Pelanggan::where('status_berlangganan', 'Menunggu')->count();
 
         $client = setRoute();
         $query = new Query('/ip/hotspot/active/print');

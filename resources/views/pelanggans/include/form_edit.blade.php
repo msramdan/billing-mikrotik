@@ -304,9 +304,9 @@
                 <option value="Non Aktif"
                     {{ isset($pelanggan) && $pelanggan->status_berlangganan == 'Non Aktif' ? 'selected' : (old('status_berlangganan') == 'Non Aktif' ? 'selected' : '') }}>
                     Non Aktif</option>
-                <option value="Menungu"
-                    {{ isset($pelanggan) && $pelanggan->status_berlangganan == 'Menungu' ? 'selected' : (old('status_berlangganan') == 'Menungu' ? 'selected' : '') }}>
-                    Menungu</option>
+                <option value="Menunggu"
+                    {{ isset($pelanggan) && $pelanggan->status_berlangganan == 'Menunggu' ? 'selected' : (old('status_berlangganan') == 'Menunggu' ? 'selected' : '') }}>
+                    Menunggu</option>
             </select>
             @error('status_berlangganan')
                 <span class="text-danger">

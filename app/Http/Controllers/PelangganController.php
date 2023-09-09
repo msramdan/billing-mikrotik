@@ -178,7 +178,7 @@ class PelangganController extends Controller
                 'packages.nama_layanan',
                 'packages.harga',
                 'settingmikrotiks.identitas_router'
-            )->where('pelanggans.id', $pelanggan->id)->first();;
+            )->where('pelanggans.id', $pelanggan->id)->first();
 
         return view('pelanggans.show', compact('pelanggan'));
     }
@@ -338,19 +338,25 @@ class PelangganController extends Controller
             ->with('success', __('Internet pelanggan berhasil di set Expired'));
     }
 
-    public function setNonToExpired($user_pppoe)
+    public function setNonToExpired($pelanggan_id,$user_pppoe)
     {
         $client = setRoute();
-        // set komen
         $queryGet = (new Query('/ppp/secret/print'))
             ->where('name', $user_pppoe);
         $data = $client->query($queryGet)->read();
         $idSecret = $data[0]['.id'];
+
+        // get paket asal
+        $pelanggan = DB::table('pelanggans')
+            ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
+            ->select(
+                'packages.profile',
+            )->where('pelanggans.id', $pelanggan_id)->first();
         // balikan paket
         $comment = 'Di set tidak expired Tanggal : ' . date('Y-m-d H:i:s');
         $queryComment = (new Query('/ppp/secret/set'))
             ->equal('.id', $idSecret)
-            ->equal('profile', 'EXPIRED')
+            ->equal('profile', $pelanggan->profile)
             ->equal('comment', $comment);
         $client->query($queryComment)->read();
         // get name

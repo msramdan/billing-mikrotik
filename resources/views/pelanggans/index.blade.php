@@ -57,7 +57,7 @@
                                                 </option>
                                                 <option value="Aktif">Aktif</option>
                                                 <option value="Non Aktif">Non Aktif</option>
-                                                <option value="Menungu">Menungu</option>
+                                                <option value="Menunggu">Menunggu</option>
                                             </select>
                                         </div>
                                         <div class="col-md-3">

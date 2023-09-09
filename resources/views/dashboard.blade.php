@@ -456,7 +456,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div>
-                                <p class="mb-0 text-secondary">P.Menungu</p>
+                                <p class="mb-0 text-secondary">P.Menunggu</p>
                                 <h4 class="my-1 text-primary"><a href="#" class="" data-bs-toggle="modal"
                                         data-bs-target="#modalBrancError">
                                         {{ $countPelangganMenunggu }} Data </a>

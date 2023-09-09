@@ -14,12 +14,19 @@
                     <a href="{{ route('pelanggans.edit', $model->id) }}" class="dropdown-item">Edit</a>
                 </li>
             @endcan
-            <li><a class="dropdown-item"
-                    href="{{ route('pelanggans.setNonToExpired', ['user_pppoe' => $model->user_pppoe]) }}">Set to Non
-                    Expired</a></li>
-            <li><a class="dropdown-item"
-                    href="{{ route('pelanggans.setToExpired', ['user_pppoe' => $model->user_pppoe]) }}">Set to
-                    Expired</a></li>
+            @if ($model->status_berlangganan == 'Menunggu')
+                <li><button class="dropdown-item" disabled >Set to Non Expired</button></li>
+                <li><button class="dropdown-item" disabled >Set to Expired</button></li>
+            @else
+                <li><a class="dropdown-item"
+                        href="{{ route('pelanggans.setNonToExpired', [
+                            'id' => $model->id,
+                            'user_pppoe' => $model->user_pppoe,
+                        ]) }}">Set
+                        to Non Expired</a></li>
+                <li><a class="dropdown-item" href="{{ route('pelanggans.setToExpired', ['user_pppoe' => $model->user_pppoe]) }}">Set to Expired</a></li>
+            @endif
+
             @can('pelanggan delete')
                 <li>
                     <form action="{{ route('pelanggans.destroy', $model->id) }}" method="post" class="d-inline"
