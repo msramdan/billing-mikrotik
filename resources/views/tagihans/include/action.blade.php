@@ -111,8 +111,15 @@
         @endcan
         @can('tagihan delete')
             @can('tagihan edit')
-                <button disabled class="btn btn-outline-danger btn-sm" title="Hapus Tagihan"><i
-                        class="ace-icon fa fa-trash-alt"></i></button>
+            <form action="{{ route('tagihans.destroy', $model->id) }}" method="post" class="d-inline"
+                onsubmit="return confirm('Are you sure to delete this record?')">
+                @csrf
+                @method('delete')
+
+                <button class="btn btn-outline-danger btn-sm" title="Hapus Tagihan">
+                    <i class="ace-icon fa fa-trash-alt"></i>
+                </button>
+            </form>
             @endcan
         @endcan
     @else
