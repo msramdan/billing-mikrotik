@@ -38,7 +38,7 @@ class UpdatePelangganRequest extends FormRequest
 			'alamat' => 'required|string',
 			'password' => 'nullable|confirmed',
 			'ppn' => 'required|in:Yes,No',
-			'status_berlangganan' => 'required|in:Aktif,Non Aktif,Menunggu',
+			'status_berlangganan' => 'required|in:Aktif,Non Aktif,Menunggu,Tunggakan',
 			'paket_layanan' => 'required|exists:App\Models\Package,id',
 			'jatuh_tempo' => 'required|numeric',
 			'kirim_tagihan_wa' => 'required|in:Yes,No',
