@@ -84,7 +84,6 @@
                                 </div>
                             </div>
                             <hr>
-
                             <div class="table-responsive p-1">
                                 <table class="table table-striped" id="data-table" width="100%">
                                     <thead>
