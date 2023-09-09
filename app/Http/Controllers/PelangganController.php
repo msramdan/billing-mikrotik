@@ -310,66 +310,87 @@ class PelangganController extends Controller
         }
     }
 
-    public function setToExpired($user_pppoe)
+    public function setToExpired($pelanggan_id, $user_pppoe)
     {
-        $client = setRoute();
-        $queryGet = (new Query('/ppp/secret/print'))
-            ->where('name', $user_pppoe);
-        $data = $client->query($queryGet)->read();
-        $idSecret = $data[0]['.id'];
-        // set komen
-        $comment = 'Di set expired Tanggal : ' . date('Y-m-d H:i:s');
-        $queryComment = (new Query('/ppp/secret/set'))
-            ->equal('.id', $idSecret)
-            ->equal('profile', 'EXPIRED')
-            ->equal('comment', $comment);
-        $client->query($queryComment)->read();
-        // get name from active ppp
-        $queryGet = (new Query('/ppp/active/print'))
-            ->where('name', $user_pppoe);
-        $dataActive = $client->query($queryGet)->read();
-        // remove session
-        $idActive = $dataActive[0]['.id'];
-        $queryDelete = (new Query('/ppp/active/remove'))
-            ->equal('.id', $idActive);
-        $client->query($queryDelete)->read();
-        return redirect()
-            ->route('pelanggans.index')
-            ->with('success', __('Internet pelanggan berhasil di set Expired'));
+        try {
+            $client = setRoute();
+            $queryGet = (new Query('/ppp/secret/print'))
+                ->where('name', $user_pppoe);
+            $data = $client->query($queryGet)->read();
+            $idSecret = $data[0]['.id'];
+            // set komen
+            $comment = 'Di set expired Tanggal : ' . date('Y-m-d H:i:s');
+            $queryComment = (new Query('/ppp/secret/set'))
+                ->equal('.id', $idSecret)
+                ->equal('profile', 'EXPIRED')
+                ->equal('comment', $comment);
+            $client->query($queryComment)->read();
+            // get name from active ppp
+            $queryGet = (new Query('/ppp/active/print'))
+                ->where('name', $user_pppoe);
+            $dataActive = $client->query($queryGet)->read();
+            // remove session
+            $idActive = $dataActive[0]['.id'];
+            $queryDelete = (new Query('/ppp/active/remove'))
+                ->equal('.id', $idActive);
+            $client->query($queryDelete)->read();
+            // update status pelanggan jadi non aktif
+            $affected = DB::table('pelanggans')
+              ->where('id', $pelanggan_id)
+              ->update(['status_berlangganan' => 'Non Aktif']);
+
+            return redirect()
+                ->route('pelanggans.index')
+                ->with('success', __('Internet pelanggan berhasil di set Expired'));
+        } catch (ConnectException $e) {
+            echo $e->getMessage() . PHP_EOL;
+            die();
+        }
     }
 
-    public function setNonToExpired($pelanggan_id,$user_pppoe)
+    public function setNonToExpired($pelanggan_id, $user_pppoe)
     {
-        $client = setRoute();
-        $queryGet = (new Query('/ppp/secret/print'))
-            ->where('name', $user_pppoe);
-        $data = $client->query($queryGet)->read();
-        $idSecret = $data[0]['.id'];
-        // get paket asal
-        $pelanggan = DB::table('pelanggans')
-            ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
-            ->select(
-                'packages.profile',
-            )->where('pelanggans.id', $pelanggan_id)->first();
-        // balikan paket
-        $comment = 'Di set tidak expired Tanggal : ' . date('Y-m-d H:i:s');
-        $queryComment = (new Query('/ppp/secret/set'))
-            ->equal('.id', $idSecret)
-            ->equal('profile', $pelanggan->profile)
-            ->equal('comment', $comment);
-        $client->query($queryComment)->read();
-        // get name
-        $queryGet = (new Query('/ppp/active/print'))
-            ->where('name', $user_pppoe);
-        $data = $client->query($queryGet)->read();
-        // remove session
-        $idActive = $data[0]['.id'];
-        $queryDelete = (new Query('/ppp/active/remove'))
-            ->equal('.id', $idActive);
-        $client->query($queryDelete)->read();
-        return redirect()
-            ->route('pelanggans.index')
-            ->with('success', __('Internet pelanggan berhasil di set Tidak Expired'));
-    }
 
+        try {
+            $client = setRoute();
+            $queryGet = (new Query('/ppp/secret/print'))
+                ->where('name', $user_pppoe);
+            $data = $client->query($queryGet)->read();
+            $idSecret = $data[0]['.id'];
+            // get paket asal
+            $pelanggan = DB::table('pelanggans')
+                ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
+                ->select(
+                    'packages.profile',
+                )->where('pelanggans.id', $pelanggan_id)->first();
+            // balikan paket
+            $comment = 'Di set tidak expired Tanggal : ' . date('Y-m-d H:i:s');
+            $queryComment = (new Query('/ppp/secret/set'))
+                ->equal('.id', $idSecret)
+                ->equal('profile', $pelanggan->profile)
+                ->equal('comment', $comment);
+            $client->query($queryComment)->read();
+            // get name
+            $queryGet = (new Query('/ppp/active/print'))
+                ->where('name', $user_pppoe);
+            $data = $client->query($queryGet)->read();
+            // remove session
+            $idActive = $data[0]['.id'];
+            $queryDelete = (new Query('/ppp/active/remove'))
+                ->equal('.id', $idActive);
+            $client->query($queryDelete)->read();
+
+            // update status pelanggan jadi aktif
+            $affected = DB::table('pelanggans')
+              ->where('id', $pelanggan_id)
+              ->update(['status_berlangganan' => 'Aktif']);
+
+            return redirect()
+                ->route('pelanggans.index')
+                ->with('success', __('Internet pelanggan berhasil di set Tidak Expired'));
+        } catch (ConnectException $e) {
+            echo $e->getMessage() . PHP_EOL;
+            die();
+        }
+    }
 }

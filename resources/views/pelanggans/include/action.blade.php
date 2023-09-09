@@ -24,7 +24,10 @@
                             'user_pppoe' => $model->user_pppoe,
                         ]) }}">Set
                         to Non Expired</a></li>
-                <li><a class="dropdown-item" href="{{ route('pelanggans.setToExpired', ['user_pppoe' => $model->user_pppoe]) }}">Set to Expired</a></li>
+                <li><a class="dropdown-item" href="{{ route('pelanggans.setToExpired', [
+                    'id' => $model->id,
+                    'user_pppoe' => $model->user_pppoe,
+                ]) }}">Set to Expired</a></li>
             @endif
 
             @can('pelanggan delete')
