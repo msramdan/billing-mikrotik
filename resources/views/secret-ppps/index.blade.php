@@ -39,6 +39,7 @@
                                 <table class="table table-striped" id="data-table" width="100%">
                                     <thead>
                                         <tr>
+                                            <th>{{ __('ID') }}</th>
                                             <th>{{ __('Username') }}</th>
                                             <th>{{ __('Password') }}</th>
                                             <th>{{ __('Service') }}</th>
@@ -76,7 +77,12 @@
             processing: true,
             serverSide: true,
             ajax: "{{ route('secret-ppps.index') }}",
-            columns: [{
+            columns: [
+                {
+                    data: 'id',
+                    name: 'id',
+                },
+                {
                     data: 'name',
                     name: 'name',
                 },

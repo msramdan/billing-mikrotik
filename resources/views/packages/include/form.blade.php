@@ -48,6 +48,29 @@
             @enderror
         </div>
     </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="kategori-paket-id">{{ __('Profile') }}</label>
+            <select class="form-select @error('profile') is-invalid @enderror" name="profile"
+                id="profile" class="form-control" required>
+                <option value="" selected disabled>-- {{ __('Select package category') }} --</option>
+                @foreach ($profile as $row)
+                    <option value="{{ $row['name'] }}"
+                        {{ isset($package) && $package->profile == $row['name'] ? 'selected' : (old('profile') == $row['name'] ? 'selected' : '') }}>
+                        {{ $row['name']}}
+                    </option>
+                @endforeach
+            </select>
+            @error('profile')
+                <span class="text-danger">
+                    {{ $message }}
+                </span>
+            @enderror
+        </div>
+    </div>
+
+
     <div class="col-md-6">
         <div class="form-group">
             <label for="keterangan">{{ __('Keterangan') }}</label>

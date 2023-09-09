@@ -309,4 +309,62 @@ class PelangganController extends Controller
                 ->with('error', __("The pelanggan can't be deleted because it's related to another table."));
         }
     }
+
+    public function setToExpired($user_pppoe)
+    {
+        $client = setRoute();
+        $queryGet = (new Query('/ppp/secret/print'))
+            ->where('name', $user_pppoe);
+        $data = $client->query($queryGet)->read();
+        $idSecret = $data[0]['.id'];
+        // set komen
+        $comment = 'Di set expired Tanggal : ' . date('Y-m-d H:i:s');
+        $queryComment = (new Query('/ppp/secret/set'))
+            ->equal('.id', $idSecret)
+            ->equal('profile', 'EXPIRED')
+            ->equal('comment', $comment);
+        $client->query($queryComment)->read();
+        // get name from active ppp
+        $queryGet = (new Query('/ppp/active/print'))
+            ->where('name', $user_pppoe);
+        $dataActive = $client->query($queryGet)->read();
+        // remove session
+        $idActive = $dataActive[0]['.id'];
+        $queryDelete = (new Query('/ppp/active/remove'))
+            ->equal('.id', $idActive);
+        $client->query($queryDelete)->read();
+        return redirect()
+            ->route('pelanggans.index')
+            ->with('success', __('Internet pelanggan berhasil di set Expired'));
+    }
+
+    public function setNonToExpired($user_pppoe)
+    {
+        $client = setRoute();
+        // set komen
+        $queryGet = (new Query('/ppp/secret/print'))
+            ->where('name', $user_pppoe);
+        $data = $client->query($queryGet)->read();
+        $idSecret = $data[0]['.id'];
+        // balikan paket
+        $comment = 'Di set tidak expired Tanggal : ' . date('Y-m-d H:i:s');
+        $queryComment = (new Query('/ppp/secret/set'))
+            ->equal('.id', $idSecret)
+            ->equal('profile', 'EXPIRED')
+            ->equal('comment', $comment);
+        $client->query($queryComment)->read();
+        // get name
+        $queryGet = (new Query('/ppp/active/print'))
+            ->where('name', $user_pppoe);
+        $data = $client->query($queryGet)->read();
+        // remove session
+        $idActive = $data[0]['.id'];
+        $queryDelete = (new Query('/ppp/active/remove'))
+            ->equal('.id', $idActive);
+        $client->query($queryDelete)->read();
+        return redirect()
+            ->route('pelanggans.index')
+            ->with('success', __('Internet pelanggan berhasil di set Tidak Expired'));
+    }
+
 }
