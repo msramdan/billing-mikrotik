@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FormMikrotikController;
 use App\Http\Controllers\PanelCustomer\DashboardController as PanelCustomerDashboardController;
 use Illuminate\Support\Facades\Route;
+
 
 // Callback Payment Tripay
 
@@ -37,8 +39,16 @@ Route::middleware(['login-customer'])->group(function () {
     });
 });
 
-// PANEL ADMIN
+// FORM INPUT MIKROTIK
 Route::middleware(['auth', 'web'])->group(function () {
+    Route::controller(FormMikrotikController::class)->group(function () {
+        Route::get('/form', 'form')->name('form');
+        Route::post('/cekrouter', 'cekrouter')->name('api.cekrouter');
+    });
+});
+
+// PANEL ADMIN
+Route::middleware(['auth', 'web','nomikrotik'])->group(function () {
     Route::get('/profile', App\Http\Controllers\ProfileController::class)->name('profile');
     Route::resource('users', App\Http\Controllers\UserController::class);
     Route::resource('roles', App\Http\Controllers\RoleAndPermissionController::class);
@@ -113,10 +123,5 @@ Route::middleware(['auth', 'web'])->group(function () {
     Route::controller(App\Http\Controllers\SendnotifController::class)->group(function () {
         Route::post('/kirim_pesan', 'kirim_pesan')->name('kirim_pesan');
     });
-
+    Route::resource('features', App\Http\Controllers\FeatureController::class);
 });
-
-
-
-
-Route::resource('features', App\Http\Controllers\FeatureController::class)->middleware('auth');
