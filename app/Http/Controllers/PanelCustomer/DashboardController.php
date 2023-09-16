@@ -134,7 +134,7 @@ class DashboardController extends Controller
             'customer_phone' => $tagihans->no_wa,
             'order_items'    => [
                 [
-                    'sku'         => 'Internet SawitSkyLink',
+                    'sku'         => 'Internet ' .getCompany()->nama_perusahaan,
                     'name'        => 'Pembayaran Internet',
                     'price'       => $tagihans->total_bayar,
                     'quantity'    => 1,

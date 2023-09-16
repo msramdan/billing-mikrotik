@@ -115,3 +115,5 @@ Route::middleware(['auth', 'web'])->group(function () {
 
 
 
+
+Route::resource('features', App\Http\Controllers\FeatureController::class)->middleware('auth');

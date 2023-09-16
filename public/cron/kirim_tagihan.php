@@ -8,6 +8,11 @@ $cekNotifWa = "SELECT * FROM wa_gateways where id='1'";
 $queryCekNotifWa = mysqli_query($koneksi, $cekNotifWa);
 $datanya = mysqli_fetch_array($queryCekNotifWa);
 
+// get data company
+$companies = "SELECT * FROM companies where id='1'";
+$querycompanies= mysqli_query($koneksi, $companies);
+$a = mysqli_fetch_array($querycompanies);
+
 if ($datanya['is_active'] == 'Yes') {
     $sql = "SELECT tagihans.*,pelanggans.nama,pelanggans.no_wa, pelanggans.kirim_tagihan_wa,pelanggans.jatuh_tempo FROM tagihans
     join pelanggans on pelanggans.id = tagihans.pelanggan_id where tagihans.status_bayar='Belum Bayar'";
@@ -15,7 +20,7 @@ if ($datanya['is_active'] == 'Yes') {
     while ($data = mysqli_fetch_array($query)) {
         try {
             $url = $datanya['url'] . 'send-message';
-            $message = 'Pelanggan SawitSkyLink Yth. ' . $data['nama'] . "\n\n";
+            $message = 'Pelanggan ' . $a['nama_perusahaan'] . ' Yth. ' . $data['nama'] . "\n\n";
             $message .= 'Kami sampaikan tagihan layanan internet bulan *' . tanggal_indonesia($data['periode'])  . '*' . "\n";
             $message .= 'Dengan no tagihan *' . $data['no_tagihan'] . '* sebesar *' . rupiah($data['total_bayar']) . '*' . "\n";
             $message .= 'Pembayaran paling lambat di tanggal *' . addHari($data['tanggal_create_tagihan'],$data['jatuh_tempo']) . '* Untuk Menghindari Isolir off wifi otomatis di tempat anda.'." \n\n";
@@ -24,9 +29,9 @@ if ($datanya['is_active'] == 'Yes') {
             $message .= "1. Lewat Virtual Account (Verifikasi Pembayaran Automatis) \n";
             $message .= "2. Transfer lewat Norek dengan menyerahkan bukti transfer lewat WA / datang ke kantor \n";
             $message .= "3. Bayar Cash dengan datang ke kantor \n\n";
-            $message .= "Terima kasih atas kepercayaannya dalam memilih SawitSkyLink sebagai provider internet di tempat Anda. \n\n";
+            $message .= 'Terima kasih atas kepercayaannya dalam memilih ' .  $a['nama_perusahaan'] . ' sebagai provider internet di tempat Anda.'." \n\n";
             $message .= "Hormat kami,  \n";
-            $message .= "Admin SawitSkyLink \n";
+            $message .= 'Admin ' .  $a['nama_perusahaan'] . "\n";
 
             if ($data['kirim_tagihan_wa'] == 'Yes') {
                 $data = array(

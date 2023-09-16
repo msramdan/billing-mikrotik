@@ -365,7 +365,8 @@ return [
             'wa gateway view',
             'privacy policy view',
             'payment tripay view',
-            'sendnotif view'
+            'sendnotif view',
+            'feature view'
         ],
         'menus' => [
             [
@@ -380,7 +381,8 @@ return [
                     'wa gateway view',
                     'privacy policy view',
                     'payment tripay view',
-                    'sendnotif view'
+                    'sendnotif view',
+                    'feature view'
                 ],
                 'submenus' => [
                     [
@@ -392,6 +394,11 @@ return [
                         'title' => 'Privacy Policies',
                         'route' => '/privacy-policies',
                         'permission' => 'privacy policy view'
+                    ],
+                    [
+                        'title' => 'Features',
+                        'route' => '/features',
+                        'permission' => 'feature view'
                     ],
                     [
                         'title' => 'Bank Accounts',
@@ -418,6 +425,7 @@ return [
                         'route' => '/sendnotifs',
                         'permission' => 'sendnotif view'
                     ]
+
                 ]
             ]
         ]

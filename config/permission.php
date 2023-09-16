@@ -210,5 +210,6 @@ return [
         ['group' => 'tagihans', 'access' => ['tagihan view', 'tagihan create', 'tagihan edit', 'tagihan delete']],
         ['group' => 'laporans', 'access' => ['laporan view']],
         ['group' => 'sendnotifs', 'access' => ['sendnotif view']],
+        ['group' => 'features', 'access' => ['feature view', 'feature create', 'feature edit', 'feature delete']],
     ],
 ];

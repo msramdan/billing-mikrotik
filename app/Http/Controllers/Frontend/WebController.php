@@ -12,14 +12,26 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Pelanggan;
 use App\Models\WaGateway;
 use App\Models\Company;
-use App\Models\AreaCoverage;
 use Image;
+use App\Models\Feature;
 
 class WebController extends Controller
 {
     public function index()
     {
-        return view('frontend.index');
+        $packages = DB::table('packages')
+            ->where('is_active', 'Yes')
+            ->orderBy('harga', 'asc')
+            ->get();
+        $packages = DB::table('packages')
+            ->where('is_active', 'Yes')
+            ->orderBy('harga', 'asc')
+            ->get();
+        $features = Feature::all();
+        return view('frontend.index', [
+            'packages' => $packages,
+            'features' => $features
+        ]);
     }
 
     public function loginClient()
@@ -44,7 +56,7 @@ class WebController extends Controller
         $password = $request->password;
         $data = Pelanggan::where('email', $email)->first();
         if ($data) {
-            if($data->status_berlangganan !='Menunggu'){
+            if ($data->status_berlangganan != 'Menunggu') {
                 if (Hash::check($password, $data->password)) {
                     Session::put('id-customer', $data->id);
                     Session::put('login-customer', TRUE);
@@ -54,11 +66,10 @@ class WebController extends Controller
                     Alert::error('Failed', 'Password anda salah!');
                     return redirect()->back()->withInput($request->all())->withErrors($validator);
                 }
-            }else{
+            } else {
                 Alert::error('Failed', 'Akun sedang di verifikasi / non aktif silahkan hubungi admin');
                 return redirect()->back()->withInput($request->all())->withErrors($validator);
             }
-
         } else {
             Alert::error('Failed', 'Email tidak terdaftar!');
             return redirect()->back()->withInput($request->all())->withErrors($validator);
@@ -131,8 +142,8 @@ class WebController extends Controller
             if ($customer) {
                 $waGateway = WaGateway::findOrFail(1)->first();
                 $company = Company::findOrFail(1)->first();
-                if($waGateway->is_active=='Yes'){
-                    sendNotifWa($waGateway->url, $waGateway->api_key,$request,'daftar',$company->no_wa);
+                if ($waGateway->is_active == 'Yes') {
+                    sendNotifWa($waGateway->url, $waGateway->api_key, $request, 'daftar', $company->no_wa);
                 }
             }
         } catch (\Exception $e) {
@@ -151,8 +162,8 @@ class WebController extends Controller
     public function areaCoverage()
     {
         $areaCoverages = DB::table('area_coverages')->get();
-        return view('frontend.coverage',[
-            'areaCoverages' =>$areaCoverages
+        return view('frontend.coverage', [
+            'areaCoverages' => $areaCoverages
         ]);
     }
 

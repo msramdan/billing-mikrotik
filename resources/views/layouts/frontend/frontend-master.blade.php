@@ -73,7 +73,7 @@
                 <div class="container">
                     <nav class="navbar navbar-expand-md navbar-light">
                         <a class="navbar-brand" href="/">
-                            <h1><b style="color: #FA8185">Sawit</b><b>SkyLink</b></h1>
+                            <h1><b style="color: #FA8185">{{ getCompany()->nama_perusahaan }}</b></h1>
                         </a>
 
                         <div class="collapse navbar-collapse mean-menu" id="navbarSupportedContent">

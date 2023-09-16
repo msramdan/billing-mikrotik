@@ -77,6 +77,13 @@ function rupiah($angka)
     return $hasil_rupiah;
 }
 
+function rupiah2($angka)
+{
+
+    $a = number_format($angka, 0, ',', '.');
+    return $a;
+}
+
 function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima)
 {
 
