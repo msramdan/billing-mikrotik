@@ -29,7 +29,7 @@ return new class extends Migration
 			$table->text('alamat');
 			$table->string('password');
 			$table->enum('ppn', ['Yes', 'No'])->nullable();
-			$table->enum('status_berlangganan', ['Aktif', 'Non Aktif', 'Menungu']);
+			$table->enum('status_berlangganan', ['Aktif', 'Non Aktif', 'Menunggu','Tunggakan']);
 			$table->foreignId('paket_layanan')->nullable()->constrained('packages')->cascadeOnUpdate()->nullOnDelete();
 			$table->integer('jatuh_tempo')->nullable();
 			$table->enum('kirim_tagihan_wa', ['Yes', 'No'])->nullable();

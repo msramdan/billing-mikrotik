@@ -21,7 +21,7 @@ class Package extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['nama_layanan', 'harga', 'kategori_paket_id', 'keterangan', 'is_active'];
+    protected $fillable = ['nama_layanan', 'harga', 'kategori_paket_id', 'keterangan', 'is_active','profile'];
 
     /**
      * The attributes that should be cast.

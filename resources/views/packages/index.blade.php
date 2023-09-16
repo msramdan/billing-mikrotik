@@ -42,6 +42,7 @@
                                             <th>{{ __('Nama Layanan') }}</th>
 											<th>{{ __('Harga') }}</th>
 											<th>{{ __('Package Category') }}</th>
+                                            <th>{{ __('Profile') }}</th>
 											<th>{{ __('Keterangan') }}</th>
 											<th>{{ __('Is Active') }}</th>
                                             <th>{{ __('Created At') }}</th>
@@ -84,6 +85,10 @@
 				{
                     data: 'package_category',
                     name: 'package_category.nama_kategori'
+                },
+                {
+                    data: 'profile',
+                    name: 'profile',
                 },
 				{
                     data: 'keterangan',

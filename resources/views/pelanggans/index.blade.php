@@ -57,7 +57,8 @@
                                                 </option>
                                                 <option value="Aktif">Aktif</option>
                                                 <option value="Non Aktif">Non Aktif</option>
-                                                <option value="Menungu">Menungu</option>
+                                                <option value="Menunggu">Menunggu</option>
+                                                <option value="Tunggakan">Tunggakan</option>
                                             </select>
                                         </div>
                                         <div class="col-md-3">
@@ -83,7 +84,6 @@
                                 </div>
                             </div>
                             <hr>
-
                             <div class="table-responsive p-1">
                                 <table class="table table-striped" id="data-table" width="100%">
                                     <thead>

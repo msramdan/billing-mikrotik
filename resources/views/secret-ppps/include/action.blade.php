@@ -1,58 +1,47 @@
 <td>
-    @can('secret ppp enable')
-        <form action="{{ route('secret-ppps.enable', $model['.id']) }}" method="post" class="d-inline"
-            onsubmit="return confirm('Are you sure to enable this secret ?')">
-            @csrf
-            @method('PUT')
-            <button class="btn btn-outline-success btn-sm" title="Enable">
-                <i class="ace-icon fa fa-check"></i>
-            </button>
-        </form>
-    @endcan
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fa-solid fa-gear"></i>
+        </button>
+        <ul class="dropdown-menu">
+            @can('secret ppp enable')
+                <li>
+                    <form action="{{ route('secret-ppps.enable', $model['.id']) }}" method="post" class="d-inline"
+                        onsubmit="return confirm('Are you sure to enable this secret ?')">
+                        @csrf
+                        @method('PUT')
+                        <button class="dropdown-item" title="Enable">
+                            Enable PPP
+                        </button>
+                    </form>
+                </li>
+            @endcan
+            @can('secret ppp disable')
+                <li>
+                    <form action="{{ route('secret-ppps.disable', ['id' => $model['.id'], 'name' => $model['name']]) }}"
+                        method="post" class="d-inline" onsubmit="return confirm('Are you sure to disable this secret ?')">
+                        @csrf
+                        @method('PUT')
+                        <button class="dropdown-item" title="Disable">
+                            Disable PPP
+                        </button>
+                    </form>
+                </li>
+            @endcan
+            @can('secret ppp delete')
+                <li>
+                    <form
+                        action="{{ route('secret-ppps.deleteSecret', ['id' => $model['.id'], 'name' => $model['name']]) }}"
+                        method="post" class="d-inline" onsubmit="return confirm('Are you sure to delete this secret ?')">
+                        @csrf
+                        @method('delete')
 
-    @can('secret ppp disable')
-        <form action="{{ route('secret-ppps.disable',  ['id' => $model['.id'], 'name' => $model['name']] ) }}" method="post" class="d-inline"
-            onsubmit="return confirm('Are you sure to disable this secret ?')">
-            @csrf
-            @method('PUT')
-            <button class="btn btn-outline-warning btn-sm" title="Disable">
-                <i class="ace-icon fa fa-times"></i>
-            </button>
-        </form>
-    @endcan
-
-    @can('secret ppp delete')
-        <form action="{{ route('secret-ppps.deleteSecret', ['id' => $model['.id'], 'name' => $model['name']]) }}" method="post" class="d-inline"
-            onsubmit="return confirm('Are you sure to delete this secret ?')">
-            @csrf
-            @method('delete')
-
-            <button class="btn btn-outline-danger btn-sm" title="Delete">
-                <i class="ace-icon fa fa-trash-alt"></i>
-            </button>
-        </form>
-    @endcan
+                        <button class="dropdown-item" title="Delete">
+                            Delete
+                        </button>
+                    </form>
+                </li>
+            @endcan
+        </ul>
+    </div>
 </td>
-
-@push('js')
-    <script>
-        function validateForm() {
-            event.preventDefault(); // prevent form submit
-            var form = document.forms["myForm"]; // storing the form
-            swal({
-                    title: "Are you sure?",
-                    text: "Once deleted, you will not be able to recover this imaginary file!",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        form.submit();
-                    } else {
-                        swal("Your imaginary file is safe!");
-                    }
-                });
-        }
-    </script>
-@endpush

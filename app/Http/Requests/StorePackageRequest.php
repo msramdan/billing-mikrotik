@@ -28,6 +28,7 @@ class StorePackageRequest extends FormRequest
 			'harga' => 'required|numeric',
 			'kategori_paket_id' => 'required|exists:App\Models\PackageCategory,id',
 			'keterangan' => 'required|string',
+            'profile' => 'required|string',
 			'is_active' => 'required|in:Yes,No',
         ];
     }

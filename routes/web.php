@@ -88,6 +88,11 @@ Route::middleware(['auth', 'web'])->group(function () {
     Route::resource('odcs', App\Http\Controllers\OdcController::class);
     Route::resource('odps', App\Http\Controllers\OdpController::class);
     Route::resource('pelanggans', App\Http\Controllers\PelangganController::class);
+    Route::controller(App\Http\Controllers\PelangganController::class)->group(function () {
+        Route::get('setToExpired/{id}/{user_pppoe}', 'setToExpired')->name('pelanggans.setToExpired');
+        Route::get('setNonToExpired/{id}/{user_pppoe}', 'setNonToExpired')->name('pelanggans.setNonToExpired');
+    });
+
     Route::get('apiodc/{id}', [App\Http\Controllers\OdcController::class, 'odc'])->name('api.odc');
     Route::get('apiodp/{id}', [App\Http\Controllers\OdpController::class, 'odp'])->name('api.odp');
     Route::get('getPort/{id}', [App\Http\Controllers\OdpController::class, 'getPort'])->name('api.getPort');

@@ -19,6 +19,7 @@ return new class extends Migration
 			$table->integer('harga');
 			$table->foreignId('kategori_paket_id')->nullable()->constrained('package_categories')->restrictOnUpdate()->nullOnDelete();
 			$table->text('keterangan');
+            $table->string('profile', 255);
 			$table->enum('is_active', ['Yes', 'No']);
             $table->timestamps();
         });
