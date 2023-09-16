@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('nominal');
 			$table->dateTime('tanggal');
 			$table->text('keterangan');
+            $table->foreignId('referense_id')->nullable()->constrained('tagihans')->restrictOnUpdate()->cascadeOnDelete();
             $table->timestamps();
         });
     }

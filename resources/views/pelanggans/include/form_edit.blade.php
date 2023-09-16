@@ -24,7 +24,7 @@
         <div class="form-group">
             <label for="odc">{{ __('Odc') }}</label>
             <select class="form-select js-example-basic-single @error('odc') is-invalid @enderror" name="odc"
-                id="odc" class="form-control" required>
+                id="odc" class="form-control" >
                 <option value="" selected disabled>-- {{ __('Select odc') }} --</option>
 
                 @foreach ($dataOdcs as $odc)
@@ -45,7 +45,7 @@
         <div class="form-group">
             <label for="odp">{{ __('Odp') }}</label>
             <select class="form-select  js-example-basic-single @error('odp') is-invalid @enderror" name="odp"
-                id="odp" class="form-control" required>
+                id="odp" class="form-control" >
                 <option value="" selected disabled>-- {{ __('Select odp') }} --</option>
 
                 @foreach ($dataodps as $odp)

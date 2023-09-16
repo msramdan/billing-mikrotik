@@ -266,6 +266,7 @@ class TagihanController extends Controller
             'nominal' => $request->nominal,
             'tanggal' => $tgl,
             'keterangan' => 'Pembayaran Tagihan no Tagihan ' . $request->no_tagihan . ' a/n ' . $request->nama_pelanggan . ' Periode ' . $request->periode_waktu,
+            'referense_id' => $request->tagihan_id,
             'created_at' => $tgl,
             'updated_at' => $tgl,
         ]);

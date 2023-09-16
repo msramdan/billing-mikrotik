@@ -17,6 +17,7 @@ class PacageSeeder extends Seeder
             'nama_layanan' => 'Gofiber5Mbps',
             'harga' => 165000,
             'kategori_paket_id' => 1,
+            'profile' => 'test',
             'keterangan' => '-',
             'is_active' => 'Yes',
             'created_at' => date('Y-m-d H:i:s'),

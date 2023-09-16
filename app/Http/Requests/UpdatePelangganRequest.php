@@ -25,9 +25,9 @@ class UpdatePelangganRequest extends FormRequest
     {
         return [
             'coverage_area' => 'required|exists:App\Models\AreaCoverage,id',
-			'odc' => 'required|exists:App\Models\Odc,id',
-			'odp' => 'required|exists:App\Models\Odp,id',
-			'no_port_odp' => 'required',
+			'odc' => 'nullable|exists:App\Models\Odc,id',
+			'odp' => 'nullable|exists:App\Models\Odp,id',
+			'no_port_odp' => 'nullable',
 			'no_layanan' => 'required|string|max:12',
 			'nama' => 'required|string|max:255',
 			'tanggal_daftar' => 'required|date',
