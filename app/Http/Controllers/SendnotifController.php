@@ -24,25 +24,65 @@ class SendnotifController extends Controller
 
     public function kirim_pesan(Request $request)
     {
-        $odp = $request->odp;
-        $pelanggan = Pelanggan::where('odp', $odp)
-            ->where('status_berlangganan', 'Aktif')
-            ->get();
-        $waGateway = WaGateway::findOrFail(1)->first();
-        foreach ($pelanggan as $value) {
-            $endpoint_wa = $waGateway->url . 'send-message';
-            $response = Http::post($endpoint_wa, [
-                'api_key' => $waGateway->api_key,
-                'receiver' => strval($value->no_wa),
-                'data' => [
-                    "message" => $request->pesan,
-                ]
-            ]);
-            \Log::info($response);
+        if ($request->odp != null) {
+            $odp = $request->odp;
+            $pelanggan = Pelanggan::where('odp', $odp)
+                ->where('status_berlangganan', 'Aktif')
+                ->get();
+            $waGateway = WaGateway::findOrFail(1)->first();
+            foreach ($pelanggan as $value) {
+                $endpoint_wa = $waGateway->url . 'send-message';
+                $response = Http::post($endpoint_wa, [
+                    'api_key' => $waGateway->api_key,
+                    'receiver' => strval($value->no_wa),
+                    'data' => [
+                        "message" => $request->pesan,
+                    ]
+                ]);
+                \Log::info($response);
+            }
+        } else {
+            // odc
+            if ($request->odc != null) {
+                $odc = $request->odc;
+                $pelanggan = Pelanggan::where('odc', $odc)
+                    ->where('status_berlangganan', 'Aktif')
+                    ->get();
+                $waGateway = WaGateway::findOrFail(1)->first();
+                foreach ($pelanggan as $value) {
+                    $endpoint_wa = $waGateway->url . 'send-message';
+                    $response = Http::post($endpoint_wa, [
+                        'api_key' => $waGateway->api_key,
+                        'receiver' => strval($value->no_wa),
+                        'data' => [
+                            "message" => $request->pesan,
+                        ]
+                    ]);
+                    \Log::info($response);
+                }
+            } else {
+                // area
+                $coverage_area = $request->coverage_area;
+                $pelanggan = Pelanggan::where('coverage_area', $coverage_area)
+                    ->where('status_berlangganan', 'Aktif')
+                    ->get();
+                $waGateway = WaGateway::findOrFail(1)->first();
+                foreach ($pelanggan as $value) {
+                    $endpoint_wa = $waGateway->url . 'send-message';
+                    $response = Http::post($endpoint_wa, [
+                        'api_key' => $waGateway->api_key,
+                        'receiver' => strval($value->no_wa),
+                        'data' => [
+                            "message" => $request->pesan,
+                        ]
+                    ]);
+                    \Log::info($response);
+                }
+            }
         }
+
         return redirect()
             ->route('sendnotifs.index')
             ->with('success', __('Kirim pemberitahuan WA berhasil'));
     }
-
 }

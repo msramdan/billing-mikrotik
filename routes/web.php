@@ -91,6 +91,9 @@ Route::middleware(['auth', 'web'])->group(function () {
     Route::controller(App\Http\Controllers\PelangganController::class)->group(function () {
         Route::get('setToExpired/{id}/{user_pppoe}', 'setToExpired')->name('pelanggans.setToExpired');
         Route::get('setNonToExpired/{id}/{user_pppoe}', 'setNonToExpired')->name('pelanggans.setNonToExpired');
+        Route::get('getTableArea/{id}', 'getTableArea')->name('api.getTableArea');
+        Route::get('getTableOdc/{id}', 'getTableOdc')->name('api.getTableOdc');
+        Route::get('getTableOdp/{id}', 'getTableOdp')->name('api.getTableOdp');
     });
 
     Route::get('apiodc/{id}', [App\Http\Controllers\OdcController::class, 'odc'])->name('api.odc');

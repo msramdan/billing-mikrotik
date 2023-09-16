@@ -29,20 +29,15 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-body">
-                            <div class="alert alert-info" role="alert">
-                                Semua pelanggan aktif yang terkonek dengan ODP terpilih akan mendapatkan notifikasi WA.
-                              </div>
-
-                            <form action="{{route('kirim_pesan')}}" method="POST">
+                            <form action="{{ route('kirim_pesan') }}" method="POST">
                                 @csrf
                                 @method('POST')
                                 <div class="row mb-2">
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="coverage-area">{{ __('Area Coverage') }}</label>
-                                            <select
-                                                class="form-select js-example-basic-single"
-                                                name="coverage_area" id="coverage-area" class="form-control" required>
+                                            <select class="form-select js-example-basic-single" name="coverage_area"
+                                                id="coverage-area" class="form-control" required>
                                                 <option value="" selected disabled>-- {{ __('Select area coverage') }}
                                                     --</option>
 
@@ -58,9 +53,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="odc">{{ __('Odc') }}</label>
-                                            <select
-                                                class="form-select "
-                                                name="odc" id="odc" class="form-control" required>
+                                            <select class="form-select " name="odc" id="odc" class="form-control">
                                                 <option value="" selected disabled>-- {{ __('Select') }} --</option>
                                             </select>
                                         </div>
@@ -68,9 +61,8 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="odp">{{ __('Odp') }}</label>
-                                            <select
-                                                class="form-select  @error('odp') is-invalid @enderror"
-                                                name="odp" id="odp" class="form-control" required>
+                                            <select class="form-select  @error('odp') is-invalid @enderror" name="odp"
+                                                id="odp" class="form-control">
                                                 <option value="" selected disabled>-- {{ __('Select') }} --</option>
                                             </select>
                                         </div>
@@ -78,7 +70,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="Pesan WA">{{ __('Pesan WA') }}</label>
-                                            <textarea name="pesan" id="pesan" rows="5" class="form-control"  required></textarea>
+                                            <textarea name="pesan" id="pesan" rows="5" class="form-control" required></textarea>
                                             @error('Pesan WA')
                                                 <span class="text-danger">
                                                     {{ $message }}
@@ -90,8 +82,25 @@
                                 <button type="submit" class="btn btn-primary">{{ __('Kirim') }}</button>
                         </div>
                     </div>
-
                     </form>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="alert alert-info" role="alert">
+                                LIST DAFTAR PELANGGAN YANG AKAN DI KIRIM PESAN
+                            </div>
+                            <table class="table table-bordered" id="data-table">
+                                <thead>
+                                    <th style="width: 8%">#</th>
+                                    <th style="width: 46%">Nama</th>
+                                    <th style="width: 46%">No Wa</th>
+                                </thead>
+                                <tbody class="tbody" id="tbodyid">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
     </div>
@@ -99,36 +108,39 @@
     </section>
     </div>
 @endsection
+@push('css')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.12.0/datatables.min.css" />
+@endpush
+
 
 @push('js')
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.12.0/datatables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#data-table').DataTable({
+                "paging": true,
+                "ordering": false,
+                "info": false
+            });
+        });
+    </script>
+
     <script>
         const options_temp = '<option value="" selected disabled>-- Select --</option>';
         $('#coverage-area').change(function() {
-            $('#odc, #odp, #no_port_odp').html(options_temp);
+            $('#odc, #odp').html(options_temp);
             if ($(this).val() != "") {
                 getOdc($(this).val());
             }
         })
 
         $('#odc').change(function() {
-            $('#odp, #no_port_odp').html(options_temp);
+            $('#odp').html(options_temp);
             if ($(this).val() != "") {
                 getOdp($(this).val());
-            }
-        })
-
-
-        $('#odp').change(function() {
-            $('#no_port_odp').html(options_temp);
-            if ($(this).val() != "") {
-                getPort($(this).val());
-            }
-        })
-
-        $('#router').change(function() {
-            $('#user_pppoe').html(options_temp);
-            if ($(this).val() != "") {
-                getProfile($(this).val());
             }
         })
 
@@ -178,5 +190,83 @@
                 }
             })
         }
+    </script>
+
+    <script>
+        $('#coverage-area').change(function() {
+            if ($(this).val() != "") {
+                let url = '{{ route('api.getTableArea', ':id') }}';
+                url = url.replace(':id', $(this).val())
+                $.ajax({
+                    url,
+                    method: 'GET',
+                    success: function(res) {
+                        var tableSearch = $('#table-search');
+                        var result = res.data;
+                        $("#tbodyid").empty();
+                        $.each(result, function(index, value) {
+                            var oneIndexed = index + 1
+                            $('tbody').append(
+                                '<tr><td>' + oneIndexed + '</td><td>' + value.nama +
+                                '</td><td>' +
+                                value.no_wa + '</td></tr>');
+                        });
+                    },
+                })
+            }
+
+        })
+    </script>
+
+    <script>
+        $('#odc').change(function() {
+            if ($(this).val() != "") {
+                let url = '{{ route('api.getTableOdc', ':id') }}';
+                url = url.replace(':id', $(this).val())
+                $.ajax({
+                    url,
+                    method: 'GET',
+                    success: function(res) {
+                        var tableSearch = $('#table-search');
+                        var result = res.data;
+                        $("#tbodyid").empty();
+                        $.each(result, function(index, value) {
+                            var oneIndexed = index + 1
+                            $('tbody').append(
+                                '<tr><td>' + oneIndexed + '</td><td>' + value.nama +
+                                '</td><td>' +
+                                value.no_wa + '</td></tr>');
+                        });
+                    },
+                })
+            }
+
+        })
+    </script>
+
+    <script>
+        $('#odp').change(function() {
+            if ($(this).val() != "") {
+                let url = '{{ route('api.getTableOdp', ':id') }}';
+                url = url.replace(':id', $(this).val())
+                $.ajax({
+                    url,
+                    method: 'GET',
+                    success: function(res) {
+                        var tableSearch = $('#table-search');
+                        var result = res.data;
+                        $("#tbodyid").empty();
+                        $.each(result, function(index, value) {
+                            var oneIndexed = index + 1
+                            $('tbody').append(
+                                '<tr><td>' + oneIndexed + '</td><td>' + value.nama +
+                                '</td><td>' +
+                                value.no_wa + '</td></tr>');
+                        });
+                    },
+                })
+            }
+
+        })
     </script>
 @endpush
