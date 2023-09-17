@@ -263,6 +263,10 @@
                                         username: data.data.user,
                                         password: data.data.pass
                                     },
+                                    beforeSend: function() {
+                                        $('#loader').removeClass('display-none')
+                                    },
+
                                     success: function(data) {
                                         if (data.success == true) {
                                             Swal.fire(
@@ -279,6 +283,10 @@
                                             );
                                             location.reload('/');
                                         }
+
+                                    },
+                                    complete: function() {
+                                        $('#loader').addClass('display-none')
                                     },
                                 });
                             });

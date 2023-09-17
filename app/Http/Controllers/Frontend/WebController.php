@@ -87,10 +87,23 @@ class WebController extends Controller
 
     public function registerClient()
     {
-        $paket = DB::table('packages')->where('is_active', 'Yes')->get();
-        return view('frontend.register', [
-            'paket' => $paket
-        ]);
+        if (getCompany()->jumlah_pelanggan == 0) {
+            $paket = DB::table('packages')->where('is_active', 'Yes')->get();
+            return view('frontend.register', [
+                'paket' => $paket
+            ]);
+        } else {
+            if (hitungPelanggan() >= getCompany()->jumlah_pelanggan) {
+                Alert::error('Limit Router', 'Akun terkena limit pelanggan silahkan hubungi admin aplikasi');
+                return redirect()
+                    ->route('website');
+            } else {
+                $paket = DB::table('packages')->where('is_active', 'Yes')->get();
+                return view('frontend.register', [
+                    'paket' => $paket
+                ]);
+            }
+        }
     }
 
     public function submitRegister(Request $request,)
@@ -145,7 +158,7 @@ class WebController extends Controller
                 $waGateway = WaGateway::findOrFail(1)->first();
                 $company = Company::findOrFail(1)->first();
                 if ($waGateway->is_active == 'Yes') {
-                    sendNotifWa($waGateway->url, $waGateway->api_key, $request, 'daftar', $company->no_wa,'');
+                    sendNotifWa($waGateway->url, $waGateway->api_key, $request, 'daftar', $company->no_wa, '');
                 }
             }
         } catch (\Exception $e) {

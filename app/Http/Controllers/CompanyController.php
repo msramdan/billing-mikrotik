@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use App\Http\Requests\{StoreCompanyRequest, UpdateCompanyRequest};
 use Yajra\DataTables\Facades\DataTables;
+use App\Models\Settingmikrotik;
+use App\Models\Pelanggan;
 use Image;
 
 class CompanyController extends Controller

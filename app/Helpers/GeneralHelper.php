@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Http;
 use App\Models\Package;
 use App\Models\Pelanggan;
 use App\Models\Tagihan;
+use App\Models\Settingmikrotik;
 
 function formatBytes($bytes, $decimal = null)
 {
@@ -60,6 +61,17 @@ function getCompany()
         ->first();
     return $data;
 }
+
+function hitungRouter(){
+    $count = Settingmikrotik::count();
+    return $count;
+}
+
+function hitungPelanggan(){
+    $count = Pelanggan::count();
+    return $count;
+}
+
 
 function getTripay()
 {

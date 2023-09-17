@@ -317,30 +317,6 @@
 
 @section('content')
     <div class="page-content">
-        <div class="alert alert-info" role="alert">
-            @php
-                $info = getCompany();
-            @endphp
-            Anda terdaftar paket : {{ $info->nama_paket }}
-
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-3">Jumlah Router Mikrotik :  {{ $info->jumlah_router == 0 ? '-' : $info->jumlah_router  }} <br>
-                        <ul>
-                            <li>Terpakai : {{ $countRouter  }} </li>
-                            <li>Sisa : {{ $info->jumlah_router == 0 ? '-' : $info->jumlah_router - $countRouter  }} </li>
-                        </ul>
-                    </div>
-                    <div class="col-md-3">Jumlah Pelanggan : {{ $info->jumlah_pelanggan== 0 ? '-' : $info->jumlah_pelanggan  }}<br>
-                        <ul>
-                            <li>Terpakai :  {{ $countPelanggan  }} </li>
-                            <li>Sisa : {{ $info->jumlah_pelanggan== 0 ? '-' : $info->jumlah_pelanggan - $countPelanggan   }}</li>
-                        </ul>
-                    </div>
-                </div>
-
-            </div>
-        </div>
         <section class="row">
             <div class="col-xl-3 col-sm-6 box-col-3">
                 <div class="card radius-10 border-start border-0 border-3 border-primary">

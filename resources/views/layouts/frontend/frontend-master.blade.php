@@ -64,7 +64,7 @@
             <div class="bahama-mobile-nav">
                 <div class="logo">
                     <a href="/">
-                       <h1><b style="color: #FA8185">{{ getCompany()->nama_perusahaan }}</b></h1>
+                        <h1><b style="color: #FA8185">{{ getCompany()->nama_perusahaan }}</b></h1>
                     </a>
                 </div>
             </div>
@@ -115,6 +115,7 @@
     <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
         integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
         crossorigin=""></script>
+    @include('sweetalert::alert')
     @stack('js')
 </body>
 

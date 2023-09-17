@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use \RouterOS\Query;
 use \RouterOS\Client;
 use \RouterOS\Exceptions\ConnectException;
+use Alert;
 
 class PelangganController extends Controller
 {
@@ -120,7 +121,17 @@ class PelangganController extends Controller
      */
     public function create()
     {
-        return view('pelanggans.create');
+        if (getCompany()->jumlah_pelanggan == 0) {
+            return view('pelanggans.create');
+        } else {
+            if (hitungPelanggan() >= getCompany()->jumlah_pelanggan) {
+                Alert::error('Limit Router', 'Anda terkena limit pelanggan silahkan uprage paket');
+                return redirect()
+                    ->route('pelanggans.index');
+            } else {
+                return view('pelanggans.create');
+            }
+        }
     }
 
     /**
@@ -131,32 +142,33 @@ class PelangganController extends Controller
      */
     public function store(StorePelangganRequest $request)
     {
-        $attr = $request->validated();
+        if (hitungPelanggan() >= getCompany()->jumlah_pelanggan) {
+            Alert::error('Limit Router', 'Anda terkena limit pelanggan silahkan uprage paket');
+            return redirect()
+                ->route('pelanggans.index');
+        } else {
+            $attr = $request->validated();
+            $attr['password'] = bcrypt($request->password);
+            if ($request->file('photo_ktp') && $request->file('photo_ktp')->isValid()) {
 
-        $attr['password'] = bcrypt($request->password);
+                $path = storage_path('app/public/uploads/photo_ktps/');
+                $filename = $request->file('photo_ktp')->hashName();
 
-        if ($request->file('photo_ktp') && $request->file('photo_ktp')->isValid()) {
+                if (!file_exists($path)) {
+                    mkdir($path, 0777, true);
+                }
+                Image::make($request->file('photo_ktp')->getRealPath())->resize(500, 500, function ($constraint) {
+                    $constraint->upsize();
+                    $constraint->aspectRatio();
+                })->save($path . $filename);
 
-            $path = storage_path('app/public/uploads/photo_ktps/');
-            $filename = $request->file('photo_ktp')->hashName();
-
-            if (!file_exists($path)) {
-                mkdir($path, 0777, true);
+                $attr['photo_ktp'] = $filename;
             }
-
-            Image::make($request->file('photo_ktp')->getRealPath())->resize(500, 500, function ($constraint) {
-                $constraint->upsize();
-                $constraint->aspectRatio();
-            })->save($path . $filename);
-
-            $attr['photo_ktp'] = $filename;
+            Pelanggan::create($attr);
+            return redirect()
+                ->route('pelanggans.index')
+                ->with('success', __('The pelanggan was created successfully.'));
         }
-
-        Pelanggan::create($attr);
-
-        return redirect()
-            ->route('pelanggans.index')
-            ->with('success', __('The pelanggan was created successfully.'));
     }
 
     /**

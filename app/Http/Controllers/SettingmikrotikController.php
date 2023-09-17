@@ -7,6 +7,7 @@ use App\Http\Requests\{StoreSettingmikrotikRequest, UpdateSettingmikrotikRequest
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Alert;
 
 class SettingmikrotikController extends Controller
 {
@@ -35,8 +36,10 @@ class SettingmikrotikController extends Controller
                 ->rawColumns(['is_active', 'action'])
                 ->toJson();
         }
-
-        return view('settingmikrotiks.index');
+        $countRouter = Settingmikrotik::count();
+        return view('settingmikrotiks.index', [
+            'countRouter' => $countRouter
+        ]);
     }
 
     /**
@@ -46,7 +49,17 @@ class SettingmikrotikController extends Controller
      */
     public function create()
     {
-        return view('settingmikrotiks.create');
+        if (getCompany()->jumlah_router == 0) {
+            return view('settingmikrotiks.create');
+        } else {
+            if (hitungRouter() >= getCompany()->jumlah_router) {
+                Alert::error('Limit Router', 'Anda terkena limit router silahkan uprage paket');
+                return redirect()
+                    ->route('settingmikrotiks.index');
+            } else {
+                return view('settingmikrotiks.create');
+            }
+        }
     }
 
     /**
@@ -57,13 +70,30 @@ class SettingmikrotikController extends Controller
      */
     public function store(StoreSettingmikrotikRequest $request)
     {
-        $attr = $request->validated();
-        $attr['password'] = $request->password;
-        $attr['is_active'] = 'No';
-        Settingmikrotik::create($attr);
-        return redirect()
-            ->route('settingmikrotiks.index')
-            ->with('success', __('The settingmikrotik was created successfully.'));
+
+        if (getCompany()->jumlah_router == 0) {
+            $attr = $request->validated();
+            $attr['password'] = $request->password;
+            $attr['is_active'] = 'No';
+            Settingmikrotik::create($attr);
+            return redirect()
+                ->route('settingmikrotiks.index')
+                ->with('success', __('The settingmikrotik was created successfully.'));
+        } else {
+            if (hitungRouter() >= getCompany()->jumlah_router) {
+                Alert::error('Limit Router', 'Anda terkena limit router silahkan uprage paket');
+                return redirect()
+                    ->route('settingmikrotiks.index');
+            } else {
+                $attr = $request->validated();
+                $attr['password'] = $request->password;
+                $attr['is_active'] = 'No';
+                Settingmikrotik::create($attr);
+                return redirect()
+                    ->route('settingmikrotiks.index')
+                    ->with('success', __('The settingmikrotik was created successfully.'));
+            }
+        }
     }
 
     /**
