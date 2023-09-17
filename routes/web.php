@@ -40,10 +40,11 @@ Route::middleware(['login-customer'])->group(function () {
 });
 
 // FORM INPUT MIKROTIK
-Route::middleware(['auth', 'web'])->group(function () {
+Route::middleware(['auth', 'web','onmikrotik'])->group(function () {
     Route::controller(FormMikrotikController::class)->group(function () {
         Route::get('/form', 'form')->name('form');
         Route::post('/cekrouter', 'cekrouter')->name('api.cekrouter');
+        Route::post('/simpanrouter', 'simpanrouter')->name('api.simpanrouter');
     });
 });
 

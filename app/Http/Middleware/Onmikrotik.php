@@ -9,11 +9,15 @@ use Illuminate\Support\Facades\DB;
 use \RouterOS\Client;
 use \RouterOS\Exceptions\ConnectException;
 
-class Nomikrotik
+class Onmikrotik
 {
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     */
     public function handle(Request $request, Closure $next): Response
     {
-        // cek ada atw tinggal mikrotik aktive
         $router = DB::table('settingmikrotiks')->where('is_active', 'Yes')->first();
         if ($router) {
             try {
@@ -23,12 +27,12 @@ class Nomikrotik
                     'pass' => $router->password,
                     'port' => $router->port,
                 ]);
-                return $next($request);
+                return redirect('/dashboard');
             } catch (ConnectException $e) {
-                return redirect('form');
+                return $next($request);
             }
         } else {
-            return redirect('form');
+            return $next($request);
         }
     }
 }
