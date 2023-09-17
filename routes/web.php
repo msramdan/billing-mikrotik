@@ -22,6 +22,8 @@ Route::controller(App\Http\Controllers\Frontend\WebController::class)->group(fun
     Route::get('/speedTest', 'speedTest')->name('speedTest');
     Route::get('/cekTagihan', 'cekTagihan')->name('cekTagihan');
     Route::get('/areaCoverage', 'areaCoverage')->name('areaCoverage');
+    Route::get('/bayar/{tagihan_id}/{metode}', 'bayar')->name('bayar');
+    Route::get('/detailBayar/{id}', 'detailBayar')->name('detailBayar');
 });
 // PANEL CUSTOMER Need Session
 Route::middleware(['login-customer'])->group(function () {
