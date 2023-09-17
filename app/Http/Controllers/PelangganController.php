@@ -102,10 +102,14 @@ class PelangganController extends Controller
         $areaCoverages = AreaCoverage::all();
         $package = Package::all();
         $router = Settingmikrotik::all();
+        $x = DB::table('pelanggans')
+            ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
+            ->sum('packages.harga');
         return view('pelanggans.index', [
             'areaCoverages' => $areaCoverages,
             'package' => $package,
-            'router' => $router
+            'router' => $router,
+            'pendapatan' => $x
         ]);
     }
 
@@ -336,8 +340,8 @@ class PelangganController extends Controller
             $client->query($queryDelete)->read();
             // update status pelanggan jadi non aktif
             $affected = DB::table('pelanggans')
-              ->where('id', $pelanggan_id)
-              ->update(['status_berlangganan' => 'Non Aktif']);
+                ->where('id', $pelanggan_id)
+                ->update(['status_berlangganan' => 'Non Aktif']);
 
             return redirect()
                 ->route('pelanggans.index')
@@ -382,8 +386,8 @@ class PelangganController extends Controller
 
             // update status pelanggan jadi aktif
             $affected = DB::table('pelanggans')
-              ->where('id', $pelanggan_id)
-              ->update(['status_berlangganan' => 'Aktif']);
+                ->where('id', $pelanggan_id)
+                ->update(['status_berlangganan' => 'Aktif']);
 
             return redirect()
                 ->route('pelanggans.index')

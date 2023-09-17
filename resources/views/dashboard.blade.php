@@ -324,9 +324,8 @@
                         <div class="d-flex align-items-center">
                             <div>
                                 <p class="mb-0 text-secondary">Hotspot aktif</p>
-                                <h4 class="my-1 text-primary"><a href="#" class="" data-bs-toggle="modal"
-                                        data-bs-target="#modalBrancError">
-                                        {{ $hotspotactives }} Data </a>
+                                <h4 class="my-1 text-primary">
+                                    <a href="/hotspotactives" class=""> {{ $hotspotactives }} Data </a>
                                 </h4>
 
                             </div>
@@ -343,8 +342,7 @@
                         <div class="d-flex align-items-center">
                             <div>
                                 <p class="mb-0 text-secondary">Ppp aktif</p>
-                                <h4 class="my-1 text-primary"><a href="#" class="" data-bs-toggle="modal"
-                                        data-bs-target="#modalBrancError">
+                                <h4 class="my-1 text-primary"><a href="/active-ppps" class="">
                                         {{ $activePpps }} Data </a>
                                 </h4>
 
@@ -362,8 +360,7 @@
                         <div class="d-flex align-items-center">
                             <div>
                                 <p class="mb-0 text-secondary">Ppp tidak aktif</p>
-                                <h4 class="my-1 text-primary"><a href="#" class="" data-bs-toggle="modal"
-                                        data-bs-target="#modalBrancError">
+                                <h4 class="my-1 text-primary"><a href="#" class="">
                                         {{ $nonactivePpps }} Data </a>
                                 </h4>
 
@@ -381,8 +378,7 @@
                         <div class="d-flex align-items-center">
                             <div>
                                 <p class="mb-0 text-secondary">Area Coverage</p>
-                                <h4 class="my-1 text-primary"><a href="#" class="" data-bs-toggle="modal"
-                                        data-bs-target="#modalBrancError">
+                                <h4 class="my-1 text-primary"><a href="/area-coverages" class="">
                                         {{ $countAreaCoverage }} Data </a>
                                 </h4>
 
@@ -401,8 +397,7 @@
                         <div class="d-flex align-items-center">
                             <div>
                                 <p class="mb-0 text-secondary">Total Pelanggan</p>
-                                <h4 class="my-1 text-primary"><a href="#" class="" data-bs-toggle="modal"
-                                        data-bs-target="#modalBrancError">
+                                <h4 class="my-1 text-primary"><a href="/pelanggans" class="">
                                         {{ $countPelanggan }} Data </a>
                                 </h4>
 
@@ -420,8 +415,7 @@
                         <div class="d-flex align-items-center">
                             <div>
                                 <p class="mb-0 text-secondary">P. Aktif</p>
-                                <h4 class="my-1 text-primary"><a href="#" class="" data-bs-toggle="modal"
-                                        data-bs-target="#modalBrancError">
+                                <h4 class="my-1 text-primary"><a href="/pelanggans" class="">
                                         {{ $countPelangganAktif }} Data </a>
                                 </h4>
 
@@ -439,8 +433,7 @@
                         <div class="d-flex align-items-center">
                             <div>
                                 <p class="mb-0 text-secondary">P. Non Aktif</p>
-                                <h4 class="my-1 text-primary"><a href="#" class="" data-bs-toggle="modal"
-                                        data-bs-target="#modalBrancError">
+                                <h4 class="my-1 text-primary"><a href="/pelanggans" class="">
                                         {{ $countPelangganNon }} Data </a>
                                 </h4>
                             </div>
@@ -457,8 +450,7 @@
                         <div class="d-flex align-items-center">
                             <div>
                                 <p class="mb-0 text-secondary">P.Menunggu</p>
-                                <h4 class="my-1 text-primary"><a href="#" class="" data-bs-toggle="modal"
-                                        data-bs-target="#modalBrancError">
+                                <h4 class="my-1 text-primary"><a href="/pelanggans" class="">
                                         {{ $countPelangganMenunggu }} Data </a>
                                 </h4>
 
@@ -506,8 +498,7 @@
                     <div class="card-body">
                         <div class="table-responsive p-1">
                             <div class="table-wrapper-scroll-y my-custom-scrollbar">
-                                <table class="table table-striped" id="data-table"
-                                    style="font-size: 10px;">
+                                <table class="table table-striped" id="data-table" style="font-size: 10px;">
                                     <thead>
                                         <tr>
                                             <th style="width: 38%">{{ __('Nominal') }}</th>
