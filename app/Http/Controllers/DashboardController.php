@@ -8,6 +8,8 @@ use App\Models\Pelanggan;
 use App\Models\AreaCoverage;
 use \RouterOS\Query;
 use App\Models\Pemasukan;
+use App\Models\Settingmikrotik;
+
 
 class DashboardController extends Controller
 {
@@ -16,6 +18,7 @@ class DashboardController extends Controller
         $pelanggan = Pelanggan::all();
         $countAreaCoverage = AreaCoverage::count();
         $countPelanggan = Pelanggan::count();
+        $countRouter = Settingmikrotik::count();
         $countPelangganAktif = Pelanggan::where('status_berlangganan', 'Aktif')->count();
         $countPelangganNon = Pelanggan::where('status_berlangganan', 'Non Aktif')->count();
         $countPelangganMenunggu = Pelanggan::where('status_berlangganan', 'Menunggu')->count();
@@ -36,6 +39,7 @@ class DashboardController extends Controller
             'pelanggan' => $pelanggan,
             'countAreaCoverage' => $countAreaCoverage,
             'countPelanggan' => $countPelanggan,
+            'countRouter' => $countRouter,
             'countPelangganAktif' => $countPelangganAktif,
             'countPelangganNon' => $countPelangganNon,
             'countPelangganMenunggu' => $countPelangganMenunggu,

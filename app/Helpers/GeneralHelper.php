@@ -54,7 +54,10 @@ function getRouteName()
 
 function getCompany()
 {
-    $data = DB::table('companies')->first();
+    $data = DB::table('companies')
+        ->join('paket_langganan', 'companies.paket_langganan_id', '=', 'paket_langganan.id')
+        ->select('companies.*', 'paket_langganan.nama_paket', 'paket_langganan.jumlah_router','paket_langganan.jumlah_pelanggan')
+        ->first();
     return $data;
 }
 
@@ -134,7 +137,7 @@ function hitungUang($type)
 {
     if ($type == 'Pemasukan') {
         $pemasukan = DB::table('pemasukans')
-        // ->where('categories.kind', '=', 1)
+            // ->where('categories.kind', '=', 1)
             ->sum('pemasukans.nominal');
         return $pemasukan;
     } else {
@@ -164,4 +167,3 @@ function tanggal_indonesia($tanggal)
     $pecahkan = explode('-', $tanggal);
     return $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
 }
-
