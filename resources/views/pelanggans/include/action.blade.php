@@ -40,6 +40,9 @@
                     </form>
                 </li>
             @endcan
+            <li>
+                <a target="_blank" href="http://maps.google.com/?q={{$model->latitude}},{{$model->longitude}}" class="dropdown-item">Direct Gmaps</a>
+            </li>
         </ul>
     </div>
 </td>
