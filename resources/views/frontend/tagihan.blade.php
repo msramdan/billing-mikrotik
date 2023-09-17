@@ -113,11 +113,14 @@
                     <form action="">
                         <div class="card-body special-card">
                             @if ($no_tagihan != '')
-                                @if ($tagihan->status_bayar == 'Sudah Bayar')
-                                    <div class="ribbon"><span>Sudah Bayar</span></div>
-                                @else
-                                    <div class="ribbon red"><span>Belum Bayar</span></div>
+                                @if ($tagihan != null)
+                                    @if ($tagihan->status_bayar == 'Sudah Bayar')
+                                        <div class="ribbon"><span>Sudah Bayar</span></div>
+                                    @else
+                                        <div class="ribbon red"><span>Belum Bayar</span></div>
+                                    @endif
                                 @endif
+
                             @endif
                             <div class="col-lg-12 col-md-12">
                                 <div class="form-group">
@@ -140,97 +143,104 @@
                 <div class="card text-white bg-primary mb-3">
                     <div class="card-header"> <b>Informasi</b></div>
                     <div class="card-body special-card">
+
                         @if ($no_tagihan == '')
                             <center><b>Silahkan isi form Terlebih dahulu untuk melihat tagihan</b></center>
-                        @endif
-                        @if ($tagihan)
-                            <table class="table table-hover table-striped">
-                                <tr>
-                                    <td class="fw-bold">{{ __('No Tagihan') }}</td>
-                                    <td>{{ $tagihan->no_tagihan }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-bold">{{ __('Pelanggan') }}</td>
-                                    <td>{{ $tagihan->nama }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-bold">{{ __('Periode') }}</td>
-                                    <td>{{ $tagihan->periode }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-bold">{{ __('Metode Bayar') }}</td>
-                                    <td>{{ $tagihan->metode_bayar }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-bold">{{ __('Status Bayar') }}</td>
-                                    <td>{{ $tagihan->status_bayar }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-bold">{{ __('Nominal Bayar') }}</td>
-                                    <td>{{ rupiah($tagihan->nominal_bayar) }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-bold">{{ __('Potongan Bayar') }}</td>
-                                    <td>{{ rupiah($tagihan->potongan_bayar) }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-bold">{{ __('PPN') }}</td>
-                                    <td>{{ $tagihan->ppn }} - {{ rupiah($tagihan->nominal_ppn) }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-bold">{{ __('Total Bayar') }}</td>
-                                    <td>
-                                        (Nominal Bayar - Potongan Bayar) + PPN <br>
-                                        ({{ rupiah($tagihan->nominal_bayar) }} - {{ rupiah($tagihan->potongan_bayar) }}) +
-                                        {{ rupiah($tagihan->nominal_ppn) }} <br>
-                                        <b>{{ rupiah($tagihan->total_bayar) }}</b>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-bold">{{ __('Tanggal Bayar') }}</td>
-                                    <td>{{ isset($tagihan->tanggal_bayar) ? $tagihan->tanggal_bayar : '' }}
-                                    </td>
-                                </tr>
-                            </table>
+                        @else
+                            @if ($tagihan != null)
+                                <table class="table table-hover table-striped">
+                                    <tr>
+                                        <td class="fw-bold">{{ __('No Tagihan') }}</td>
+                                        <td>{{ $tagihan->no_tagihan }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Pelanggan') }}</td>
+                                        <td>{{ $tagihan->nama }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Periode') }}</td>
+                                        <td>{{ $tagihan->periode }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Metode Bayar') }}</td>
+                                        <td>{{ $tagihan->metode_bayar }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Status Bayar') }}</td>
+                                        <td>{{ $tagihan->status_bayar }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Nominal Bayar') }}</td>
+                                        <td>{{ rupiah($tagihan->nominal_bayar) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Potongan Bayar') }}</td>
+                                        <td>{{ rupiah($tagihan->potongan_bayar) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('PPN') }}</td>
+                                        <td>{{ $tagihan->ppn }} - {{ rupiah($tagihan->nominal_ppn) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Total Bayar') }}</td>
+                                        <td>
+                                            (Nominal Bayar - Potongan Bayar) + PPN <br>
+                                            ({{ rupiah($tagihan->nominal_bayar) }} -
+                                            {{ rupiah($tagihan->potongan_bayar) }}) +
+                                            {{ rupiah($tagihan->nominal_ppn) }} <br>
+                                            <b>{{ rupiah($tagihan->total_bayar) }}</b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Tanggal Bayar') }}</td>
+                                        <td>{{ isset($tagihan->tanggal_bayar) ? $tagihan->tanggal_bayar : '' }}
+                                        </td>
+                                    </tr>
+                                </table>
 
-                            @if ($tagihan->status_bayar == 'Belum Bayar')
-                                <div class="accordion" id="accordionExample">
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header" id="headingTwo">
-                                            <button class="accordion-button collapsed" type="button"
-                                                data-bs-toggle="collapse" data-bs-target="#collapseTwo"
-                                                aria-expanded="false" aria-controls="collapseTwo">
-                                                <b>LANGSUNG BAYAR TAGIHAN</b>
-                                            </button>
-                                        </h2>
-                                        <div id="collapseTwo" class="accordion-collapse collapse"
-                                            aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                                            <div class="accordion-body">
-                                                <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                @foreach ($metodeBayar as $row)
-                                                                    <div class="col-md-3 col-md-3 mb-3">
-                                                                        <div class="small-box bg-light" style="border-radius: 5%">
-                                                                            <center>
-                                                                                <div class="frame">
-                                                                                    <img src="{{ $row->icon_url }}"
-                                                                                        class="img-aja"
-                                                                                        style="height: 80%" />
-                                                                                </div>
-                                                                                <a href="{{ route('bayar', [
-                                                                                    'tagihan_id' => $tagihan->id,
-                                                                                    'metode' => $row->code,
-                                                                                ]) }}"
-                                                                                    class="small-box-footer" style="color: blue"> <b>Pilih Metode</b>
-                                                                                    <i class="fas fa-arrow-circle-right"></i></a>
-                                                                            </center>
+                                @if ($tagihan->status_bayar == 'Belum Bayar')
+                                    <div class="accordion" id="accordionExample">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingTwo">
+                                                <button class="accordion-button collapsed" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                                                    aria-expanded="false" aria-controls="collapseTwo">
+                                                    <b>LANGSUNG BAYAR TAGIHAN</b>
+                                                </button>
+                                            </h2>
+                                            <div id="collapseTwo" class="accordion-collapse collapse"
+                                                aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                                <div class="accordion-body">
+                                                    <div class="col-md-12">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <div class="row">
+                                                                    @foreach ($metodeBayar as $row)
+                                                                        <div class="col-md-3 col-md-3 mb-3">
+                                                                            <div class="small-box bg-light"
+                                                                                style="border-radius: 5%">
+                                                                                <center>
+                                                                                    <div class="frame">
+                                                                                        <img src="{{ $row->icon_url }}"
+                                                                                            class="img-aja"
+                                                                                            style="height: 80%" />
+                                                                                    </div>
+                                                                                    <a href="{{ route('bayar', [
+                                                                                        'tagihan_id' => $tagihan->id,
+                                                                                        'metode' => $row->code,
+                                                                                    ]) }}"
+                                                                                        class="small-box-footer"
+                                                                                        style="color: blue"> <b>Pilih
+                                                                                            Metode</b>
+                                                                                        <i
+                                                                                            class="fas fa-arrow-circle-right"></i></a>
+                                                                                </center>
 
 
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                @endforeach
+                                                                    @endforeach
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -238,11 +248,13 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                @endif
+                            @else
+                                <center><b>Data tidak ditemukan, Silahkan cek kembali no tagihan</b></center>
                             @endif
-                        @else
-                            <center><b>Data tidak ditemukan, Silahkan cek kembali no tagihan</b></center>
                         @endif
+
+
                     </div>
                 </div>
             </div>

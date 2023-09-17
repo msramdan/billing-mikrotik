@@ -163,6 +163,7 @@ class WebController extends Controller
         } else {
             $no_tagihan = '';
         }
+        $metodeBayar = [];
         $tagihan = DB::table('tagihans')
             ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
             ->select('tagihans.*', 'pelanggans.nama')
@@ -177,8 +178,6 @@ class WebController extends Controller
                 ])->get($url);
                 $a = json_decode($response->getBody());
                 $metodeBayar = $a->data;
-            } else {
-                $metodeBayar = [];
             }
         }
         return view('frontend.tagihan', [
@@ -213,7 +212,7 @@ class WebController extends Controller
         $privateKey   = getTripay()->private_key;
         $merchantCode = getTripay()->kode_merchant;
         $merchantRef  = $tagihans->no_tagihan;
-        $url =getTripay()->url. 'transaction/create';
+        $url = getTripay()->url . 'transaction/create';
         $amount       =  $tagihans->total_bayar;
         $data = [
             'method'         => $method,
@@ -224,7 +223,7 @@ class WebController extends Controller
             'customer_phone' => $tagihans->no_wa,
             'order_items'    => [
                 [
-                    'sku'         => 'Internet ' .getCompany()->nama_perusahaan,
+                    'sku'         => 'Internet ' . getCompany()->nama_perusahaan,
                     'name'        => 'Pembayaran Internet',
                     'price'       => $tagihans->total_bayar,
                     'quantity'    => 1,
@@ -263,7 +262,7 @@ class WebController extends Controller
 
         curl_setopt_array($curl, [
             CURLOPT_FRESH_CONNECT  => true,
-            CURLOPT_URL            => getTripay()->url. 'transaction/detail?' . http_build_query($payload),
+            CURLOPT_URL            => getTripay()->url . 'transaction/detail?' . http_build_query($payload),
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HEADER         => false,
             CURLOPT_HTTPHEADER     => ['Authorization: Bearer ' . $apiKey],
@@ -278,8 +277,5 @@ class WebController extends Controller
         return view('frontend.detailBayar', [
             'detail' => $response
         ]);
-
-
     }
-
 }
