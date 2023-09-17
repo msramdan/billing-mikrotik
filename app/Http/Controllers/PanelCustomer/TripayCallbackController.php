@@ -107,7 +107,7 @@ class TripayCallbackController extends Controller
                 // kirim wa
                 $waGateway = WaGateway::findOrFail(1)->first();
                 if ($waGateway->is_active == 'Yes') {
-                    sendNotifWa($waGateway->url, $waGateway->api_key, $invoice, 'bayar', $invoice->no_wa);
+                    sendNotifWa($waGateway->url, $waGateway->api_key, $invoice, 'bayar', $invoice->no_wa, $waGateway->footer_pesan_wa_pembayaran);
                 }
             }
             return Response::json(['success' => true]);

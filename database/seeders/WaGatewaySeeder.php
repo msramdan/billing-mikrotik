@@ -17,6 +17,8 @@ class WaGatewaySeeder extends Seeder
             'url' => 'https://wagw.sitarsius.com/api/',
             'api_key' => '2faa16d94efa15236186b0a69bbee00b080b6886',
             'is_active' => 'Yes',
+            'footer_pesan_wa_tagihan' => 'Admin',
+            'footer_pesan_wa_pembayaran' => 'Admin',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);

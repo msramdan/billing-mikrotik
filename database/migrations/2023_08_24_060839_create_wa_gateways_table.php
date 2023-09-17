@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('url', 255);
 			$table->string('api_key', 255);
 			$table->enum('is_active', ['Yes', 'No']);
+            $table->text('footer_pesan_wa_tagihan')->nullable();
+            $table->text('footer_pesan_wa_pembayaran')->nullable();
             $table->timestamps();
         });
     }

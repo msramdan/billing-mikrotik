@@ -145,7 +145,7 @@ class WebController extends Controller
                 $waGateway = WaGateway::findOrFail(1)->first();
                 $company = Company::findOrFail(1)->first();
                 if ($waGateway->is_active == 'Yes') {
-                    sendNotifWa($waGateway->url, $waGateway->api_key, $request, 'daftar', $company->no_wa);
+                    sendNotifWa($waGateway->url, $waGateway->api_key, $request, 'daftar', $company->no_wa,'');
                 }
             }
         } catch (\Exception $e) {

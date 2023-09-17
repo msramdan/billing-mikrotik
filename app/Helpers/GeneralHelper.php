@@ -84,7 +84,7 @@ function rupiah2($angka)
     return $a;
 }
 
-function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima)
+function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima, $footer)
 {
 
 
@@ -109,7 +109,7 @@ function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima)
         $message .= '*Nominal :* ' . rupiah($request->nominal) . "\n";
         $message .= '*Metode Pembayaran :* ' .  $request->metode_bayar . " \n";
         $message .= '*Tanggal :* ' . date('Y-m-d H:i:s') . "\n\n";
-        $message .= "Terima Kasih.";
+        $message .= $footer;
     }
 
     $endpoint_wa = $url . 'send-message';

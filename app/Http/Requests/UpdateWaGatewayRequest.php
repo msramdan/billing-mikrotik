@@ -27,6 +27,8 @@ class UpdateWaGatewayRequest extends FormRequest
             'url' => 'required|url|max:255',
 			'api_key' => 'required|string|max:255',
 			'is_active' => 'required|in:Yes,No',
+            'footer_pesan_wa_tagihan' => 'nullable',
+            'footer_pesan_wa_pembayaran' => 'nullable',
         ];
     }
 }

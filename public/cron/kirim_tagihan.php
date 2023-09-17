@@ -25,13 +25,7 @@ if ($datanya['is_active'] == 'Yes') {
             $message .= 'Dengan no tagihan *' . $data['no_tagihan'] . '* sebesar *' . rupiah($data['total_bayar']) . '*' . "\n";
             $message .= 'Pembayaran paling lambat di tanggal *' . addHari($data['tanggal_create_tagihan'],$data['jatuh_tempo']) . '* Untuk Menghindari Isolir off wifi otomatis di tempat anda.'." \n\n";
             $message .= "*Note : Abaikan pesan ini jika sudah berbayar* \n\n";
-            $message .= "Anda dapat melakukan pembayaran tagihan dengan cara : \n";
-            $message .= "1. Lewat Virtual Account (Verifikasi Pembayaran Automatis) \n";
-            $message .= "2. Transfer lewat Norek dengan menyerahkan bukti transfer lewat WA / datang ke kantor \n";
-            $message .= "3. Bayar Cash dengan datang ke kantor \n\n";
-            $message .= 'Terima kasih atas kepercayaannya dalam memilih ' .  $a['nama_perusahaan'] . ' sebagai provider internet di tempat Anda.'." \n\n";
-            $message .= "Hormat kami,  \n";
-            $message .= 'Admin ' .  $a['nama_perusahaan'] . "\n";
+            $message .= $datanya['footer_pesan_wa_tagihan'];
 
             if ($data['kirim_tagihan_wa'] == 'Yes') {
                 $data = array(
