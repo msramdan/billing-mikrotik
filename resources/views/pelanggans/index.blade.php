@@ -36,6 +36,12 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
+                            <div class="col-md-4">
+                                <div class="alert alert-success" role="alert">
+                                    <i class="fa fa-money-bill" aria-hidden="true"></i> Estimasi Pendapatan / Bulan : <br>
+                                    <b>{{ rupiah($pendapatan) }}</b>
+                                </div>
+                            </div>
                             <div class="col-md-12">
                                 <div class="row">
                                     <div class="row g-3">
@@ -52,7 +58,8 @@
                                             </select>
                                         </div>
                                         <div class="col-md-3">
-                                            <select name="status" id="status" class="form-control  js-example-basic-single">
+                                            <select name="status" id="status"
+                                                class="form-control  js-example-basic-single">
                                                 <option value="All">All Status Berlangganan
                                                 </option>
                                                 <option value="Aktif">Aktif</option>
@@ -72,7 +79,8 @@
                                             </select>
                                         </div>
                                         <div class="col-md-3">
-                                            <select name="mikrotik" id="mikrotik" class="form-control  js-example-basic-single">
+                                            <select name="mikrotik" id="mikrotik"
+                                                class="form-control  js-example-basic-single">
                                                 <option value="All">All Route Mikrotik</option>
                                                 @foreach ($router as $row)
                                                     <option value="{{ $row->id }}">{{ $row->identitas_router }}
@@ -122,8 +130,7 @@
 @push('js')
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.12.0/datatables.min.js"></script>
     <script>
-        let columns = [
-            {
+        let columns = [{
                 data: 'DT_RowIndex',
                 name: 'DT_RowIndex',
                 orderable: false,

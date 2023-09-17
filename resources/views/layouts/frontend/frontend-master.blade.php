@@ -64,7 +64,7 @@
             <div class="bahama-mobile-nav">
                 <div class="logo">
                     <a href="/">
-                        <img src="{{ asset('frontend') }}/assets/img/logo.png" alt="logo">
+                       <h1><b style="color: #FA8185">{{ getCompany()->nama_perusahaan }}</b></h1>
                     </a>
                 </div>
             </div>
@@ -83,8 +83,8 @@
                                         Tagihan</a></li>
                                 <li class="nav-item"><a href="{{ route('areaCoverage') }}" class="nav-link">Area
                                         Coverage</a></li>
-                                <li class="nav-item"><a href="{{ route('speedTest') }}" class="nav-link">Speed Test</a>
-                                </li>
+                                {{-- <li class="nav-item"><a href="{{ route('speedTest') }}" class="nav-link">Speed Test</a>
+                                </li> --}}
                             </ul>
                         </div>
                     </nav>

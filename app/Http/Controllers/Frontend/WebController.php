@@ -14,6 +14,8 @@ use App\Models\WaGateway;
 use App\Models\Company;
 use Image;
 use App\Models\Feature;
+use App\Models\Tagihan;
+use Illuminate\Support\Facades\Http;
 
 class WebController extends Controller
 {
@@ -143,7 +145,7 @@ class WebController extends Controller
                 $waGateway = WaGateway::findOrFail(1)->first();
                 $company = Company::findOrFail(1)->first();
                 if ($waGateway->is_active == 'Yes') {
-                    sendNotifWa($waGateway->url, $waGateway->api_key, $request, 'daftar', $company->no_wa);
+                    sendNotifWa($waGateway->url, $waGateway->api_key, $request, 'daftar', $company->no_wa,'');
                 }
             }
         } catch (\Exception $e) {
@@ -154,9 +156,35 @@ class WebController extends Controller
         return redirect()->back();
     }
 
-    public function cekTagihan()
+    public function cekTagihan(Request $request)
     {
-        return view('frontend.tagihan');
+        if ($request->no_tagihan != null) {
+            $no_tagihan = $request->no_tagihan;
+        } else {
+            $no_tagihan = '';
+        }
+        $metodeBayar = [];
+        $tagihan = DB::table('tagihans')
+            ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
+            ->select('tagihans.*', 'pelanggans.nama')
+            ->where('tagihans.no_tagihan', '=', $no_tagihan)
+            ->first();
+        if ($tagihan) {
+            if ($tagihan->status_bayar == 'Belum Bayar') {
+                $url =  getTripay()->url . 'merchant/payment-channel';
+                $api_key = getTripay()->api_key;
+                $response = Http::withHeaders([
+                    'Authorization' => 'Bearer ' . $api_key
+                ])->get($url);
+                $a = json_decode($response->getBody());
+                $metodeBayar = $a->data;
+            }
+        }
+        return view('frontend.tagihan', [
+            'no_tagihan' => $no_tagihan,
+            'tagihan' => $tagihan,
+            'metodeBayar' => $metodeBayar,
+        ]);
     }
 
     public function areaCoverage()
@@ -170,5 +198,84 @@ class WebController extends Controller
     public function speedTest()
     {
         return view('frontend.speed');
+    }
+
+    public function bayar($tagihan_id, $method)
+    {
+        $tagihans = DB::table('tagihans')
+            ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
+            ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
+            ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.jatuh_tempo', 'pelanggans.email as email_customer', 'pelanggans.no_wa', 'packages.nama_layanan', 'pelanggans.no_layanan')
+            ->where('tagihans.id', '=', $tagihan_id)
+            ->first();
+        $apiKey       = getTripay()->api_key;
+        $privateKey   = getTripay()->private_key;
+        $merchantCode = getTripay()->kode_merchant;
+        $merchantRef  = $tagihans->no_tagihan;
+        $url = getTripay()->url . 'transaction/create';
+        $amount       =  $tagihans->total_bayar;
+        $data = [
+            'method'         => $method,
+            'merchant_ref'   => $merchantRef,
+            'amount'         => $amount,
+            'customer_name'  => $tagihans->nama,
+            'customer_email' => $tagihans->email_customer,
+            'customer_phone' => $tagihans->no_wa,
+            'order_items'    => [
+                [
+                    'sku'         => 'Internet ' . getCompany()->nama_perusahaan,
+                    'name'        => 'Pembayaran Internet',
+                    'price'       => $tagihans->total_bayar,
+                    'quantity'    => 1,
+                    'product_url' => '',
+                    'image_url'   => '',
+                ]
+            ],
+            'expired_time' => (time() + (1 * 5 * 60)),
+            'signature'    => hash_hmac('sha256', $merchantCode . $merchantRef . $amount, $privateKey)
+        ];
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_FRESH_CONNECT  => true,
+            CURLOPT_URL            => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER         => false,
+            CURLOPT_HTTPHEADER     => ['Authorization: Bearer ' . $apiKey],
+            CURLOPT_FAILONERROR    => false,
+            CURLOPT_POST           => true,
+            CURLOPT_POSTFIELDS     => http_build_query($data),
+            CURLOPT_IPRESOLVE      => CURL_IPRESOLVE_V4
+        ]);
+        $response = curl_exec($curl);
+        $error = curl_error($curl);
+        curl_close($curl);
+        $response = json_decode($response)->data;
+        return redirect()->route('detailBayar', [
+            'id' => $response->reference
+        ]);
+    }
+    public function detailBayar($reference)
+    {
+        $apiKey = getTripay()->api_key;
+        $payload = ['reference'    => $reference];
+        $curl = curl_init();
+
+        curl_setopt_array($curl, [
+            CURLOPT_FRESH_CONNECT  => true,
+            CURLOPT_URL            => getTripay()->url . 'transaction/detail?' . http_build_query($payload),
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER         => false,
+            CURLOPT_HTTPHEADER     => ['Authorization: Bearer ' . $apiKey],
+            CURLOPT_FAILONERROR    => false,
+            CURLOPT_IPRESOLVE      => CURL_IPRESOLVE_V4
+        ]);
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+        $response = json_decode($response)->data;
+
+        return view('frontend.detailBayar', [
+            'detail' => $response
+        ]);
     }
 }

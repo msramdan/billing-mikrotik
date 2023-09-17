@@ -24,6 +24,7 @@ return new class extends Migration
 			$table->text('deskripsi_perusahaan');
 			$table->string('logo')->nullable();
 			$table->string('favicon')->nullable();
+            $table->foreignId('paket_langganan_id')->nullable()->constrained('paket_langganan')->restrictOnUpdate()->restrictOnDelete();
             $table->timestamps();
         });
     }

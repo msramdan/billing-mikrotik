@@ -291,7 +291,7 @@ class TagihanController extends Controller
             $waGateway = WaGateway::findOrFail(1)->first();
             $pelanggan = Pelanggan::findOrFail($request->pelanggan_id)->first();
             if ($waGateway->is_active == 'Yes') {
-                sendNotifWa($waGateway->url, $waGateway->api_key, $request, 'bayar', $pelanggan->no_wa);
+                sendNotifWa($waGateway->url, $waGateway->api_key, $request, 'bayar', $pelanggan->no_wa,$waGateway->footer_pesan_wa_pembayaran);
             }
         }
 

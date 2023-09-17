@@ -54,7 +54,10 @@ function getRouteName()
 
 function getCompany()
 {
-    $data = DB::table('companies')->first();
+    $data = DB::table('companies')
+        ->join('paket_langganan', 'companies.paket_langganan_id', '=', 'paket_langganan.id')
+        ->select('companies.*', 'paket_langganan.nama_paket', 'paket_langganan.jumlah_router','paket_langganan.jumlah_pelanggan')
+        ->first();
     return $data;
 }
 
@@ -84,7 +87,7 @@ function rupiah2($angka)
     return $a;
 }
 
-function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima)
+function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima, $footer)
 {
 
 
@@ -109,7 +112,7 @@ function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima)
         $message .= '*Nominal :* ' . rupiah($request->nominal) . "\n";
         $message .= '*Metode Pembayaran :* ' .  $request->metode_bayar . " \n";
         $message .= '*Tanggal :* ' . date('Y-m-d H:i:s') . "\n\n";
-        $message .= "Terima Kasih.";
+        $message .= $footer;
     }
 
     $endpoint_wa = $url . 'send-message';
@@ -134,7 +137,7 @@ function hitungUang($type)
 {
     if ($type == 'Pemasukan') {
         $pemasukan = DB::table('pemasukans')
-        // ->where('categories.kind', '=', 1)
+            // ->where('categories.kind', '=', 1)
             ->sum('pemasukans.nominal');
         return $pemasukan;
     } else {
@@ -164,4 +167,3 @@ function tanggal_indonesia($tanggal)
     $pecahkan = explode('-', $tanggal);
     return $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
 }
-

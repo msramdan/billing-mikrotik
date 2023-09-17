@@ -122,8 +122,7 @@
                                 <br>
                                 <a href="{{ route('reboot') }}"
                                     onclick="return confirm('Apakah anda yakin akan merestart Router <?= $identity ?> ?')"
-                                    class="d-sm-inline-block btn btn-primary shadow-sm">
-                                    <i class="fa fa-power-off fa-sm text-white-50"></i><i class="fa fa-refresh"
+                                    class="d-sm-inline-block btn btn-primary shadow-sm"><i class="fa fa-refresh"
                                         aria-hidden="true"></i> Reboot MikroTik Now
                                 </a>
                                 <h4 style="margin-top: 10px">{{ getRouteName() }}</h4>

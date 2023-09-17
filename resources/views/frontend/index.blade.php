@@ -132,7 +132,7 @@
                         <div class="single-pricing-table active">
                             <div class="pricing-header">
                                 <div class="icon">
-                                    <i class="fa fa-wifi"></i>
+                                    <i class="flaticon-router"></i>
                                 </div>
                                 <span>Internet</span>
                                 <h3>{{ $val->nama_layanan }}</h3>

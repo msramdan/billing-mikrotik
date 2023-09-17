@@ -317,6 +317,30 @@
 
 @section('content')
     <div class="page-content">
+        <div class="alert alert-info" role="alert">
+            @php
+                $info = getCompany();
+            @endphp
+            Anda terdaftar paket : {{ $info->nama_paket }}
+
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-3">Jumlah Router Mikrotik :  {{ $info->jumlah_router == 0 ? '-' : $info->jumlah_router  }} <br>
+                        <ul>
+                            <li>Terpakai : {{ $countRouter  }} </li>
+                            <li>Sisa : {{ $info->jumlah_router == 0 ? '-' : $info->jumlah_router - $countRouter  }} </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3">Jumlah Pelanggan : {{ $info->jumlah_pelanggan== 0 ? '-' : $info->jumlah_pelanggan  }}<br>
+                        <ul>
+                            <li>Terpakai :  {{ $countPelanggan  }} </li>
+                            <li>Sisa : {{ $info->jumlah_pelanggan== 0 ? '-' : $info->jumlah_pelanggan - $countPelanggan   }}</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
         <section class="row">
             <div class="col-xl-3 col-sm-6 box-col-3">
                 <div class="card radius-10 border-start border-0 border-3 border-primary">
@@ -324,9 +348,8 @@
                         <div class="d-flex align-items-center">
                             <div>
                                 <p class="mb-0 text-secondary">Hotspot aktif</p>
-                                <h4 class="my-1 text-primary"><a href="#" class="" data-bs-toggle="modal"
-                                        data-bs-target="#modalBrancError">
-                                        {{ $hotspotactives }} Data </a>
+                                <h4 class="my-1 text-primary">
+                                    <a href="/hotspotactives" class=""> {{ $hotspotactives }} Data </a>
                                 </h4>
 
                             </div>
@@ -343,8 +366,7 @@
                         <div class="d-flex align-items-center">
                             <div>
                                 <p class="mb-0 text-secondary">Ppp aktif</p>
-                                <h4 class="my-1 text-primary"><a href="#" class="" data-bs-toggle="modal"
-                                        data-bs-target="#modalBrancError">
+                                <h4 class="my-1 text-primary"><a href="/active-ppps" class="">
                                         {{ $activePpps }} Data </a>
                                 </h4>
 
@@ -362,8 +384,7 @@
                         <div class="d-flex align-items-center">
                             <div>
                                 <p class="mb-0 text-secondary">Ppp tidak aktif</p>
-                                <h4 class="my-1 text-primary"><a href="#" class="" data-bs-toggle="modal"
-                                        data-bs-target="#modalBrancError">
+                                <h4 class="my-1 text-primary"><a href="#" class="">
                                         {{ $nonactivePpps }} Data </a>
                                 </h4>
 
@@ -381,8 +402,7 @@
                         <div class="d-flex align-items-center">
                             <div>
                                 <p class="mb-0 text-secondary">Area Coverage</p>
-                                <h4 class="my-1 text-primary"><a href="#" class="" data-bs-toggle="modal"
-                                        data-bs-target="#modalBrancError">
+                                <h4 class="my-1 text-primary"><a href="/area-coverages" class="">
                                         {{ $countAreaCoverage }} Data </a>
                                 </h4>
 
@@ -401,8 +421,7 @@
                         <div class="d-flex align-items-center">
                             <div>
                                 <p class="mb-0 text-secondary">Total Pelanggan</p>
-                                <h4 class="my-1 text-primary"><a href="#" class="" data-bs-toggle="modal"
-                                        data-bs-target="#modalBrancError">
+                                <h4 class="my-1 text-primary"><a href="/pelanggans" class="">
                                         {{ $countPelanggan }} Data </a>
                                 </h4>
 
@@ -420,8 +439,7 @@
                         <div class="d-flex align-items-center">
                             <div>
                                 <p class="mb-0 text-secondary">P. Aktif</p>
-                                <h4 class="my-1 text-primary"><a href="#" class="" data-bs-toggle="modal"
-                                        data-bs-target="#modalBrancError">
+                                <h4 class="my-1 text-primary"><a href="/pelanggans" class="">
                                         {{ $countPelangganAktif }} Data </a>
                                 </h4>
 
@@ -439,8 +457,7 @@
                         <div class="d-flex align-items-center">
                             <div>
                                 <p class="mb-0 text-secondary">P. Non Aktif</p>
-                                <h4 class="my-1 text-primary"><a href="#" class="" data-bs-toggle="modal"
-                                        data-bs-target="#modalBrancError">
+                                <h4 class="my-1 text-primary"><a href="/pelanggans" class="">
                                         {{ $countPelangganNon }} Data </a>
                                 </h4>
                             </div>
@@ -457,8 +474,7 @@
                         <div class="d-flex align-items-center">
                             <div>
                                 <p class="mb-0 text-secondary">P.Menunggu</p>
-                                <h4 class="my-1 text-primary"><a href="#" class="" data-bs-toggle="modal"
-                                        data-bs-target="#modalBrancError">
+                                <h4 class="my-1 text-primary"><a href="/pelanggans" class="">
                                         {{ $countPelangganMenunggu }} Data </a>
                                 </h4>
 
@@ -506,8 +522,7 @@
                     <div class="card-body">
                         <div class="table-responsive p-1">
                             <div class="table-wrapper-scroll-y my-custom-scrollbar">
-                                <table class="table table-striped" id="data-table"
-                                    style="font-size: 10px;">
+                                <table class="table table-striped" id="data-table" style="font-size: 10px;">
                                     <thead>
                                         <tr>
                                             <th style="width: 38%">{{ __('Nominal') }}</th>

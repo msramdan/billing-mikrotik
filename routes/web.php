@@ -22,6 +22,8 @@ Route::controller(App\Http\Controllers\Frontend\WebController::class)->group(fun
     Route::get('/speedTest', 'speedTest')->name('speedTest');
     Route::get('/cekTagihan', 'cekTagihan')->name('cekTagihan');
     Route::get('/areaCoverage', 'areaCoverage')->name('areaCoverage');
+    Route::get('/bayar/{tagihan_id}/{metode}', 'bayar')->name('bayar');
+    Route::get('/detailBayar/{id}', 'detailBayar')->name('detailBayar');
 });
 // PANEL CUSTOMER Need Session
 Route::middleware(['login-customer'])->group(function () {
@@ -40,10 +42,11 @@ Route::middleware(['login-customer'])->group(function () {
 });
 
 // FORM INPUT MIKROTIK
-Route::middleware(['auth', 'web'])->group(function () {
+Route::middleware(['auth', 'web','onmikrotik'])->group(function () {
     Route::controller(FormMikrotikController::class)->group(function () {
         Route::get('/form', 'form')->name('form');
         Route::post('/cekrouter', 'cekrouter')->name('api.cekrouter');
+        Route::post('/simpanrouter', 'simpanrouter')->name('api.simpanrouter');
     });
 });
 

@@ -21,7 +21,7 @@ class WaGateway extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['url', 'api_key', 'is_active'];
+    protected $fillable = ['url', 'api_key', 'is_active','footer_pesan_wa_tagihan','footer_pesan_wa_pembayaran'];
 
     /**
      * The attributes that should be cast.
@@ -29,6 +29,6 @@ class WaGateway extends Model
      * @var string[]
      */
     protected $casts = ['url' => 'string', 'api_key' => 'string', 'created_at' => 'datetime:d/m/Y H:i', 'updated_at' => 'datetime:d/m/Y H:i'];
-    
+
 
 }
