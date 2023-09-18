@@ -113,6 +113,7 @@ Route::middleware(['auth', 'web','nomikrotik'])->group(function () {
     Route::get('apiodp/{id}', [App\Http\Controllers\OdpController::class, 'odp'])->name('api.odp');
     Route::get('getPort/{id}', [App\Http\Controllers\OdpController::class, 'getPort'])->name('api.getPort');
     Route::get('getProfile/{id}', [App\Http\Controllers\OdpController::class, 'getProfile'])->name('api.getProfile');
+    Route::get('getStatic/{id}', [App\Http\Controllers\OdpController::class, 'getStatic'])->name('api.getStatic');
     Route::resource('payment-tripays', App\Http\Controllers\PaymentTripayController::class);
     Route::resource('pemasukans', App\Http\Controllers\PemasukanController::class);
     Route::resource('pengeluarans', App\Http\Controllers\PengeluaranController::class);

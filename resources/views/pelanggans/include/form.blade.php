@@ -380,21 +380,60 @@
             @enderror
         </div>
     </div>
+
     <div class="col-md-3">
         <div class="form-group">
-            <label for="user-pppoe">{{ __('User Pppoe') }}</label>
-            <select class="form-select js-example-basic-single @error('user_pppoe') is-invalid @enderror"
-                name="user_pppoe" id="user_pppoe" class="form-control" required>
+            <label for="user-pppoe">{{ __('User Mode') }}</label>
+            <select class="form-select js-example-basic-single @error('user_mode') is-invalid @enderror"
+                name="user_mode" id="user_mode" class="form-control">
+                <option value="" selected disabled>-- {{ __('Select') }} --</option>
+                {{-- <option value="PPOE"
+                    {{ isset($pelanggan) && $pelanggan->user_mode == 'PPOE' ? 'selected' : (old('user_mode') == 'PPOE' ? 'selected' : '') }}>
+                    PPOE</option>
+                <option value="Static"
+                    {{ isset($pelanggan) && $pelanggan->user_mode == 'Static' ? 'selected' : (old('user_mode') == 'Static' ? 'selected' : '') }}>
+                    Static</option> --}}
+            </select>
+            @error('user_mode')
+                <span class="text-danger">
+                    {{ $message }}
+                </span>
+            @enderror
+        </div>
+    </div>
+
+
+    <div class="col-md-6">
+        <div class="alert alert-warning" role="alert" id="alert">
+            <b>Note : Silahkan pilih user mode terlebih dahulu</b>
+        </div>
+        <div class="form-group" id="user_static_mode" style="display: none">
+            <label for="user-pppoe">{{ __('User Static') }}</label> <br>
+            <select style="width: 100%" class="form-select js-example-basic-single  @error('user_static') is-invalid @enderror" name="user_static"
+                id="user_static" class="form-control">
                 <option value="" selected disabled>-- {{ __('Select') }} --</option>
             </select>
+            @error('user_static')
+                <span class="text-danger">
+                    {{ $message }}
+                </span>
+            @enderror
+        </div>
 
-
+        <div class="form-group" id="user_ppoe_mode" style="display: none">
+            <label for="user-pppoe">{{ __('User Pppoe') }}</label> <br>
+            <select style="width: 100%"  class="form-select js-example-basic-single @error('user_pppoe') is-invalid @enderror" name="user_pppoe" id="user_pppoe"
+                class="form-control">
+                <option value="" selected disabled>-- {{ __('Select') }} --</option>
+            </select>
             @error('user_pppoe')
                 <span class="text-danger">
                     {{ $message }}
                 </span>
             @enderror
         </div>
+
+
     </div>
 
     <div class="col-md-6">
@@ -447,19 +486,14 @@
                                 <span style="color: red;">{{ $message }}</span>
                             @enderror
                         </div>
-
                         <ul class="results">
                             <li style="text-align: center;padding: 50% 0; max-height: 25hv;">Masukan Pencarian</li>
                         </ul>
                     </div>
                     <div class="map-embed" id="map" style="border-radius: 5px"></div>
                 </div>
-
             </div>
-
-
         </div>
-
     </div>
 </div>
 
@@ -480,3 +514,4 @@
             $('#no-layanan').val(shuffled);
         }
     </script>
+@endpush

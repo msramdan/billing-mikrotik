@@ -37,7 +37,9 @@ return new class extends Migration
 			$table->string('longitude', 50)->nullable();
 			$table->enum('auto_isolir', ['Yes', 'No'])->nullable();
 			$table->foreignId('router')->nullable()->nullable()->constrained('settingmikrotiks')->restrictOnUpdate()->nullOnDelete();
+            $table->string('mode_user', 100)->nullable();
 			$table->string('user_pppoe', 100)->nullable();
+            $table->string('user_static', 100)->nullable();
             $table->timestamps();
         });
     }

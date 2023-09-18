@@ -218,7 +218,28 @@ class OdpController extends Controller
         }
         $query = new Query('/ppp/secret/print');
         $data = $client->query($query)->read();
-        $message = 'Berhasil mengambil data kota';
+        $message = 'Berhasil mengambil data PPOE';
+        return response()->json(compact('message', 'data'));
+    }
+
+    public function getStatic($id)
+    {
+        $router = DB::table('settingmikrotiks')->where('id',$id)->first();
+        try {
+            $client = new Client([
+                'host' => $router->host,
+                'user' => $router->username,
+                'pass' => $router->password,
+                'port' => $router->port,
+            ]);
+        } catch (ConnectException $e) {
+            echo $e->getMessage() . PHP_EOL;
+            die();
+        }
+        $query = (new Query('/queue/simple/print'))
+        ->where('dynamic', 'false');
+        $data = $client->query($query)->read();
+        $message = 'Berhasil mengambil data statik';
         return response()->json(compact('message', 'data'));
     }
 
