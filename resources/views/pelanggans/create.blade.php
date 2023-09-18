@@ -415,22 +415,26 @@
 
         $(document).ready(function() {
             $('#router').change(function() {
-                $('#user_mode').html(options_temp);
+                $('#mode_user').html(options_temp);
+                $('#user_static').html(options_temp);
+                $('#user_pppoe').html(options_temp);
                 if ($(this).val() != "") {
                     $("#alert").show();
                     $("#user_static_mode").hide();
                     $("#user_ppoe_mode").hide();
                     if ($(this).val() != "") {
-                        $("#user_mode").append(new Option("PPOE", "PPOE"));
-                        $("#user_mode").append(new Option("Static", "Static"));
+                        $("#mode_user").append(new Option("PPOE", "PPOE"));
+                        $("#mode_user").append(new Option("Static", "Static"));
                     }
                 }
             })
         });
 
         $(document).ready(function() {
-            $("#user_mode").change(function() {
+            $("#mode_user").change(function() {
                 $("#alert").hide();
+                $('#user_static').html(options_temp);
+                $('#user_pppoe').html(options_temp);
                 var id = $('#router').val();
                 if (this.value == 'Static') {
                     $('#user_static').html(options_temp);

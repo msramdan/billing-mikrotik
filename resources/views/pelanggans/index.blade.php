@@ -106,7 +106,8 @@
                                             <th>{{ __('Status Berlangganan') }}</th>
                                             <th>{{ __('Package') }}</th>
                                             <th>{{ __('Router') }}</th>
-                                            <th>{{ __('User Pppoe') }}</th>
+                                            <th>{{ __('Mode User') }}</th>
+                                            <th>{{ __('User') }}</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
@@ -173,8 +174,12 @@
                 name: 'settingmikrotik',
             },
             {
-                data: 'user_pppoe',
-                name: 'user_pppoe',
+                data: 'mode_user',
+                name: 'mode_user',
+            },
+            {
+                data: 'user_mikrotik',
+                name: 'user_mikrotik',
             },
             {
                 data: 'action',

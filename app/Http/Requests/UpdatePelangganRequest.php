@@ -46,7 +46,9 @@ class UpdatePelangganRequest extends FormRequest
 			'longitude' => 'required|string|max:50',
 			'auto_isolir' => 'required|in:Yes,No',
 			'router' => 'required|exists:App\Models\Settingmikrotik,id',
-			'user_pppoe' => 'required|string|max:100',
+			'user_pppoe' => 'nullable|string|max:100',
+            'mode_user' => 'nullable|string|max:100',
+            'user_static' => 'nullable|string|max:100',
         ];
     }
 }

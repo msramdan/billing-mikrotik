@@ -383,18 +383,18 @@
 
     <div class="col-md-3">
         <div class="form-group">
-            <label for="user-pppoe">{{ __('User Mode') }}</label>
-            <select class="form-select js-example-basic-single @error('user_mode') is-invalid @enderror"
-                name="user_mode" id="user_mode" class="form-control">
+            <label for="user-pppoe">{{ __('Mode User') }}</label>
+            <select class="form-select js-example-basic-single @error('mode_user') is-invalid @enderror"
+                name="mode_user" id="mode_user" class="form-control">
                 <option value="" selected disabled>-- {{ __('Select') }} --</option>
                 {{-- <option value="PPOE"
-                    {{ isset($pelanggan) && $pelanggan->user_mode == 'PPOE' ? 'selected' : (old('user_mode') == 'PPOE' ? 'selected' : '') }}>
+                    {{ isset($pelanggan) && $pelanggan->mode_user == 'PPOE' ? 'selected' : (old('mode_user') == 'PPOE' ? 'selected' : '') }}>
                     PPOE</option>
                 <option value="Static"
-                    {{ isset($pelanggan) && $pelanggan->user_mode == 'Static' ? 'selected' : (old('user_mode') == 'Static' ? 'selected' : '') }}>
+                    {{ isset($pelanggan) && $pelanggan->mode_user == 'Static' ? 'selected' : (old('mode_user') == 'Static' ? 'selected' : '') }}>
                     Static</option> --}}
             </select>
-            @error('user_mode')
+            @error('mode_user')
                 <span class="text-danger">
                     {{ $message }}
                 </span>

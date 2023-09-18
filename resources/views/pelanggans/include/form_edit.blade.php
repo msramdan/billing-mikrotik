@@ -413,11 +413,58 @@
             @enderror
         </div>
     </div>
+
+
     <div class="col-md-3">
         <div class="form-group">
-            <label for="user-pppoe">{{ __('User Pppoe') }}</label>
-            <select class="form-select js-example-basic-single @error('user_pppoe') is-invalid @enderror"
-                name="user_pppoe" id="user_pppoe" class="form-control">
+            <label for="user-pppoe">{{ __('Mode User') }}</label>
+            <select class="form-select js-example-basic-single @error('mode_user') is-invalid @enderror"
+                name="mode_user" id="mode_user" class="form-control">
+                <option value="" selected disabled>-- {{ __('Select') }} --</option>
+                <option value="PPOE"
+                    {{ isset($pelanggan) && $pelanggan->mode_user == 'PPOE' ? 'selected' : (old('mode_user') == 'PPOE' ? 'selected' : '') }}>
+                    PPOE</option>
+                <option value="Static"
+                    {{ isset($pelanggan) && $pelanggan->mode_user == 'Static' ? 'selected' : (old('mode_user') == 'Static' ? 'selected' : '') }}>
+                    Static</option>
+            </select>
+            @error('mode_user')
+                <span class="text-danger">
+                    {{ $message }}
+                </span>
+            @enderror
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="alert alert-warning" role="alert" id="alert">
+            <b>Note : Silahkan pilih user mode terlebih dahulu</b>
+        </div>
+
+        <div class="form-group" id="user_static_mode" style="display: none">
+            <label for="user-pppoe">{{ __('User Static') }}</label> <br>
+            <select style="width: 100%" class="form-select js-example-basic-single  @error('user_static') is-invalid @enderror" name="user_static"
+                id="user_static" class="form-control">
+                <option value="" selected disabled>-- {{ __('Select') }} --</option>
+                @foreach ($statik as $x)
+                <option value="{{ $x['name'] }}"
+                    {{ isset($pelanggan) && $pelanggan->user_static == $x['name'] ? 'selected' : (old('user_static') == $x['name'] ? 'selected' : '') }}>
+                    {{ $x['name'] }}
+                </option>
+            @endforeach
+
+            </select>
+            @error('user_static')
+                <span class="text-danger">
+                    {{ $message }}
+                </span>
+            @enderror
+        </div>
+
+        <div class="form-group" id="user_ppoe_mode" style="display: none">
+            <label for="user-pppoe">{{ __('User Pppoe') }}</label> <br>
+            <select style="width: 100%"  class="form-select js-example-basic-single @error('user_pppoe') is-invalid @enderror" name="user_pppoe" id="user_pppoe"
+                class="form-control">
                 <option value="" selected disabled>-- {{ __('Select') }} --</option>
                 @foreach ($secretPPoe as $settingmikrotik)
                     <option value="{{ $settingmikrotik['name'] }}"

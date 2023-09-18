@@ -90,6 +90,13 @@ class PelangganController extends Controller
                     return $row->kode_area . '-' . $row->nama_area;
                 })->addColumn('odc', function ($row) {
                     return $row->kode_odc;
+                })->addColumn('user_mikrotik', function ($row) {
+                    if ($row->mode_user == 'Static') {
+                        return $row->user_static;
+                    } else {
+                        return $row->user_pppoe;
+                    }
+                    return $row->user_static;
                 })->addColumn('odp', function ($row) {
                     return $row->kode_odp;
                 })->addColumn('package', function ($row) {
@@ -142,11 +149,7 @@ class PelangganController extends Controller
      */
     public function store(StorePelangganRequest $request)
     {
-        if (hitungPelanggan() >= getCompany()->jumlah_pelanggan) {
-            Alert::error('Limit Router', 'Anda terkena limit pelanggan silahkan uprage paket');
-            return redirect()
-                ->route('pelanggans.index');
-        } else {
+        if (getCompany()->jumlah_pelanggan == 0) {
             $attr = $request->validated();
             $attr['password'] = bcrypt($request->password);
             if ($request->file('photo_ktp') && $request->file('photo_ktp')->isValid()) {
@@ -168,6 +171,34 @@ class PelangganController extends Controller
             return redirect()
                 ->route('pelanggans.index')
                 ->with('success', __('The pelanggan was created successfully.'));
+        } else {
+            if (hitungPelanggan() >= getCompany()->jumlah_pelanggan) {
+                Alert::error('Limit Router', 'Anda terkena limit pelanggan silahkan uprage paket');
+                return redirect()
+                    ->route('pelanggans.index');
+            } else {
+                $attr = $request->validated();
+                $attr['password'] = bcrypt($request->password);
+                if ($request->file('photo_ktp') && $request->file('photo_ktp')->isValid()) {
+
+                    $path = storage_path('app/public/uploads/photo_ktps/');
+                    $filename = $request->file('photo_ktp')->hashName();
+
+                    if (!file_exists($path)) {
+                        mkdir($path, 0777, true);
+                    }
+                    Image::make($request->file('photo_ktp')->getRealPath())->resize(500, 500, function ($constraint) {
+                        $constraint->upsize();
+                        $constraint->aspectRatio();
+                    })->save($path . $filename);
+
+                    $attr['photo_ktp'] = $filename;
+                }
+                Pelanggan::create($attr);
+                return redirect()
+                    ->route('pelanggans.index')
+                    ->with('success', __('The pelanggan was created successfully.'));
+            }
         }
     }
 
@@ -246,7 +277,26 @@ class PelangganController extends Controller
         } else {
             $secretPPoe = [];
         }
-        return view('pelanggans.edit', compact('pelanggan', 'dataOdcs', 'dataodps', 'array', 'secretPPoe'));
+
+        if ($router) {
+            try {
+                $clientstatik = new Client([
+                    'host' => $router->host,
+                    'user' => $router->username,
+                    'pass' => $router->password,
+                    'port' => $router->port,
+                ]);
+            } catch (ConnectException $e) {
+                echo $e->getMessage() . PHP_EOL;
+                die();
+            }
+            $querystatik = (new Query('/queue/simple/print'))
+                ->where('dynamic', 'false');
+            $statik = $clientstatik->query($querystatik)->read();
+        } else {
+            $statik = [];
+        }
+        return view('pelanggans.edit', compact('pelanggan', 'dataOdcs', 'dataodps', 'array', 'secretPPoe', 'statik'));
     }
 
     /**

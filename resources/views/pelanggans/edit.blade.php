@@ -416,12 +416,54 @@
             }
         })
 
-        $('#router').change(function() {
-            $('#user_pppoe').html(options_temp);
-            if ($(this).val() != "") {
-                getProfile($(this).val());
+        $(document).ready(function() {
+            $("#alert").hide();
+            var x = $("#mode_user").val();
+            if(x=='Static'){
+                $("#user_static_mode").show();
+                $("#user_ppoe_mode").hide();
+            }else{
+                $("#user_static_mode").hide();
+                $("#user_ppoe_mode").show();
             }
-        })
+
+            $('#router').change(function() {
+                $('#mode_user').html(options_temp);
+                $('#user_static').html(options_temp);
+                $('#user_pppoe').html(options_temp);
+                if ($(this).val() != "") {
+                    $("#alert").show();
+                    $("#user_static_mode").hide();
+                    $("#user_ppoe_mode").hide();
+                    if ($(this).val() != "") {
+                        $("#mode_user").append(new Option("PPOE", "PPOE"));
+                        $("#mode_user").append(new Option("Static", "Static"));
+                    }
+                }
+            })
+        });
+
+        $(document).ready(function() {
+            $("#mode_user").change(function() {
+                $("#alert").hide();
+                $('#user_static').html(options_temp);
+                $('#user_pppoe').html(options_temp);
+                var id = $('#router').val();
+                if (this.value == 'Static') {
+                    $('#user_static').html(options_temp);
+                    $("#user_static_mode").show();
+                    $("#user_ppoe_mode").hide();
+                    getStatic(id);
+
+                } else {
+                    $('#user_pppoe').html(options_temp);
+                    $("#user_static_mode").hide();
+                    $("#user_ppoe_mode").show();
+                    getProfile(id);
+                }
+            });
+        });
+
 
         function getOdc(areaId) {
             let url = '{{ route('api.odc', ':id') }}';
@@ -520,6 +562,30 @@
                 }
             })
         }
+
+        function getStatic(router) {
+            let url = '{{ route('api.getStatic', ':id') }}';
+            url = url.replace(':id', router)
+            $.ajax({
+                url,
+                method: 'GET',
+                beforeSend: function() {
+                    $('#user_static').prop('disabled', true);
+                },
+                success: function(res) {
+                    const options = res.data.map(value => {
+                        return `<option value="${value.name}">${value.name}</option>`
+                    });
+                    $('#user_static').html(options_temp + options);
+                    $('#user_static').prop('disabled', false);
+                },
+                error: function(err) {
+                    alert(JSON.stringify(err))
+                    $('#user_static').prop('disabled', false);
+                }
+            })
+        }
+
     </script>
 
 @endpush

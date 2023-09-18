@@ -47,6 +47,8 @@ class StorePelangganRequest extends FormRequest
 			'auto_isolir' => 'required|in:Yes,No',
 			'router' => 'nullable|exists:App\Models\Settingmikrotik,id',
 			'user_pppoe' => 'nullable|string|max:100',
+            'mode_user' => 'nullable|string|max:100',
+            'user_static' => 'nullable|string|max:100',
         ];
     }
 }
