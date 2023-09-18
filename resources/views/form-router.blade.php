@@ -95,7 +95,7 @@
                                             <div class="mb-3">
                                                 <label for="" class="form-label">Nama Router</label>
                                                 <input type="text" name="name" id="name" class="form-control"
-                                                    id="" required value="test">
+                                                    id="" required value="">
                                             </div>
                                         </div>
 
@@ -103,12 +103,12 @@
                                             <div class="col-md-6">
                                                 <label for="" class="form-label">Host</label>
                                                 <input type="text" id="host" name="host" class="form-control"
-                                                    value="103.122.65.234" required>
+                                                    value="" required>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="" class="form-label">Port</label>
                                                 <input type="number" id="port" name="port" class="form-control"
-                                                    placeholder="8728" required value="83">
+                                                    placeholder="8728" required value="">
                                             </div>
                                         </div>
 
@@ -116,13 +116,13 @@
                                             <div class="col-md-6">
                                                 <label for="" class="form-label">Username</label>
                                                 <input type="text" id="username" name="username"
-                                                    class="form-control" required value="sawitskylink">
+                                                    class="form-control" required value="">
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="" class="form-label">Password</label>
                                                 <div class="input-group">
                                                     <input type="password" id="password" name="password"
-                                                        class="form-control" required value="sawit064199">
+                                                        class="form-control" required value="">
                                                     <button type="button" class="btn btn-success btn-sm"
                                                         style="width: 40px" onclick="toggleShowPassword()">
 
