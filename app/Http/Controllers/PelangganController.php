@@ -230,12 +230,6 @@ class PelangganController extends Controller
         return view('pelanggans.show', compact('pelanggan'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Pelanggan $pelanggan
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Pelanggan $pelanggan)
     {
         $pelanggan->load('area_coverage:id,kode_area', 'odc:id,kode_odc', 'odp:id,kode_odc', 'package:id,nama_layanan', 'settingmikrotik:id,identitas_router');
@@ -259,7 +253,6 @@ class PelangganController extends Controller
             }
         }
         $router = DB::table('settingmikrotiks')->where('id', $pelanggan->router)->first();
-
         if ($router) {
             try {
                 $client = new Client([
@@ -310,6 +303,13 @@ class PelangganController extends Controller
     {
         $attr = $request->validated();
 
+        if($request->mode_user != $pelanggan->mode_user ){
+            if($request->mode_user=='Static'){
+                $attr['user_pppoe'] = null;
+            }else{
+                $attr['user_static'] = null;
+            }
+        }
 
         switch (is_null($request->password)) {
             case true:
