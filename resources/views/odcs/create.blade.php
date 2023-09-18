@@ -226,145 +226,167 @@
 
 @push('js')
     <script>
-        $(document).ready(function() {
-            var i = 1;
+        var i = 1;
 
-            function checkKosongLatLong() {
-                if ($('#latitude').val() == '' || $('#longitude').val() == '') {
-                    $('.alert-choose-loc').show();
-                } else {
-                    $('.alert-choose-loc').hide();
-                }
+        function checkKosongLatLong() {
+            if ($('#latitude').val() == '' || $('#longitude').val() == '') {
+                $('.alert-choose-loc').show();
+            } else {
+                $('.alert-choose-loc').hide();
             }
+        }
 
-            var delay = (function() {
-                var timer = 0;
-                return function(callback, ms) {
-                    clearTimeout(timer);
-                    timer = setTimeout(callback, ms);
-                };
-            })()
+        var delay = (function() {
+            var timer = 0;
+            return function(callback, ms) {
+                clearTimeout(timer);
+                timer = setTimeout(callback, ms);
+            };
+        })()
 
 
-            // initialize map
-            const getLocationMap = L.map('map');
+        // initialize map
+        const getLocationMap = L.map('map');
 
-            // initialize OSM
-            const osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-            const osmAttrib = 'Leaflet © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors';
-            const osm = new L.TileLayer(osmUrl, {
-                minZoom: 8,
-                maxZoom: 50,
-                attribution: osmAttrib
-            });
-            // render map
-
-            getLocationMap.scrollWheelZoom.disable()
-            getLocationMap.setView(new L.LatLng('-6.175392', '106.827153'), 14)
-            getLocationMap.addLayer(osm)
-            // initial hidden marker, and update on click
-            const getLocationMapMarker = L.marker([0, 0]).addTo(getLocationMap);
-
-            function getToLoc(lat, lng, displayname = null) {
-                const zoom = 17;
-
-                $.ajax({
-                    url: `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`,
-                    dataType: 'json',
-                    success: function(data) {
-                        $('#latitude').val(lat)
-                        $('#longitude').val(lng)
-                        if (displayname == null) {
-                            $('#search_place').val(data.display_name)
-                        } else {
-                            $('#search_place').val(displayname)
-                        }
-                    }
-                });
-                getLocationMap.setView(new L.LatLng(lat, lng), zoom);
-                getLocationMapMarker.setLatLng([lat, lng])
-                $('.results').hide();
-                checkKosongLatLong()
-
-            }
-
-            // listen click on map
-            getLocationMap.on('click', function(e) {
-                // set default lat and lng to 0,0
-                const {
-                    lat = 0, lng = 0
-                } = e.latlng;
-                // update text DOM
-
-                $('#latitude').val(lat)
-                $('#longitude').val(lng)
-                // update marker position
-                getToLoc(lat, lng)
-                checkKosongLatLong()
-
-            });
-
-            $(document).on('click', '.resultnya', function() {
-
-                const {
-                    lat = 0, lng = 0, dispname = ''
-                } = $(this).data();
-                getToLoc(lat, lng, dispname)
-            })
-
-            function doSearching(elem) {
-                $('.results').html(
-                    '<li style="text-align: center;padding: 50% 0; max-height: 25hv;">Mengetik...</li>');
-                const search = elem.val()
-                delay(function() {
-                    if (search.length >= 3) {
-                        $('.results').html(
-                            '<li style="text-align: center;padding: 50% 0; max-height: 25hv;"><i class="fa fa-refresh fa-spin"></i> Mencari...</li>'
-                        );
-                        const url = 'https://nominatim.openstreetmap.org/search?format=json&q=' + search;
-                        $.ajax({
-                            url: url,
-                            dataType: 'json',
-                            success: function(data) {
-                                $('.results').empty();
-                                if (data.length > 0) {
-                                    $.each(data, function(i, item) {
-                                        $('.results').append(
-                                            '<li><a class="resultnya" href="#" data-lat="' +
-                                            item.lat + '" data-lng="' + item.lon +
-                                            '" data-dispname="' + item
-                                            .display_name + '">' + item
-                                            .display_name +
-                                            '<br/><i class="fa fa-map-marker"></i><span style="margin-left: 7px;">' +
-                                            item.lat + ',' + item.lon +
-                                            '</span></a></li>');
-                                    })
-                                } else {
-                                    $('.results').html(
-                                        '<li style="text-align: center;padding: 50% 0; max-height: 25hv;">Tidak ditemukan (Mungkin ada yang salah dengan ejaan, typo, atau kesalahan ketik)</li>'
-                                    );
-                                }
-                            }
-                        });
-                    } else {
-                        $('.results').html(
-                            '<li style="text-align: center;padding: 50% 0; max-height: 25hv;">Masukan Pencarian (Min. 3 Karakter)</li>'
-                        );
-                    }
-                }, 1000);
-            }
-
-            $('#search_place').focus(function() {
-                $('.results').show();
-            }).keyup(function() {
-                doSearching($(this))
-            }).blur(function() {
-                setTimeout(function() {
-                    $('.results').hide();
-                }, 1000);
-            })
-            $('#search_place').on('paste', doSearching($(this)))
+        // initialize OSM
+        const osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+        const osmAttrib = 'Leaflet © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors';
+        const osm = new L.TileLayer(osmUrl, {
+            minZoom: 8,
+            maxZoom: 50,
+            attribution: osmAttrib
         });
+        // render map
+
+        getLocationMap.scrollWheelZoom.disable()
+        getLocationMap.setView(new L.LatLng('-6.175392', '106.827153'), 14)
+        getLocationMap.addLayer(osm)
+        // initial hidden marker, and update on click
+        const getLocationMapMarker = L.marker([0, 0]).addTo(getLocationMap);
+
+        function getToLoc(lat, lng, displayname = null) {
+            const zoom = 17;
+
+            $.ajax({
+                url: `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`,
+                dataType: 'json',
+                success: function(data) {
+                    $('#latitude').val(lat)
+                    $('#longitude').val(lng)
+                    if (displayname == null) {
+                        $('#search_place').val(data.display_name)
+                    } else {
+                        $('#search_place').val(displayname)
+                    }
+                }
+            });
+            getLocationMap.setView(new L.LatLng(lat, lng), zoom);
+            getLocationMapMarker.setLatLng([lat, lng])
+            $('.results').hide();
+            checkKosongLatLong()
+
+        }
+
+        // listen click on map
+        getLocationMap.on('click', function(e) {
+            // set default lat and lng to 0,0
+            const {
+                lat = 0, lng = 0
+            } = e.latlng;
+            // update text DOM
+
+            $('#latitude').val(lat)
+            $('#longitude').val(lng)
+            // update marker position
+            getToLoc(lat, lng)
+            checkKosongLatLong()
+
+        });
+
+        $(document).on('click', '.resultnya', function() {
+
+            const {
+                lat = 0, lng = 0, dispname = ''
+            } = $(this).data();
+            getToLoc(lat, lng, dispname)
+        })
+
+        function getCurrentLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    console.log(position);
+                    const zoom = 10;
+                    $.ajax({
+                        url: `https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`,
+                        dataType: 'json',
+                        success: function(data) {
+                            $('#latitude').val(position.coords.latitude)
+                            $('#longitude').val(position.coords.longitude)
+                            $('#search_place').val(data.display_name)
+                        }
+                    });
+
+                    getLocationMap.setView(new L.LatLng(position.coords.latitude, position.coords.longitude), zoom);
+                    getLocationMapMarker.setLatLng([position.coords.latitude, position.coords.longitude])
+                    $('.results').hide();
+                    checkKosongLatLong()
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function doSearching(elem) {
+            $('.results').html(
+                '<li style="text-align: center;padding: 50% 0; max-height: 25hv;">Mengetik...</li>');
+            const search = elem.val()
+            delay(function() {
+                if (search.length >= 3) {
+                    $('.results').html(
+                        '<li style="text-align: center;padding: 50% 0; max-height: 25hv;"><i class="fa fa-refresh fa-spin"></i> Mencari...</li>'
+                    );
+                    const url = 'https://nominatim.openstreetmap.org/search?format=json&q=' + search;
+                    $.ajax({
+                        url: url,
+                        dataType: 'json',
+                        success: function(data) {
+                            $('.results').empty();
+                            if (data.length > 0) {
+                                $.each(data, function(i, item) {
+                                    $('.results').append(
+                                        '<li><a class="resultnya" href="#" data-lat="' +
+                                        item.lat + '" data-lng="' + item.lon +
+                                        '" data-dispname="' + item
+                                        .display_name + '">' + item
+                                        .display_name +
+                                        '<br/><i class="fa fa-map-marker"></i><span style="margin-left: 7px;">' +
+                                        item.lat + ',' + item.lon +
+                                        '</span></a></li>');
+                                })
+                            } else {
+                                $('.results').html(
+                                    '<li style="text-align: center;padding: 50% 0; max-height: 25hv;">Tidak ditemukan (Mungkin ada yang salah dengan ejaan, typo, atau kesalahan ketik)</li>'
+                                );
+                            }
+                        }
+                    });
+                } else {
+                    $('.results').html(
+                        '<li style="text-align: center;padding: 50% 0; max-height: 25hv;">Masukan Pencarian (Min. 3 Karakter)</li>'
+                    );
+                }
+            }, 1000);
+        }
+
+        $('#search_place').focus(function() {
+            $('.results').show();
+        }).keyup(function() {
+            doSearching($(this))
+        }).blur(function() {
+            setTimeout(function() {
+                $('.results').hide();
+            }, 1000);
+        })
+        $('#search_place').on('paste', doSearching($(this)))
     </script>
 @endpush
-

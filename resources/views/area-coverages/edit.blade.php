@@ -225,7 +225,6 @@
 
 @push('js')
     <script>
-        $(document).ready(function() {
             var i = 1;
 
             function checkKosongLatLong() {
@@ -343,6 +342,32 @@
                 getToLoc(lat, lng, dispname)
             })
 
+            function getCurrentLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    console.log(position);
+                    const zoom = 10;
+                    $.ajax({
+                        url: `https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`,
+                        dataType: 'json',
+                        success: function(data) {
+                            $('#latitude').val(position.coords.latitude)
+                            $('#longitude').val(position.coords.longitude)
+                            $('#search_place').val(data.display_name)
+                        }
+                    });
+
+                    getLocationMap.setView(new L.LatLng(position.coords.latitude, position.coords.longitude), zoom);
+                    getLocationMapMarker.setLatLng([position.coords.latitude, position.coords.longitude])
+                    $('.results').hide();
+                    checkKosongLatLong()
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+
             function doSearching(elem) {
                 $('.results').html(
                     '<li style="text-align: center;padding: 50% 0; max-height: 25hv;">Mengetik...</li>');
@@ -395,6 +420,5 @@
                 }, 1000);
             })
             $('#search_place').on('paste', doSearching($(this)))
-        });
     </script>
 @endpush

@@ -466,9 +466,16 @@
             </div>
             <div class="card px-2 py-1">
                 <div class="mb-3 search-box">
-                    <input type="text" class="form-control @error('place') is-invalid @enderror" name="place"
-                        id="search_place" placeholder="Cari Lokasi" value="{{ old('place') }}"
-                        autocomplete="off">
+                    <div class="input-group" style="width: 100%">
+                        <input type="text" class="form-control @error('place') is-invalid @enderror"
+                            name="place" id="search_place" placeholder="Cari Lokasi" value="{{ old('place') }}"
+                            autocomplete="off" >
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1"><button type="button" class="btn"  onclick="getCurrentLocation()" >
+                                <i class='fas fa-map-marker-alt'></i>
+                            </button></span>
+                        </div>
+                    </div>
                     <span class="d-none" style="color: red;" id="error-place"></span>
                     @error('place')
                         <span style="color: red;">{{ $message }}</span>

@@ -24,7 +24,7 @@
         <div class="form-group">
             <label for="odc">{{ __('Odc') }}</label>
             <select class="form-select js-example-basic-single @error('odc') is-invalid @enderror" name="odc"
-                id="odc" class="form-control" >
+                id="odc" class="form-control">
                 <option value="" selected disabled>-- {{ __('Select') }} --</option>
             </select>
             @error('odc')
@@ -38,7 +38,7 @@
         <div class="form-group">
             <label for="odp">{{ __('Odp') }}</label>
             <select class="form-select js-example-basic-single @error('odp') is-invalid @enderror" name="odp"
-                id="odp" class="form-control" >
+                id="odp" class="form-control">
                 <option value="" selected disabled>-- {{ __('Select') }} --</option>
             </select>
             @error('odp')
@@ -427,21 +427,37 @@
                     @enderror
                 </div>
             </div>
-            <div class="card px-2 py-1">
-                <div class="mb-3 search-box">
-                    <input type="text" class="form-control @error('place') is-invalid @enderror" name="place"
-                        id="search_place" placeholder="Cari Lokasi" value="{{ old('place') }}"
-                        autocomplete="off">
-                    <span class="d-none" style="color: red;" id="error-place"></span>
-                    @error('place')
-                        <span style="color: red;">{{ $message }}</span>
-                    @enderror
-                    <ul class="results">
-                        <li style="text-align: center;padding: 50% 0; max-height: 25hv;">Masukan Pencarian</li>
-                    </ul>
+
+
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="mb-3 search-box">
+                        <div class="input-group" style="width: 100%">
+                            <input type="text" class="form-control @error('place') is-invalid @enderror"
+                                name="place" id="search_place" placeholder="Cari Lokasi"
+                                value="{{ old('place') }}" autocomplete="off">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1"><button type="button"
+                                        class="btn" onclick="getCurrentLocation()">
+                                        <i class='fas fa-map-marker-alt'></i>
+                                    </button></span>
+                            </div>
+                            <span class="d-none" style="color: red;" id="error-place"></span>
+                            @error('place')
+                                <span style="color: red;">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <ul class="results">
+                            <li style="text-align: center;padding: 50% 0; max-height: 25hv;">Masukan Pencarian</li>
+                        </ul>
+                    </div>
+                    <div class="map-embed" id="map" style="border-radius: 5px"></div>
                 </div>
-                <div class="map-embed" id="map" style="border-radius: 5px"></div>
+
             </div>
+
+
         </div>
 
     </div>
