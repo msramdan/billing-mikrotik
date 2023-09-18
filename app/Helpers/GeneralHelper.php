@@ -30,7 +30,7 @@ function setRoute()
                 'host' => $router->host,
                 'user' => $router->username,
                 'pass' => $router->password,
-                'port' => $router->port,
+                'port' => (int) $router->port,
             ]);
             return $client;
         } catch (ConnectException $e) {

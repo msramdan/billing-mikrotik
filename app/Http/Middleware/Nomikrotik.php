@@ -21,7 +21,7 @@ class Nomikrotik
                     'host' => $router->host,
                     'user' => $router->username,
                     'pass' => $router->password,
-                    'port' => $router->port,
+                    'port' => (int) $router->port,
                 ]);
                 return $next($request);
             } catch (ConnectException $e) {

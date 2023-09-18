@@ -25,7 +25,7 @@ class Onmikrotik
                     'host' => $router->host,
                     'user' => $router->username,
                     'pass' => $router->password,
-                    'port' => $router->port,
+                    'port' => (int) $router->port,
                 ]);
                 return redirect('/dashboard');
             } catch (ConnectException $e) {

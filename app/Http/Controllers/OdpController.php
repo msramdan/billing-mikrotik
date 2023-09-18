@@ -210,7 +210,7 @@ class OdpController extends Controller
                 'host' => $router->host,
                 'user' => $router->username,
                 'pass' => $router->password,
-                'port' => $router->port,
+                'port' => (int) $router->port,
             ]);
         } catch (ConnectException $e) {
             echo $e->getMessage() . PHP_EOL;
@@ -230,7 +230,7 @@ class OdpController extends Controller
                 'host' => $router->host,
                 'user' => $router->username,
                 'pass' => $router->password,
-                'port' => $router->port,
+                'port' => (int) $router->port,
             ]);
         } catch (ConnectException $e) {
             echo $e->getMessage() . PHP_EOL;
