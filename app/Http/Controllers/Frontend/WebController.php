@@ -190,7 +190,15 @@ class WebController extends Controller
                     'Authorization' => 'Bearer ' . $api_key
                 ])->get($url);
                 $a = json_decode($response->getBody());
-                $metodeBayar = $a->data;
+
+                if($a->success==true){
+                    $metodeBayar = $a->data;
+                }else{
+                    echo $a->message;
+                    die();
+                }
+
+
             }
         }
         return view('frontend.tagihan', [
