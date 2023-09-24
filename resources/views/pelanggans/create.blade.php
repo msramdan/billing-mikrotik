@@ -422,6 +422,9 @@
                     $("#alert").show();
                     $("#user_static_mode").hide();
                     $("#user_ppoe_mode").hide();
+                    $('#user_static').attr('required', false);
+                    $('#user_pppoe').attr('required', false);
+
                     if ($(this).val() != "") {
                         $("#mode_user").append(new Option("PPOE", "PPOE"));
                         $("#mode_user").append(new Option("Static", "Static"));
@@ -440,12 +443,15 @@
                     $('#user_static').html(options_temp);
                     $("#user_static_mode").show();
                     $("#user_ppoe_mode").hide();
+                    $('#user_static').attr('required', true);
+                    $('#user_pppoe').attr('required', false);
                     getStatic(id);
-
                 } else {
                     $('#user_pppoe').html(options_temp);
                     $("#user_static_mode").hide();
                     $("#user_ppoe_mode").show();
+                    $('#user_static').attr('required', false);
+                    $('#user_pppoe').attr('required', true);
                     getProfile(id);
                 }
             });

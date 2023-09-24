@@ -215,6 +215,6 @@ class HotspotuserController extends Controller
 
     public function mikhmon()
     {
-        return redirect('https://mikhmon.easytopup.my.id');
+        return redirect('/mikhmon');
     }
 }

@@ -31,13 +31,7 @@ class UpdateUserRequest extends FormRequest
             'role' => ['required', 'exists:roles,id'],
             'password' =>  [
                 'nullable',
-                'confirmed',
-                Password::min(8)
-                    ->letters()
-                    ->mixedCase()
-                    ->numbers()
-                    ->symbols()
-                    ->uncompromised()
+                'confirmed'
             ]
         ];
     }

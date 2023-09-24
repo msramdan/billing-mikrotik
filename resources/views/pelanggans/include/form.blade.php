@@ -310,7 +310,7 @@
             <input type="number" min="1" max="5" name="jatuh_tempo" id="jatuh-tempo"
                 class="form-control @error('jatuh_tempo') is-invalid @enderror"
                 value="{{ isset($pelanggan) ? $pelanggan->jatuh_tempo : old('jatuh_tempo') }}"
-                placeholder="{{ __('Jatuh Tempo') }}" />
+                placeholder="{{ __('Jatuh Tempo') }}" required  />
             @error('jatuh_tempo')
                 <span class="text-danger">
                     {{ $message }}
@@ -322,7 +322,7 @@
         <div class="form-group">
             <label for="auto-isolir">{{ __('Auto Isolir') }}</label>
             <select class="form-select js-example-basic-single @error('auto_isolir') is-invalid @enderror"
-                name="auto_isolir" id="auto-isolir" class="form-control">
+                name="auto_isolir" id="auto-isolir" class="form-control" required>
                 <option value="" selected disabled>-- {{ __('Select auto isolir') }} --</option>
                 <option value="Yes"
                     {{ isset($pelanggan) && $pelanggan->auto_isolir == 'Yes' ? 'selected' : (old('auto_isolir') == 'Yes' ? 'selected' : '') }}>
@@ -342,7 +342,7 @@
         <div class="form-group">
             <label for="kirim-tagihan-wa">{{ __('Kirim Tagihan Wa') }}</label>
             <select class="form-select js-example-basic-single @error('kirim_tagihan_wa') is-invalid @enderror"
-                name="kirim_tagihan_wa" id="kirim-tagihan-wa" class="form-control">
+                name="kirim_tagihan_wa" id="kirim-tagihan-wa" class="form-control" required>
                 <option value="" selected disabled>-- {{ __('Select kirim tagihan wa') }} --</option>
                 <option value="Yes"
                     {{ isset($pelanggan) && $pelanggan->kirim_tagihan_wa == 'Yes' ? 'selected' : (old('kirim_tagihan_wa') == 'Yes' ? 'selected' : '') }}>
@@ -363,7 +363,7 @@
         <div class="form-group">
             <label for="router">{{ __('Settingmikrotik') }}</label>
             <select class="form-select js-example-basic-single @error('router') is-invalid @enderror" name="router"
-                id="router" class="form-control">
+                id="router" class="form-control" required>
                 <option value="" selected disabled>-- {{ __('Select settingmikrotik') }} --</option>
 
                 @foreach ($settingmikrotiks as $settingmikrotik)
@@ -385,14 +385,8 @@
         <div class="form-group">
             <label for="user-pppoe">{{ __('Mode User') }}</label>
             <select class="form-select js-example-basic-single @error('mode_user') is-invalid @enderror"
-                name="mode_user" id="mode_user" class="form-control">
+                name="mode_user" id="mode_user" class="form-control" required>
                 <option value="" selected disabled>-- {{ __('Select') }} --</option>
-                {{-- <option value="PPOE"
-                    {{ isset($pelanggan) && $pelanggan->mode_user == 'PPOE' ? 'selected' : (old('mode_user') == 'PPOE' ? 'selected' : '') }}>
-                    PPOE</option>
-                <option value="Static"
-                    {{ isset($pelanggan) && $pelanggan->mode_user == 'Static' ? 'selected' : (old('mode_user') == 'Static' ? 'selected' : '') }}>
-                    Static</option> --}}
             </select>
             @error('mode_user')
                 <span class="text-danger">

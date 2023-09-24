@@ -93,21 +93,20 @@
                             </div>
                             <hr>
                             <div class="table-responsive p-1">
-                                <table class="table table-striped" id="data-table" width="100%">
+                                <table id="data-table" class="table table-striped" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>{{ __('Area Coverage') }}</th>
                                             <th>{{ __('No Layanan') }}</th>
                                             <th>{{ __('Nama') }}</th>
-                                            <th>{{ __('Tanggal Daftar') }}</th>
+                                            {{-- <th>{{ __('Tanggal Daftar') }}</th>
                                             <th>{{ __('Wa') }}</th>
                                             <th>{{ __('No Ktp') }}</th>
                                             <th>{{ __('Status Berlangganan') }}</th>
                                             <th>{{ __('Package') }}</th>
                                             <th>{{ __('Router') }}</th>
                                             <th>{{ __('Mode User') }}</th>
-                                            <th>{{ __('User') }}</th>
+                                            <th>{{ __('User') }}</th> --}}
                                             <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
@@ -130,16 +129,71 @@
 
 @push('js')
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.12.0/datatables.min.js"></script>
+
     <script>
+        function format(d) {
+            return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+                '<tr>' +
+                '<td>Area Coverage</td>' +
+                '<td>' + d.area_coverage + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Tanggal Daftar</td>' +
+                '<td>' + d.tanggal_daftar + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Wa</td>' +
+                '<td>' + d.no_wa + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>No Ktp</td>' +
+                '<td>' + d.no_ktp + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Status Berlangganan</td>' +
+                '<td>' + d.status_berlangganan + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Package</td>' +
+                '<td>' + d.package + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Router</td>' +
+                '<td>' + d.settingmikrotik + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Mode User</td>' +
+                '<td>' + d.mode_user + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>User</td>' +
+                '<td>' + d.user_mikrotik + '</td>' +
+                '</tr>' +
+                '</table>';
+        }
+
+        $('#data-table').on('click', 'tbody td.dt-control', function() {
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+            } else {
+                // Open this row
+                row.child(format(row.data())).show();
+            }
+        });
+
+        $('#data-table').on('requestChild.dt', function(e, row) {
+            row.child(format(row.data())).show();
+        })
+
         let columns = [{
-                data: 'DT_RowIndex',
-                name: 'DT_RowIndex',
-                orderable: false,
-                searchable: false
-            },
-            {
-                data: 'area_coverage',
-                name: 'area_coverage.kode_area'
+                "className": 'dt-control',
+                "orderable": false,
+                "data": null,
+                "defaultContent": ''
             },
             {
                 data: 'no_layanan',
@@ -148,38 +202,6 @@
             {
                 data: 'nama',
                 name: 'nama',
-            },
-            {
-                data: 'tanggal_daftar',
-                name: 'tanggal_daftar',
-            },
-            {
-                data: 'no_wa',
-                name: 'no_wa',
-            },
-            {
-                data: 'no_ktp',
-                name: 'no_ktp',
-            },
-            {
-                data: 'status_berlangganan',
-                name: 'status_berlangganan',
-            },
-            {
-                data: 'package',
-                name: 'package.nama_layanan'
-            },
-            {
-                data: 'settingmikrotik',
-                name: 'settingmikrotik',
-            },
-            {
-                data: 'mode_user',
-                name: 'mode_user',
-            },
-            {
-                data: 'user_mikrotik',
-                name: 'user_mikrotik',
             },
             {
                 data: 'action',

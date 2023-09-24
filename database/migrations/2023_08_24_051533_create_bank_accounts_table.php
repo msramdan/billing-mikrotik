@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('bank_id')->nullable()->constrained('banks')->restrictOnUpdate()->nullOnDelete();
 			$table->string('pemilik_rekening', 255);
-			$table->integer('nomor_rekening');
+			$table->string('nomor_rekening',50);
             $table->timestamps();
         });
     }
