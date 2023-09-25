@@ -43,6 +43,8 @@
                                             <th>{{ __('Avatar') }}</th>
                                             <th>{{ __('Name') }}</th>
                                             <th>{{ __('Email') }}</th>
+                                            <th>{{ __('No Wa') }}</th>
+                                            <th>{{ __('Kirim Notif Wa') }}</th>
                                             <th>{{ __('Role') }}</th>
                                             <th>{{ __('Created At') }}</th>
                                             <th>{{ __('Updated At') }}</th>
@@ -97,6 +99,14 @@
                 {
                     data: 'email',
                     name: 'email'
+                },
+                {
+                    data: 'no_wa',
+                    name: 'no_wa'
+                },
+                {
+                    data: 'kirim_notif_wa',
+                    name: 'kirim_notif_wa'
                 },
                 {
                     data: 'role',

@@ -55,6 +55,14 @@
                                         <td>{{ $user->email }}</td>
                                     </tr>
                                     <tr>
+                                        <td class="fw-bold">{{ __('No Wa') }}</td>
+                                        <td>{{ $user->no_wa }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Kirim Notif Wa') }}</td>
+                                        <td>{{ $user->kirim_notif_wa }}</td>
+                                    </tr>
+                                    <tr>
                                         <td class="fw-bold">{{ __('Role') }}</td>
                                         <td>{{ $user->getRoleNames()->toArray() !== [] ? $user->getRoleNames()[0] : '-' }}</td>
                                     </tr>

@@ -10,11 +10,11 @@ use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Pelanggan;
+use App\Models\Package;
 use App\Models\WaGateway;
-use App\Models\Company;
+use App\Models\User;
 use Image;
 use App\Models\Feature;
-use App\Models\Tagihan;
 use Illuminate\Support\Facades\Http;
 
 class WebController extends Controller
@@ -106,7 +106,7 @@ class WebController extends Controller
         }
     }
 
-    public function submitRegister(Request $request,)
+    public function submitRegister(Request $request)
     {
         $validator = Validator::make(
             $request->all(),
@@ -155,10 +155,46 @@ class WebController extends Controller
                 'updated_at' => date('Y-m-d H:i:s'),
             ]);
             if ($customer) {
-                $waGateway = WaGateway::findOrFail(1)->first();
-                $company = Company::findOrFail(1)->first();
+                $waGateway = WaGateway::findOrFail(1);
                 if ($waGateway->is_active == 'Yes') {
-                    sendNotifWa($waGateway->url, $waGateway->api_key, $request, 'daftar', $company->no_wa, '');
+                    // kirim notif wa ke user
+                    $listUser = User::where('kirim_notif_wa', 'Yes')
+                        ->get();
+                    $url = $waGateway->url. 'send-message';
+                    foreach ($listUser as $row) {
+                        try {
+                            $paket = Package::findOrFail($request->paket_layanan)->first();
+                            $customer = Pelanggan::where('email', $request->email)->firstOrFail();
+                            $url_detail = url('/pelanggans/' . $customer->id);
+                            $message = 'Hello. admin ' . getCompany()->nama_perusahaan . "\n\n";
+                            $message .= "Ada calon customer baru yang melakukan pendaftaran \n\n";
+                            $message .= "*Nama :* " . $request->nama . "\n";
+                            $message .= '*Email :* ' . $request->email . "\n";
+                            $message .= '*No Wa :* ' . $request->no_wa . "\n";
+                            $message .= '*No KTP :* ' .  $request->no_ktp . " \n";
+                            $message .= '*Alamat :* ' .  $request->alamat . "\n";
+                            $message .= '*Paket pilihan :* ' . $paket->nama_layanan . "\n\n";
+                            $message .= "Detail pendaftaran bisa admin lihat disini : $url_detail \n\n";
+
+                            $data = array(
+                                'api_key'  => $waGateway->api_key,
+                                'receiver' => $row->no_wa,
+                                'data'     => [
+                                    'message' => $message,
+                                ],
+                            );
+                            $body = json_encode($data);
+                            $ch = curl_init($url);
+                            curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
+                            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                            $result = curl_exec($ch);
+                            curl_close($ch);
+                            print_r($result);
+                        } catch (Throwable $t) {
+                            continue;
+                        }
+                    }
                 }
             }
         } catch (\Exception $e) {
@@ -191,14 +227,12 @@ class WebController extends Controller
                 ])->get($url);
                 $a = json_decode($response->getBody());
 
-                if($a->success==true){
+                if ($a->success == true) {
                     $metodeBayar = $a->data;
-                }else{
+                } else {
                     echo $a->message;
                     die();
                 }
-
-
             }
         }
         return view('frontend.tagihan', [

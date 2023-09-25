@@ -29,6 +29,51 @@
 
     <div class="col-md-6">
         <div class="form-group">
+            <label for="no_wa">{{ __('No Wa') }}</label>
+            <input type="number" name="no_wa" id="no_wa"
+                class="form-control @error('no_wa') is-invalid @enderror" placeholder="{{ __('No Wa') }}"
+                value="{{ isset($user) ? $user->no_wa : old('no_wa') }}" required>
+            @error('no_wa')
+                <span class="text-danger">
+                    {{ $message }}
+                </span>
+            @enderror
+            <div id="passwordHelpBlock" class="form-text">
+                {{ __('Harus diawali dengan 62, Cth : 6283874731480') }}
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="kirim-notif-wa">{{ __('Kirim Notif Wa') }}</label>
+            <select class="form-select @error('kirim_notif_wa') is-invalid @enderror"
+                name="kirim_notif_wa" id="kirim-notif-wa" class="form-control" required>
+                <option value="" selected disabled>-- {{ __('Select kirim notif wa') }} --</option>
+                <option value="Yes"
+                    {{ isset($user) && $user->kirim_notif_wa == 'Yes' ? 'selected' : (old('kirim_notif_wa') == 'Yes' ? 'selected' : '') }}>
+                    Yes</option>
+                <option value="No"
+                    {{ isset($user) && $user->kirim_notif_wa == 'No' ? 'selected' : (old('kirim_notif_wa') == 'No' ? 'selected' : '') }}>
+                    No</option>
+            </select>
+            @error('kirim_notif_wa')
+                <span class="text-danger">
+                    {{ $message }}
+                </span>
+            @enderror
+            <div id="passwordHelpBlock" class="form-text">
+                {{ __('Kirim notif wa ketika ada calon pelanggan daftar baru') }}
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <div class="col-md-6">
+        <div class="form-group">
             <label for="password">{{ __('Password') }}</label>
             <input type="password" name="password" id="password"
                 class="form-control @error('password') is-invalid @enderror" placeholder="{{ __('Password') }}"

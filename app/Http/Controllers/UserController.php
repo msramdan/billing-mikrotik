@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\{StoreUserRequest, UpdateUserRequest};
 use App\Models\User;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Image;
 
 class UserController extends Controller
@@ -67,10 +70,29 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreUserRequest $request)
+    public function store(Request $request)
     {
-        $attr = $request->validated();
-
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name' => ['required', 'min:3', 'max:255'],
+                'email' => ['required', 'email', 'unique:users,email'],
+                'avatar' => ['nullable', 'image', 'max:1024'],
+                'role' => ['required', 'exists:roles,id'],
+                'no_wa' => 'required|string|max:15|phone_number',
+                'kirim_notif_wa' => 'required|in:Yes,No',
+                'password' =>  [
+                    'required',
+                    'confirmed'
+                ]
+            ],
+            [
+                'no_wa.phone_number'    => 'Harus diawali dengan 62, Cth : 6283874731480',
+            ]
+        );
+        if ($validator->fails()) {
+            return redirect()->back()->withInput($request->all())->withErrors($validator);
+        }
         if ($request->file('avatar') && $request->file('avatar')->isValid()) {
 
             $filename = $request->file('avatar')->hashName();
@@ -87,8 +109,11 @@ class UserController extends Controller
             $attr['avatar'] = $filename;
         }
 
+        $attr['name'] =$request->name;
+        $attr['email'] =$request->email;
+        $attr['no_wa'] =$request->no_wa;
+        $attr['kirim_notif_wa'] =$request->kirim_notif_wa;
         $attr['password'] = bcrypt($request->password);
-
         $user = User::create($attr);
 
         $user->assignRole($request->role);
@@ -131,9 +156,29 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(Request $request, User $user)
     {
-        $attr = $request->validated();
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name' => ['required', 'min:3', 'max:255'],
+                'email' => ['required', 'email', 'unique:users,email,' . $user->id],
+                'avatar' => ['nullable', 'image', 'max:1024'],
+                'role' => ['required', 'exists:roles,id'],
+                'no_wa' => 'required|string|max:15|phone_number',
+                'kirim_notif_wa' => 'required|in:Yes,No',
+                'password' =>  [
+                    'nullable',
+                    'confirmed'
+                ]
+            ],
+            [
+                'no_wa.phone_number'    => 'Harus diawali dengan 62, Cth : 6283874731480',
+            ]
+        );
+        if ($validator->fails()) {
+            return redirect()->back()->withInput($request->all())->withErrors($validator);
+        }
 
         if ($request->file('avatar') && $request->file('avatar')->isValid()) {
 
@@ -160,6 +205,11 @@ class UserController extends Controller
         } else {
             $attr['avatar'] = $user->avatar;
         }
+
+        $attr['name'] =$request->name;
+        $attr['email'] =$request->email;
+        $attr['no_wa'] =$request->no_wa;
+        $attr['kirim_notif_wa'] =$request->kirim_notif_wa;
 
         switch (is_null($request->password)) {
             case true:
