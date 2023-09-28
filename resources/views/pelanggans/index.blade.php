@@ -68,7 +68,7 @@
                                                 <option value="Tunggakan">Tunggakan</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <select name="packagePilihan" id="packagePilihan"
                                                 class="form-control  js-example-basic-single">
                                                 <option value="All">All Package</option>
@@ -78,7 +78,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <select name="mikrotik" id="mikrotik"
                                                 class="form-control  js-example-basic-single">
                                                 <option value="All">All Route Mikrotik</option>
@@ -86,6 +86,15 @@
                                                     <option value="{{ $row->id }}">{{ $row->identitas_router }}
                                                     </option>
                                                 @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <select name="mode_user" id="mode_user"
+                                                class="form-control  js-example-basic-single">
+                                                <option value="All">All Mode User
+                                                </option>
+                                                <option value="PPOE">PPOE</option>
+                                                <option value="Static">Static</option>
                                             </select>
                                         </div>
                                     </div>
@@ -219,6 +228,7 @@
                 data: function(s) {
                     s.area_coverage = $('select[name=area_coverage] option').filter(':selected').val()
                     s.status = $('select[name=status] option').filter(':selected').val()
+                    s.mode_user = $('select[name=mode_user] option').filter(':selected').val()
                     s.packagePilihan = $('select[name=packagePilihan] option').filter(':selected').val()
                     s.mikrotik = $('select[name=mikrotik] option').filter(':selected').val()
                 }
@@ -236,6 +246,9 @@
             table.draw();
         })
         $('#mikrotik').change(function() {
+            table.draw();
+        })
+        $('#mode_user').change(function() {
             table.draw();
         })
     </script>

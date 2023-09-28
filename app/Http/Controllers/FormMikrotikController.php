@@ -16,7 +16,9 @@ class FormMikrotikController extends Controller
 
     public function cekrouter(Request $request)
     {
+
         try {
+
             $data = [
                 'host' => $request->host,
                 'user' => $request->username,
@@ -37,7 +39,8 @@ class FormMikrotikController extends Controller
                 'message' => 'Koneksi ke mikrotik berhasil',
                 'data' => $dataInput
             ]);
-        } catch (ConnectException $e) {
+        } catch (\Exception $e) {
+
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage() . PHP_EOL,

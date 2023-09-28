@@ -89,11 +89,11 @@
                                             <th>#</th>
                                             <th>{{ __('No Tagihan') }}</th>
                                             <th>{{ __('Pelanggan') }}</th>
-                                            <th>{{ __('Periode') }}</th>
+                                            {{-- <th>{{ __('Periode') }}</th>
                                             <th>{{ __('Metode Bayar') }}</th>
                                             <th>{{ __('Nominal Bayar') }}</th>
                                             <th>{{ __('Potongan Bayar') }}</th>
-                                            <th>{{ __('PPN') }}</th>
+                                            <th>{{ __('PPN') }}</th> --}}
                                             <th>{{ __('Total Bayar') }}</th>
                                             <th>{{ __('Status Bayar') }}</th>
                                             <th>{{ __('Action') }}</th>
@@ -119,11 +119,63 @@
 @push('js')
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.12.0/datatables.min.js"></script>
     <script>
+        function format(d) {
+            return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+                '<tr>' +
+                '<td>Periode</td>' +
+                '<td>' + d.periode + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Metode Bayar</td>' +
+                '<td>' + d.metode_bayar + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Nominal Bayar</td>' +
+                '<td>' + d.nominal_bayar + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Potongan Bayar</td>' +
+                '<td>' + d.potongan_bayar + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>PPN</td>' +
+                '<td>' + d.nominal_ppn + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Total Bayar</td>' +
+                '<td>' + d.total_bayar + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>User Verifikasi</td>' +
+                '<td>' + d.user + '</td>' +
+                '</tr>' +
+                '</table>';
+        }
+
+        $('#data-table').on('click', 'tbody td.dt-control', function() {
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+            } else {
+                // Open this row
+                row.child(format(row.data())).show();
+            }
+        });
+
+        $('#data-table').on('requestChild.dt', function(e, row) {
+            row.child(format(row.data())).show();
+        })
+
+
+
         let columns = [{
-                data: 'DT_RowIndex',
-                name: 'DT_RowIndex',
-                orderable: false,
-                searchable: false
+                "className": 'dt-control',
+                "orderable": false,
+                "data": null,
+                "defaultContent": ''
             },
             {
                 data: 'no_tagihan',
@@ -132,28 +184,6 @@
             {
                 data: 'pelanggan',
                 name: 'pelanggan.coverage_area'
-            },
-            {
-                data: 'periode',
-                name: 'periode',
-            },
-            {
-                data: 'metode_bayar',
-                name: 'metode_bayar',
-            },
-
-            {
-                data: 'nominal_bayar',
-                name: 'nominal_bayar',
-            },
-
-            {
-                data: 'potongan_bayar',
-                name: 'potongan_bayar',
-            },
-            {
-                data: 'nominal_ppn',
-                name: 'nominal_ppn',
             },
             {
                 data: 'total_bayar',

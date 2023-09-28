@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use App\Models\Tagihan;
 use App\Models\WaGateway;
+use \RouterOS\Query;
 use Illuminate\Support\Facades\DB;
 
 class TripayCallbackController extends Controller
@@ -91,11 +92,11 @@ class TripayCallbackController extends Controller
 
             if ($status == 'PAID') {
                 $invoice = DB::table('tagihans')
-                        ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
-                        ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
-                        ->select('tagihans.no_tagihan','tagihans.periode', 'tagihans.total_bayar as nominal', 'tagihans.metode_bayar', 'pelanggans.nama as nama_pelanggan', 'pelanggans.jatuh_tempo', 'pelanggans.email as email_customer', 'pelanggans.no_wa', 'packages.nama_layanan', 'pelanggans.no_layanan')
-                        ->where('tagihans.no_tagihan', '=', $invoiceId)
-                        ->first();
+                    ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
+                    ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
+                    ->select('tagihans.no_tagihan', 'tagihans.periode', 'tagihans.total_bayar as nominal', 'tagihans.metode_bayar', 'pelanggans.id as pelanggan_id', 'pelanggans.nama as nama_pelanggan', 'pelanggans.jatuh_tempo', 'pelanggans.email as email_customer', 'pelanggans.no_wa', 'packages.nama_layanan', 'pelanggans.no_layanan')
+                    ->where('tagihans.no_tagihan', '=', $invoiceId)
+                    ->first();
                 // insert data pemasukan
                 DB::table('pemasukans')->insert([
                     'nominal' => $invoice->nominal,
@@ -104,6 +105,49 @@ class TripayCallbackController extends Controller
                     'created_at' => date('Y-m-d H:i:s'),
                     'updated_at' => date('Y-m-d H:i:s'),
                 ]);
+
+                // set status jadi aktif handle klo kena isolir duluan dan tidak ada tagihan belum di bayar lain nya
+                $cekTagihan = Tagihan::where('pelanggan_id', $invoice->pelanggan_id)
+                    ->where('status_bayar', 'Belum Bayar')
+                    ->count();
+                if ($cekTagihan < 1) {
+                    // buka isolir
+                    $client = setRoute();
+                    $pelanggan = DB::table('pelanggans')
+                        ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
+                        ->select(
+                            'packages.profile',
+                            'pelanggans.user_pppoe',
+                        )->where('pelanggans.id', $invoice->pelanggan_id)->first();
+                    $queryGet = (new Query('/ppp/secret/print'))
+                        ->where('name', $pelanggan->user_pppoe);
+                    $data = $client->query($queryGet)->read();
+                    $idSecret = $data[0]['.id'];
+                    // balikan paket
+                    $comment = 'Isolir terbuka automatis : ' . date('Y-m-d H:i:s');
+                    $queryComment = (new Query('/ppp/secret/set'))
+                        ->equal('.id', $idSecret)
+                        ->equal('profile', $pelanggan->profile)
+                        ->equal('comment', $comment);
+                    $client->query($queryComment)->read();
+                    // get name
+                    $queryGet = (new Query('/ppp/active/print'))
+                        ->where('name', $pelanggan->user_pppoe);
+                    $data = $client->query($queryGet)->read();
+                    // remove session
+                    $idActive = $data[0]['.id'];
+                    $queryDelete = (new Query('/ppp/active/remove'))
+                        ->equal('.id', $idActive);
+                    $client->query($queryDelete)->read();
+                    DB::table('pelanggans')
+                        ->where('id', $invoice->pelanggan_id)
+                        ->update(
+                            [
+                                'status_berlangganan' => 'Aktif',
+                            ]
+                        );
+                }
+
                 // kirim wa
                 $waGateway = WaGateway::findOrFail(1)->first();
                 if ($waGateway->is_active == 'Yes') {

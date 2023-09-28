@@ -38,6 +38,7 @@ class PelangganController extends Controller
             $packagePilihan = intval($request->query('packagePilihan'));
             $mikrotik = intval($request->query('mikrotik'));
             $status = $request->query('status');
+            $mode_user = $request->query('mode_user');
 
             $pelanggans = DB::table('pelanggans')
                 ->leftJoin('area_coverages', 'pelanggans.coverage_area', '=', 'area_coverages.id')
@@ -71,6 +72,12 @@ class PelangganController extends Controller
             if (isset($mikrotik) && !empty($mikrotik)) {
                 if ($mikrotik != 'All') {
                     $pelanggans = $pelanggans->where('pelanggans.router', $mikrotik);
+                }
+            }
+
+            if (isset($mode_user) && !empty($mode_user)) {
+                if ($mode_user != 'All') {
+                    $pelanggans = $pelanggans->where('pelanggans.mode_user', $mode_user);
                 }
             }
 

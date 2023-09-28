@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\WaGateway;
 use App\Models\Pelanggan;
 use PDF;
+use Auth;
+use \RouterOS\Query;
 
 class TagihanController extends Controller
 {
@@ -32,7 +34,8 @@ class TagihanController extends Controller
 
             $tagihans = DB::table('tagihans')
                 ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
-                ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.id as pelanggan_id');
+                ->leftJoin('users', 'tagihans.user_id', '=', 'users.id')
+                ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.id as pelanggan_id', 'users.name as nama_user');
 
             if (isset($pelanggans) && !empty($pelanggans)) {
                 if ($pelanggans != 'All') {
@@ -66,6 +69,13 @@ class TagihanController extends Controller
                 })
                 ->addColumn('potongan_bayar', function ($row) {
                     return rupiah($row->potongan_bayar);
+                })
+                ->addColumn('user', function ($row) {
+                    if ($row->nama_user) {
+                        return $row->nama_user;
+                    } else {
+                        return '-';
+                    }
                 })
                 ->addColumn('total_bayar', function ($row) {
                     return rupiah($row->total_bayar);
@@ -259,6 +269,7 @@ class TagihanController extends Controller
                     'metode_bayar' => $request->metode_bayar,
                     'status_bayar' => 'Sudah Bayar',
                     'tanggal_kirim_notif_wa' => $tgl,
+                    'user_id' => Auth::user()->id
                 ]
             );
         // insert pemasukan
@@ -275,8 +286,35 @@ class TagihanController extends Controller
         $cekTagihan = Tagihan::where('pelanggan_id', $request->pelanggan_id)
             ->where('status_bayar', 'Belum Bayar')
             ->count();
-
         if ($cekTagihan < 1) {
+            // buka isolir
+            $client = setRoute();
+            $pelanggan = DB::table('pelanggans')
+                ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
+                ->select(
+                    'packages.profile',
+                    'pelanggans.user_pppoe',
+                )->where('pelanggans.id', $request->pelanggan_id)->first();
+            $queryGet = (new Query('/ppp/secret/print'))
+                ->where('name', $pelanggan->user_pppoe);
+            $data = $client->query($queryGet)->read();
+            $idSecret = $data[0]['.id'];
+            // balikan paket
+            $comment = 'Isolir terbuka automatis : ' . date('Y-m-d H:i:s');
+            $queryComment = (new Query('/ppp/secret/set'))
+                ->equal('.id', $idSecret)
+                ->equal('profile', $pelanggan->profile)
+                ->equal('comment', $comment);
+            $client->query($queryComment)->read();
+            // get name
+            $queryGet = (new Query('/ppp/active/print'))
+                ->where('name', $pelanggan->user_pppoe);
+            $data = $client->query($queryGet)->read();
+            // remove session
+            $idActive = $data[0]['.id'];
+            $queryDelete = (new Query('/ppp/active/remove'))
+                ->equal('.id', $idActive);
+            $client->query($queryDelete)->read();
             DB::table('pelanggans')
                 ->where('id', $request->pelanggan_id)
                 ->update(
@@ -285,16 +323,14 @@ class TagihanController extends Controller
                     ]
                 );
         }
-
         // id jika notif Yes kirim
         if ($request->notif == 'Yes') {
             $waGateway = WaGateway::findOrFail(1);
             $pelanggan = Pelanggan::findOrFail($request->pelanggan_id);
             if ($waGateway->is_active == 'Yes') {
-                sendNotifWa($waGateway->url, $waGateway->api_key, $request, 'bayar', $pelanggan->no_wa,$waGateway->footer_pesan_wa_pembayaran);
+                sendNotifWa($waGateway->url, $waGateway->api_key, $request, 'bayar', $pelanggan->no_wa, $waGateway->footer_pesan_wa_pembayaran);
             }
         }
-
         return redirect()
             ->route('tagihans.index')
             ->with('success', __('Pembayran berhasil dilakukan'));

@@ -12,7 +12,9 @@
                         <h1>Built for Internet Service</h1>
                         <p>Dapatkan layanan internet murah berkualitas hanya di {{ getCompany()->nama_perusahaan }}</p>
                         <div class="price">
-                          Rp {{ rupiah2($packages[0]->harga) }} <span>/ Bulan</span>
+                            @if (isset($packages[0]->harga))
+                                Rp {{ rupiah2($packages[0]->harga) }} <span>/ Bulan</span>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -45,27 +47,27 @@
             </div>
 
             <div class="row">
-                @foreach ( $features as $row )
-                <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="single-features-box" style="height: 325px">
-                        <div class="icon">
-                            {!!$row->icon!!}
-                        </div>
+                @foreach ($features as $row)
+                    <div class="col-lg-4 col-md-6 col-sm-6">
+                        <div class="single-features-box" style="height: 325px">
+                            <div class="icon">
+                                {!! $row->icon !!}
+                            </div>
 
-                        <h3>{{$row->judul}}</h3>
+                            <h3>{{ $row->judul }}</h3>
 
-                        <p style="text-align: justify">{{$row->keterangan}}</p>
+                            <p style="text-align: justify">{{ $row->keterangan }}</p>
 
-                        <div class="back-icon">
-                            {!!$row->icon!!}
-                        </div>
+                            <div class="back-icon">
+                                {!! $row->icon !!}
+                            </div>
 
-                        <div class="image-box">
-                            <img src="{{ asset('frontend') }}/assets/img/shape-image/2.png" alt="image">
-                            <img src="{{ asset('frontend') }}/assets/img/shape-image/2.png" alt="image">
+                            <div class="image-box">
+                                <img src="{{ asset('frontend') }}/assets/img/shape-image/2.png" alt="image">
+                                <img src="{{ asset('frontend') }}/assets/img/shape-image/2.png" alt="image">
+                            </div>
                         </div>
                     </div>
-                </div>
                 @endforeach
 
 
