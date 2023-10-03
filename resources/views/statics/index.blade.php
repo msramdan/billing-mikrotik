@@ -29,11 +29,11 @@
                                 <table class="table table-striped" id="data-table" width="100%">
                                     <thead>
                                         <tr>
+                                            <th></th>
                                             <th>{{ __('Name') }}</th>
                                             <th>Max Limit</th>
                                             <th>Limit At</th>
                                             <th>Bytes</th>
-                                            <th>Parent</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -54,36 +54,71 @@
 @endpush
 
 @push('js')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
-        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.12.0/datatables.min.js"></script>
     <script>
-        $('#data-table').DataTable({
+        function format(d) {
+            return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+                '<tr>' +
+                '<td>Parent</td>' +
+                '<td>:</td>' +
+                '<td>' + d.parent + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Target</td>' +
+                '<td>:</td>' +
+                '<td>' + d.target + '</td>' +
+                '</tr>' +
+                '</table>';
+        }
+
+        $('#data-table').on('click', 'tbody td.dt-control', function() {
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+            } else {
+                // Open this row
+                row.child(format(row.data())).show();
+            }
+        });
+
+        $('#data-table').on('requestChild.dt', function(e, row) {
+            row.child(format(row.data())).show();
+        })
+
+        let columns = [{
+                "className": 'dt-control',
+                "orderable": false,
+                "data": null,
+                "defaultContent": ''
+            },
+            {
+                data: 'name',
+                name: 'name',
+            },
+            {
+                data: 'max_limit',
+                name: 'max_limit',
+            },
+            {
+                data: 'limit-at',
+                name: 'limit-at',
+            },
+            {
+                data: 'bytes',
+                name: 'bytes',
+            }
+        ];
+
+        var table = $('#data-table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('statics.index') }}",
-            columns: [{
-                    data: 'name',
-                    name: 'name',
-                },
-                {
-                    data: 'max_limit',
-                    name: 'max_limit',
-                },
-                {
-                    data: 'limit-at',
-                    name: 'limit-at',
-                },
-                {
-                    data: 'bytes',
-                    name: 'bytes',
-                },
-                {
-                    data: 'parent',
-                    name: 'parent',
-                }
-            ],
+            ajax: {
+                url: "{{ route('statics.index') }}",
+            },
+            columns: columns
         });
     </script>
 @endpush

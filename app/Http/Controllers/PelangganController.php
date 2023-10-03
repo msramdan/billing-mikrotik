@@ -310,10 +310,10 @@ class PelangganController extends Controller
     {
         $attr = $request->validated();
 
-        if($request->mode_user != $pelanggan->mode_user ){
-            if($request->mode_user=='Static'){
+        if ($request->mode_user != $pelanggan->mode_user) {
+            if ($request->mode_user == 'Static') {
                 $attr['user_pppoe'] = null;
-            }else{
+            } else {
                 $attr['user_static'] = null;
             }
         }
@@ -382,6 +382,72 @@ class PelangganController extends Controller
                 ->with('error', __("The pelanggan can't be deleted because it's related to another table."));
         }
     }
+
+    public function setToExpiredStatic($pelanggan_id, $user_static)
+    {
+        try {
+            $client = setRoute();
+
+            // get ip by user static
+            $queryGet = (new Query('/queue/simple/print'))
+                ->where('name', $user_static);
+            $data = $client->query($queryGet)->read();
+            $ip = $data[0]['target'];
+            $parts = explode('/', $ip);
+            $fixIp = $parts[0];
+
+            $queryAdd = (new Query('/ip/firewall/address-list/add'))
+                ->equal('list', 'expired')
+                ->equal('address', $fixIp);
+            $client->query($queryAdd)->read();
+            // update status pelanggan jadi non aktif
+            $affected = DB::table('pelanggans')
+                ->where('id', $pelanggan_id)
+                ->update(['status_berlangganan' => 'Non Aktif']);
+            return redirect()
+                ->route('pelanggans.index')
+                ->with('success', __('Internet pelanggan berhasil di set Expired'));
+        } catch (ConnectException $e) {
+            echo $e->getMessage() . PHP_EOL;
+            die();
+        }
+    }
+
+    public function setNonToExpiredStatic($pelanggan_id, $user_static)
+    {
+        try {
+            $client = setRoute();
+            // get ip by user static
+            $queryGet = (new Query('/queue/simple/print'))
+                ->where('name', $user_static);
+            $data = $client->query($queryGet)->read();
+            $ip = $data[0]['target'];
+            $parts = explode('/', $ip);
+            $fixIp = $parts[0];
+            // get id
+            $queryGet = (new Query('/ip/firewall/address-list/print'))
+                ->where('list', 'expired') // Filter by name
+                ->where('address', $fixIp);
+            $data = $client->query($queryGet)->read();
+            $idIP = $data[0]['.id'];
+            $queryRemove = (new Query('/ip/firewall/address-list/remove'))
+                ->equal('.id', $idIP);
+            $client->query($queryRemove)->read();
+            // update status pelanggan jadi non aktif
+            $affected = DB::table('pelanggans')
+                ->where('id', $pelanggan_id)
+                ->update(['status_berlangganan' => 'Aktif']);
+            return redirect()
+                ->route('pelanggans.index')
+                ->with('success', __('Internet pelanggan berhasil di set Tidak Expired 2'));
+        } catch (ConnectException $e) {
+            echo $e->getMessage() . PHP_EOL;
+            die();
+        }
+    }
+
+
+
 
     public function setToExpired($pelanggan_id, $user_pppoe)
     {
