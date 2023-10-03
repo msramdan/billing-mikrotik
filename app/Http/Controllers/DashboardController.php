@@ -1,20 +1,20 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Models\Pelanggan;
 use App\Models\AreaCoverage;
 use \RouterOS\Query;
 use App\Models\Pemasukan;
 use App\Models\Settingmikrotik;
+use Carbon\Carbon;
 
 
 class DashboardController extends Controller
 {
     public function index()
     {
+        $currentMonthStart = Carbon::now()->startOfMonth();
+        $newPelanggan = Pelanggan::where('tanggal_daftar', '>=', $currentMonthStart)->count();
         $pelanggan = Pelanggan::all();
         $countAreaCoverage = AreaCoverage::count();
         $countPelanggan = Pelanggan::count();
@@ -22,7 +22,6 @@ class DashboardController extends Controller
         $countPelangganAktif = Pelanggan::where('status_berlangganan', 'Aktif')->count();
         $countPelangganNon = Pelanggan::where('status_berlangganan', 'Non Aktif')->count();
         $countPelangganMenunggu = Pelanggan::where('status_berlangganan', 'Menunggu')->count();
-
         $client = setRoute();
         $query = new Query('/ip/hotspot/active/print');
         $hotspotactives = $client->query($query)->read();
@@ -47,6 +46,7 @@ class DashboardController extends Controller
             'activePpps' => count($activePpps),
             'nonactivePpps' => count($nonactivePpps) - count($activePpps),
             'pemasukans' => $pemasukans,
+            'newPelanggan' => $newPelanggan,
         ]);
     }
 }

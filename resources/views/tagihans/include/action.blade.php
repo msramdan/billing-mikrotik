@@ -7,11 +7,11 @@
             <i class="fa fa-print"></i>
         </a>
         @if ($model->status_bayar == 'Sudah Bayar')
-            <button disabled class="btn btn-outline-success btn-sm" title="Bayar Tagihan">
+            <button disabled class="btn btn-outline-warning btn-sm" title="Bayar Tagihan">
                 <i class="fa fa-money-bill" aria-hidden="true"></i>
             </button>
         @else
-            <button type="button" class="btn btn-outline-success btn-sm identifyingClass" data-bs-toggle="modal"
+            <button type="button" class="btn btn-outline-warning btn-sm identifyingClass" data-bs-toggle="modal"
                 data-bs-target="#exampleModal{{ $model->id }}">
                 <i class="fa fa-money-bill" aria-hidden="true"></i>
             </button>
@@ -27,8 +27,8 @@
                             @csrf
                             @method('POST')
                             <div class="modal-body">
-                                <input type="hidden" name="tagihan_id" value="{{$model->id}}">
-                                <input type="hidden" name="pelanggan_id" value="{{$model->pelanggan_id}}">
+                                <input type="hidden" name="tagihan_id" value="{{ $model->id }}">
+                                <input type="hidden" name="pelanggan_id" value="{{ $model->pelanggan_id }}">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="no-tagihan">{{ __('No Tagihan') }}</label>
@@ -42,8 +42,8 @@
                                     <div class="form-group">
                                         <label for="no-tagihan">{{ __('Nama Pelanggan') }}</label>
                                         <div class="input-group mb-3">
-                                            <input type="text" name="nama_pelanggan" required class="form-control" readonly
-                                                value="{{ $model->nama }}" />
+                                            <input type="text" name="nama_pelanggan" required class="form-control"
+                                                readonly value="{{ $model->nama }}" />
                                         </div>
                                     </div>
                                 </div>
@@ -51,8 +51,8 @@
                                     <div class="form-group">
                                         <label for="no-tagihan">{{ __('Periode') }}</label>
                                         <div class="input-group mb-3">
-                                            <input type="text" name="periode_waktu" required class="form-control" readonly
-                                                value="{{ $model->periode }}" />
+                                            <input type="text" name="periode_waktu" required class="form-control"
+                                                readonly value="{{ $model->periode }}" />
                                         </div>
                                     </div>
                                 </div>
@@ -105,24 +105,35 @@
         @endif
     @endcan
     @if ($model->status_bayar == 'Sudah Bayar')
+        <button disabled class="btn btn-outline-success btn-sm" title="Kirim Notif Tagihan WA"><i class="ace-icon bi bi-whatsapp"></i></button>
+
         @can('tagihan edit')
             <button disabled class="btn btn-outline-primary btn-sm" title="Edit Tagihan"><i
                     class="fa fa-pencil-alt"></i></button>
         @endcan
         @can('tagihan delete')
             @can('tagihan edit')
-            <form action="{{ route('tagihans.destroy', $model->id) }}" method="post" class="d-inline"
-                onsubmit="return confirm('Are you sure to delete this record?')">
-                @csrf
-                @method('delete')
+                <form action="{{ route('tagihans.destroy', $model->id) }}" method="post" class="d-inline"
+                    onsubmit="return confirm('Are you sure to delete this record?')">
+                    @csrf
+                    @method('delete')
 
-                <button class="btn btn-outline-danger btn-sm" title="Hapus Tagihan">
-                    <i class="ace-icon fa fa-trash-alt"></i>
-                </button>
-            </form>
+                    <button class="btn btn-outline-danger btn-sm" title="Hapus Tagihan">
+                        <i class="ace-icon fa fa-trash-alt"></i>
+                    </button>
+                </form>
             @endcan
         @endcan
     @else
+        <form action="{{ route('sendTagihanWa', $model->id) }}" method="POST" class="d-inline"
+            onsubmit="return confirm('yakin kirim notifikasi tagihan wa ?')">
+            @csrf
+            @method('POST')
+            <button class="btn btn-outline-success btn-sm" title="Kirim Notif Tagihan WA">
+                <i class="ace-icon bi bi-whatsapp"></i>
+            </button>
+        </form>
+
         @can('tagihan edit')
             <a href="{{ route('tagihans.edit', $model->id) }}" class="btn btn-outline-primary btn-sm"
                 title="Edit Tagihan">

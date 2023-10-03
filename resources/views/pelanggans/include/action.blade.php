@@ -15,7 +15,25 @@
                 </li>
             @endcan
 
-            @if ($model->mode_user != 'Static')
+            @if ($model->mode_user == 'Static')
+                @if ($model->status_berlangganan == 'Menunggu')
+                    <li><button class="dropdown-item" disabled>Set to Non Expired</button></li>
+                    <li><button class="dropdown-item" disabled>Set to Expired</button></li>
+                @else
+                    <li><a class="dropdown-item"
+                            href="{{ route('pelanggans.setNonToExpiredStatic', [
+                                'id' => $model->id,
+                                'user_static' => $model->user_static,
+                            ]) }}">Set
+                            to Non Expired</a></li>
+                    <li><a class="dropdown-item"
+                            href="{{ route('pelanggans.setToExpiredStatic', [
+                                'id' => $model->id,
+                                'user_static' => $model->user_static,
+                            ]) }}">Set
+                            to Expired</a></li>
+                @endif
+            @else
                 @if ($model->status_berlangganan == 'Menunggu')
                     <li><button class="dropdown-item" disabled>Set to Non Expired</button></li>
                     <li><button class="dropdown-item" disabled>Set to Expired</button></li>
@@ -34,7 +52,6 @@
                             to Expired</a></li>
                 @endif
             @endif
-
 
             @can('pelanggan delete')
                 <li>

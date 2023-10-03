@@ -68,6 +68,7 @@ Route::middleware(['auth', 'web','nomikrotik'])->group(function () {
     Route::resource('area-coverages', App\Http\Controllers\AreaCoverageController::class);
     Route::resource('profile-pppoes', App\Http\Controllers\ProfilePppoeController::class);
     Route::resource('active-ppps', App\Http\Controllers\ActivePppController::class);
+    Route::resource('non-active-ppps', App\Http\Controllers\ActiveNonPppController::class);
     Route::controller(App\Http\Controllers\ActivePppController::class)->group(function () {
         Route::get('monitoring', 'monitoring')->name('monitoring');
     });
@@ -104,6 +105,8 @@ Route::middleware(['auth', 'web','nomikrotik'])->group(function () {
     Route::controller(App\Http\Controllers\PelangganController::class)->group(function () {
         Route::get('setToExpired/{id}/{user_pppoe}', 'setToExpired')->name('pelanggans.setToExpired');
         Route::get('setNonToExpired/{id}/{user_pppoe}', 'setNonToExpired')->name('pelanggans.setNonToExpired');
+        Route::get('setToExpiredStatic/{id}/{user_static}', 'setToExpiredStatic')->name('pelanggans.setToExpiredStatic');
+        Route::get('setNonToExpiredStatic/{id}/{user_static}', 'setNonToExpiredStatic')->name('pelanggans.setNonToExpiredStatic');
         Route::get('getTableArea/{id}', 'getTableArea')->name('api.getTableArea');
         Route::get('getTableOdc/{id}', 'getTableOdc')->name('api.getTableOdc');
         Route::get('getTableOdp/{id}', 'getTableOdp')->name('api.getTableOdp');
@@ -121,6 +124,7 @@ Route::middleware(['auth', 'web','nomikrotik'])->group(function () {
     Route::controller(App\Http\Controllers\TagihanController::class)->group(function () {
         Route::get('invoice/{id}', 'invoice')->name('invoice.pdf');
         Route::post('/bayarTagihan', 'bayarTagihan')->name('bayarTagihan');
+        Route::post('/sendTagihanWa/{id}', 'sendTagihanWa')->name('sendTagihanWa');
     });
     Route::resource('laporans', App\Http\Controllers\LaporanController::class);
     Route::resource('sendnotifs', App\Http\Controllers\SendnotifController::class);

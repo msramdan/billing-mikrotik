@@ -57,17 +57,19 @@ function getCompany()
 {
     $data = DB::table('companies')
         ->join('paket_langganan', 'companies.paket_langganan_id', '=', 'paket_langganan.id')
-        ->select('companies.*', 'paket_langganan.nama_paket', 'paket_langganan.jumlah_router','paket_langganan.jumlah_pelanggan')
+        ->select('companies.*', 'paket_langganan.nama_paket', 'paket_langganan.jumlah_router', 'paket_langganan.jumlah_pelanggan')
         ->first();
     return $data;
 }
 
-function hitungRouter(){
+function hitungRouter()
+{
     $count = Settingmikrotik::count();
     return $count;
 }
 
-function hitungPelanggan(){
+function hitungPelanggan()
+{
     $count = Pelanggan::count();
     return $count;
 }
@@ -125,6 +127,13 @@ function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima, $footer
         $message .= '*Metode Pembayaran :* ' .  $request->metode_bayar . " \n";
         $message .= '*Tanggal :* ' . date('Y-m-d H:i:s') . "\n\n";
         $message .= $footer;
+    } else if ($typePesan == 'tagihan') {
+        $message = 'Pelanggan ' . getCompany()->nama_perusahaan . ' Yth. ' . $request->nama . "\n\n";
+        $message .= 'Kami sampaikan tagihan layanan internet bulan *' . tanggal_indonesia($request->periode)  . '*' . "\n";
+        $message .= 'Dengan no tagihan *' . $request->no_tagihan . '* sebesar *' . rupiah($request->total_bayar) . '*' . "\n";
+        $message .= 'Pembayaran paling lambat di tanggal *' . addHari($request->tanggal_create_tagihan, $request->jatuh_tempo) . '* Untuk Menghindari Isolir off wifi otomatis di tempat anda.' . " \n\n";
+        $message .= "*Note : Abaikan pesan ini jika sudah berbayar* \n\n";
+        $message .= $footer;
     }
 
     $endpoint_wa = $url . 'send-message';
@@ -143,6 +152,12 @@ function totalStatusBayar($status)
     $totalStatus = Tagihan::where('status_bayar', $status)
         ->get();
     return  $totalStatus->count();
+}
+
+function addHari($tgl, $jatuh_tempo)
+{
+    $tgl    = date('Y-m-d', strtotime('+'.$jatuh_tempo.'days', strtotime($tgl)));
+    return $tgl;
 }
 
 function hitungUang($type)

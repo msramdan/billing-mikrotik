@@ -257,6 +257,22 @@ class TagihanController extends Controller
         return $pdf->stream();
     }
 
+    public function sendTagihanWa($tagihan_id)
+    {
+        $waGateway = WaGateway::findOrFail(1);
+        $tagihans = DB::table('tagihans')
+            ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
+            ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.no_wa', 'pelanggans.jatuh_tempo')
+            ->where('tagihans.id', '=', $tagihan_id)->first();
+        if ($waGateway->is_active == 'Yes') {
+            sendNotifWa($waGateway->url, $waGateway->api_key, $tagihans, 'tagihan', $tagihans->no_wa, $waGateway->footer_pesan_wa_tagihan);
+        }
+
+        return redirect()
+            ->route('tagihans.index')
+            ->with('success', __('Kirim notifikasi tagihan berhasil'));
+    }
+
     public function bayarTagihan(Request $request)
     {
         $tgl = date('Y-m-d H:i:s');
@@ -287,34 +303,56 @@ class TagihanController extends Controller
             ->where('status_bayar', 'Belum Bayar')
             ->count();
         if ($cekTagihan < 1) {
-            // buka isolir
-            $client = setRoute();
             $pelanggan = DB::table('pelanggans')
                 ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
                 ->select(
                     'packages.profile',
+                    'pelanggans.mode_user',
                     'pelanggans.user_pppoe',
+                    'pelanggans.user_static',
                 )->where('pelanggans.id', $request->pelanggan_id)->first();
-            $queryGet = (new Query('/ppp/secret/print'))
-                ->where('name', $pelanggan->user_pppoe);
-            $data = $client->query($queryGet)->read();
-            $idSecret = $data[0]['.id'];
-            // balikan paket
-            $comment = 'Isolir terbuka automatis : ' . date('Y-m-d H:i:s');
-            $queryComment = (new Query('/ppp/secret/set'))
-                ->equal('.id', $idSecret)
-                ->equal('profile', $pelanggan->profile)
-                ->equal('comment', $comment);
-            $client->query($queryComment)->read();
-            // get name
-            $queryGet = (new Query('/ppp/active/print'))
-                ->where('name', $pelanggan->user_pppoe);
-            $data = $client->query($queryGet)->read();
-            // remove session
-            $idActive = $data[0]['.id'];
-            $queryDelete = (new Query('/ppp/active/remove'))
-                ->equal('.id', $idActive);
-            $client->query($queryDelete)->read();
+            if ($pelanggan->mode_user == 'PPOE') {
+                // buka isolir
+                $client = setRoute();
+                $queryGet = (new Query('/ppp/secret/print'))
+                    ->where('name', $pelanggan->user_pppoe);
+                $data = $client->query($queryGet)->read();
+                $idSecret = $data[0]['.id'];
+                // balikan paket
+                $comment = 'Isolir terbuka automatis : ' . date('Y-m-d H:i:s');
+                $queryComment = (new Query('/ppp/secret/set'))
+                    ->equal('.id', $idSecret)
+                    ->equal('profile', $pelanggan->profile)
+                    ->equal('comment', $comment);
+                $client->query($queryComment)->read();
+                // get name
+                $queryGet = (new Query('/ppp/active/print'))
+                    ->where('name', $pelanggan->user_pppoe);
+                $data = $client->query($queryGet)->read();
+                // remove session
+                $idActive = $data[0]['.id'];
+                $queryDelete = (new Query('/ppp/active/remove'))
+                    ->equal('.id', $idActive);
+                $client->query($queryDelete)->read();
+            } else {
+                $client = setRoute();
+                // get ip by user static
+                $queryGet = (new Query('/queue/simple/print'))
+                    ->where('name', $pelanggan->user_static);
+                $data = $client->query($queryGet)->read();
+                $ip = $data[0]['target'];
+                $parts = explode('/', $ip);
+                $fixIp = $parts[0];
+                // get id
+                $queryGet = (new Query('/ip/firewall/address-list/print'))
+                    ->where('list', 'expired') // Filter by name
+                    ->where('address', $fixIp);
+                $data = $client->query($queryGet)->read();
+                $idIP = $data[0]['.id'];
+                $queryRemove = (new Query('/ip/firewall/address-list/remove'))
+                    ->equal('.id', $idIP);
+                $client->query($queryRemove)->read();
+            }
             DB::table('pelanggans')
                 ->where('id', $request->pelanggan_id)
                 ->update(

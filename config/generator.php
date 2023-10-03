@@ -264,6 +264,7 @@ return [
         'permissions' => [
             'profile pppoe view',
             'active ppp view',
+            'non active ppp view',
             'secret ppp view',
             'static view'
         ],
@@ -276,6 +277,7 @@ return [
                 'permissions' => [
                     'profile pppoe view',
                     'active ppp view',
+                    'non active ppp view',
                     'secret ppp view',
                     'static view'
                 ],
@@ -294,6 +296,11 @@ return [
                         'title' => 'Active PPP',
                         'route' => '/active-ppps',
                         'permission' => 'active ppp view'
+                    ],
+                    [
+                        'title' => 'Non Active PPP',
+                        'route' => '/non-active-ppps',
+                        'permission' => 'non active ppp view'
                     ],
                     [
                         'title' => 'User Static',

@@ -191,6 +191,7 @@ return [
         ['group' => 'area coverages', 'access' => ['area coverage view', 'area coverage create', 'area coverage edit', 'area coverage delete']],
         ['group' => 'profile pppoes', 'access' => ['profile pppoe view']],
         ['group' => 'active ppps', 'access' => ['active ppp view', 'active ppp delete']],
+        ['group' => 'non active ppps', 'access' => ['non active ppp view']],
         ['group' => 'secret ppps', 'access' => ['secret ppp view', 'secret ppp create', 'secret ppp disable', 'secret ppp enable', 'secret ppp delete']],
         ['group' => 'logs', 'access' => ['log view']],
         ['group' => 'dhcps', 'access' => ['dhcp view', 'dhcp delete']],

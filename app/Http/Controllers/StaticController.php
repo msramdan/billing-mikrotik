@@ -20,6 +20,9 @@ class StaticController extends Controller
                 ->where('dynamic', 'false');
             $statics = $client->query($query)->read();
             return DataTables::of($statics)
+                ->addColumn('target', function ($row) {
+                    return str($row['target']);
+                })
                 ->addColumn('max_limit', function ($row) {
                     $thismaxlimit   = $row['max-limit'];
                     $maxlimit       = explode("/", $thismaxlimit);
