@@ -125,6 +125,7 @@ Route::middleware(['auth', 'web','nomikrotik'])->group(function () {
         Route::get('invoice/{id}', 'invoice')->name('invoice.pdf');
         Route::post('/bayarTagihan', 'bayarTagihan')->name('bayarTagihan');
         Route::post('/sendTagihanWa/{id}', 'sendTagihanWa')->name('sendTagihanWa');
+        Route::post('/sendAll', 'sendAll')->name('sendAll');
     });
     Route::resource('laporans', App\Http\Controllers\LaporanController::class);
     Route::resource('sendnotifs', App\Http\Controllers\SendnotifController::class);

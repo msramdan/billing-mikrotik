@@ -24,6 +24,14 @@
 
             @can('tagihan create')
                 <div class="d-flex justify-content-end">
+                    <form action="{{route('sendAll')}}" method="POST" class="d-inline"
+                        onsubmit="return confirm('yakin kirim notifikasi ke semua pelanggan ?')">
+                        @csrf
+                        @method('POST')
+                        <button class="btn btn-success mb-3" title="kirim notifikasi">
+                            <i class="ace-icon bi bi-whatsapp"></i> Kirim Notif Wa
+                        </button>
+                    </form>&nbsp;
                     <a href="{{ route('tagihans.create') }}" class="btn btn-primary mb-3">
                         <i class="fas fa-plus"></i>
                         {{ __('Create a new tagihan') }}

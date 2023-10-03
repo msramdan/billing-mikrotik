@@ -273,6 +273,27 @@ class TagihanController extends Controller
             ->with('success', __('Kirim notifikasi tagihan berhasil'));
     }
 
+    public function sendAll()
+    {
+        // get semua tagihan belum bayar
+        $tagihans = DB::table('tagihans')
+            ->select('tagihans.*')
+            ->where('tagihans.status_bayar', '=', 'Belum Bayar')->get();
+        $waGateway = WaGateway::findOrFail(1);
+        foreach ($tagihans as $row) {
+            if ($waGateway->is_active == 'Yes') {
+                $req = DB::table('tagihans')
+                    ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
+                    ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.no_wa', 'pelanggans.jatuh_tempo')
+                    ->where('tagihans.id', '=', $row->id)->first();
+                sendNotifWa($waGateway->url, $waGateway->api_key, $req, 'tagihan', $req->no_wa, $waGateway->footer_pesan_wa_tagihan);
+            }
+        }
+        return redirect()
+            ->route('tagihans.index')
+            ->with('success', __('Kirim notifikasi ke semua pelanggan berhasil'));
+    }
+
     public function bayarTagihan(Request $request)
     {
         $tgl = date('Y-m-d H:i:s');
