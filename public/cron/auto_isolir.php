@@ -1,7 +1,5 @@
 <?php
 
-// di jalankan tiap hari jam 00:01
-
 date_default_timezone_set('Asia/Jakarta');
 ini_set('date.timezone', 'Asia/Jakarta');
 include 'koneksi.php';
@@ -12,17 +10,18 @@ $API->debug = false;
 $router = mysqli_query($koneksi, "select * from settingmikrotiks where is_active='Yes'")->fetch_assoc();
 
 // get data tagihan
-$sql = "SELECT tagihans.*, pelanggans.auto_isolir,pelanggans.jatuh_tempo,pelanggans.user_pppoe FROM tagihans
+$sql = "SELECT tagihans.*, pelanggans.auto_isolir,pelanggans.tanggal_daftar,pelanggans.jatuh_tempo,pelanggans.user_pppoe FROM tagihans
     join pelanggans on pelanggans.id = tagihans.pelanggan_id where tagihans.status_bayar='Belum Bayar'";
 $query = mysqli_query($koneksi, $sql);
 
-while ($data = mysqli_fetch_array($query)) {
-    if ($data['auto_isolir'] == 'Yes') {
+while ($row = mysqli_fetch_array($query)) {
+    if ($row['auto_isolir'] == 'Yes') {
         // tgl jatuh tempo
-        $jatuh_tempo = $data['jatuh_tempo'];
-        $pelanggan_id = $data['pelanggan_id'];
-        $tanggal_create_tagihan = $data['tanggal_create_tagihan'];
-        $tgl_jatuh_tempo = addHari($tanggal_create_tagihan, $jatuh_tempo);
+        $jatuh_tempo = $row['jatuh_tempo'];
+        $pelanggan_id = $row['pelanggan_id'];
+        $tglDaftar = substr($row['tanggal_daftar'], 8, 2);
+        $generateTgl = date('Y-m-') .$tglDaftar;
+        $tgl_jatuh_tempo = addHari($generateTgl, $jatuh_tempo);
         $date_now = date('Y-m-d');
         if ($tgl_jatuh_tempo <= $date_now) {
             // set status pelanggan ke non aktif
@@ -33,7 +32,7 @@ while ($data = mysqli_fetch_array($query)) {
             if ($API->connect($router['host'], $router['port'], $router['username'], $router['password'])) {
                 // $API->write('/ppp/profile/print');
                 $a = $API->comm("/ppp/secret/print",  array(
-                    '?name' => $data['user_pppoe'],
+                    '?name' => $row['user_pppoe'],
                 ));
                 $idSecret = $a[0]['.id'];
                 // set expire
@@ -45,7 +44,7 @@ while ($data = mysqli_fetch_array($query)) {
                  ));
                  // get name from active ppp
                  $b = $API->comm("/ppp/active/print",  array(
-                    '?name' => $data['user_pppoe'],
+                    '?name' => $row['user_pppoe'],
                 ));
                 $idActive = $b[0]['.id'];
                 // remove session
