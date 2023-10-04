@@ -1,5 +1,5 @@
 <?php
-// Jalan craete tagihan jam 1 malam tiap tgl 1
+// Jalan craete tagihan tiap hari jam 8
 // ini_set('display_errors', '1');
 // ini_set('display_startup_errors', '1');
 // error_reporting(E_ALL);
@@ -61,34 +61,9 @@ if ($dataX->num_rows > 0) {
                 //    create tagihan
                 $noTag = generate_string($permitted_chars, 10);
                 mysqli_query($koneksi, "INSERT INTO tagihans
-            (no_tagihan,pelanggan_id,periode,status_bayar,nominal_bayar,potongan_bayar,ppn,nominal_ppn,total_bayar,tanggal_create_tagihan)
+            (no_tagihan,pelanggan_id,periode,status_bayar,nominal_bayar,potongan_bayar,ppn,nominal_ppn,total_bayar,tanggal_create_tagihan,is_send)
             VALUES
-            ('$noTag', '$pelanggan_id','$periode','Belum Bayar',$harga,0,'$ppn',$nominalPpn,$totalBayar,'$dateNow')");
-                // dan kirim notif
-                $url = $datanya['url'] . 'send-message';
-                $message = 'Pelanggan ' . $a['nama_perusahaan'] . ' Yth. ' . $nama_pelanggan . "\n\n";
-                $message .= 'Kami sampaikan tagihan layanan internet bulan *' . tanggal_indonesia($periode)  . '*' . "\n";
-                $message .= 'Dengan no tagihan *' . $noTag . '* sebesar *' . rupiah($totalBayar) . '*' . "\n";
-                $message .= 'Pembayaran paling lambat di tanggal *' . addHari($generateTgl, $row['jatuh_tempo']) . '* Untuk Menghindari Isolir off wifi otomatis di tempat anda.' . " \n\n";
-                $message .= "*Note : Abaikan pesan ini jika sudah berbayar* \n\n";
-                $message .= $datanya['footer_pesan_wa_tagihan'];
-                if ($row['kirim_tagihan_wa'] == 'Yes') {
-                    $data = array(
-                        'api_key'  => $datanya['api_key'],
-                        'receiver' => $row['no_wa'],
-                        'data'     => [
-                            'message' => $message,
-                        ],
-                    );
-                    $body = json_encode($data);
-                    $ch = curl_init($url);
-                    curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
-                    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
-                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                    $result = curl_exec($ch);
-                    curl_close($ch);
-                    print_r($result);
-                }
+            ('$noTag', '$pelanggan_id','$periode','Belum Bayar',$harga,0,'$ppn',$nominalPpn,$totalBayar,'$dateNow','No')");
                 echo "berhasil generate tagihan bulan " . $periode . " pelanggan " . $nama_pelanggan;
                 echo "<br>";
             }else{
@@ -115,37 +90,4 @@ function generate_string($input, $strength = 10)
         $random_string .= $random_character;
     }
     return 'INV-SSL-' . $random_string;
-}
-
-function rupiah($angka)
-{
-    $hasil_rupiah = "Rp " . number_format($angka, 2, ',', '.');
-    return $hasil_rupiah;
-}
-
-function tanggal_indonesia($tanggal)
-{
-    $bulan = array(
-        1 =>   'Januari',
-        'Februari',
-        'Maret',
-        'April',
-        'Mei',
-        'Juni',
-        'Juli',
-        'Agustus',
-        'September',
-        'Oktober',
-        'November',
-        'Desember'
-    );
-
-    $pecahkan = explode('-', $tanggal);
-    return $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
-}
-
-function addHari($tgl, $jatuh_tempo)
-{
-    $tgl    = date('Y-m-d', strtotime('+' . $jatuh_tempo . 'days', strtotime($tgl)));
-    return $tgl;
 }

@@ -29,6 +29,7 @@ return new class extends Migration
 			$table->dateTime('tanggal_create_tagihan');
 			$table->dateTime('tanggal_kirim_notif_wa')->nullable();
             $table->text('payload_tripay')->nullable();
+            $table->enum('is_send', ['Yes', 'No']);
             $table->foreignId('user_id')->nullable()->constrained('users')->restrictOnUpdate()->nullOnDelete();
             $table->timestamps();
         });

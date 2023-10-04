@@ -144,7 +144,7 @@ function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima, $footer
             "message" => $message,
         ]
     ]);
-    \Log::info($response);
+    return json_decode($response);
 }
 
 function totalStatusBayar($status)

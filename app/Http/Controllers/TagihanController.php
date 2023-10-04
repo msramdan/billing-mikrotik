@@ -135,6 +135,7 @@ class TagihanController extends Controller
             'ppn' => $request->ppn,
             'nominal_ppn' => $nominal_ppn,
             'status_bayar' => 'Belum Bayar',
+            'is_send' => 'No',
             'tanggal_create_tagihan' => date('Y-m-d H:i:s'),
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
@@ -265,12 +266,26 @@ class TagihanController extends Controller
             ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.no_wa', 'pelanggans.jatuh_tempo')
             ->where('tagihans.id', '=', $tagihan_id)->first();
         if ($waGateway->is_active == 'Yes') {
-            sendNotifWa($waGateway->url, $waGateway->api_key, $tagihans, 'tagihan', $tagihans->no_wa, $waGateway->footer_pesan_wa_tagihan);
+            try {
+                set_time_limit(20);
+                $res = sendNotifWa($waGateway->url, $waGateway->api_key, $tagihans, 'tagihan', $tagihans->no_wa, $waGateway->footer_pesan_wa_tagihan);
+                if ($res->status == true || $res->status == 'true') {
+                    // update
+                    DB::table('tagihans')
+                        ->where('tagihans.id', $tagihan_id)
+                        ->update(['is_send' => 'Yes']);
+                    return redirect()
+                        ->route('tagihans.index')
+                        ->with('success', __('Kirim notifikasi tagihan berhasil'));
+                } else {
+                    return redirect()
+                        ->route('tagihans.index')
+                        ->with('error', __('Kirim notifikasi tagihan gagal ') .$res->message );
+                }
+            } catch (\Exception $e) {
+                echo 'Caught exception: ', $e->getMessage(), "\n";
+            }
         }
-
-        return redirect()
-            ->route('tagihans.index')
-            ->with('success', __('Kirim notifikasi tagihan berhasil'));
     }
 
     public function sendAll()
@@ -281,12 +296,16 @@ class TagihanController extends Controller
             ->where('tagihans.status_bayar', '=', 'Belum Bayar')->get();
         $waGateway = WaGateway::findOrFail(1);
         foreach ($tagihans as $row) {
-            if ($waGateway->is_active == 'Yes') {
-                $req = DB::table('tagihans')
-                    ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
-                    ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.no_wa', 'pelanggans.jatuh_tempo')
-                    ->where('tagihans.id', '=', $row->id)->first();
-                sendNotifWa($waGateway->url, $waGateway->api_key, $req, 'tagihan', $req->no_wa, $waGateway->footer_pesan_wa_tagihan);
+            try {
+                if ($waGateway->is_active == 'Yes') {
+                    $req = DB::table('tagihans')
+                        ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
+                        ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.no_wa', 'pelanggans.jatuh_tempo')
+                        ->where('tagihans.id', '=', $row->id)->first();
+                    sendNotifWa($waGateway->url, $waGateway->api_key, $req, 'tagihan', $req->no_wa, $waGateway->footer_pesan_wa_tagihan);
+                }
+            } catch (\Exception $e) {
+                continue;
             }
         }
         return redirect()
