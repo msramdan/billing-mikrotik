@@ -55,7 +55,7 @@ class FeatureController extends Controller
      */
     public function store(StoreFeatureRequest $request)
     {
-        
+
         Feature::create($request->validated());
 
         return redirect()
@@ -94,7 +94,7 @@ class FeatureController extends Controller
      */
     public function update(UpdateFeatureRequest $request, Feature $feature)
     {
-        
+
         $feature->update($request->validated());
 
         return redirect()

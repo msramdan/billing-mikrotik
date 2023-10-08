@@ -25,6 +25,7 @@ return new class extends Migration
 			$table->string('logo')->nullable();
 			$table->string('favicon')->nullable();
             $table->foreignId('paket_langganan_id')->nullable()->constrained('paket_langganan')->restrictOnUpdate()->restrictOnDelete();
+            $table->datetime('expired');
             $table->timestamps();
         });
     }

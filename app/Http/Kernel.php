@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
         'login-customer' => \App\Http\Middleware\PanelCustomer::class,
         'nomikrotik' => \App\Http\Middleware\Nomikrotik::class,
         'onmikrotik' => \App\Http\Middleware\Onmikrotik::class,
+        'cek-expired' => \App\Http\Middleware\Expired::class,
     ];
 }

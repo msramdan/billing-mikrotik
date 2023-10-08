@@ -1,32 +1,35 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExpiredController;
 use App\Http\Controllers\FormMikrotikController;
 use App\Http\Controllers\PanelCustomer\DashboardController as PanelCustomerDashboardController;
 use Illuminate\Support\Facades\Route;
 
 
 // Callback Payment Tripay
-
 Route::controller(App\Http\Controllers\PanelCustomer\TripayCallbackController::class)->group(function () {
     Route::post('/handle', 'handle')->name('handle');
 });
 
 // FRONT END - LANDING PAGE Public
-Route::controller(App\Http\Controllers\Frontend\WebController::class)->group(function () {
-    Route::get('/', 'index')->name('website');
-    Route::get('/loginClient', 'loginClient')->name('loginClient');
-    Route::get('/registerClient', 'registerClient')->name('registerClient');
-    Route::post('/submitRegister', 'submitRegister')->name('submitRegister');
-    Route::post('/submitLogin', 'submitLogin')->name('submitLogin');
-    Route::get('/speedTest', 'speedTest')->name('speedTest');
-    Route::get('/cekTagihan', 'cekTagihan')->name('cekTagihan');
-    Route::get('/areaCoverage', 'areaCoverage')->name('areaCoverage');
-    Route::get('/bayar/{tagihan_id}/{metode}', 'bayar')->name('bayar');
-    Route::get('/detailBayar/{id}', 'detailBayar')->name('detailBayar');
+Route::middleware(['cek-expired'])->group(function () {
+    Route::controller(App\Http\Controllers\Frontend\WebController::class)->group(function () {
+        Route::get('/', 'index')->name('website');
+        Route::get('/loginClient', 'loginClient')->name('loginClient');
+        Route::get('/registerClient', 'registerClient')->name('registerClient');
+        Route::post('/submitRegister', 'submitRegister')->name('submitRegister');
+        Route::post('/submitLogin', 'submitLogin')->name('submitLogin');
+        Route::get('/speedTest', 'speedTest')->name('speedTest');
+        Route::get('/cekTagihan', 'cekTagihan')->name('cekTagihan');
+        Route::get('/areaCoverage', 'areaCoverage')->name('areaCoverage');
+        Route::get('/bayar/{tagihan_id}/{metode}', 'bayar')->name('bayar');
+        Route::get('/detailBayar/{id}', 'detailBayar')->name('detailBayar');
+    });
 });
+
 // PANEL CUSTOMER Need Session
-Route::middleware(['login-customer'])->group(function () {
+Route::middleware(['login-customer', 'cek-expired'])->group(function () {
     Route::controller(PanelCustomerDashboardController::class)->group(function () {
         Route::get('/dashboardCustomer', 'index')->name('dashboardCustomer');
         Route::get('/caraPembayaran', 'caraPembayaran')->name('caraPembayaran');
@@ -42,7 +45,7 @@ Route::middleware(['login-customer'])->group(function () {
 });
 
 // FORM INPUT MIKROTIK
-Route::middleware(['auth', 'web','onmikrotik'])->group(function () {
+Route::middleware(['auth', 'web', 'onmikrotik', 'cek-expired'])->group(function () {
     Route::controller(FormMikrotikController::class)->group(function () {
         Route::get('/form', 'form')->name('form');
         Route::post('/cekrouter', 'cekrouter')->name('api.cekrouter');
@@ -50,8 +53,12 @@ Route::middleware(['auth', 'web','onmikrotik'])->group(function () {
     });
 });
 
+Route::controller(ExpiredController::class)->group(function () {
+    Route::get('/expired', 'expired')->name('expired');
+});
+
 // PANEL ADMIN
-Route::middleware(['auth', 'web','nomikrotik'])->group(function () {
+Route::middleware(['auth', 'web', 'nomikrotik', 'cek-expired'])->group(function () {
     Route::get('/profile', App\Http\Controllers\ProfileController::class)->name('profile');
     Route::resource('users', App\Http\Controllers\UserController::class);
     Route::resource('roles', App\Http\Controllers\RoleAndPermissionController::class);
