@@ -192,7 +192,6 @@
             },
             {
                 data: 'pelanggan',
-                name: 'pelanggan.coverage_area'
             },
             {
                 data: 'total_bayar',

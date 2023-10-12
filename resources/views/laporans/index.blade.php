@@ -81,6 +81,14 @@
                                         Nominal : {{ rupiah($nominalpengeluaran) }}
                                     </div>
                                 </div>
+                                <div class="col-sm-6">
+                                    <div class="alert alert-dark" role="alert">
+                                        <b>Sisa Hasil Pendapatan</b>
+                                        <hr>
+                                        Total : {{$totalpengeluaran}} Transaksi<br>
+                                        Nominal : {{ rupiah($nominalpemasukan - $nominalpengeluaran ) }}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
