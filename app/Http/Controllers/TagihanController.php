@@ -280,7 +280,7 @@ class TagihanController extends Controller
                 } else {
                     return redirect()
                         ->route('tagihans.index')
-                        ->with('error', __('Kirim notifikasi tagihan gagal ') .$res->message );
+                        ->with('error', __('Kirim notifikasi tagihan gagal ') . $res->message);
                 }
             } catch (\Exception $e) {
                 echo 'Caught exception: ', $e->getMessage(), "\n";
@@ -369,11 +369,13 @@ class TagihanController extends Controller
                 $queryGet = (new Query('/ppp/active/print'))
                     ->where('name', $pelanggan->user_pppoe);
                 $data = $client->query($queryGet)->read();
-                // remove session
-                $idActive = $data[0]['.id'];
-                $queryDelete = (new Query('/ppp/active/remove'))
-                    ->equal('.id', $idActive);
-                $client->query($queryDelete)->read();
+                if ($data) {
+                    // remove session
+                    $idActive = $data[0]['.id'];
+                    $queryDelete = (new Query('/ppp/active/remove'))
+                        ->equal('.id', $idActive);
+                    $client->query($queryDelete)->read();
+                }
             } else {
                 $client = setRoute();
                 // get ip by user static
