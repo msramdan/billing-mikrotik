@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('pelanggans', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('company_id')->constrained('companies')->restrictOnUpdate()->cascadeOnDelete();
             $table->foreignId('coverage_area')->nullable()->constrained('area_coverages')->restrictOnUpdate()->nullOnDelete();
 			$table->foreignId('odc')->nullable()->constrained('odcs')->restrictOnUpdate()->nullOnDelete();
 			$table->foreignId('odp')->nullable()->constrained('odps')->restrictOnUpdate()->nullOnDelete();

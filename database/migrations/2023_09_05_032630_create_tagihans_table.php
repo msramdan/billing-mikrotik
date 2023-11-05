@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('tagihans', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('company_id')->constrained('companies')->restrictOnUpdate()->cascadeOnDelete();
             $table->string('no_tagihan', 50);
 			$table->foreignId('pelanggan_id')->nullable()->constrained('pelanggans')->restrictOnUpdate()->nullOnDelete();
             $table->string('periode', 10);

@@ -13,9 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('privacy_policies', function (Blueprint $table) {
+        Schema::create('pakets', function (Blueprint $table) {
             $table->id();
-            $table->text('privacy_policy');
+            $table->string('nama_paket');
+			$table->integer('jumlah_router');
+			$table->integer('jumlah_pelanggan');
+            $table->integer('jumlah_olt');
             $table->timestamps();
         });
     }
@@ -27,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('privacy_policies');
+        Schema::dropIfExists('pakets');
     }
 };

@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('packages', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('company_id')->constrained('companies')->restrictOnUpdate()->cascadeOnDelete();
             $table->string('nama_layanan', 255);
 			$table->integer('harga');
 			$table->foreignId('kategori_paket_id')->nullable()->constrained('package_categories')->restrictOnUpdate()->nullOnDelete();

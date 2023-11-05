@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('odcs', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('company_id')->constrained('companies')->restrictOnUpdate()->cascadeOnDelete();
             $table->string('kode_odc', 20);
 			$table->foreignId('wilayah_odc')->nullable()->constrained('area_coverages')->restrictOnUpdate()->nullOnDelete();
 			$table->integer('nomor_port_olt');

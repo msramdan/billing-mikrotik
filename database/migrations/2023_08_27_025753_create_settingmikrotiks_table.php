@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('settingmikrotiks', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('company_id')->constrained('companies')->restrictOnUpdate()->cascadeOnDelete();
             $table->string('identitas_router', 255);
             $table->string('host', 50);
             $table->integer('port');

@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('banks', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('company_id')->constrained('companies')->restrictOnUpdate()->cascadeOnDelete();
             $table->string('nama_bank', 255);
 			$table->string('logo_bank');
             $table->timestamps();

@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('pengeluarans', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('company_id')->constrained('companies')->restrictOnUpdate()->cascadeOnDelete();
             $table->integer('nominal');
 			$table->dateTime('tanggal');
 			$table->text('keterangan');
