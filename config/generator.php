@@ -369,11 +369,10 @@ return [
             'company view',
             'bank account view',
             'bank view',
-            'wa gateway view',
             'privacy policy view',
-            'payment tripay view',
             'sendnotif view',
-            'feature view'
+            'feature view',
+            'paket view'
         ],
         'menus' => [
             [
@@ -389,7 +388,8 @@ return [
                     'privacy policy view',
                     'payment tripay view',
                     'sendnotif view',
-                    'feature view'
+                    'feature view',
+                    'paket view'
                 ],
                 'submenus' => [
                     [
@@ -418,21 +418,15 @@ return [
                         'permission' => 'bank view'
                     ],
                     [
-                        'title' => 'Wa Gateway',
-                        'route' => '/wa-gateways',
-                        'permission' => 'wa gateway view'
-                    ],
-                    [
-                        'title' => 'Payment Tripay',
-                        'route' => '/payment-tripays',
-                        'permission' => 'payment tripay view'
-                    ],
-                    [
                         'title' => 'Send Notif WA',
                         'route' => '/sendnotifs',
                         'permission' => 'sendnotif view'
+                    ],
+                    [
+                        'title' => 'Pakets',
+                        'route' => '/pakets',
+                        'permission' => 'paket view'
                     ]
-
                 ]
             ]
         ]

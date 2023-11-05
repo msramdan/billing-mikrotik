@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateWaGatewayRequest extends FormRequest
+class StorePaketRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +24,9 @@ class UpdateWaGatewayRequest extends FormRequest
     public function rules()
     {
         return [
-            'url' => 'required|url|max:255',
-			'api_key' => 'required|string|max:255',
-			'is_active' => 'required|in:Yes,No',
-            'footer_pesan_wa_tagihan' => 'nullable',
-            'footer_pesan_wa_pembayaran' => 'nullable',
+            'nama_paket' => 'required|string',
+			'jumlah_router' => 'required|numeric',
+			'jumlah_pelanggan' => 'required|numeric',
         ];
     }
 }

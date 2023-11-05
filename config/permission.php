@@ -187,7 +187,6 @@ return [
         ['group' => 'packages', 'access' => ['package view', 'package create', 'package edit', 'package delete']],
         ['group' => 'companies', 'access' => ['company view', 'company edit']],
         ['group' => 'privacy policies', 'access' => ['privacy policy view', 'privacy policy edit']],
-        ['group' => 'wa gateways', 'access' => ['wa gateway view', 'wa gateway edit',]],
         ['group' => 'area coverages', 'access' => ['area coverage view', 'area coverage create', 'area coverage edit', 'area coverage delete']],
         ['group' => 'profile pppoes', 'access' => ['profile pppoe view']],
         ['group' => 'active ppps', 'access' => ['active ppp view', 'active ppp delete']],
@@ -205,12 +204,11 @@ return [
         ['group' => 'odcs', 'access' => ['odc view', 'odc create', 'odc edit', 'odc delete']],
         ['group' => 'odps', 'access' => ['odp view', 'odp create', 'odp edit', 'odp delete']],
         ['group' => 'pelanggans', 'access' => ['pelanggan view', 'pelanggan create', 'pelanggan edit', 'pelanggan delete']],
-        ['group' => 'payment tripays', 'access' => ['payment tripay view', 'payment tripay edit']],
         ['group' => 'pemasukans', 'access' => ['pemasukan view', 'pemasukan create', 'pemasukan edit', 'pemasukan delete']],
         ['group' => 'pengeluarans', 'access' => ['pengeluaran view', 'pengeluaran create', 'pengeluaran edit', 'pengeluaran delete']],
         ['group' => 'tagihans', 'access' => ['tagihan view', 'tagihan create', 'tagihan edit', 'tagihan delete']],
         ['group' => 'laporans', 'access' => ['laporan view']],
         ['group' => 'sendnotifs', 'access' => ['sendnotif view']],
         ['group' => 'features', 'access' => ['feature view', 'feature create', 'feature edit', 'feature delete']],
-    ],
-];
+  ['group' => 'pakets', 'access' => ['paket view', 'paket create', 'paket edit', 'paket delete']],
+		],];
