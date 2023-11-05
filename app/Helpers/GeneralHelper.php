@@ -53,14 +53,14 @@ function getRouteName()
     }
 }
 
-function getCompany()
-{
-    $data = DB::table('companies')
-        ->join('paket_langganan', 'companies.paket_langganan_id', '=', 'paket_langganan.id')
-        ->select('companies.*', 'paket_langganan.nama_paket', 'paket_langganan.jumlah_router', 'paket_langganan.jumlah_pelanggan')
-        ->first();
-    return $data;
-}
+// function getCompany()
+// {
+//     $data = DB::table('companies')
+//         ->join('paket_langganan', 'companies.paket_langganan_id', '=', 'paket_langganan.id')
+//         ->select('companies.*', 'paket_langganan.nama_paket', 'paket_langganan.jumlah_router', 'paket_langganan.jumlah_pelanggan')
+//         ->first();
+//     return $data;
+// }
 
 function hitungRouter()
 {
@@ -75,11 +75,11 @@ function hitungPelanggan()
 }
 
 
-function getTripay()
-{
-    $data = DB::table('payment_tripays')->first();
-    return $data;
-}
+// function getTripay()
+// {
+//     $data = DB::table('payment_tripays')->first();
+//     return $data;
+// }
 
 function getCustomer()
 {

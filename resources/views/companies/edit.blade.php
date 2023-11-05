@@ -15,7 +15,7 @@
 
                 <x-breadcrumb>
                     <li class="breadcrumb-item">
-                        <a href="/dashboard">{{ __('Dashboard') }}</a>
+                        <a href="/">{{ __('Dashboard') }}</a>
                     </li>
                     <li class="breadcrumb-item">
                         <a href="{{ route('companies.index') }}">{{ __('Companies') }}</a>
@@ -28,41 +28,18 @@
         </div>
 
         <section class="section">
-            <x-alert></x-alert>
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <div class="alert alert-info" role="alert">
-                                @php
-                                    $info = getCompany();
-                                @endphp
-                                Anda terdaftar paket : {{ $info->nama_paket }}
-
-                                <div class="col-md-12">
-                                    <div class="row">
-                                        <div class="col-md-3">Jumlah Router Mikrotik :  {{ $info->jumlah_router == 0 ? '-' : $info->jumlah_router  }} <br>
-                                            <ul>
-                                                <li>Terpakai : {{ hitungRouter()  }} </li>
-                                                <li>Sisa : {{ $info->jumlah_router == 0 ? '-' : $info->jumlah_router - hitungRouter()  }} </li>
-                                            </ul>
-                                        </div>
-                                        <div class="col-md-3">Jumlah Pelanggan : {{ $info->jumlah_pelanggan== 0 ? '-' : $info->jumlah_pelanggan  }}<br>
-                                            <ul>
-                                                <li>Terpakai :  {{ hitungPelanggan()  }} </li>
-                                                <li>Sisa : {{ $info->jumlah_pelanggan== 0 ? '-' : $info->jumlah_pelanggan - hitungPelanggan()  }}</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                            <form action="{{ route('companies.update', $company->id) }}" method="POST"
-                                enctype="multipart/form-data">
+                            <form action="{{ route('companies.update', $company->id) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
+
                                 @include('companies.include.form')
+
+                                <a href="{{ url()->previous() }}" class="btn btn-secondary">{{ __('Back') }}</a>
+
                                 <button type="submit" class="btn btn-primary">{{ __('Update') }}</button>
                             </form>
                         </div>

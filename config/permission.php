@@ -185,8 +185,6 @@ return [
         ['group' => 'bank accounts', 'access' => ['bank account view', 'bank account create', 'bank account edit', 'bank account delete']],
         ['group' => 'package categories', 'access' => ['package category view', 'package category create', 'package category edit', 'package category delete']],
         ['group' => 'packages', 'access' => ['package view', 'package create', 'package edit', 'package delete']],
-        ['group' => 'companies', 'access' => ['company view', 'company edit']],
-        ['group' => 'privacy policies', 'access' => ['privacy policy view', 'privacy policy edit']],
         ['group' => 'area coverages', 'access' => ['area coverage view', 'area coverage create', 'area coverage edit', 'area coverage delete']],
         ['group' => 'profile pppoes', 'access' => ['profile pppoe view']],
         ['group' => 'active ppps', 'access' => ['active ppp view', 'active ppp delete']],
@@ -209,6 +207,6 @@ return [
         ['group' => 'tagihans', 'access' => ['tagihan view', 'tagihan create', 'tagihan edit', 'tagihan delete']],
         ['group' => 'laporans', 'access' => ['laporan view']],
         ['group' => 'sendnotifs', 'access' => ['sendnotif view']],
-        ['group' => 'features', 'access' => ['feature view', 'feature create', 'feature edit', 'feature delete']],
-  ['group' => 'pakets', 'access' => ['paket view', 'paket create', 'paket edit', 'paket delete']],
+        ['group' => 'pakets', 'access' => ['paket view', 'paket create', 'paket edit', 'paket delete']],
+  ['group' => 'companies', 'access' => ['company view', 'company create', 'company edit', 'company delete']], 
 		],];

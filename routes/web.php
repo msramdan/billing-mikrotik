@@ -65,12 +65,10 @@ Route::middleware(['auth', 'web', 'nomikrotik', 'cek-expired'])->group(function 
     Route::controller(DashboardController::class)->group(function () {
         Route::get('/dashboard', 'index')->name('dashboard');
     });
-    Route::resource('companies', App\Http\Controllers\CompanyController::class);
     Route::resource('banks', App\Http\Controllers\BankController::class);
     Route::resource('bank-accounts', App\Http\Controllers\BankAccountController::class);
     Route::resource('package-categories', App\Http\Controllers\PackageCategoryController::class);
     Route::resource('packages', App\Http\Controllers\PackageController::class);
-    Route::resource('privacy-policies', App\Http\Controllers\PrivacyPolicyController::class);
     Route::resource('area-coverages', App\Http\Controllers\AreaCoverageController::class);
     Route::resource('profile-pppoes', App\Http\Controllers\ProfilePppoeController::class);
     Route::resource('active-ppps', App\Http\Controllers\ActivePppController::class);
@@ -137,7 +135,8 @@ Route::middleware(['auth', 'web', 'nomikrotik', 'cek-expired'])->group(function 
     Route::controller(App\Http\Controllers\SendnotifController::class)->group(function () {
         Route::post('/kirim_pesan', 'kirim_pesan')->name('kirim_pesan');
     });
-    Route::resource('features', App\Http\Controllers\FeatureController::class);
 });
 
 Route::resource('pakets', App\Http\Controllers\PaketController::class)->middleware('auth');
+
+Route::resource('companies', App\Http\Controllers\CompanyController::class)->middleware('auth');

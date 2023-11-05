@@ -366,13 +366,11 @@ return [
     [
         'header' => 'Setting',
         'permissions' => [
-            'company view',
             'bank account view',
             'bank view',
-            'privacy policy view',
             'sendnotif view',
-            'feature view',
-            'paket view'
+            'paket view',
+            'company view'
         ],
         'menus' => [
             [
@@ -381,31 +379,22 @@ return [
                 'route' => null,
                 'permission' => null,
                 'permissions' => [
-                    'company view',
                     'bank account view',
                     'bank view',
-                    'wa gateway view',
-                    'privacy policy view',
-                    'payment tripay view',
                     'sendnotif view',
-                    'feature view',
-                    'paket view'
+                    'paket view',
+                    'company view'
                 ],
                 'submenus' => [
                     [
-                        'title' => 'Companies',
+                        'title' => 'Daftar Company',
                         'route' => '/companies',
                         'permission' => 'company view'
                     ],
                     [
-                        'title' => 'Privacy Policies',
-                        'route' => '/privacy-policies',
-                        'permission' => 'privacy policy view'
-                    ],
-                    [
-                        'title' => 'Features',
-                        'route' => '/features',
-                        'permission' => 'feature view'
+                        'title' => 'Daftar Paket',
+                        'route' => '/pakets',
+                        'permission' => 'paket view'
                     ],
                     [
                         'title' => 'Bank Accounts',
@@ -421,11 +410,6 @@ return [
                         'title' => 'Send Notif WA',
                         'route' => '/sendnotifs',
                         'permission' => 'sendnotif view'
-                    ],
-                    [
-                        'title' => 'Pakets',
-                        'route' => '/pakets',
-                        'permission' => 'paket view'
                     ]
                 ]
             ]

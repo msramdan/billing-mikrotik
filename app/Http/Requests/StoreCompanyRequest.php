@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateCompanyRequest extends FormRequest
+class StoreCompanyRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,7 +27,7 @@ class UpdateCompanyRequest extends FormRequest
             'nama_perusahaan' => 'required|string|max:255',
 			'nama_pemilik' => 'required|string|max:255',
 			'telepon_perusahaan' => 'nullable|string|max:20',
-			'email' => 'nullable|email|unique:companies,email,' . $this->company->id,
+			'email' => 'nullable|email|unique:companies,email',
 			'no_wa' => 'required|string|max:14',
 			'alamat' => 'nullable|string',
 			'deskripsi_perusahaan' => 'nullable|string',

@@ -1,18 +1,18 @@
 <td>
-    @can('feature view')
-    <a href="{{ route('features.show', $model->id) }}" class="btn btn-outline-success btn-sm">
+    @can('company view')
+    <a href="{{ route('companies.show', $model->id) }}" class="btn btn-outline-success btn-sm">
         <i class="fa fa-eye"></i>
     </a>
     @endcan
 
-    @can('feature edit')
-        <a href="{{ route('features.edit', $model->id) }}" class="btn btn-outline-primary btn-sm">
+    @can('company edit')
+        <a href="{{ route('companies.edit', $model->id) }}" class="btn btn-outline-primary btn-sm">
             <i class="fa fa-pencil-alt"></i>
         </a>
     @endcan
 
-    @can('feature delete')
-        <form action="{{ route('features.destroy', $model->id) }}" method="post" class="d-inline"
+    @can('company delete')
+        <form action="{{ route('companies.destroy', $model->id) }}" method="post" class="d-inline"
             onsubmit="return confirm('Are you sure to delete this record?')">
             @csrf
             @method('delete')

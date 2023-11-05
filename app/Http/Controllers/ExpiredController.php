@@ -11,12 +11,12 @@ class ExpiredController extends Controller
 {
     public function expired()
     {
-        $companies = DB::table('companies')->where('id', 1)->first();
-        $currentDateTime = date('Y-m-d H:i:s');
-        if ($currentDateTime <= $companies->expired) {
+        // $companies = DB::table('companies')->where('id', 1)->first();
+        // $currentDateTime = date('Y-m-d H:i:s');
+        // if ($currentDateTime <= $companies->expired) {
             return redirect('/');
-        } else {
-            return view('page-expired');
-        }
+        // } else {
+        //     return view('page-expired');
+        // }
     }
 }
