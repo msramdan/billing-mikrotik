@@ -21,7 +21,7 @@ class Company extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['nama_perusahaan', 'nama_pemilik', 'telepon_perusahaan', 'email', 'no_wa', 'alamat', 'deskripsi_perusahaan', 'logo', 'favicon', 'url_wa_gateway', 'api_key_wa_gateway', 'is_active', 'footer_pesan_wa_tagihan', 'footer_pesan_wa_pembayaran', 'url_tripay', 'api_key_tripay', 'kode_merchant', 'private_key', 'paket_id'];
+    protected $fillable = ['nama_perusahaan', 'nama_pemilik', 'telepon_perusahaan', 'email', 'no_wa', 'alamat', 'deskripsi_perusahaan', 'logo', 'favicon', 'url_wa_gateway', 'api_key_wa_gateway', 'is_active', 'footer_pesan_wa_tagihan', 'footer_pesan_wa_pembayaran', 'url_tripay', 'api_key_tripay', 'kode_merchant', 'private_key', 'paket_id','expired'];
 
     /**
      * The attributes that should be cast.

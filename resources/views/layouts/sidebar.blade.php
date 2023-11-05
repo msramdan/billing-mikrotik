@@ -4,7 +4,7 @@
             <div class="d-flex justify-content-between align-items-center">
                 <div class="logo">
                     <a href="/" style="font-size: 20px">
-                        {{-- {{getCompany()->nama_perusahaan}} --}} Test
+                        {{getCompany()->nama_perusahaan}}
                     </a>
                 </div>
                 <div class="theme-toggle d-flex gap-2  align-items-center mt-2">
@@ -44,7 +44,15 @@
         <div class="sidebar-menu">
 
             <ul class="menu">
-                <b>Router : {{ getRouteName() }}</b>
+                <div class="mb-3">
+                    <select class="form-select" id="exampleSelect" name="exampleSelect">
+                        <option value="">Select an option</option>
+                        <option value="option1">Option 1</option>
+                        <option value="option2">Option 2</option>
+                        <option value="option3">Option 3</option>
+                    </select>
+                </div>
+                {{-- <b>Router : {{ getRouteName() }}</b> --}}
                 <li class="sidebar-item{{ request()->is('/') || request()->is('dashboard') ? ' active' : '' }}">
                     <a class="sidebar-link" href="/dashboard">
                         <i class="bi bi-speedometer"></i>

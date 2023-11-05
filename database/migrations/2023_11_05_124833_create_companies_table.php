@@ -34,6 +34,7 @@ return new class extends Migration
 			$table->string('kode_merchant', 255);
 			$table->string('private_key', 255);
 			$table->foreignId('paket_id')->constrained('pakets')->restrictOnUpdate()->restrictOnDelete();
+            $table->date('expired');
             $table->timestamps();
         });
     }

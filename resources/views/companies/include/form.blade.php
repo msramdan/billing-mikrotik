@@ -188,7 +188,7 @@
             <select class="form-select @error('is_active') is-invalid @enderror" name="is_active" id="is-active" class="form-control" required>
                 <option value="" selected disabled>-- {{ __('Select is active') }} --</option>
                 <option value="Yes" {{ isset($company) && $company->is_active == 'Yes' ? 'selected' : (old('is_active') == 'Yes' ? 'selected' : '') }}>Yes</option>
-		<option value="No" {{ isset($company) && $company->is_active == 'No' ? 'selected' : (old('is_active') == 'No' ? 'selected' : '') }}>No</option>			
+		<option value="No" {{ isset($company) && $company->is_active == 'No' ? 'selected' : (old('is_active') == 'No' ? 'selected' : '') }}>No</option>
             </select>
             @error('is_active')
                 <span class="text-danger">
@@ -268,7 +268,7 @@
             <label for="paket-id">{{ __('Paket') }}</label>
             <select class="form-select @error('paket_id') is-invalid @enderror" name="paket_id" id="paket-id" class="form-control" required>
                 <option value="" selected disabled>-- {{ __('Select paket') }} --</option>
-                
+
                         @foreach ($pakets as $paket)
                             <option value="{{ $paket->id }}" {{ isset($company) && $company->paket_id == $paket->id ? 'selected' : (old('paket_id') == $paket->id ? 'selected' : '') }}>
                                 {{ $paket->nama_paket }}
@@ -276,6 +276,18 @@
                         @endforeach
             </select>
             @error('paket_id')
+                <span class="text-danger">
+                    {{ $message }}
+                </span>
+            @enderror
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="expired">{{ __('Expired') }}</label>
+            <input type="date" name="expired" id="expired" class="form-control @error('expired') is-invalid @enderror" value="{{ isset($company) ? $company->expired : old('expired') }}" placeholder="{{ __('Expired') }}" required />
+            @error('expired')
                 <span class="text-danger">
                     {{ $message }}
                 </span>
