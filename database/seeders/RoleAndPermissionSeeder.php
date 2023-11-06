@@ -28,6 +28,8 @@ class RoleAndPermissionSeeder extends Seeder
         $userAdmin = User::first();
         $userAdmin->assignRole('Super Admin');
         $superAdmin->givePermissionTo(Permission::all());
+
+
         $excludedIds = [
             'user view',
             'user create',
@@ -46,6 +48,8 @@ class RoleAndPermissionSeeder extends Seeder
             'paket edit',
             'paket delete'
         ];
+        $userClient = User::find(2);
+        $userClient->assignRole('Client Company');
         $clientCompany->givePermissionTo(Permission::whereNotIn('name', $excludedIds)->get());
     }
 }
