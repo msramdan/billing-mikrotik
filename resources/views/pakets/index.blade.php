@@ -42,8 +42,7 @@
                                             <th>{{ __('Nama Paket') }}</th>
 											<th>{{ __('Jumlah Router') }}</th>
 											<th>{{ __('Jumlah Pelanggan') }}</th>
-                                            <th>{{ __('Created At') }}</th>
-                                            <th>{{ __('Updated At') }}</th>
+                                            <th>{{ __('Jumlah OLT') }}</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
@@ -84,12 +83,8 @@
                     name: 'jumlah_pelanggan',
                 },
                 {
-                    data: 'created_at',
-                    name: 'created_at'
-                },
-                {
-                    data: 'updated_at',
-                    name: 'updated_at'
+                    data: 'jumlah_olt',
+                    name: 'jumlah_olt',
                 },
                 {
                     data: 'action',

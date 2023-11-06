@@ -12,7 +12,7 @@ class PaketSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('paket_langganan')->insert([
+        DB::table('pakets')->insert([
             'nama_paket' => 'Paket 50.000',
             'jumlah_router' => 1,
             'jumlah_pelanggan' => 100,
@@ -21,7 +21,7 @@ class PaketSeeder extends Seeder
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
 
-        DB::table('paket_langganan')->insert([
+        DB::table('pakets')->insert([
             'nama_paket' => 'Paket 100.000',
             'jumlah_router' => 2,
             'jumlah_pelanggan' => 250,
@@ -30,7 +30,7 @@ class PaketSeeder extends Seeder
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
 
-        DB::table('paket_langganan')->insert([
+        DB::table('pakets')->insert([
             'nama_paket' => 'Paket 150.000',
             'jumlah_router' => 4,
             'jumlah_pelanggan' => 500,
@@ -39,7 +39,7 @@ class PaketSeeder extends Seeder
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
 
-        DB::table('paket_langganan')->insert([
+        DB::table('pakets')->insert([
             'nama_paket' => 'Paket 300.000',
             'jumlah_router' => 5,
             'jumlah_pelanggan' => 1000,
@@ -48,7 +48,7 @@ class PaketSeeder extends Seeder
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
 
-        DB::table('paket_langganan')->insert([
+        DB::table('pakets')->insert([
             'nama_paket' => 'Paket Platinum',
             'jumlah_router' => 10,
             'jumlah_pelanggan' => 2000,

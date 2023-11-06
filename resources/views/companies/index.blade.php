@@ -22,14 +22,14 @@
         <section class="section">
             <x-alert></x-alert>
 
-                @can('company create')
+            @can('company create')
                 <div class="d-flex justify-content-end">
                     <a href="{{ route('companies.create') }}" class="btn btn-primary mb-3">
                         <i class="fas fa-plus"></i>
                         {{ __('Create a new company') }}
                     </a>
                 </div>
-                @endcan
+            @endcan
 
             <div class="row">
                 <div class="col-md-12">
@@ -39,27 +39,12 @@
                                 <table class="table table-striped" id="data-table" width="100%">
                                     <thead>
                                         <tr>
+                                            <th>#</th>
                                             <th>{{ __('Nama Perusahaan') }}</th>
-											<th>{{ __('Nama Pemilik') }}</th>
-											<th>{{ __('Telepon Perusahaan') }}</th>
-											<th>{{ __('Email') }}</th>
-											<th>{{ __('No Wa') }}</th>
-											<th>{{ __('Alamat') }}</th>
-											<th>{{ __('Deskripsi Perusahaan') }}</th>
-											<th>{{ __('Logo') }}</th>
-											<th>{{ __('Favicon') }}</th>
-											<th>{{ __('Url Wa Gateway') }}</th>
-											<th>{{ __('Api Key Wa Gateway') }}</th>
-											<th>{{ __('Is Active') }}</th>
-											<th>{{ __('Footer Pesan Wa Tagihan') }}</th>
-											<th>{{ __('Footer Pesan Wa Pembayaran') }}</th>
-											<th>{{ __('Url Tripay') }}</th>
-											<th>{{ __('Api Key Tripay') }}</th>
-											<th>{{ __('Kode Merchant') }}</th>
-											<th>{{ __('Private Key') }}</th>
-											<th>{{ __('Paket') }}</th>
-                                            <th>{{ __('Created At') }}</th>
-                                            <th>{{ __('Updated At') }}</th>
+                                            <th>{{ __('Nama Pemilik') }}</th>
+                                            <th>{{ __('Telepon Perusahaan') }}</th>
+                                            <th>{{ __('Email') }}</th>
+                                            <th>{{ __('No Wa') }}</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
@@ -74,124 +59,130 @@
 @endsection
 
 @push('css')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.12.0/datatables.min.css" />
 @endpush
 
 @push('js')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.12.0/datatables.min.js"></script>
     <script>
-        $('#data-table').DataTable({
+        function format(d) {
+            return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+                '<tr>' +
+                '<td>Area Alamat</td>' +
+                '<td>' + d.Alamat + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Deskripsi Perusahaan</td>' +
+                '<td>' + d.deskripsi_perusahaan + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Url Wa Gateway</td>' +
+                '<td>' + d.url_wa_gateway + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Api Key Wa Gateway</td>' +
+                '<td>' + d.api_key_wa_gateway + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Is Active</td>' +
+                '<td>' + d.is_active + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Footer Pesan Wa Tagihan</td>' +
+                '<td>' + d.footer_pesan_wa_tagihan + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Footer Pesan Wa Pembayaran</td>' +
+                '<td>' + d.footer_pesan_wa_pembayaran + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Url Tripay</td>' +
+                '<td>' + d.url_tripay + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Api Key Tripay</td>' +
+                '<td>' + d.api_key_tripay + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Kode Merchant</td>' +
+                '<td>' + d.kode_merchant + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Private Key</td>' +
+                '<td>' + d.private_key + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Paket</td>' +
+                '<td>' + d.nama_paket + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Expired</td>' +
+                '<td>' + d.expired + '</td>' +
+                '</tr>' +
+                '</table>';
+        }
+
+        $('#data-table').on('click', 'tbody td.dt-control', function() {
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+            if (row.child.isShown()) {
+                row.child.hide();
+            } else {
+                row.child(format(row.data())).show();
+            }
+        });
+
+        $('#data-table').on('requestChild.dt', function(e, row) {
+            row.child(format(row.data())).show();
+        })
+
+        let columns = [{
+                "className": 'dt-control',
+                "orderable": false,
+                "data": null,
+                "defaultContent": ''
+            },
+            {
+                data: 'nama_perusahaan',
+                name: 'nama_perusahaan',
+            },
+            {
+                data: 'nama_pemilik',
+                name: 'nama_pemilik',
+            },
+            {
+                data: 'telepon_perusahaan',
+                name: 'telepon_perusahaan',
+            },
+            {
+                data: 'email',
+                name: 'email',
+            },
+            {
+                data: 'no_wa',
+                name: 'no_wa',
+            },
+            {
+                data: 'action',
+                name: 'action',
+                orderable: false,
+                searchable: false
+            }
+        ];
+
+        var table = $('#data-table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('companies.index') }}",
-            columns: [
-                {
-                    data: 'nama_perusahaan',
-                    name: 'nama_perusahaan',
-                },
-				{
-                    data: 'nama_pemilik',
-                    name: 'nama_pemilik',
-                },
-				{
-                    data: 'telepon_perusahaan',
-                    name: 'telepon_perusahaan',
-                },
-				{
-                    data: 'email',
-                    name: 'email',
-                },
-				{
-                    data: 'no_wa',
-                    name: 'no_wa',
-                },
-				{
-                    data: 'alamat',
-                    name: 'alamat',
-                },
-				{
-                    data: 'deskripsi_perusahaan',
-                    name: 'deskripsi_perusahaan',
-                },
-				{
-                    data: 'logo',
-                    name: 'logo',
-                    orderable: false,
-                    searchable: false,
-                    render: function(data, type, full, meta) {
-                        return `<div class="avatar">
-                            <img src="${data}" alt="Logo" >
-                        </div>`;
-                        }
-                    },
-				{
-                    data: 'favicon',
-                    name: 'favicon',
-                    orderable: false,
-                    searchable: false,
-                    render: function(data, type, full, meta) {
-                        return `<div class="avatar">
-                            <img src="${data}" alt="Favicon" >
-                        </div>`;
-                        }
-                    },
-				{
-                    data: 'url_wa_gateway',
-                    name: 'url_wa_gateway',
-                },
-				{
-                    data: 'api_key_wa_gateway',
-                    name: 'api_key_wa_gateway',
-                },
-				{
-                    data: 'is_active',
-                    name: 'is_active',
-                },
-				{
-                    data: 'footer_pesan_wa_tagihan',
-                    name: 'footer_pesan_wa_tagihan',
-                },
-				{
-                    data: 'footer_pesan_wa_pembayaran',
-                    name: 'footer_pesan_wa_pembayaran',
-                },
-				{
-                    data: 'url_tripay',
-                    name: 'url_tripay',
-                },
-				{
-                    data: 'api_key_tripay',
-                    name: 'api_key_tripay',
-                },
-				{
-                    data: 'kode_merchant',
-                    name: 'kode_merchant',
-                },
-				{
-                    data: 'private_key',
-                    name: 'private_key',
-                },
-				{
-                    data: 'paket',
-                    name: 'paket.nama_paket'
-                },
-                {
-                    data: 'created_at',
-                    name: 'created_at'
-                },
-                {
-                    data: 'updated_at',
-                    name: 'updated_at'
-                },
-                {
-                    data: 'action',
-                    name: 'action',
-                    orderable: false,
-                    searchable: false
-                }
-            ],
+            ajax: {
+                url: "{{ route('companies.index') }}",
+            },
+            columns: columns
         });
     </script>
 @endpush

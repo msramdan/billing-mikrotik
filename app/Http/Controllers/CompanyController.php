@@ -6,6 +6,7 @@ use App\Models\Company;
 use App\Http\Requests\{StoreCompanyRequest, UpdateCompanyRequest};
 use Yajra\DataTables\Facades\DataTables;
 use Image;
+use Illuminate\Support\Facades\DB;
 
 class CompanyController extends Controller
 {
@@ -25,34 +26,37 @@ class CompanyController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $companies = Company::with('paket:id,nama_paket');
+            $companies = DB::table('companies')
+                ->leftJoin('pakets', 'companies.paket_id', '=', 'pakets.id')
+                ->select('companies.*', 'pakets.nama_paket');
+            $companies = $companies->orderBy('companies.id', 'DESC')->get();
 
             return Datatables::of($companies)
-                ->addColumn('alamat', function($row){
+                ->addColumn('alamat', function ($row) {
                     return str($row->alamat)->limit(100);
                 })
-				->addColumn('deskripsi_perusahaan', function($row){
+                ->addColumn('deskripsi_perusahaan', function ($row) {
                     return str($row->deskripsi_perusahaan)->limit(100);
                 })
-				->addColumn('footer_pesan_wa_tagihan', function($row){
+                ->addColumn('footer_pesan_wa_tagihan', function ($row) {
                     return str($row->footer_pesan_wa_tagihan)->limit(100);
                 })
-				->addColumn('footer_pesan_wa_pembayaran', function($row){
+                ->addColumn('footer_pesan_wa_pembayaran', function ($row) {
                     return str($row->footer_pesan_wa_pembayaran)->limit(100);
                 })
-				->addColumn('paket', function ($row) {
-                    return $row->paket ? $row->paket->nama_paket : '';
+                ->addColumn('paket', function ($row) {
+                    return $row->nama_paket;
                 })
                 ->addColumn('logo', function ($row) {
                     if ($row->logo == null) {
-                    return 'https://via.placeholder.com/350?text=No+Image+Avaiable';
-                }
+                        return 'https://via.placeholder.com/350?text=No+Image+Avaiable';
+                    }
                     return asset('storage/uploads/logos/' . $row->logo);
                 })
                 ->addColumn('favicon', function ($row) {
                     if ($row->favicon == null) {
-                    return 'https://via.placeholder.com/350?text=No+Image+Avaiable';
-                }
+                        return 'https://via.placeholder.com/350?text=No+Image+Avaiable';
+                    }
                     return asset('storage/uploads/favicons/' . $row->favicon);
                 })
 
@@ -94,7 +98,7 @@ class CompanyController extends Controller
 
             Image::make($request->file('logo')->getRealPath())->resize(500, 500, function ($constraint) {
                 $constraint->upsize();
-				$constraint->aspectRatio();
+                $constraint->aspectRatio();
             })->save($path . $filename);
 
             $attr['logo'] = $filename;
@@ -110,7 +114,7 @@ class CompanyController extends Controller
 
             Image::make($request->file('favicon')->getRealPath())->resize(500, 500, function ($constraint) {
                 $constraint->upsize();
-				$constraint->aspectRatio();
+                $constraint->aspectRatio();
             })->save($path . $filename);
 
             $attr['favicon'] = $filename;
@@ -131,9 +135,9 @@ class CompanyController extends Controller
      */
     public function show(Company $company)
     {
-        $company->load('paket:id,nama_paket', );
+        $company->load('paket:id,nama_paket',);
 
-		return view('companies.show', compact('company'));
+        return view('companies.show', compact('company'));
     }
 
     /**
@@ -144,9 +148,9 @@ class CompanyController extends Controller
      */
     public function edit(Company $company)
     {
-        $company->load('paket:id,nama_paket', );
+        $company->load('paket:id,nama_paket',);
 
-		return view('companies.edit', compact('company'));
+        return view('companies.edit', compact('company'));
     }
 
     /**
@@ -171,7 +175,7 @@ class CompanyController extends Controller
 
             Image::make($request->file('logo')->getRealPath())->resize(500, 500, function ($constraint) {
                 $constraint->upsize();
-				$constraint->aspectRatio();
+                $constraint->aspectRatio();
             })->save($path . $filename);
 
             // delete old logo from storage
@@ -192,7 +196,7 @@ class CompanyController extends Controller
 
             Image::make($request->file('favicon')->getRealPath())->resize(500, 500, function ($constraint) {
                 $constraint->upsize();
-				$constraint->aspectRatio();
+                $constraint->aspectRatio();
             })->save($path . $filename);
 
             // delete old favicon from storage
@@ -224,7 +228,7 @@ class CompanyController extends Controller
             if ($company->logo != null && file_exists($path . $company->logo)) {
                 unlink($path . $company->logo);
             }
-    $path = storage_path('app/public/uploads/favicons/');
+            $path = storage_path('app/public/uploads/favicons/');
 
             if ($company->favicon != null && file_exists($path . $company->favicon)) {
                 unlink($path . $company->favicon);

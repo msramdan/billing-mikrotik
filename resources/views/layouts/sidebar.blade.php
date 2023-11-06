@@ -3,8 +3,10 @@
         <div class="sidebar-header position-relative">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="logo">
-                    <a href="/" style="font-size: 20px">
-                        {{getCompany()->nama_perusahaan}}
+                    <a href="/dashboard" style="font-size: 20px">
+                        @if (isset(getCompany()->nama_perusahaan))
+                            {{ getCompany()->nama_perusahaan }}
+                        @endif
                     </a>
                 </div>
                 <div class="theme-toggle d-flex gap-2  align-items-center mt-2">

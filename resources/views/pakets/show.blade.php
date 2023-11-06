@@ -35,17 +35,21 @@
                             <div class="table-responsive">
                                 <table class="table table-hover table-striped">
                                     <tr>
-                                            <td class="fw-bold">{{ __('Nama Paket') }}</td>
-                                            <td>{{ $paket->nama_paket }}</td>
-                                        </tr>
-									<tr>
-                                            <td class="fw-bold">{{ __('Jumlah Router') }}</td>
-                                            <td>{{ $paket->jumlah_router }}</td>
-                                        </tr>
-									<tr>
-                                            <td class="fw-bold">{{ __('Jumlah Pelanggan') }}</td>
-                                            <td>{{ $paket->jumlah_pelanggan }}</td>
-                                        </tr>
+                                        <td class="fw-bold">{{ __('Nama Paket') }}</td>
+                                        <td>{{ $paket->nama_paket }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Jumlah Router') }}</td>
+                                        <td>{{ $paket->jumlah_router }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Jumlah Pelanggan') }}</td>
+                                        <td>{{ $paket->jumlah_pelanggan }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Jumlah OLT') }}</td>
+                                        <td>{{ $paket->jumlah_olt }}</td>
+                                    </tr>
                                     <tr>
                                         <td class="fw-bold">{{ __('Created at') }}</td>
                                         <td>{{ $paket->created_at->format('d/m/Y H:i') }}</td>

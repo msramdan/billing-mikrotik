@@ -27,6 +27,7 @@ class StorePaketRequest extends FormRequest
             'nama_paket' => 'required|string',
 			'jumlah_router' => 'required|numeric',
 			'jumlah_pelanggan' => 'required|numeric',
+            'jumlah_olt' => 'required|numeric',
         ];
     }
 }

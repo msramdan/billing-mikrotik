@@ -21,7 +21,7 @@ class Paket extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['nama_paket', 'jumlah_router', 'jumlah_pelanggan'];
+    protected $fillable = ['nama_paket', 'jumlah_router', 'jumlah_pelanggan','jumlah_olt'];
 
     /**
      * The attributes that should be cast.
@@ -29,6 +29,6 @@ class Paket extends Model
      * @var string[]
      */
     protected $casts = ['nama_paket' => 'string', 'jumlah_router' => 'integer', 'jumlah_pelanggan' => 'integer', 'created_at' => 'datetime:d/m/Y H:i', 'updated_at' => 'datetime:d/m/Y H:i'];
-    
+
 
 }
