@@ -13,10 +13,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(UserSeeder::class);
-        $this->call(RoleAndPermissionSeeder::class);
         $this->call(PaketSeeder::class);
         $this->call(CompanySeeder::class);
+        $this->call(UserSeeder::class);
+        $this->call(RoleAndPermissionSeeder::class);
         $this->call(SettingMikrotikSeeder::class);
         $this->call(AreaSeeder::class);
         $this->call(PacageKategoriSeeder::class);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\{StoreUserRequest, UpdateUserRequest};
+use App\Models\Company;
 use App\Models\User;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
@@ -61,7 +62,10 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.create');
+        $companies = Company::orderBy('nama_perusahaan', 'ASC')->get();
+        return view('users.create', [
+            'companies' => $companies
+        ]);
     }
 
     /**
@@ -109,14 +113,24 @@ class UserController extends Controller
             $attr['avatar'] = $filename;
         }
 
-        $attr['name'] =$request->name;
-        $attr['email'] =$request->email;
-        $attr['no_wa'] =$request->no_wa;
-        $attr['kirim_notif_wa'] =$request->kirim_notif_wa;
+        $attr['name'] = $request->name;
+        $attr['email'] = $request->email;
+        $attr['no_wa'] = $request->no_wa;
+        $attr['kirim_notif_wa'] = $request->kirim_notif_wa;
         $attr['password'] = bcrypt($request->password);
         $user = User::create($attr);
-
-        $user->assignRole($request->role);
+        if ($user) {
+            $user->assignRole($request->role);
+            $companies = $request->companies;
+            if (isset($companies)) {
+                foreach ($companies as $value) {
+                    DB::table('assign_company')->insert([
+                        'company_id' => $value,
+                        'user_id' => $user->id
+                    ]);
+                }
+            }
+        }
 
         return redirect()
             ->route('users.index')
@@ -206,10 +220,10 @@ class UserController extends Controller
             $attr['avatar'] = $user->avatar;
         }
 
-        $attr['name'] =$request->name;
-        $attr['email'] =$request->email;
-        $attr['no_wa'] =$request->no_wa;
-        $attr['kirim_notif_wa'] =$request->kirim_notif_wa;
+        $attr['name'] = $request->name;
+        $attr['email'] = $request->email;
+        $attr['no_wa'] = $request->no_wa;
+        $attr['kirim_notif_wa'] = $request->kirim_notif_wa;
 
         switch (is_null($request->password)) {
             case true:

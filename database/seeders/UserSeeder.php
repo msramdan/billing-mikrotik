@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Company;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class UserSeeder extends Seeder
 {
@@ -37,5 +39,12 @@ class UserSeeder extends Seeder
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
+        $companies = Company::all();
+        foreach ($companies as $value) {
+            DB::table('assign_company')->insert([
+                'company_id' => $value->id,
+                'user_id' => 1
+            ]);
+        }
     }
 }

@@ -152,10 +152,10 @@
                 </div>
             </div>
 
-            <div class="col-md-1 text-center">
+            <div class="col-md-2 text-center">
                 <div class="avatar avatar-xl">
                     @if ($user->avatar == null)
-                        <img src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim($user->email))) }}&s=500"
+                        <img src="https://www.gravatar.com/avatar/{{ md5(strtolower(trim($user->email))) }}&s=200"
                             alt="avatar">
                     @else
                         <img src="{{ asset("uploads/images/avatars/$user->avatar") }}" alt="avatar">
@@ -163,7 +163,7 @@
                 </div>
             </div>
 
-            <div class="col-md-5 me-0 pe-0">
+            <div class="col-md-4 me-0 pe-0">
                 <div class="form-group">
                     <label for="avatar">{{ __('Avatar') }}</label>
                     <input type="file" name="avatar" class="form-control @error('avatar') is-invalid @enderror" id="avatar">

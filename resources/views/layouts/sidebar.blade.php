@@ -47,11 +47,19 @@
 
             <ul class="menu">
                 <div class="mb-3">
+                    @php
+                        $assign = DB::table('assign_company')
+                            ->leftJoin('companies', 'assign_company.company_id', '=', 'companies.id')
+                            ->where('user_id', '=', auth()->user()->id)
+                            ->select('companies.nama_perusahaan', 'assign_company.company_id')
+                            ->get();
+                    @endphp
                     <select class="form-select" id="exampleSelect" name="exampleSelect">
-                        <option value="">Select an option</option>
-                        <option value="option1">Option 1</option>
-                        <option value="option2">Option 2</option>
-                        <option value="option3">Option 3</option>
+                        <option value="" selected disabled>-- Select Company --</option>
+                        @foreach ($assign as $row)
+                            <option value="{{ $row->company_id }}">{{ $row->nama_perusahaan }}</option>
+                        @endforeach
+
                     </select>
                 </div>
                 {{-- <b>Router : {{ getRouteName() }}</b> --}}
