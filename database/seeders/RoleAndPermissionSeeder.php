@@ -17,16 +17,35 @@ class RoleAndPermissionSeeder extends Seeder
     {
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        $roleAdmin = Role::create(['name' => 'Admin']);
+        $superAdmin = Role::create(['name' => 'Super Admin']);
+        $clientCompany = Role::create(['name' => 'Client Company']);
 
         foreach (config('permission.permissions') as $permission) {
             foreach ($permission['access'] as $access) {
                 Permission::create(['name' => $access]);
             }
         }
-
         $userAdmin = User::first();
-        $userAdmin->assignRole('admin');
-        $roleAdmin->givePermissionTo(Permission::all());
+        $userAdmin->assignRole('Super Admin');
+        $superAdmin->givePermissionTo(Permission::all());
+        $excludedIds = [
+            'user view',
+            'user create',
+            'user edit',
+            'user delete',
+            'role & permission view',
+            'role & permission create',
+            'role & permission edit',
+            'role & permission delete',
+            'company view',
+            'company create',
+            'company edit',
+            'company delete',
+            'paket view',
+            'paket create',
+            'paket edit',
+            'paket delete'
+        ];
+        $clientCompany->givePermissionTo(Permission::whereNotIn('name', $excludedIds)->get());
     }
 }
