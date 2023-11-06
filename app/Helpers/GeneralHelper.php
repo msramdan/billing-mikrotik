@@ -156,7 +156,7 @@ function totalStatusBayar($status)
 
 function addHari($tgl, $jatuh_tempo)
 {
-    $tgl    = date('Y-m-d', strtotime('+'.$jatuh_tempo.'days', strtotime($tgl)));
+    $tgl    = date('Y-m-d', strtotime('+' . $jatuh_tempo . 'days', strtotime($tgl)));
     return $tgl;
 }
 
@@ -193,4 +193,10 @@ function tanggal_indonesia($tanggal)
 
     $pecahkan = explode('-', $tanggal);
     return $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
+}
+
+function getSessionCompany()
+{
+    $sessionCompany = session('sessionCompany');
+    return $sessionCompany;
 }

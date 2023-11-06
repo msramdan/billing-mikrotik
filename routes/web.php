@@ -138,5 +138,7 @@ Route::middleware(['auth', 'web', 'nomikrotik', 'cek-expired'])->group(function 
 });
 
 Route::resource('pakets', App\Http\Controllers\PaketController::class)->middleware('auth');
-
+Route::controller(App\Http\Controllers\CompanyController::class)->group(function () {
+    Route::post('/update-session', 'updateSession')->name('updateSession');
+});
 Route::resource('companies', App\Http\Controllers\CompanyController::class)->middleware('auth');

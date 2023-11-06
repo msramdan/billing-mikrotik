@@ -44,7 +44,6 @@
             </div>
         </div>
         <div class="sidebar-menu">
-
             <ul class="menu">
                 <div class="mb-3">
                     @php
@@ -54,10 +53,12 @@
                             ->select('companies.nama_perusahaan', 'assign_company.company_id')
                             ->get();
                     @endphp
-                    <select class="form-select" id="exampleSelect" name="exampleSelect">
+                    <select class="form-select" id="changeCompany" name="changeCompany">
                         <option value="" selected disabled>-- Select Company --</option>
                         @foreach ($assign as $row)
-                            <option value="{{ $row->company_id }}">{{ $row->nama_perusahaan }}</option>
+                            <option value="{{ $row->company_id }}"
+                                {{ getSessionCompany() == $row->company_id ? 'selected' : '' }}>
+                                {{ $row->nama_perusahaan }}</option>
                         @endforeach
 
                     </select>

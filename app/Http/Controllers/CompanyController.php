@@ -7,6 +7,7 @@ use App\Http\Requests\{StoreCompanyRequest, UpdateCompanyRequest};
 use Yajra\DataTables\Facades\DataTables;
 use Image;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class CompanyController extends Controller
 {
@@ -244,5 +245,12 @@ class CompanyController extends Controller
                 ->route('companies.index')
                 ->with('error', __("The company can't be deleted because it's related to another table."));
         }
+    }
+
+    public function updateSession(Request $request)
+    {
+        $value = $request->input('selectedValue');
+        session(['sessionCompany' => $value]);
+        return response()->json(['success' => true]);
     }
 }
