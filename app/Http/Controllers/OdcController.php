@@ -28,6 +28,7 @@ class OdcController extends Controller
         if (request()->ajax()) {
             $odcs = DB::table('odcs')
             ->leftJoin('area_coverages', 'odcs.wilayah_odc', '=', 'area_coverages.id')
+            ->where('odcs.company_id', '=', session('sessionCompany'))
             ->select('odcs.*', 'area_coverages.nama')
             ->get();
 

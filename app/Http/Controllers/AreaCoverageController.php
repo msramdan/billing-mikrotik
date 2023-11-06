@@ -24,7 +24,7 @@ class AreaCoverageController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $areaCoverages = AreaCoverage::query();
+            $areaCoverages = AreaCoverage::where('area_coverages.company_id', '=', session('sessionCompany'))->get();
 
             return DataTables::of($areaCoverages)
                 ->addColumn('alamat', function($row){
@@ -58,7 +58,7 @@ class AreaCoverageController extends Controller
      */
     public function store(StoreAreaCoverageRequest $request)
     {
-        
+
         AreaCoverage::create($request->validated());
 
         return redirect()
@@ -97,7 +97,7 @@ class AreaCoverageController extends Controller
      */
     public function update(UpdateAreaCoverageRequest $request, AreaCoverage $areaCoverage)
     {
-        
+
         $areaCoverage->update($request->validated());
 
         return redirect()

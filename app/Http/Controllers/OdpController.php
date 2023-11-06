@@ -32,6 +32,7 @@ class OdpController extends Controller
             $odps = DB::table('odps')
                 ->leftJoin('odcs', 'odps.kode_odc', '=', 'odcs.id')
                 ->leftJoin('area_coverages', 'odps.wilayah_odp', '=', 'area_coverages.id')
+                ->where('odps.company_id', '=', session('sessionCompany'))
                 ->select('odps.*', 'area_coverages.nama', 'odcs.kode_odc')
                 ->get();
 

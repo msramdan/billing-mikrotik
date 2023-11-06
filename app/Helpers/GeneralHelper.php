@@ -57,6 +57,7 @@ function getCompany()
 {
     $data = DB::table('companies')
         ->join('pakets', 'companies.paket_id', '=', 'pakets.id')
+        ->where('companies.id', '=', session('sessionCompany'))
         ->select('companies.*', 'pakets.nama_paket', 'pakets.jumlah_router', 'pakets.jumlah_pelanggan')
         ->first();
     return $data;

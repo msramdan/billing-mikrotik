@@ -26,34 +26,42 @@ class LaporanController extends Controller
 
         $tagiahnBayar = Tagihan::where('periode', $month)
             ->where('status_bayar', 'Sudah Bayar')
+            ->where('company_id', '=', session('sessionCompany'))
             ->count();
         $nominalTagiahnBayar = DB::table('tagihans')
             ->where('periode', $month)
             ->where('status_bayar', 'Sudah Bayar')
+            ->where('company_id', '=', session('sessionCompany'))
             ->sum('tagihans.total_bayar');
 
         $tagiahnBelumBayar = Tagihan::where('periode', $month)
             ->where('status_bayar', 'Belum Bayar')
+            ->where('company_id', '=', session('sessionCompany'))
             ->count();
         $nominalTtagiahnBayar = DB::table('tagihans')
             ->where('periode', $month)
             ->where('status_bayar', 'Belum Bayar')
+            ->where('company_id', '=', session('sessionCompany'))
             ->sum('tagihans.total_bayar');
         // =====================
         $start = Carbon::parse($month)->startOfMonth();
         $end = Carbon::parse($month)->endOfMonth();
 
         $totalpemasukan = DB::table('pemasukans')
+            ->where('company_id', '=', session('sessionCompany'))
             ->whereBetween('tanggal', [$start, $end])
             ->count();
         $nominalpemasukan = DB::table('pemasukans')
+            ->where('company_id', '=', session('sessionCompany'))
             ->whereBetween('tanggal', [$start, $end])
             ->sum('pemasukans.nominal');
 
         $totalpengeluaran = DB::table('pengeluarans')
+            ->where('company_id', '=', session('sessionCompany'))
             ->whereBetween('tanggal', [$start, $end])
             ->count();
         $nominalpengeluaran = DB::table('pengeluarans')
+            ->where('company_id', '=', session('sessionCompany'))
             ->whereBetween('tanggal', [$start, $end])
             ->sum('pengeluarans.nominal');
 

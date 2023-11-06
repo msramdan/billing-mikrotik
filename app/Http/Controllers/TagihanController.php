@@ -35,6 +35,7 @@ class TagihanController extends Controller
             $tagihans = DB::table('tagihans')
                 ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
                 ->leftJoin('users', 'tagihans.user_id', '=', 'users.id')
+                ->where('tagihans.company_id', '=', session('sessionCompany'))
                 ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.id as pelanggan_id', 'users.name as nama_user');
 
             if (isset($pelanggans) && !empty($pelanggans)) {

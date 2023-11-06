@@ -24,7 +24,7 @@ class PengeluaranController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $pengeluarans = Pengeluaran::query();
+            $pengeluarans = Pengeluaran::where('pengeluarans.company_id', '=', session('sessionCompany'))->get();
 
             return DataTables::of($pengeluarans)
                 ->addColumn('nominal', function ($row) {

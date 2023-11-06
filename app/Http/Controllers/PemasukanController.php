@@ -24,7 +24,7 @@ class PemasukanController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $pemasukans = Pemasukan::query();
+            $pemasukans = Pemasukan::where('pemasukans.company_id', '=', session('sessionCompany'))->get();
 
             return DataTables::of($pemasukans)
                 ->addColumn('nominal', function($row){

@@ -29,6 +29,7 @@ class PackageController extends Controller
         if (request()->ajax()) {
             $packages = DB::table('packages')
                 ->leftJoin('package_categories', 'packages.kategori_paket_id', '=', 'package_categories.id')
+                ->where('packages.company_id', '=', session('sessionCompany'))
                 ->select('packages.*', 'package_categories.nama_kategori')
                 ->get();
 

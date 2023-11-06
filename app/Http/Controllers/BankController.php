@@ -25,8 +25,7 @@ class BankController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $banks = Bank::query();
-
+            $banks = Bank::where('company_id', '=', session('sessionCompany'))->get();
             return Datatables::of($banks)
 
                 ->addColumn('logo_bank', function ($row) {

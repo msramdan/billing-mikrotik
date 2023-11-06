@@ -26,9 +26,10 @@ class BankAccountController extends Controller
     {
         if (request()->ajax()) {
             $bankAccounts = DB::table('bank_accounts')
-            ->leftJoin('banks', 'bank_accounts.bank_id', '=', 'banks.id')
-            ->select('bank_accounts.*', 'banks.nama_bank')
-            ->get();
+                ->leftJoin('banks', 'bank_accounts.bank_id', '=', 'banks.id')
+                ->where('bank_accounts.company_id', '=', session('sessionCompany'))
+                ->select('bank_accounts.*', 'banks.nama_bank')
+                ->get();
             return DataTables::of($bankAccounts)
                 ->addColumn('bank', function ($row) {
                     return $row->nama_bank;
@@ -75,7 +76,7 @@ class BankAccountController extends Controller
     {
         $bankAccount->load('bank:id,id');
 
-		return view('bank-accounts.show', compact('bankAccount'));
+        return view('bank-accounts.show', compact('bankAccount'));
     }
 
     /**
@@ -88,7 +89,7 @@ class BankAccountController extends Controller
     {
         $bankAccount->load('bank:id,id');
 
-		return view('bank-accounts.edit', compact('bankAccount'));
+        return view('bank-accounts.edit', compact('bankAccount'));
     }
 
     /**

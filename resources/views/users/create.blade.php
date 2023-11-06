@@ -62,6 +62,11 @@
                                         </label>
                                     </div>
                                 @endforeach
+                                @error('companies')
+                                <span class="text-danger">
+                                    Companies wajib diisi minimal 1.
+                                </span>
+                            @enderror
 
                             </div>
                         </div>

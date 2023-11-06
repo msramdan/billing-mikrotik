@@ -16,16 +16,10 @@ class PackageCategoryController extends Controller
         $this->middleware('permission:package category delete')->only('destroy');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         if (request()->ajax()) {
-            $packageCategories = PackageCategory::query();
-
+            $packageCategories = PackageCategory::where('package_categories.company_id', '=', session('sessionCompany'))->get();
             return DataTables::of($packageCategories)
                 ->addColumn('keterangan', function ($row) {
                     return str($row->keterangan)->limit(100);

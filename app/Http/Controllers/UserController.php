@@ -85,6 +85,7 @@ class UserController extends Controller
                 'role' => ['required', 'exists:roles,id'],
                 'no_wa' => 'required|string|max:15|phone_number',
                 'kirim_notif_wa' => 'required|in:Yes,No',
+                'companies' => 'required',
                 'password' =>  [
                     'required',
                     'confirmed'

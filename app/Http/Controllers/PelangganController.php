@@ -46,6 +46,7 @@ class PelangganController extends Controller
                 ->leftJoin('odps', 'pelanggans.odp', '=', 'odps.id')
                 ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
                 ->leftJoin('settingmikrotiks', 'pelanggans.router', '=', 'settingmikrotiks.id')
+                ->where('pelanggans.company_id', '=', session('sessionCompany'))
                 ->select(
                     'pelanggans.*',
                     'area_coverages.kode_area',
