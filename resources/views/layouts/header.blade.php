@@ -10,9 +10,9 @@
     <link rel="stylesheet" href="{{ asset('mazer') }}/css/main/app-dark.css">
     <link rel="stylesheet" href="{{ asset('mazer') }}/css/shared/iconly.css">
 
-    <link rel="icon"
+    {{-- <link rel="icon"
         @if (getCompany()->favicon != null) href="{{ Storage::url('public/uploads/favicons/') . getCompany()->favicon }}" @endif
-        type="image/x-icon">
+        type="image/x-icon"> --}}
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
         integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
         crossorigin="" />

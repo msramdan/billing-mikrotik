@@ -56,8 +56,8 @@ function getRouteName()
 function getCompany()
 {
     $data = DB::table('companies')
-        ->join('paket_langganan', 'companies.paket_langganan_id', '=', 'paket_langganan.id')
-        ->select('companies.*', 'paket_langganan.nama_paket', 'paket_langganan.jumlah_router', 'paket_langganan.jumlah_pelanggan')
+        ->join('pakets', 'companies.paket_id', '=', 'pakets.id')
+        ->select('companies.*', 'pakets.nama_paket', 'pakets.jumlah_router', 'pakets.jumlah_pelanggan')
         ->first();
     return $data;
 }
@@ -75,11 +75,11 @@ function hitungPelanggan()
 }
 
 
-function getTripay()
-{
-    $data = DB::table('payment_tripays')->first();
-    return $data;
-}
+// function getTripay()
+// {
+//     $data = DB::table('payment_tripays')->first();
+//     return $data;
+// }
 
 function getCustomer()
 {

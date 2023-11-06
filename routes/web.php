@@ -65,13 +65,10 @@ Route::middleware(['auth', 'web', 'nomikrotik', 'cek-expired'])->group(function 
     Route::controller(DashboardController::class)->group(function () {
         Route::get('/dashboard', 'index')->name('dashboard');
     });
-    Route::resource('companies', App\Http\Controllers\CompanyController::class);
     Route::resource('banks', App\Http\Controllers\BankController::class);
     Route::resource('bank-accounts', App\Http\Controllers\BankAccountController::class);
-    Route::resource('wa-gateways', App\Http\Controllers\WaGatewayController::class);
     Route::resource('package-categories', App\Http\Controllers\PackageCategoryController::class);
     Route::resource('packages', App\Http\Controllers\PackageController::class);
-    Route::resource('privacy-policies', App\Http\Controllers\PrivacyPolicyController::class);
     Route::resource('area-coverages', App\Http\Controllers\AreaCoverageController::class);
     Route::resource('profile-pppoes', App\Http\Controllers\ProfilePppoeController::class);
     Route::resource('active-ppps', App\Http\Controllers\ActivePppController::class);
@@ -124,7 +121,6 @@ Route::middleware(['auth', 'web', 'nomikrotik', 'cek-expired'])->group(function 
     Route::get('getPort/{id}', [App\Http\Controllers\OdpController::class, 'getPort'])->name('api.getPort');
     Route::get('getProfile/{id}', [App\Http\Controllers\OdpController::class, 'getProfile'])->name('api.getProfile');
     Route::get('getStatic/{id}', [App\Http\Controllers\OdpController::class, 'getStatic'])->name('api.getStatic');
-    Route::resource('payment-tripays', App\Http\Controllers\PaymentTripayController::class);
     Route::resource('pemasukans', App\Http\Controllers\PemasukanController::class);
     Route::resource('pengeluarans', App\Http\Controllers\PengeluaranController::class);
     Route::resource('tagihans', App\Http\Controllers\TagihanController::class);
@@ -139,5 +135,8 @@ Route::middleware(['auth', 'web', 'nomikrotik', 'cek-expired'])->group(function 
     Route::controller(App\Http\Controllers\SendnotifController::class)->group(function () {
         Route::post('/kirim_pesan', 'kirim_pesan')->name('kirim_pesan');
     });
-    Route::resource('features', App\Http\Controllers\FeatureController::class);
 });
+
+Route::resource('pakets', App\Http\Controllers\PaketController::class)->middleware('auth');
+
+Route::resource('companies', App\Http\Controllers\CompanyController::class)->middleware('auth');

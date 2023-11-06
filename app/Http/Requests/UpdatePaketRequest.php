@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StorePaymentTripayRequest extends FormRequest
+class UpdatePaketRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,9 @@ class StorePaymentTripayRequest extends FormRequest
     public function rules()
     {
         return [
-            'kode_merchant' => 'required|string|max:255',
-			'api_key' => 'required|string|max:255',
-			'private_key' => 'required|string|max:255',
+            'nama_paket' => 'required|string',
+			'jumlah_router' => 'required|numeric',
+			'jumlah_pelanggan' => 'required|numeric',
         ];
     }
 }

@@ -44,7 +44,15 @@
         <div class="sidebar-menu">
 
             <ul class="menu">
-                <b>Router : {{ getRouteName() }}</b>
+                <div class="mb-3">
+                    <select class="form-select" id="exampleSelect" name="exampleSelect">
+                        <option value="">Select an option</option>
+                        <option value="option1">Option 1</option>
+                        <option value="option2">Option 2</option>
+                        <option value="option3">Option 3</option>
+                    </select>
+                </div>
+                {{-- <b>Router : {{ getRouteName() }}</b> --}}
                 <li class="sidebar-item{{ request()->is('/') || request()->is('dashboard') ? ' active' : '' }}">
                     <a class="sidebar-link" href="/dashboard">
                         <i class="bi bi-speedometer"></i>

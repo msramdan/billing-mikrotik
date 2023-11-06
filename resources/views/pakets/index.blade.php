@@ -1,20 +1,20 @@
 @extends('layouts.app')
 
-@section('title', __('Features'))
+@section('title', __('Pakets'))
 
 @section('content')
     <div class="page-heading">
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-8 order-md-1 order-last">
-                    <h3>{{ __('Features') }}</h3>
+                    <h3>{{ __('Pakets') }}</h3>
                     <p class="text-subtitle text-muted">
-                        {{ __('Below is a list of all features.') }}
+                        {{ __('Below is a list of all pakets.') }}
                     </p>
                 </div>
                 <x-breadcrumb>
                     <li class="breadcrumb-item"><a href="/">{{ __('Dashboard') }}</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ __('Features') }}</li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ __('Pakets') }}</li>
                 </x-breadcrumb>
             </div>
         </div>
@@ -22,11 +22,11 @@
         <section class="section">
             <x-alert></x-alert>
 
-                @can('feature create')
+                @can('paket create')
                 <div class="d-flex justify-content-end">
-                    <a href="{{ route('features.create') }}" class="btn btn-primary mb-3">
+                    <a href="{{ route('pakets.create') }}" class="btn btn-primary mb-3">
                         <i class="fas fa-plus"></i>
-                        {{ __('Create a new feature') }}
+                        {{ __('Create a new paket') }}
                     </a>
                 </div>
                 @endcan
@@ -39,9 +39,9 @@
                                 <table class="table table-striped" id="data-table" width="100%">
                                     <thead>
                                         <tr>
-                                            <th>{{ __('Icon') }}</th>
-											<th>{{ __('Judul') }}</th>
-											<th>{{ __('Keterangan') }}</th>
+                                            <th>{{ __('Nama Paket') }}</th>
+											<th>{{ __('Jumlah Router') }}</th>
+											<th>{{ __('Jumlah Pelanggan') }}</th>
                                             <th>{{ __('Created At') }}</th>
                                             <th>{{ __('Updated At') }}</th>
                                             <th>{{ __('Action') }}</th>
@@ -69,19 +69,19 @@
         $('#data-table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('features.index') }}",
+            ajax: "{{ route('pakets.index') }}",
             columns: [
                 {
-                    data: 'icon',
-                    name: 'icon',
+                    data: 'nama_paket',
+                    name: 'nama_paket',
                 },
 				{
-                    data: 'judul',
-                    name: 'judul',
+                    data: 'jumlah_router',
+                    name: 'jumlah_router',
                 },
 				{
-                    data: 'keterangan',
-                    name: 'keterangan',
+                    data: 'jumlah_pelanggan',
+                    name: 'jumlah_pelanggan',
                 },
                 {
                     data: 'created_at',

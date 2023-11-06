@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('package_categories', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('company_id')->constrained('companies')->restrictOnUpdate()->cascadeOnDelete();
             $table->string('nama_kategori', 255);
 			$table->text('keterangan')->nullable();
             $table->timestamps();

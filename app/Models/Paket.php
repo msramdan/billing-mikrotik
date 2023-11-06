@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class WaGateway extends Model
+class Paket extends Model
 {
     use HasFactory;
 
@@ -14,21 +14,21 @@ class WaGateway extends Model
      *
      * @var string
      */
-    protected $table = 'wa_gateways';
+    protected $table = 'pakets';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var string[]
      */
-    protected $fillable = ['url', 'api_key', 'is_active','footer_pesan_wa_tagihan','footer_pesan_wa_pembayaran'];
+    protected $fillable = ['nama_paket', 'jumlah_router', 'jumlah_pelanggan'];
 
     /**
      * The attributes that should be cast.
      *
      * @var string[]
      */
-    protected $casts = ['url' => 'string', 'api_key' => 'string', 'created_at' => 'datetime:d/m/Y H:i', 'updated_at' => 'datetime:d/m/Y H:i'];
-
+    protected $casts = ['nama_paket' => 'string', 'jumlah_router' => 'integer', 'jumlah_pelanggan' => 'integer', 'created_at' => 'datetime:d/m/Y H:i', 'updated_at' => 'datetime:d/m/Y H:i'];
+    
 
 }

@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('bank_accounts', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('company_id')->constrained('companies')->restrictOnUpdate()->cascadeOnDelete();
             $table->foreignId('bank_id')->nullable()->constrained('banks')->restrictOnUpdate()->nullOnDelete();
 			$table->string('pemilik_rekening', 255);
 			$table->string('nomor_rekening',50);

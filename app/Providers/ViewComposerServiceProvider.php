@@ -134,5 +134,12 @@ View::composer(['sendnotifs.create', 'sendnotifs.edit'], function ($view) {
             );
         });
 
+				View::composer(['companies.create', 'companies.edit'], function ($view) {
+            return $view->with(
+                'pakets',
+                \App\Models\Paket::select('id', 'nama_paket')->get()
+            );
+        });
+
 	}
 }

@@ -13,13 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('wa_gateways', function (Blueprint $table) {
+        Schema::create('pakets', function (Blueprint $table) {
             $table->id();
-            $table->string('url', 255);
-			$table->string('api_key', 255);
-			$table->enum('is_active', ['Yes', 'No']);
-            $table->text('footer_pesan_wa_tagihan')->nullable();
-            $table->text('footer_pesan_wa_pembayaran')->nullable();
+            $table->string('nama_paket');
+			$table->integer('jumlah_router');
+			$table->integer('jumlah_pelanggan');
+            $table->integer('jumlah_olt');
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('wa_gateways');
+        Schema::dropIfExists('pakets');
     }
 };

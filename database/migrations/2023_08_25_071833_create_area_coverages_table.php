@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('area_coverages', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('company_id')->constrained('companies')->restrictOnUpdate()->cascadeOnDelete();
             $table->string('kode_area', 50);
             $table->enum('tampilkan_register', ['Yes', 'No']);
             $table->string('nama', 255);
