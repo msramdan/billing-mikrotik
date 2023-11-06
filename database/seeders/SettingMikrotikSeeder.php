@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class RouterMikrotikSeeder extends Seeder
+class SettingMikrotikSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,6 +14,7 @@ class RouterMikrotikSeeder extends Seeder
     public function run(): void
     {
         DB::table('settingmikrotiks')->insert([
+            'company_id' => 1,
             'identitas_router' => 'CCR1016-12G',
             'host' => '103.122.65.234',
             'port' => 83,
@@ -25,6 +26,7 @@ class RouterMikrotikSeeder extends Seeder
         ]);
 
         DB::table('settingmikrotiks')->insert([
+            'company_id' => 1,
             'identitas_router' => 'Router Test',
             'host' => '103.122.65.234:86',
             'port' => 8728,

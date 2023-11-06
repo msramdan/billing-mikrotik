@@ -14,6 +14,7 @@ class OdpSeeder extends Seeder
     public function run(): void
     {
         DB::table('odps')->insert([
+            'company_id' => 1,
             'kode_odc' => 1,
             'nomor_port_odc' => 1,
             'kode_odp' => 'ODP-001',

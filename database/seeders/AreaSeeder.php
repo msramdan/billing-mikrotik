@@ -11,6 +11,7 @@ class AreaSeeder extends Seeder
     public function run(): void
     {
         DB::table('area_coverages')->insert([
+            'company_id' => 1,
             'kode_area' => 'AC001',
             'tampilkan_register' => 'Yes',
             'nama' => 'Ambengan',

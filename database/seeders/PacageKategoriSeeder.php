@@ -14,6 +14,7 @@ class PacageKategoriSeeder extends Seeder
     public function run(): void
     {
         DB::table('package_categories')->insert([
+            'company_id' => 1,
             'nama_kategori' => 'Internet',
             'keterangan' => '-',
             'created_at' => date('Y-m-d H:i:s'),

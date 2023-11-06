@@ -14,6 +14,7 @@ class PacageSeeder extends Seeder
     public function run(): void
     {
         DB::table('packages')->insert([
+            'company_id' => 1,
             'nama_layanan' => 'Gofiber5Mbps',
             'harga' => 165000,
             'kategori_paket_id' => 1,
