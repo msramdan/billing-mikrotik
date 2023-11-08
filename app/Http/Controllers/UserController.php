@@ -147,7 +147,6 @@ class UserController extends Controller
     public function show(User $user)
     {
         $user->load('roles:id,name');
-
         return view('users.show', compact('user'));
     }
 
@@ -160,8 +159,8 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $user->load('roles:id,name');
-
-        return view('users.edit', compact('user'));
+        $companies = Company::orderBy('nama_perusahaan', 'ASC')->get();
+        return view('users.edit', compact('user', 'companies'));
     }
 
     /**
@@ -182,6 +181,7 @@ class UserController extends Controller
                 'role' => ['required', 'exists:roles,id'],
                 'no_wa' => 'required|string|max:15|phone_number',
                 'kirim_notif_wa' => 'required|in:Yes,No',
+                'companies' => 'required',
                 'password' =>  [
                     'nullable',
                     'confirmed'
@@ -236,9 +236,15 @@ class UserController extends Controller
         }
 
         $user->update($attr);
-
+        $companies = $request->companies;
+        if (isset($companies)) {
+            foreach ($companies as $value) {
+                DB::table('assign_company')->updateOrInsert(
+                    ['company_id' => $value, 'user_id' => $user->id]
+                );
+            }
+        }
         $user->syncRoles($request->role);
-
         return redirect()
             ->route('users.index')
             ->with('success', __('The user was updated successfully.'));

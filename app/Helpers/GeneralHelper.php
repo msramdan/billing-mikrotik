@@ -63,16 +63,23 @@ function getCompany()
     return $data;
 }
 
+
+function cekAssign($company_id, $user_id)
+{
+    return DB::table('assign_company')
+        ->where('company_id', $company_id)
+        ->where('user_id', $user_id)
+        ->count();
+}
+
 function hitungRouter()
 {
-    $count = Settingmikrotik::count();
-    return $count;
+    return Settingmikrotik::count();
 }
 
 function hitungPelanggan()
 {
-    $count = Pelanggan::count();
-    return $count;
+    return Pelanggan::count();
 }
 
 
