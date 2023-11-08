@@ -16,16 +16,18 @@ class Expired
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // $companies = DB::table('companies')->where('id', 1)->first();
-        // $currentDateTime = date('Y-m-d H:i:s');
-        // if ($companies) {
-        //     if ($currentDateTime > $companies->expired) {
-        //         return redirect('expired');
-        //     } else {
+        $companies = DB::table('companies')
+            ->where('companies.id', '=', session('sessionCompany'))->first();
+        // dd($companies);
+        $currentDateTime = date('Y-m-d H:i:s');
+        if ($companies) {
+            if ($currentDateTime > $companies->expired) {
+                return redirect('expired');
+            } else {
                 return $next($request);
-        //     }
-        // } else {
-        //     return redirect('expired');
-        // }
+            }
+        } else {
+            return redirect('expired');
+        }
     }
 }

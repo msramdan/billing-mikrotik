@@ -13,36 +13,36 @@ Route::controller(App\Http\Controllers\PanelCustomer\TripayCallbackController::c
 });
 
 // FRONT END - LANDING PAGE Public
-Route::middleware(['cek-expired'])->group(function () {
-    Route::controller(App\Http\Controllers\Frontend\WebController::class)->group(function () {
-        Route::get('/', 'index')->name('website');
-        Route::get('/loginClient', 'loginClient')->name('loginClient');
-        Route::get('/registerClient', 'registerClient')->name('registerClient');
-        Route::post('/submitRegister', 'submitRegister')->name('submitRegister');
-        Route::post('/submitLogin', 'submitLogin')->name('submitLogin');
-        Route::get('/speedTest', 'speedTest')->name('speedTest');
-        Route::get('/cekTagihan', 'cekTagihan')->name('cekTagihan');
-        Route::get('/areaCoverage', 'areaCoverage')->name('areaCoverage');
-        Route::get('/bayar/{tagihan_id}/{metode}', 'bayar')->name('bayar');
-        Route::get('/detailBayar/{id}', 'detailBayar')->name('detailBayar');
-    });
+// Route::middleware(['cek-expired'])->group(function () {
+Route::controller(App\Http\Controllers\Frontend\WebController::class)->group(function () {
+    Route::get('/', 'index')->name('website');
+    Route::get('/loginClient', 'loginClient')->name('loginClient');
+    Route::get('/registerClient', 'registerClient')->name('registerClient');
+    Route::post('/submitRegister', 'submitRegister')->name('submitRegister');
+    Route::post('/submitLogin', 'submitLogin')->name('submitLogin');
+    Route::get('/speedTest', 'speedTest')->name('speedTest');
+    Route::get('/cekTagihan', 'cekTagihan')->name('cekTagihan');
+    Route::get('/areaCoverage', 'areaCoverage')->name('areaCoverage');
+    Route::get('/bayar/{tagihan_id}/{metode}', 'bayar')->name('bayar');
+    Route::get('/detailBayar/{id}', 'detailBayar')->name('detailBayar');
 });
+// });
 
 // PANEL CUSTOMER Need Session
-Route::middleware(['login-customer', 'cek-expired'])->group(function () {
-    Route::controller(PanelCustomerDashboardController::class)->group(function () {
-        Route::get('/dashboardCustomer', 'index')->name('dashboardCustomer');
-        Route::get('/caraPembayaran', 'caraPembayaran')->name('caraPembayaran');
-        Route::get('/showTagihan/{id}', 'showTagihan')->name('showTagihan');
-        Route::get('/invoiceTagihan/{id}', 'invoiceTagihan')->name('invoiceTagihan');
-        Route::get('/paymentList/{id}', 'paymentList')->name('paymentList');
-        Route::get('/doPayment/{tagihan_id}/{metode}', 'doPayment')->name('doPayment');
-        Route::get('/detailTagihan/{id}', 'detailTagihan')->name('detailTagihan');
-    });
-    Route::controller(App\Http\Controllers\Frontend\WebController::class)->group(function () {
-        Route::get('/logoutCustomer', 'logoutCustomer')->name('logoutCustomer');
-    });
+// Route::middleware(['login-customer', 'cek-expired'])->group(function () {
+Route::controller(PanelCustomerDashboardController::class)->group(function () {
+    Route::get('/dashboardCustomer', 'index')->name('dashboardCustomer');
+    Route::get('/caraPembayaran', 'caraPembayaran')->name('caraPembayaran');
+    Route::get('/showTagihan/{id}', 'showTagihan')->name('showTagihan');
+    Route::get('/invoiceTagihan/{id}', 'invoiceTagihan')->name('invoiceTagihan');
+    Route::get('/paymentList/{id}', 'paymentList')->name('paymentList');
+    Route::get('/doPayment/{tagihan_id}/{metode}', 'doPayment')->name('doPayment');
+    Route::get('/detailTagihan/{id}', 'detailTagihan')->name('detailTagihan');
 });
+Route::controller(App\Http\Controllers\Frontend\WebController::class)->group(function () {
+    Route::get('/logoutCustomer', 'logoutCustomer')->name('logoutCustomer');
+});
+// });
 
 // FORM INPUT MIKROTIK
 Route::middleware(['auth', 'web', 'onmikrotik', 'cek-expired'])->group(function () {
@@ -109,8 +109,10 @@ Route::middleware(['auth', 'web', 'nomikrotik', 'cek-expired'])->group(function 
     Route::controller(App\Http\Controllers\PelangganController::class)->group(function () {
         Route::get('setToExpired/{id}/{user_pppoe}', 'setToExpired')->name('pelanggans.setToExpired');
         Route::get('setNonToExpired/{id}/{user_pppoe}', 'setNonToExpired')->name('pelanggans.setNonToExpired');
-        Route::get('setToExpiredStatic/{id}/{user_static}', 'setToExpiredStatic')->name('pelanggans.setToExpiredStatic');
-        Route::get('setNonToExpiredStatic/{id}/{user_static}', 'setNonToExpiredStatic')->name('pelanggans.setNonToExpiredStatic');
+        Route::get('setToExpiredStatic/{id}/{user_static}', 'setToExpiredStatic')
+            ->name('pelanggans.setToExpiredStatic');
+        Route::get('setNonToExpiredStatic/{id}/{user_static}', 'setNonToExpiredStatic')
+            ->name('pelanggans.setNonToExpiredStatic');
         Route::get('getTableArea/{id}', 'getTableArea')->name('api.getTableArea');
         Route::get('getTableOdc/{id}', 'getTableOdc')->name('api.getTableOdc');
         Route::get('getTableOdp/{id}', 'getTableOdp')->name('api.getTableOdp');
@@ -135,10 +137,9 @@ Route::middleware(['auth', 'web', 'nomikrotik', 'cek-expired'])->group(function 
     Route::controller(App\Http\Controllers\SendnotifController::class)->group(function () {
         Route::post('/kirim_pesan', 'kirim_pesan')->name('kirim_pesan');
     });
+    Route::resource('pakets', App\Http\Controllers\PaketController::class)->middleware('auth');
+    Route::controller(App\Http\Controllers\CompanyController::class)->group(function () {
+        Route::post('/update-session', 'updateSession')->name('updateSession');
+    });
+    Route::resource('companies', App\Http\Controllers\CompanyController::class)->middleware('auth');
 });
-
-Route::resource('pakets', App\Http\Controllers\PaketController::class)->middleware('auth');
-Route::controller(App\Http\Controllers\CompanyController::class)->group(function () {
-    Route::post('/update-session', 'updateSession')->name('updateSession');
-});
-Route::resource('companies', App\Http\Controllers\CompanyController::class)->middleware('auth');
