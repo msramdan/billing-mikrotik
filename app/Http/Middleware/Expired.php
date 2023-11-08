@@ -10,11 +10,7 @@ use  Auth;
 
 class Expired
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
+
     public function handle(Request $request, Closure $next): Response
     {
         $cek = session('sessionCompany');
@@ -23,7 +19,6 @@ class Expired
                 ->where('user_id', Auth::id())->first();
             session(['sessionCompany' => $assign_company->company_id]);
         }
-
         $companies = DB::table('companies')
             ->where('companies.id', '=', session('sessionCompany'))->first();
         $currentDateTime = date('Y-m-d H:i:s');

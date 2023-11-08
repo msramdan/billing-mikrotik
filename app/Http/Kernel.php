@@ -68,7 +68,6 @@ class Kernel extends HttpKernel
         'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
         'login-customer' => \App\Http\Middleware\PanelCustomer::class,
         'nomikrotik' => \App\Http\Middleware\Nomikrotik::class,
-        'onmikrotik' => \App\Http\Middleware\Onmikrotik::class,
         'cek-expired' => \App\Http\Middleware\Expired::class,
     ];
 }

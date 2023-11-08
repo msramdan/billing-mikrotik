@@ -16,10 +16,10 @@
     <link rel="stylesheet" href="{{ asset('frontend') }}/assets/css/style.css">
     <link rel="stylesheet" href="{{ asset('frontend') }}/assets/css/responsive.css">
     <link rel="stylesheet" href="{{ asset('frontend') }}/assets/css/dark-style.css">
-    <title> {{ getCompany()->nama_perusahaan }} </title>
-    <link rel="icon"
+    <title> XXXXXXXXXXX </title>
+    {{-- <link rel="icon"
         @if (getCompany()->favicon != null) href="{{ Storage::url('public/uploads/favicons/') . getCompany()->favicon }}" @endif
-        type="image/x-icon">
+        type="image/x-icon"> --}}
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
         integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
         crossorigin="" />
@@ -36,8 +36,8 @@
                 <div class="row align-items-center">
                     <div class="col-lg-5 col-md-5">
                         <div class="top-header-left">
-                            <p><span>Telpon / Wa :</span> <a href="#">{{ getCompany()->telepon_perusahaan }} /
-                                    {{ getCompany()->no_wa }}</a></p>
+                            <p><span>Telpon / Wa :</span> <a href="#">telpon /
+                                    Wa</a></p>
                         </div>
                     </div>
 
@@ -64,7 +64,7 @@
             <div class="bahama-mobile-nav">
                 <div class="logo">
                     <a href="/">
-                        <h1><b style="color: #FA8185">{{ getCompany()->nama_perusahaan }}</b></h1>
+                        <h1><b style="color: #FA8185">XXXXXXXXXXXXXXXXXXX</b></h1>
                     </a>
                 </div>
             </div>
@@ -73,7 +73,7 @@
                 <div class="container">
                     <nav class="navbar navbar-expand-md navbar-light">
                         <a class="navbar-brand" href="/">
-                            <h1><b style="color: #FA8185">{{ getCompany()->nama_perusahaan }}</b></h1>
+                            <h1><b style="color: #FA8185">XXXXXXXXXXXXXXXXXXX</b></h1>
                         </a>
 
                         <div class="collapse navbar-collapse mean-menu" id="navbarSupportedContent">

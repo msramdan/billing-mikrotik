@@ -22,11 +22,7 @@
     $(document).ready(function() {
         $('#changeCompany').change(function() {
             var selectedValue = $(this).val();
-
-            // Get the CSRF token value
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
-
-            // Make an Ajax request to set the session
             $.ajax({
                 type: 'POST',
                 url: '{{ route('updateSession') }}',
@@ -34,9 +30,34 @@
                     selectedValue: selectedValue,
                     _token: csrfToken
                 },
-                success: function(response) {
-                    // Reload the page or perform any other actions after successful session setting
-                    if (response.success) {
+                success: function(res) {
+                    if (res.success) {
+                        window.location.href = '/dashboard';
+                    }
+                },
+                error: function(error) {
+                    console.error('Error:', error);
+                }
+            });
+        });
+    });
+</script>
+
+
+<script>
+    $(document).ready(function() {
+        $('#routerSelect').change(function() {
+            var selectedValue = $(this).val();
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('routerSelect') }}',
+                data: {
+                    selectedValue: selectedValue,
+                    _token: csrfToken
+                },
+                success: function(res) {
+                    if (res.success) {
                         window.location.href = '/dashboard';
                     }
                 },

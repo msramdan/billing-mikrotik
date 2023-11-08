@@ -8,6 +8,7 @@ use Yajra\DataTables\Facades\DataTables;
 use Image;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use App\Models\Settingmikrotik;
 
 class CompanyController extends Controller
 {
@@ -251,6 +252,27 @@ class CompanyController extends Controller
     {
         $value = $request->input('selectedValue');
         session(['sessionCompany' => $value]);
-        return response()->json(['success' => true]);
+        $data = Settingmikrotik::where('company_id', '=', $value)->first();
+        // remove session
+        session()->forget('sessionRouter');
+        // set session baru
+        if ($data) {
+            session(['sessionRouter' => $data->id]);
+        }
+        return response()->json([
+            'success' => true
+        ]);
+    }
+
+    public function routerSelect(Request $request)
+    {
+        // remove session
+        session()->forget('sessionRouter');
+        // set session baru
+        $value = $request->input('selectedValue');
+        session(['sessionRouter' => $value]);
+        return response()->json([
+            'success' => true
+        ]);
     }
 }

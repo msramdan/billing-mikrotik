@@ -52,18 +52,25 @@
                             ->where('user_id', '=', auth()->user()->id)
                             ->select('companies.nama_perusahaan', 'assign_company.company_id')
                             ->get();
+                        $router = DB::table('settingmikrotiks')
+                            ->where('company_id', '=', session('sessionCompany'))
+                            ->get();
                     @endphp
                     <select class="form-select" id="changeCompany" name="changeCompany">
                         <option value="" selected disabled>-- Select Company --</option>
                         @foreach ($assign as $row)
                             <option value="{{ $row->company_id }}"
-                                {{ getSessionCompany() == $row->company_id ? 'selected' : '' }}>
+                                {{ session('sessionCompany') == $row->company_id ? 'selected' : '' }}>
                                 {{ $row->nama_perusahaan }}</option>
                         @endforeach
-
                     </select>
-                    <select class="form-select mt-2" id="changeRouter" name="changeCompany">
+                    <select id="routerSelect" class="form-select mt-2">
                         <option value="" selected disabled>-- Select Router --</option>
+                        @foreach ($router as $row)
+                            <option value="{{ $row->id }}"
+                                {{ session('sessionRouter') == $row->id ? 'selected' : '' }}>
+                                {{ $row->identitas_router }}</option>
+                        @endforeach
                     </select>
                 </div>
                 <li class="sidebar-item{{ request()->is('/') || request()->is('dashboard') ? ' active' : '' }}">
@@ -131,7 +138,6 @@
                         <i class="bi bi-door-open-fill"></i>
                         <span> {{ __('Logout') }}</span>
                     </a>
-
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                         @csrf
                     </form>

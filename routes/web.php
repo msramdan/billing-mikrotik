@@ -45,7 +45,7 @@ Route::controller(App\Http\Controllers\Frontend\WebController::class)->group(fun
 // });
 
 // FORM INPUT MIKROTIK
-Route::middleware(['auth', 'web', 'onmikrotik', 'cek-expired'])->group(function () {
+Route::middleware(['auth', 'web', 'cek-expired'])->group(function () {
     Route::controller(FormMikrotikController::class)->group(function () {
         Route::get('/form', 'form')->name('form');
         Route::post('/cekrouter', 'cekrouter')->name('api.cekrouter');
@@ -143,6 +143,7 @@ Route::middleware(['auth', 'web', 'cek-expired'])->group(function () {
 
 Route::controller(App\Http\Controllers\CompanyController::class)->group(function () {
     Route::post('/update-session', 'updateSession')->name('updateSession');
+    Route::post('/update-session-router', 'routerSelect')->name('routerSelect');
 });
 Route::resource('companies', App\Http\Controllers\CompanyController::class);
 Route::resource('pakets', App\Http\Controllers\PaketController::class);

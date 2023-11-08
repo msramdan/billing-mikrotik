@@ -7,10 +7,10 @@
             <div class="row align-items-center m-0">
                 <div class="col-lg-6 p-0">
                     <div class="main-banner-content">
-                        <span class="sub-title"><i class="flaticon-wifi-signal"></i> {{ getCompany()->nama_perusahaan }}
+                        <span class="sub-title"><i class="flaticon-wifi-signal"></i> XXXXXXXXXXXXXXXXXX
                             Broadband Service</span>
                         <h1>Built for Internet Service</h1>
-                        <p>Dapatkan layanan internet murah berkualitas hanya di {{ getCompany()->nama_perusahaan }}</p>
+                        <p>Dapatkan layanan internet murah berkualitas hanya di XXXXXXXXXXXXXXXXXX</p>
                         <div class="price">
                             @if (isset($packages[0]->harga))
                                 Rp {{ rupiah2($packages[0]->harga) }} <span>/ Bulan</span>
@@ -40,14 +40,14 @@
                         <i class="flaticon-wifi"></i>
                     </span>
 
-                    <span>{{ getCompany()->nama_perusahaan }} Isp Features</span>
+                    <span>XXXXXXXXXXXXXXXXXX Isp Features</span>
                 </span>
                 <h2>
                     Kami adalah perusahaan penyedia layanan internet di Bali</h2>
             </div>
 
             <div class="row">
-                @foreach ($features as $row)
+                {{-- @foreach ($features as $row)
                     <div class="col-lg-4 col-md-6 col-sm-6">
                         <div class="single-features-box" style="height: 325px">
                             <div class="icon">
@@ -68,9 +68,7 @@
                             </div>
                         </div>
                     </div>
-                @endforeach
-
-
+                @endforeach --}}
             </div>
         </div>
     </section>
@@ -83,8 +81,8 @@
                 <div class="col-lg-6 col-md-12">
                     <div class="about-content">
                         <span class="sub-title"><i class="flaticon-care-about-environment"></i> Tentang
-                            {{ getCompany()->nama_perusahaan }}</span>
-                        <p style="text-align: justify"> {{ getCompany()->deskripsi_perusahaan }}</p>
+                            Evdigi</span>
+                        <p style="text-align: justify"> Deskripsi Perusahaan</p>
                     </div>
                 </div>
 
@@ -104,7 +102,7 @@
                 <div class="col-lg-8 col-md-12">
                     <div class="cta-content">
                         <h3>Telpon / Wa</h3>
-                        <a href="#">{{ getCompany()->telepon_perusahaan }} / {{ getCompany()->no_wa }}</a>
+                        <a href="#">083874731480 / 6283874731480</a>
                     </div>
                 </div>
 
@@ -122,9 +120,9 @@
         <div class="container">
             <div class="section-title">
                 <span>
-                    <span>Pilihan Paket {{ getCompany()->nama_perusahaan }}</span>
+                    <span>Pilihan Paket XXXXXXXXXXXXXXXXXX</span>
                 </span>
-                <h5>Daftar Harga Layanan Paket Internet {{ getCompany()->nama_perusahaan }}, Pilih sesuai keinginan dan
+                <h5>Daftar Harga Layanan Paket Internet XXXXXXXXXXXXXXXXXX, Pilih sesuai keinginan dan
                     kebutuhan Anda</h5>
             </div>
 

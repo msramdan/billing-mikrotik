@@ -188,9 +188,3 @@ function tanggal_indonesia($tanggal)
     $pecahkan = explode('-', $tanggal);
     return $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
 }
-
-function getSessionCompany()
-{
-    $sessionCompany = session('sessionCompany');
-    return $sessionCompany;
-}

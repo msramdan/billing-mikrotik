@@ -81,9 +81,9 @@
             <div class="row">
                 <div class="col-md-4 text-center">
                     @if ($company->logo == null)
-                        <img src="https://via.placeholder.com/350?text=No+Image+Avaiable" alt="Logo" class="rounded mb-2 mt-2" alt="Logo" width="200" height="150" style="object-fit: cover">
+                        <img src="https://via.placeholder.com/350?text=No+Image+Avaiable" alt="Logo" class="rounded mb-2 mt-2" alt="Logo" width="150" height="150" style="object-fit: cover">
                     @else
-                        <img src="{{ asset('storage/uploads/logos/' . $company->logo) }}" alt="Logo" class="rounded mb-2 mt-2" width="200" height="150" style="object-fit: cover">
+                        <img src="{{ asset('storage/uploads/logos/' . $company->logo) }}" alt="Logo" class="rounded mb-2 mt-2" width="150" height="150" style="object-fit: cover">
                     @endif
                 </div>
 
@@ -123,9 +123,9 @@
             <div class="row">
                 <div class="col-md-4 text-center">
                     @if ($company->favicon == null)
-                        <img src="https://via.placeholder.com/350?text=No+Image+Avaiable" alt="Favicon" class="rounded mb-2 mt-2" alt="Favicon" width="200" height="150" style="object-fit: cover">
+                        <img src="https://via.placeholder.com/350?text=No+Image+Avaiable" alt="Favicon" class="rounded mb-2 mt-2" alt="Favicon" width="150" height="150" style="object-fit: cover">
                     @else
-                        <img src="{{ asset('storage/uploads/favicons/' . $company->favicon) }}" alt="Favicon" class="rounded mb-2 mt-2" width="200" height="150" style="object-fit: cover">
+                        <img src="{{ asset('storage/uploads/favicons/' . $company->favicon) }}" alt="Favicon" class="rounded mb-2 mt-2" width="150" height="150" style="object-fit: cover">
                     @endif
                 </div>
 

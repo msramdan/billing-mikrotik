@@ -13,7 +13,6 @@ class Nomikrotik
 {
     public function handle(Request $request, Closure $next): Response
     {
-        // cek ada atw tinggal mikrotik aktive
         $router = DB::table('settingmikrotiks')->where('is_active', 'Yes')->first();
         if ($router) {
             try {

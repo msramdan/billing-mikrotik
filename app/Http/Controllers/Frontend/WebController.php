@@ -14,7 +14,6 @@ use App\Models\Package;
 use App\Models\WaGateway;
 use App\Models\User;
 use Image;
-use App\Models\Feature;
 use Illuminate\Support\Facades\Http;
 
 class WebController extends Controller
@@ -29,10 +28,8 @@ class WebController extends Controller
             ->where('is_active', 'Yes')
             ->orderBy('harga', 'asc')
             ->get();
-        $features = Feature::all();
         return view('frontend.index', [
             'packages' => $packages,
-            'features' => $features
         ]);
     }
 
