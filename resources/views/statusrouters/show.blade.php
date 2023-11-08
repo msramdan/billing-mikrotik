@@ -125,7 +125,6 @@
                                     class="d-sm-inline-block btn btn-primary shadow-sm"><i class="fa fa-refresh"
                                         aria-hidden="true"></i> Reboot MikroTik Now
                                 </a>
-                                <h4 style="margin-top: 10px">{{ getRouteName() }}</h4>
                             </center>
                         </div>
                     </div>

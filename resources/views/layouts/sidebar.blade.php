@@ -62,8 +62,10 @@
                         @endforeach
 
                     </select>
+                    <select class="form-select mt-2" id="changeRouter" name="changeCompany">
+                        <option value="" selected disabled>-- Select Router --</option>
+                    </select>
                 </div>
-                {{-- <b>Router : {{ getRouteName() }}</b> --}}
                 <li class="sidebar-item{{ request()->is('/') || request()->is('dashboard') ? ' active' : '' }}">
                     <a class="sidebar-link" href="/dashboard">
                         <i class="bi bi-speedometer"></i>

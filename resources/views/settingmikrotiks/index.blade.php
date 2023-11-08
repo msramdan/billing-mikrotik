@@ -43,7 +43,6 @@
                                             <th>{{ __('Host') }}</th>
                                             <th>{{ __('Port') }}</th>
                                             <th>{{ __('Username') }}</th>
-                                            <th>{{ __('Is Active') }}</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
@@ -89,10 +88,6 @@
                 {
                     data: 'username',
                     name: 'username',
-                },
-                {
-                    data: 'is_active',
-                    name: 'is_active',
                 },
                 {
                     data: 'action',

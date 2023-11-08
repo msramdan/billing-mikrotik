@@ -31,7 +31,14 @@ class Expired
             if ($currentDateTime > $companies->expired) {
                 return redirect('expired');
             } else {
-                return $next($request);
+                // cek session router
+                $sessionRouter = session('sessionRouter');
+                if ($sessionRouter == null || $sessionRouter == '') {
+                    // page session null
+                    return redirect('norouter');
+                } else {
+                    return $next($request);
+                }
             }
         } else {
             return redirect('expired');

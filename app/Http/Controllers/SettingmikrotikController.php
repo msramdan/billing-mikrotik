@@ -22,18 +22,11 @@ class SettingmikrotikController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $settingmikrotiks = Settingmikrotik::query();
+            $settingmikrotiks = Settingmikrotik::where('company_id', '=', session('sessionCompany'))->get();
 
             return DataTables::of($settingmikrotiks)
-                ->addColumn('is_active', function ($row) {
-                    if ($row->is_active == 'Yes') {
-                        return '<a href="' . url('/setActive?id=' . $row->id) . '" class="btn btn-success btn-block">Aktive</a>';
-                    } else {
-                        return '<a href="' . url('/setActive?id=' . $row->id) . '" class="btn btn-danger btn-block">Non Aktive</a>';
-                    }
-                })
                 ->addColumn('action', 'settingmikrotiks.include.action')
-                ->rawColumns(['is_active', 'action'])
+                ->rawColumns(['action'])
                 ->toJson();
         }
         $countRouter = Settingmikrotik::count();
@@ -70,29 +63,18 @@ class SettingmikrotikController extends Controller
      */
     public function store(StoreSettingmikrotikRequest $request)
     {
-
-        if (getCompany()->jumlah_router == 0) {
+        if (hitungRouter() >= getCompany()->jumlah_router) {
+            Alert::error('Limit Router', 'Anda terkena limit router silahkan uprage paket');
+            return redirect()
+                ->route('settingmikrotiks.index');
+        } else {
             $attr = $request->validated();
             $attr['password'] = $request->password;
-            $attr['is_active'] = 'No';
+            $attr['company_id'] =  session('sessionCompany');
             Settingmikrotik::create($attr);
             return redirect()
                 ->route('settingmikrotiks.index')
                 ->with('success', __('The settingmikrotik was created successfully.'));
-        } else {
-            if (hitungRouter() >= getCompany()->jumlah_router) {
-                Alert::error('Limit Router', 'Anda terkena limit router silahkan uprage paket');
-                return redirect()
-                    ->route('settingmikrotiks.index');
-            } else {
-                $attr = $request->validated();
-                $attr['password'] = $request->password;
-                $attr['is_active'] = 'No';
-                Settingmikrotik::create($attr);
-                return redirect()
-                    ->route('settingmikrotiks.index')
-                    ->with('success', __('The settingmikrotik was created successfully.'));
-            }
         }
     }
 
@@ -174,24 +156,6 @@ class SettingmikrotikController extends Controller
             return redirect()
                 ->route('settingmikrotiks.index')
                 ->with('error', __("The settingmikrotik can't be deleted because it's related to another table."));
-        }
-    }
-
-    public function setActive(Request $request)
-    {
-        try {
-            DB::table('settingmikrotiks')
-                ->update(['is_active' => 'No']);
-            DB::table('settingmikrotiks')
-                ->where('id', $request->id)
-                ->update(['is_active' => 'Yes']);
-            return redirect()
-                ->route('settingmikrotiks.index')
-                ->with('success', __('The Router was activated successfully.'));
-        } catch (\Throwable $th) {
-            return redirect()
-                ->route('settingmikrotiks.index')
-                ->with('error', __("The Router can't be activated because error"));
         }
     }
 }

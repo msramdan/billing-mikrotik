@@ -20,7 +20,6 @@ class SettingMikrotikSeeder extends Seeder
             'port' => 83,
             'username' => 'sawitskylink',
             'password' => 'sawit064199',
-            'is_active' => 'Yes',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
@@ -32,7 +31,6 @@ class SettingMikrotikSeeder extends Seeder
             'port' => 8728,
             'username' => 'sawitskylink',
             'password' => 'sawit064199',
-            'is_active' => 'No',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);

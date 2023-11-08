@@ -23,33 +23,19 @@ function formatBytes($bytes, $decimal = null)
 
 function setRoute()
 {
-    $router = DB::table('settingmikrotiks')->where('is_active', 'Yes')->first();
+    $router = DB::table('settingmikrotiks')->where('id', session('sessionRouter'))->first();
     if ($router) {
         try {
-            $client = new Client([
+            return new Client([
                 'host' => $router->host,
                 'user' => $router->username,
                 'pass' => $router->password,
                 'port' => (int) $router->port,
             ]);
-            return $client;
         } catch (ConnectException $e) {
             echo $e->getMessage() . PHP_EOL;
             die();
         }
-    } else {
-        echo "Belum ada router / Router tidak aktif";
-        die();
-    }
-}
-
-function getRouteName()
-{
-    $router = DB::table('settingmikrotiks')->where('is_active', 'Yes')->first();
-    if ($router) {
-        return $router->identitas_router;
-    } else {
-        return '-';
     }
 }
 

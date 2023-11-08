@@ -21,7 +21,6 @@ return new class extends Migration
             $table->integer('port');
             $table->string('username', 100);
             $table->string('password');
-            $table->enum('is_active', ['Yes', 'No']);
             $table->timestamps();
         });
     }

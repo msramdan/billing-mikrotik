@@ -237,11 +237,18 @@ class UserController extends Controller
 
         $user->update($attr);
         $companies = $request->companies;
+        DB::table('assign_company')
+            ->where('user_id', '=', $user->id)
+            ->delete();
+
         if (isset($companies)) {
-            foreach ($companies as $value) {
-                DB::table('assign_company')->updateOrInsert(
-                    ['company_id' => $value, 'user_id' => $user->id]
-                );
+            if (isset($companies)) {
+                foreach ($companies as $value) {
+                    DB::table('assign_company')->insert([
+                        'company_id' => $value,
+                        'user_id' => $user->id
+                    ]);
+                }
             }
         }
         $user->syncRoles($request->role);

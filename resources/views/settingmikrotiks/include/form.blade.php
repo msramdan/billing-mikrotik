@@ -79,24 +79,4 @@
                 placeholder="{{ __('Password Confirmation') }}" {{ empty($settingmikrotik) ? ' required' : '' }} />
         </div>
     </div>
-    {{-- <div class="col-md-6">
-        <div class="form-group">
-            <label for="is-active">{{ __('Is Active') }}</label>
-            <select class="form-select @error('is_active') is-invalid @enderror" name="is_active" id="is-active"
-                class="form-control" required>
-                <option value="" selected disabled>-- {{ __('Select is active') }} --</option>
-                <option value="Yes"
-                    {{ isset($settingmikrotik) && $settingmikrotik->is_active == 'Yes' ? 'selected' : (old('is_active') == 'Yes' ? 'selected' : '') }}>
-                    Yes</option>
-                <option value="No"
-                    {{ isset($settingmikrotik) && $settingmikrotik->is_active == 'No' ? 'selected' : (old('is_active') == 'No' ? 'selected' : '') }}>
-                    No</option>
-            </select>
-            @error('is_active')
-                <span class="text-danger">
-                    {{ $message }}
-                </span>
-            @enderror
-        </div>
-    </div> --}}
 </div>

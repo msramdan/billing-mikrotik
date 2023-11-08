@@ -50,10 +50,6 @@
                                         <td class="fw-bold">{{ __('Username') }}</td>
                                         <td>{{ $settingmikrotik->username }}</td>
                                     </tr>
-                                    <tr>
-                                        <td class="fw-bold">{{ __('Is Active') }}</td>
-                                        <td>{{ $settingmikrotik->is_active }}</td>
-                                    </tr>
 
                                     <tr>
                                         <td class="fw-bold">{{ __('Created at') }}</td>
