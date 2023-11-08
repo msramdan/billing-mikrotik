@@ -21,7 +21,7 @@ class Pengeluaran extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['nominal', 'tanggal', 'keterangan'];
+    protected $fillable = ['nominal','company_id', 'tanggal', 'keterangan'];
 
     /**
      * The attributes that should be cast.
@@ -29,6 +29,6 @@ class Pengeluaran extends Model
      * @var string[]
      */
     protected $casts = ['nominal' => 'integer', 'tanggal' => 'datetime:d/m/Y H:i', 'keterangan' => 'string', 'created_at' => 'datetime:d/m/Y H:i', 'updated_at' => 'datetime:d/m/Y H:i'];
-    
+
 
 }

@@ -27,16 +27,16 @@ class OdcController extends Controller
     {
         if (request()->ajax()) {
             $odcs = DB::table('odcs')
-            ->leftJoin('area_coverages', 'odcs.wilayah_odc', '=', 'area_coverages.id')
-            ->where('odcs.company_id', '=', session('sessionCompany'))
-            ->select('odcs.*', 'area_coverages.nama')
-            ->get();
+                ->leftJoin('area_coverages', 'odcs.wilayah_odc', '=', 'area_coverages.id')
+                ->where('odcs.company_id', '=', session('sessionCompany'))
+                ->select('odcs.*', 'area_coverages.nama')
+                ->get();
 
             return Datatables::of($odcs)
-                ->addColumn('description', function($row){
+                ->addColumn('description', function ($row) {
                     return str($row->description)->limit(100);
                 })
-				->addColumn('area_coverage', function ($row) {
+                ->addColumn('area_coverage', function ($row) {
                     return $row->nama;
                 })
 
@@ -75,15 +75,14 @@ class OdcController extends Controller
             if (!file_exists($path)) {
                 mkdir($path, 0777, true);
             }
-
             Image::make($request->file('document')->getRealPath())->resize(500, 500, function ($constraint) {
                 $constraint->upsize();
-				$constraint->aspectRatio();
+                $constraint->aspectRatio();
             })->save($path . $filename);
 
             $attr['document'] = $filename;
         }
-
+        $attr['company_id'] =  session('sessionCompany');
         Odc::create($attr);
 
         return redirect()
@@ -101,7 +100,7 @@ class OdcController extends Controller
     {
         $odc->load('area_coverage:id,kode_area');
 
-		return view('odcs.show', compact('odc'));
+        return view('odcs.show', compact('odc'));
     }
 
     /**
@@ -114,7 +113,7 @@ class OdcController extends Controller
     {
         $odc->load('area_coverage:id,kode_area');
 
-		return view('odcs.edit', compact('odc'));
+        return view('odcs.edit', compact('odc'));
     }
 
     /**
@@ -139,7 +138,7 @@ class OdcController extends Controller
 
             Image::make($request->file('document')->getRealPath())->resize(500, 500, function ($constraint) {
                 $constraint->upsize();
-				$constraint->aspectRatio();
+                $constraint->aspectRatio();
             })->save($path . $filename);
 
             // delete old document from storage
@@ -190,5 +189,4 @@ class OdcController extends Controller
         $message = 'Berhasil mengambil data kota';
         return response()->json(compact('message', 'data'));
     }
-
 }

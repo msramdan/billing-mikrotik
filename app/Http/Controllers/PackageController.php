@@ -70,9 +70,9 @@ class PackageController extends Controller
      */
     public function store(StorePackageRequest $request)
     {
-
-        Package::create($request->validated());
-
+        $attr = $request->validated();
+        $attr['company_id'] =  session('sessionCompany');
+        Package::create($attr);
         return redirect()
             ->route('packages.index')
             ->with('success', __('The package was created successfully.'));

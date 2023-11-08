@@ -21,7 +21,7 @@ class Tagihan extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['no_tagihan', 'pelanggan_id', 'metode_bayar', 'status_bayar', 'nominal_bayar', 'potongan_bayar', 'total_bayar', 'tanggal_bayar', 'tanggal_create_tagihan', 'tanggal_kirim_notif_wa','payload_tripay'];
+    protected $fillable = ['no_tagihan','company_id', 'pelanggan_id', 'metode_bayar', 'status_bayar', 'nominal_bayar', 'potongan_bayar', 'total_bayar', 'tanggal_bayar', 'tanggal_create_tagihan', 'tanggal_kirim_notif_wa','payload_tripay'];
 
     /**
      * The attributes that should be cast.

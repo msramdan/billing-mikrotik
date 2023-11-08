@@ -21,7 +21,7 @@ class Pelanggan extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['coverage_area', 'odc', 'odp', 'no_port_odp', 'no_layanan', 'nama', 'tanggal_daftar', 'email', 'no_wa', 'no_ktp', 'photo_ktp', 'alamat', 'password', 'ppn', 'status_berlangganan', 'paket_layanan', 'jatuh_tempo', 'kirim_tagihan_wa', 'latitude', 'longitude', 'auto_isolir', 'tempo_isolir', 'router', 'user_pppoe','mode_user','user_static'];
+    protected $fillable = ['coverage_area','company_id', 'odc', 'odp', 'no_port_odp', 'no_layanan', 'nama', 'tanggal_daftar', 'email', 'no_wa', 'no_ktp', 'photo_ktp', 'alamat', 'password', 'ppn', 'status_berlangganan', 'paket_layanan', 'jatuh_tempo', 'kirim_tagihan_wa', 'latitude', 'longitude', 'auto_isolir', 'tempo_isolir', 'router', 'user_pppoe','mode_user','user_static'];
 
     /**
      * The attributes that should be cast.

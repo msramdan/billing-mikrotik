@@ -21,7 +21,7 @@ class Settingmikrotik extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['identitas_router', 'host', 'port', 'username', 'password', 'is_active'];
+    protected $fillable = ['identitas_router', 'company_id','host', 'port', 'username', 'password', 'is_active'];
 
     /**
      * The attributes that should be cast.

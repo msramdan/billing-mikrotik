@@ -58,8 +58,9 @@ class AreaCoverageController extends Controller
      */
     public function store(StoreAreaCoverageRequest $request)
     {
-
-        AreaCoverage::create($request->validated());
+        $attr = $request->validated();
+        $attr['company_id'] =  session('sessionCompany');
+        AreaCoverage::create($attr);
 
         return redirect()
             ->route('area-coverages.index')

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Pelanggan;
 use App\Models\AreaCoverage;
 use \RouterOS\Query;
@@ -14,14 +15,18 @@ class DashboardController extends Controller
     public function index()
     {
         $currentMonthStart = Carbon::now()->startOfMonth();
-        $newPelanggan = Pelanggan::where('tanggal_daftar', '>=', $currentMonthStart)->count();
-        $pelanggan = Pelanggan::all();
-        $countAreaCoverage = AreaCoverage::count();
-        $countPelanggan = Pelanggan::count();
-        $countRouter = Settingmikrotik::count();
-        $countPelangganAktif = Pelanggan::where('status_berlangganan', 'Aktif')->count();
-        $countPelangganNon = Pelanggan::where('status_berlangganan', 'Non Aktif')->count();
-        $countPelangganMenunggu = Pelanggan::where('status_berlangganan', 'Menunggu')->count();
+        $newPelanggan = Pelanggan::where('company_id', '=', session('sessionCompany'))
+            ->where('tanggal_daftar', '>=', $currentMonthStart)->count();
+        $pelanggan = Pelanggan::where('company_id', '=', session('sessionCompany'))->get();
+        $countAreaCoverage = AreaCoverage::where('company_id', '=', session('sessionCompany'))->count();
+        $countPelanggan = Pelanggan::where('company_id', '=', session('sessionCompany'))->count();
+        $countRouter = Settingmikrotik::where('company_id', '=', session('sessionCompany'))->count();
+        $countPelangganAktif = Pelanggan::where('company_id', '=', session('sessionCompany'))
+            ->where('status_berlangganan', 'Aktif')->count();
+        $countPelangganNon = Pelanggan::where('company_id', '=', session('sessionCompany'))
+            ->where('status_berlangganan', 'Non Aktif')->count();
+        $countPelangganMenunggu = Pelanggan::where('company_id', '=', session('sessionCompany'))
+            ->where('status_berlangganan', 'Menunggu')->count();
         $client = setRoute();
         $query = new Query('/ip/hotspot/active/print');
         $hotspotactives = $client->query($query)->read();

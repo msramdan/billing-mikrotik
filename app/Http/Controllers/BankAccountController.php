@@ -58,9 +58,9 @@ class BankAccountController extends Controller
      */
     public function store(StoreBankAccountRequest $request)
     {
-
-        BankAccount::create($request->validated());
-
+        $attr = $request->validated();
+        $attr['company_id'] =  session('sessionCompany');
+        BankAccount::create($attr);
         return redirect()
             ->route('bank-accounts.index')
             ->with('success', __('The bankAccount was created successfully.'));

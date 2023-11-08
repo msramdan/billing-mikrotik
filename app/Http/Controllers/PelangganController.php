@@ -175,6 +175,7 @@ class PelangganController extends Controller
 
                 $attr['photo_ktp'] = $filename;
             }
+            $attr['company_id'] =  session('sessionCompany');
             Pelanggan::create($attr);
             return redirect()
                 ->route('pelanggans.index')
@@ -202,6 +203,7 @@ class PelangganController extends Controller
 
                     $attr['photo_ktp'] = $filename;
                 }
+                $attr['company_id'] =  session('sessionCompany');
                 Pelanggan::create($attr);
                 return redirect()
                     ->route('pelanggans.index')

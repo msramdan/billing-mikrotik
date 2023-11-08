@@ -21,7 +21,7 @@ class Bank extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['nama_bank', 'logo_bank'];
+    protected $fillable = ['nama_bank', 'logo_bank','company_id'];
 
     /**
      * The attributes that should be cast.
@@ -29,6 +29,6 @@ class Bank extends Model
      * @var string[]
      */
     protected $casts = ['nama_bank' => 'string', 'logo_bank' => 'string', 'created_at' => 'datetime:d/m/Y H:i', 'updated_at' => 'datetime:d/m/Y H:i'];
-    
+
 
 }

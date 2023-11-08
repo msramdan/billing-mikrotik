@@ -58,8 +58,9 @@ class PemasukanController extends Controller
      */
     public function store(StorePemasukanRequest $request)
     {
-
-        Pemasukan::create($request->validated());
+        $attr = $request->validated();
+        $attr['company_id'] =  session('sessionCompany');
+        Pemasukan::create($attr);
 
         return redirect()
             ->route('pemasukans.index')

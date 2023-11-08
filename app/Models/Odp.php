@@ -21,7 +21,7 @@ class Odp extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['kode_odc', 'nomor_port_odc', 'kode_odp', 'wilayah_odp', 'warna_tube_fo', 'nomor_tiang', 'jumlah_port', 'document', 'description', 'latitude', 'longitude'];
+    protected $fillable = ['kode_odc','company_id', 'nomor_port_odc', 'kode_odp', 'wilayah_odp', 'warna_tube_fo', 'nomor_tiang', 'jumlah_port', 'document', 'description', 'latitude', 'longitude'];
 
     /**
      * The attributes that should be cast.

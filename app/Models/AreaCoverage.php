@@ -21,7 +21,7 @@ class AreaCoverage extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['kode_area', 'tampilkan_register', 'nama', 'alamat', 'keterangan', 'radius', 'latitude', 'longitude'];
+    protected $fillable = ['kode_area', 'tampilkan_register', 'nama', 'alamat', 'keterangan', 'radius', 'latitude', 'longitude','company_id'];
 
     /**
      * The attributes that should be cast.

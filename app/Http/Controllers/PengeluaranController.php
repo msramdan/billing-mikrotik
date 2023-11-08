@@ -58,8 +58,9 @@ class PengeluaranController extends Controller
      */
     public function store(StorePengeluaranRequest $request)
     {
-
-        Pengeluaran::create($request->validated());
+        $attr = $request->validated();
+        $attr['company_id'] =  session('sessionCompany');
+        Pengeluaran::create($attr);
 
         return redirect()
             ->route('pengeluarans.index')

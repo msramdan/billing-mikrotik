@@ -21,7 +21,7 @@ class BankAccount extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['bank_id', 'pemilik_rekening', 'nomor_rekening'];
+    protected $fillable = ['bank_id', 'pemilik_rekening', 'nomor_rekening','company_id'];
 
     /**
      * The attributes that should be cast.

@@ -126,6 +126,7 @@ class TagihanController extends Controller
         } else {
             $nominal_ppn =  0;
         }
+
         DB::table('tagihans')->insert([
             'no_tagihan' => 'INV-SSL-' . $request->no_tagihan,
             'pelanggan_id' => $request->pelanggan_id,
@@ -133,6 +134,7 @@ class TagihanController extends Controller
             'potongan_bayar' => $request->potongan_bayar,
             'total_bayar' => $request->total_bayar,
             'periode' => $request->periode,
+            'company_id' => session('sessionCompany'),
             'ppn' => $request->ppn,
             'nominal_ppn' => $nominal_ppn,
             'status_bayar' => 'Belum Bayar',

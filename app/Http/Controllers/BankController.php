@@ -30,8 +30,8 @@ class BankController extends Controller
 
                 ->addColumn('logo_bank', function ($row) {
                     if ($row->logo_bank == null) {
-                    return 'https://via.placeholder.com/350?text=No+Image+Avaiable';
-                }
+                        return 'https://via.placeholder.com/350?text=No+Image+Avaiable';
+                    }
                     return asset('storage/uploads/logo_banks/' . $row->logo_bank);
                 })
 
@@ -73,12 +73,12 @@ class BankController extends Controller
 
             Image::make($request->file('logo_bank')->getRealPath())->resize(500, 500, function ($constraint) {
                 $constraint->upsize();
-				$constraint->aspectRatio();
+                $constraint->aspectRatio();
             })->save($path . $filename);
 
             $attr['logo_bank'] = $filename;
         }
-
+        $attr['company_id'] =  session('sessionCompany');
         Bank::create($attr);
 
         return redirect()
@@ -130,7 +130,7 @@ class BankController extends Controller
 
             Image::make($request->file('logo_bank')->getRealPath())->resize(500, 500, function ($constraint) {
                 $constraint->upsize();
-				$constraint->aspectRatio();
+                $constraint->aspectRatio();
             })->save($path . $filename);
 
             // delete old logo_bank from storage

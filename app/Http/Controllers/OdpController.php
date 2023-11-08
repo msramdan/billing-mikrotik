@@ -95,7 +95,7 @@ class OdpController extends Controller
 
             $attr['document'] = $filename;
         }
-
+        $attr['company_id'] =  session('sessionCompany');
         Odp::create($attr);
 
         return redirect()

@@ -49,9 +49,9 @@ class PackageCategoryController extends Controller
      */
     public function store(StorePackageCategoryRequest $request)
     {
-
-        PackageCategory::create($request->validated());
-
+        $attr = $request->validated();
+        $attr['company_id'] =  session('sessionCompany');
+        PackageCategory::create($attr);
         return redirect()
             ->route('package-categories.index')
             ->with('success', __('The packageCategory was created successfully.'));
