@@ -37,7 +37,7 @@
                 success: function(response) {
                     // Reload the page or perform any other actions after successful session setting
                     if (response.success) {
-                        location.reload(); // Example: Reload the page
+                        window.location.href = '/dashboard';
                     }
                 },
                 error: function(error) {

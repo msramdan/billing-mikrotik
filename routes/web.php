@@ -58,10 +58,9 @@ Route::controller(ExpiredController::class)->group(function () {
 });
 
 // PANEL ADMIN
-Route::middleware(['auth', 'web', 'nomikrotik', 'cek-expired'])->group(function () {
+Route::middleware(['auth', 'web', 'cek-expired'])->group(function () {
     Route::get('/profile', App\Http\Controllers\ProfileController::class)->name('profile');
-    Route::resource('users', App\Http\Controllers\UserController::class);
-    Route::resource('roles', App\Http\Controllers\RoleAndPermissionController::class);
+
     Route::controller(DashboardController::class)->group(function () {
         Route::get('/dashboard', 'index')->name('dashboard');
     });
@@ -137,9 +136,15 @@ Route::middleware(['auth', 'web', 'nomikrotik', 'cek-expired'])->group(function 
     Route::controller(App\Http\Controllers\SendnotifController::class)->group(function () {
         Route::post('/kirim_pesan', 'kirim_pesan')->name('kirim_pesan');
     });
-    Route::resource('pakets', App\Http\Controllers\PaketController::class)->middleware('auth');
-    Route::controller(App\Http\Controllers\CompanyController::class)->group(function () {
-        Route::post('/update-session', 'updateSession')->name('updateSession');
-    });
-    Route::resource('companies', App\Http\Controllers\CompanyController::class)->middleware('auth');
+
+
+
 });
+
+Route::controller(App\Http\Controllers\CompanyController::class)->group(function () {
+    Route::post('/update-session', 'updateSession')->name('updateSession');
+});
+Route::resource('companies', App\Http\Controllers\CompanyController::class);
+Route::resource('pakets', App\Http\Controllers\PaketController::class);
+Route::resource('users', App\Http\Controllers\UserController::class);
+Route::resource('roles', App\Http\Controllers\RoleAndPermissionController::class);
