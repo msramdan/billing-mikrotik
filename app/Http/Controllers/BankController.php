@@ -17,11 +17,6 @@ class BankController extends Controller
         $this->middleware('permission:bank delete')->only('destroy');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         if (request()->ajax()) {

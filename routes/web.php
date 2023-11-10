@@ -2,8 +2,8 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExpiredController;
-use App\Http\Controllers\FormMikrotikController;
 use App\Http\Controllers\PanelCustomer\DashboardController as PanelCustomerDashboardController;
+use App\Http\Controllers\SettingmikrotikController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -44,63 +44,50 @@ Route::controller(App\Http\Controllers\Frontend\WebController::class)->group(fun
 });
 // });
 
-// FORM INPUT MIKROTIK
-Route::middleware(['auth', 'web', 'cek-expired'])->group(function () {
-    Route::controller(FormMikrotikController::class)->group(function () {
-        Route::get('/form', 'form')->name('form');
-        Route::post('/cekrouter', 'cekrouter')->name('api.cekrouter');
-        Route::post('/simpanrouter', 'simpanrouter')->name('api.simpanrouter');
-    });
-});
-
-Route::controller(ExpiredController::class)->group(function () {
-    Route::get('/expired', 'expired')->name('expired');
-});
 
 // PANEL ADMIN
 Route::middleware(['auth', 'web', 'cek-expired'])->group(function () {
     Route::get('/profile', App\Http\Controllers\ProfileController::class)->name('profile');
-
     Route::controller(DashboardController::class)->group(function () {
-        Route::get('/dashboard', 'index')->name('dashboard');
+        Route::get('/dashboard', 'index')->name('dashboard')->middleware('no_mikrotik');
     });
     Route::resource('banks', App\Http\Controllers\BankController::class);
     Route::resource('bank-accounts', App\Http\Controllers\BankAccountController::class);
     Route::resource('package-categories', App\Http\Controllers\PackageCategoryController::class);
     Route::resource('packages', App\Http\Controllers\PackageController::class);
     Route::resource('area-coverages', App\Http\Controllers\AreaCoverageController::class);
-    Route::resource('profile-pppoes', App\Http\Controllers\ProfilePppoeController::class);
-    Route::resource('active-ppps', App\Http\Controllers\ActivePppController::class);
-    Route::resource('non-active-ppps', App\Http\Controllers\ActiveNonPppController::class);
+    Route::resource('profile-pppoes', App\Http\Controllers\ProfilePppoeController::class)->middleware('no_mikrotik');
+    Route::resource('active-ppps', App\Http\Controllers\ActivePppController::class)->middleware('no_mikrotik');
+    Route::resource('non-active-ppps', App\Http\Controllers\ActiveNonPppController::class)->middleware('no_mikrotik');
     Route::controller(App\Http\Controllers\ActivePppController::class)->group(function () {
-        Route::get('monitoring', 'monitoring')->name('monitoring');
+        Route::get('monitoring', 'monitoring')->name('monitoring')->middleware('no_mikrotik');
     });
     Route::controller(App\Http\Controllers\SecretPppController::class)->group(function () {
-        Route::put('enableSecret/{id}', 'enable')->name('secret-ppps.enable');
-        Route::put('disableSecret/{id}/{name}', 'disable')->name('secret-ppps.disable');
-        Route::delete('deleteSecret/{id}/{name}', 'deleteSecret')->name('secret-ppps.deleteSecret');
+        Route::put('enableSecret/{id}', 'enable')->name('secret-ppps.enable')->middleware('no_mikrotik');
+        Route::put('disableSecret/{id}/{name}', 'disable')->name('secret-ppps.disable')->middleware('no_mikrotik');
+        Route::delete('deleteSecret/{id}/{name}', 'deleteSecret')->name('secret-ppps.deleteSecret')->middleware('no_mikrotik');
     });
-    Route::resource('secret-ppps', App\Http\Controllers\SecretPppController::class);
-    Route::resource('logs', App\Http\Controllers\LogController::class);
-    Route::resource('dhcps', App\Http\Controllers\DhcpController::class);
-    Route::resource('interfaces', App\Http\Controllers\InterfaceController::class);
-    Route::resource('statics', App\Http\Controllers\StaticController::class);
+    Route::resource('secret-ppps', App\Http\Controllers\SecretPppController::class)->middleware('no_mikrotik');
+    Route::resource('logs', App\Http\Controllers\LogController::class)->middleware('no_mikrotik');
+    Route::resource('dhcps', App\Http\Controllers\DhcpController::class)->middleware('no_mikrotik');
+    Route::resource('interfaces', App\Http\Controllers\InterfaceController::class)->middleware('no_mikrotik');
+    Route::resource('statics', App\Http\Controllers\StaticController::class)->middleware('no_mikrotik');
     Route::resource('settingmikrotiks', App\Http\Controllers\SettingmikrotikController::class);
     Route::controller(App\Http\Controllers\SettingmikrotikController::class)->group(function () {
-        Route::get('setActive', 'setActive')->name('setActive');
+        Route::get('setActive', 'setActive')->name('setActive')->middleware('no_mikrotik');
     });
-    Route::resource('statusrouters', App\Http\Controllers\StatusrouterController::class);
+    Route::resource('statusrouters', App\Http\Controllers\StatusrouterController::class)->middleware('no_mikrotik');
     Route::controller(App\Http\Controllers\StatusrouterController::class)->group(function () {
-        Route::get('reboot', 'reboot')->name('reboot');
+        Route::get('reboot', 'reboot')->name('reboot')->middleware('no_mikrotik');
     });
-    Route::resource('hotspotactives', App\Http\Controllers\HotspotactiveController::class);
-    Route::resource('hotspotusers', App\Http\Controllers\HotspotuserController::class);
+    Route::resource('hotspotactives', App\Http\Controllers\HotspotactiveController::class)->middleware('no_mikrotik');
+    Route::resource('hotspotusers', App\Http\Controllers\HotspotuserController::class)->middleware('no_mikrotik');
     Route::controller(App\Http\Controllers\HotspotuserController::class)->group(function () {
-        Route::put('enableHotspot/{id}', 'enable')->name('hotspotusers.enable');
-        Route::put('disableHotspot/{id}/{user}', 'disable')->name('hotspotusers.disable');
-        Route::put('resetHotspot/{id}', 'reset')->name('hotspotusers.reset');
-        Route::delete('deleteHotspot/{id}/{user}', 'deleteHotspot')->name('hotspotusers.delete');
-        Route::get('mikhmon', 'mikhmon')->name('mikhmons.index');
+        Route::put('enableHotspot/{id}', 'enable')->name('hotspotusers.enable')->middleware('no_mikrotik');
+        Route::put('disableHotspot/{id}/{user}', 'disable')->name('hotspotusers.disable')->middleware('no_mikrotik');
+        Route::put('resetHotspot/{id}', 'reset')->name('hotspotusers.reset')->middleware('no_mikrotik');
+        Route::delete('deleteHotspot/{id}/{user}', 'deleteHotspot')->name('hotspotusers.delete')->middleware('no_mikrotik');
+        Route::get('mikhmon', 'mikhmon')->name('mikhmons.index')->middleware('no_mikrotik');
     });
     Route::resource('odcs', App\Http\Controllers\OdcController::class);
     Route::resource('odps', App\Http\Controllers\OdpController::class);
@@ -136,16 +123,23 @@ Route::middleware(['auth', 'web', 'cek-expired'])->group(function () {
     Route::controller(App\Http\Controllers\SendnotifController::class)->group(function () {
         Route::post('/kirim_pesan', 'kirim_pesan')->name('kirim_pesan');
     });
-
-
-
 });
 
-Route::controller(App\Http\Controllers\CompanyController::class)->group(function () {
-    Route::post('/update-session', 'updateSession')->name('updateSession');
-    Route::post('/update-session-router', 'routerSelect')->name('routerSelect');
+Route::middleware(['auth', 'web'])->group(function () {
+    Route::controller(ExpiredController::class)->group(function () {
+        Route::get('/expired', 'expired')->name('expired');
+    });
+
+    Route::controller(SettingmikrotikController::class)->group(function () {
+        Route::get('/nomikrotik', 'nomikrotik')->name('nomikrotik')->middleware('active_mikrotik');
+    });
+
+    Route::controller(App\Http\Controllers\CompanyController::class)->group(function () {
+        Route::post('/update-session', 'updateSession')->name('updateSession');
+        Route::post('/update-session-router', 'routerSelect')->name('routerSelect');
+    });
+    Route::resource('companies', App\Http\Controllers\CompanyController::class);
+    Route::resource('pakets', App\Http\Controllers\PaketController::class);
+    Route::resource('users', App\Http\Controllers\UserController::class);
+    Route::resource('roles', App\Http\Controllers\RoleAndPermissionController::class);
 });
-Route::resource('companies', App\Http\Controllers\CompanyController::class);
-Route::resource('pakets', App\Http\Controllers\PaketController::class);
-Route::resource('users', App\Http\Controllers\UserController::class);
-Route::resource('roles', App\Http\Controllers\RoleAndPermissionController::class);

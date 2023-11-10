@@ -13,8 +13,8 @@ class Expired
 
     public function handle(Request $request, Closure $next): Response
     {
-        $cek = session('sessionCompany');
-        if ($cek == null || $cek == '') {
+        $cekSession = session('sessionCompany');
+        if ($cekSession == null || $cekSession == '') {
             $assign_company = DB::table('assign_company')
                 ->where('user_id', Auth::id())->first();
             session(['sessionCompany' => $assign_company->company_id]);

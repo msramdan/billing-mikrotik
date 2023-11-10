@@ -42,16 +42,12 @@ class SettingmikrotikController extends Controller
      */
     public function create()
     {
-        if (getCompany()->jumlah_router == 0) {
-            return view('settingmikrotiks.create');
+        if (hitungRouter() >= getCompany()->jumlah_router) {
+            Alert::error('Limit Router', 'Anda terkena limit router silahkan uprage paket');
+            return redirect()
+                ->route('settingmikrotiks.index');
         } else {
-            if (hitungRouter() >= getCompany()->jumlah_router) {
-                Alert::error('Limit Router', 'Anda terkena limit router silahkan uprage paket');
-                return redirect()
-                    ->route('settingmikrotiks.index');
-            } else {
-                return view('settingmikrotiks.create');
-            }
+            return view('settingmikrotiks.create');
         }
     }
 
@@ -157,5 +153,10 @@ class SettingmikrotikController extends Controller
                 ->route('settingmikrotiks.index')
                 ->with('error', __("The settingmikrotik can't be deleted because it's related to another table."));
         }
+    }
+
+    public function nomikrotik()
+    {
+        return view('no-mikrotik');
     }
 }

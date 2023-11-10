@@ -18,7 +18,8 @@ class Onmikrotik
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $router = DB::table('settingmikrotiks')->where('is_active', 'Yes')->first();
+        $router = DB::table('settingmikrotiks')
+            ->where('id', '=', session('sessionRouter'))->first();
         if ($router) {
             try {
                 new Client([

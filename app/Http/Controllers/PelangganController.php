@@ -136,16 +136,12 @@ class PelangganController extends Controller
      */
     public function create()
     {
-        if (getCompany()->jumlah_pelanggan == 0) {
-            return view('pelanggans.create');
+        if (hitungPelanggan() >= getCompany()->jumlah_pelanggan) {
+            Alert::error('Limit Router', 'Anda terkena limit pelanggan silahkan uprage paket');
+            return redirect()
+                ->route('pelanggans.index');
         } else {
-            if (hitungPelanggan() >= getCompany()->jumlah_pelanggan) {
-                Alert::error('Limit Router', 'Anda terkena limit pelanggan silahkan uprage paket');
-                return redirect()
-                    ->route('pelanggans.index');
-            } else {
-                return view('pelanggans.create');
-            }
+            return view('pelanggans.create');
         }
     }
 
@@ -157,7 +153,11 @@ class PelangganController extends Controller
      */
     public function store(StorePelangganRequest $request)
     {
-        if (getCompany()->jumlah_pelanggan == 0) {
+        if (hitungPelanggan() >= getCompany()->jumlah_pelanggan) {
+            Alert::error('Limit Router', 'Anda terkena limit pelanggan silahkan uprage paket');
+            return redirect()
+                ->route('pelanggans.index');
+        } else {
             $attr = $request->validated();
             $attr['password'] = bcrypt($request->password);
             if ($request->file('photo_ktp') && $request->file('photo_ktp')->isValid()) {
@@ -180,35 +180,6 @@ class PelangganController extends Controller
             return redirect()
                 ->route('pelanggans.index')
                 ->with('success', __('The pelanggan was created successfully.'));
-        } else {
-            if (hitungPelanggan() >= getCompany()->jumlah_pelanggan) {
-                Alert::error('Limit Router', 'Anda terkena limit pelanggan silahkan uprage paket');
-                return redirect()
-                    ->route('pelanggans.index');
-            } else {
-                $attr = $request->validated();
-                $attr['password'] = bcrypt($request->password);
-                if ($request->file('photo_ktp') && $request->file('photo_ktp')->isValid()) {
-
-                    $path = storage_path('app/public/uploads/photo_ktps/');
-                    $filename = $request->file('photo_ktp')->hashName();
-
-                    if (!file_exists($path)) {
-                        mkdir($path, 0777, true);
-                    }
-                    Image::make($request->file('photo_ktp')->getRealPath())->resize(500, 500, function ($constraint) {
-                        $constraint->upsize();
-                        $constraint->aspectRatio();
-                    })->save($path . $filename);
-
-                    $attr['photo_ktp'] = $filename;
-                }
-                $attr['company_id'] =  session('sessionCompany');
-                Pelanggan::create($attr);
-                return redirect()
-                    ->route('pelanggans.index')
-                    ->with('success', __('The pelanggan was created successfully.'));
-            }
         }
     }
 

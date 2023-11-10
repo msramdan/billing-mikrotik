@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', __('Active PPP'))
+@section('title', __('No Router'))
 
 @section('content')
     <section class="section">
@@ -12,10 +12,9 @@
                             <div class="col-md-8 col-12 offset-md-2">
                                 <div class="text-center">
                                     <img style="width: 60%;"
-                                        class="img-error"src="{{ asset('mazer/images/samples/expired.jpg') }}"
-                                        alt="Not Found">
-                                    <p class='fs-5 ' style="color: red"> <b>Paket Langganan Anda telah kedaluwarsa.<br>
-                                            Silakan perbarui langganan Anda untuk terus menggunakan layanan kami.
+                                        class="img-error"src="{{ asset('mazer/images/samples/error-404.svg') }}"
+                                        alt="Not Found"> <br>
+                                    <p  class='fs-5 ' style="color: red"> <b>Router belum dipilih atau Router tidak aktif
                                     </p>
                                 </div>
                             </div>

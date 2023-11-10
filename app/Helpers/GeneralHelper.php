@@ -60,12 +60,12 @@ function cekAssign($company_id, $user_id)
 
 function hitungRouter()
 {
-    return Settingmikrotik::count();
+    return Settingmikrotik::where('company_id',session('sessionCompany'))->count();
 }
 
 function hitungPelanggan()
 {
-    return Pelanggan::count();
+    return Pelanggan::where('company_id',session('sessionCompany'))->count();
 }
 
 

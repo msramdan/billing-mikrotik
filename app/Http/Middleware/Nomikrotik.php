@@ -13,7 +13,8 @@ class Nomikrotik
 {
     public function handle(Request $request, Closure $next): Response
     {
-        $router = DB::table('settingmikrotiks')->where('is_active', 'Yes')->first();
+        $router = DB::table('settingmikrotiks')
+            ->where('id', '=', session('sessionRouter'))->first();
         if ($router) {
             try {
                 new Client([
@@ -24,10 +25,11 @@ class Nomikrotik
                 ]);
                 return $next($request);
             } catch (ConnectException $e) {
-                return redirect('form');
+                return redirect('nomikrotik');
             }
+            return $next($request);
         } else {
-            return redirect('form');
+            return redirect('nomikrotik');
         }
     }
 }
