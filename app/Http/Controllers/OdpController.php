@@ -198,14 +198,16 @@ class OdpController extends Controller
 
     public function odp($id)
     {
-        $data = DB::table('odps')->where('kode_odc', $id)->get();
+        $data = DB::table('odps')
+            ->where('company_id', '=', session('sessionCompany'))
+            ->where('kode_odc', $id)->get();
         $message = 'Berhasil mengambil data kota';
         return response()->json(compact('message', 'data'));
     }
 
     public function getProfile($id)
     {
-        $router = DB::table('settingmikrotiks')->where('id',$id)->first();
+        $router = DB::table('settingmikrotiks')->where('id', $id)->first();
         try {
             $client = new Client([
                 'host' => $router->host,
@@ -225,7 +227,7 @@ class OdpController extends Controller
 
     public function getStatic($id)
     {
-        $router = DB::table('settingmikrotiks')->where('id',$id)->first();
+        $router = DB::table('settingmikrotiks')->where('id', $id)->first();
         try {
             $client = new Client([
                 'host' => $router->host,
@@ -238,7 +240,7 @@ class OdpController extends Controller
             die();
         }
         $query = (new Query('/queue/simple/print'))
-        ->where('dynamic', 'false');
+            ->where('dynamic', 'false');
         $data = $client->query($query)->read();
         $message = 'Berhasil mengambil data statik';
         return response()->json(compact('message', 'data'));

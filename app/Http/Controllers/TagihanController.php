@@ -90,7 +90,7 @@ class TagihanController extends Controller
                 ->toJson();
         }
 
-        $pelanggans = DB::table('pelanggans')->get();
+        $pelanggans = DB::table('pelanggans')->where('company_id', '=', session('sessionCompany'))->get();
 
         return view('tagihans.index', [
             'pelanggans' => $pelanggans

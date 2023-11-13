@@ -115,9 +115,9 @@ class PelangganController extends Controller
                 ->addColumn('action', 'pelanggans.include.action')
                 ->toJson();
         }
-        $areaCoverages = AreaCoverage::all();
-        $package = Package::all();
-        $router = Settingmikrotik::all();
+        $areaCoverages = AreaCoverage::where('company_id', '=', session('sessionCompany'))->get();
+        $package = Package::where('company_id', '=', session('sessionCompany'))->get();
+        $router = Settingmikrotik::where('company_id', '=', session('sessionCompany'))->get();
         $x = DB::table('pelanggans')
             ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
             ->sum('packages.harga');

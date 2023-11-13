@@ -37,7 +37,8 @@ class DashboardController extends Controller
         $querysecretPpps = new Query('/ppp/secret/print');
         $nonactivePpps = $client->query($querysecretPpps)->read();
 
-        $pemasukans = Pemasukan::orderBy('id', 'desc')->limit(10)->get();
+        $pemasukans = Pemasukan::where('company_id', '=', session('sessionCompany'))
+            ->orderBy('id', 'desc')->limit(10)->get();
 
         return view('dashboard', [
             'pelanggan' => $pelanggan,

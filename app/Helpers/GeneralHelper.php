@@ -143,7 +143,7 @@ function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima, $footer
 
 function totalStatusBayar($status)
 {
-    $totalStatus = Tagihan::where('status_bayar', $status)
+    $totalStatus = Tagihan::where('company_id', '=', session('sessionCompany'))->where('status_bayar', $status)
         ->get();
     return  $totalStatus->count();
 }
@@ -158,8 +158,8 @@ function hitungUang($type)
 {
     if ($type == 'Pemasukan') {
         $pemasukan = DB::table('pemasukans')
-            // ->where('categories.kind', '=', 1)
-            ->sum('pemasukans.nominal');
+        ->where('company_id', '=', session('sessionCompany'))
+        ->sum('pemasukans.nominal');
         return $pemasukan;
     } else {
         $pengeluaran = DB::table('pengeluarans')

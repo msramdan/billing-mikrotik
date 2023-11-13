@@ -185,7 +185,9 @@ class OdcController extends Controller
 
     public function odc($id)
     {
-        $data = DB::table('odcs')->where('wilayah_odc', $id)->get();
+        $data = DB::table('odcs')
+        ->where('company_id', '=', session('sessionCompany'))
+        ->where('wilayah_odc', $id)->get();
         $message = 'Berhasil mengambil data kota';
         return response()->json(compact('message', 'data'));
     }
