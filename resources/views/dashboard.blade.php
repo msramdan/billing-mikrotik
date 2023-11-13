@@ -373,199 +373,198 @@
                 </div>
             </div>
 
+            @can('pelanggan view')
+                <div class="col-xl-3 col-sm-6 box-col-3">
+                    <div class="card radius-10 border-start border-0 border-3 border-primary">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <p class="mb-0 text-secondary">Total Pelanggan</p>
+                                    <h4 class="my-1 text-primary"><a href="/pelanggans" class="">
+                                            {{ $countPelanggan }} Data </a>
+                                    </h4>
 
-            <div class="col-xl-3 col-sm-6 box-col-3">
-                <div class="card radius-10 border-start border-0 border-3 border-primary">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div>
-                                <p class="mb-0 text-secondary">Total Pelanggan</p>
-                                <h4 class="my-1 text-primary"><a href="/pelanggans" class="">
-                                        {{ $countPelanggan }} Data </a>
-                                </h4>
-
-                            </div>
-                            <div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto"><i
-                                    class="fa fa-users"></i>
+                                </div>
+                                <div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto"><i
+                                        class="fa fa-users"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                <div class="col-xl-3 col-sm-6 box-col-3">
+                    <div class="card radius-10 border-start border-0 border-3 border-primary">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <p class="mb-0 text-secondary">P. Aktif</p>
+                                    <h4 class="my-1 text-primary"><a href="/pelanggans" class="">
+                                            {{ $countPelangganAktif }} Data </a>
+                                    </h4>
 
-
-            <div class="col-xl-3 col-sm-6 box-col-3">
-                <div class="card radius-10 border-start border-0 border-3 border-primary">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div>
-                                <p class="mb-0 text-secondary">P. Aktif</p>
-                                <h4 class="my-1 text-primary"><a href="/pelanggans" class="">
-                                        {{ $countPelangganAktif }} Data </a>
-                                </h4>
-
-                            </div>
-                            <div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto"><i
-                                    class="fa fa-check"></i>
+                                </div>
+                                <div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto"><i
+                                        class="fa fa-check"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-xl-3 col-sm-6 box-col-3">
-                <div class="card radius-10 border-start border-0 border-3 border-primary">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div>
-                                <p class="mb-0 text-secondary">P. Non Aktif</p>
-                                <h4 class="my-1 text-primary"><a href="/pelanggans" class="">
-                                        {{ $countPelangganNon }} Data </a>
-                                </h4>
-                            </div>
-                            <div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto"><i
-                                    class="fa fa-times"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-sm-6 box-col-3">
-                <div class="card radius-10 border-start border-0 border-3 border-primary">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div>
-                                <p class="mb-0 text-secondary">P.Menunggu</p>
-                                <h4 class="my-1 text-primary"><a href="/pelanggans" class="">
-                                        {{ $countPelangganMenunggu }} Data </a>
-                                </h4>
-
-                            </div>
-                            <div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto"><i
-                                    class="fa fa-spinner"></i>
+                <div class="col-xl-3 col-sm-6 box-col-3">
+                    <div class="card radius-10 border-start border-0 border-3 border-primary">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <p class="mb-0 text-secondary">P. Non Aktif</p>
+                                    <h4 class="my-1 text-primary"><a href="/pelanggans" class="">
+                                            {{ $countPelangganNon }} Data </a>
+                                    </h4>
+                                </div>
+                                <div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto"><i
+                                        class="fa fa-times"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                <div class="col-xl-3 col-sm-6 box-col-3">
+                    <div class="card radius-10 border-start border-0 border-3 border-primary">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <p class="mb-0 text-secondary">P.Menunggu</p>
+                                    <h4 class="my-1 text-primary"><a href="/pelanggans" class="">
+                                            {{ $countPelangganMenunggu }} Data </a>
+                                    </h4>
 
-            {{-- sini --}}
-            <div class="col-xl-3 col-sm-6 box-col-3">
-                <div class="card radius-10 border-start border-0 border-3 border-primary">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div>
-                                <p class="mb-0 text-secondary">Pelanggan Baru</p>
-                                <h4 class="my-1 text-primary"><a href="/pelanggans" class="">
-                                        {{$newPelanggan}} Data </a>
-                                </h4>
-                            </div>
-                            <div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto"><i
-                                    class="fa fa-users"></i>
+                                </div>
+                                <div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto"><i
+                                        class="fa fa-spinner"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
+                <div class="col-xl-3 col-sm-6 box-col-3">
+                    <div class="card radius-10 border-start border-0 border-3 border-primary">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <p class="mb-0 text-secondary">Pelanggan Baru</p>
+                                    <h4 class="my-1 text-primary"><a href="/pelanggans" class="">
+                                            {{ $newPelanggan }} Data </a>
+                                    </h4>
+                                </div>
+                                <div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto"><i
+                                        class="fa fa-users"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endcan
         </section>
-        <div class="row">
-            <div class="col-sm-4 col-sm-4">
-                <div class="card" style="height: 370px">
-                    <div class="card-header align-items-center d-flex">
-                        <h4 class="card-title mb-0 flex-grow-1">
-                            Status Tagihan
-                        </h4>
-                    </div>
-                    <div class="card-body">
-                        <canvas id="myChart"> </canvas>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-4 col-sm-4">
-                <div class="card" style="height: 370px">
-                    <div class="card-header align-items-center d-flex">
-                        <h4 class="card-title mb-0 flex-grow-1">
-                            Pemasukan VS Pengeluaran
-                        </h4>
-                    </div>
-                    <div class="card-body">
-                        <canvas id="myChart2"> </canvas>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-4 col-md-4">
-                <div class="card" style="height: 370px">
-                    <div class="card-header align-items-center d-flex">
-                        <h4 class="card-title mb-0 flex-grow-1">
-                            10 Pemasukan Terbaru
-                        </h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive p-1">
-                            <div class="table-wrapper-scroll-y my-custom-scrollbar">
-                                <table class="table table-striped" id="data-table" style="font-size: 10px;">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 38%">{{ __('Nominal') }}</th>
-                                            <th style="width: 58%">{{ __('Tanggal') }}</th>
-                                            <th style="width: 4%">{{ __('Ket') }}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
 
-                                        @foreach ($pemasukans as $row)
+        @can('pemasukan view')
+            <div class="row">
+                <div class="col-sm-4 col-sm-4">
+                    <div class="card" style="height: 370px">
+                        <div class="card-header align-items-center d-flex">
+                            <h4 class="card-title mb-0 flex-grow-1">
+                                Status Tagihan
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="myChart"> </canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-sm-4">
+                    <div class="card" style="height: 370px">
+                        <div class="card-header align-items-center d-flex">
+                            <h4 class="card-title mb-0 flex-grow-1">
+                                Pemasukan VS Pengeluaran
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="myChart2"> </canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-md-4">
+                    <div class="card" style="height: 370px">
+                        <div class="card-header align-items-center d-flex">
+                            <h4 class="card-title mb-0 flex-grow-1">
+                                10 Pemasukan Terbaru
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive p-1">
+                                <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                                    <table class="table table-striped" id="data-table" style="font-size: 10px;">
+                                        <thead>
                                             <tr>
-                                                <td>{{ rupiah($row->nominal) }}</td>
-                                                <td>{{ $row->tanggal }}</td>
-                                                <td>
-                                                    <button type="button" class="btn btn-success btn-sm"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#exampleModal{{ $row->id }}">
-                                                        <i class="fa fa-info-circle" aria-hidden="true"></i>
-                                                    </button>
-                                                </td>
+                                                <th style="width: 38%">{{ __('Nominal') }}</th>
+                                                <th style="width: 58%">{{ __('Tanggal') }}</th>
+                                                <th style="width: 4%">{{ __('Ket') }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
-                                                <div class="modal fade" id="exampleModal{{ $row->id }}"
-                                                    tabindex="-1" aria-labelledby="exampleModallview"
-                                                    aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="exampleModalLabel">Detail
-                                                                    Pemasukan</h5>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <div class="col-md-12">
-                                                                    <div class="form-group">
-                                                                        <label
-                                                                            for="no-tagihan">{{ __('Keterangan') }}</label>
-                                                                        <div class="input-group mb-3">
-                                                                            <textarea name="" class="form-control" id="" cols="30" rows="4" readonly>{{ $row->keterangan }}</textarea>
+                                            @foreach ($pemasukans as $row)
+                                                <tr>
+                                                    <td>{{ rupiah($row->nominal) }}</td>
+                                                    <td>{{ $row->tanggal }}</td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-success btn-sm"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#exampleModal{{ $row->id }}">
+                                                            <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                                        </button>
+                                                    </td>
+
+                                                    <div class="modal fade" id="exampleModal{{ $row->id }}"
+                                                        tabindex="-1" aria-labelledby="exampleModallview"
+                                                        aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalLabel">Detail
+                                                                        Pemasukan</h5>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="col-md-12">
+                                                                        <div class="form-group">
+                                                                            <label
+                                                                                for="no-tagihan">{{ __('Keterangan') }}</label>
+                                                                            <div class="input-group mb-3">
+                                                                                <textarea name="" class="form-control" id="" cols="30" rows="4" readonly>{{ $row->keterangan }}</textarea>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary"
-                                                                    data-bs-dismiss="modal">Close</button>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal">Close</button>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
 
-                                            </tr>
-                                        @endforeach
+                                                </tr>
+                                            @endforeach
 
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
+
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endcan
 
         <div class="row">
             <div class="col-xl-12 col-md-12">
