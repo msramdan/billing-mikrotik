@@ -30,11 +30,11 @@ class SendnotifController extends Controller
                 ->where('status_berlangganan', 'Aktif')
                 ->where('company_id', '=', session('sessionCompany'))
                 ->get();
-            $waGateway = WaGateway::findOrFail(1)->first();
+            $waGateway = getCompany();
             foreach ($pelanggan as $value) {
-                $endpoint_wa = $waGateway->url . 'send-message';
+                $endpoint_wa = $waGateway->url_wa_gateway . 'send-message';
                 $response = Http::post($endpoint_wa, [
-                    'api_key' => $waGateway->api_key,
+                    'api_key' => $waGateway->api_key_wa_gateway,
                     'receiver' => strval($value->no_wa),
                     'data' => [
                         "message" => $request->pesan,
@@ -50,11 +50,11 @@ class SendnotifController extends Controller
                     ->where('status_berlangganan', 'Aktif')
                     ->where('company_id', '=', session('sessionCompany'))
                     ->get();
-                $waGateway = WaGateway::findOrFail(1)->first();
+                $waGateway = getCompany();
                 foreach ($pelanggan as $value) {
-                    $endpoint_wa = $waGateway->url . 'send-message';
+                    $endpoint_wa = $waGateway->url_wa_gateway . 'send-message';
                     $response = Http::post($endpoint_wa, [
-                        'api_key' => $waGateway->api_key,
+                        'api_key' => $waGateway->api_key_wa_gateway,
                         'receiver' => strval($value->no_wa),
                         'data' => [
                             "message" => $request->pesan,
@@ -69,11 +69,11 @@ class SendnotifController extends Controller
                     ->where('status_berlangganan', 'Aktif')
                     ->where('company_id', '=', session('sessionCompany'))
                     ->get();
-                $waGateway = WaGateway::findOrFail(1)->first();
+                $waGateway = getCompany();
                 foreach ($pelanggan as $value) {
-                    $endpoint_wa = $waGateway->url . 'send-message';
+                    $endpoint_wa = $waGateway->url_wa_gateway . 'send-message';
                     $response = Http::post($endpoint_wa, [
-                        'api_key' => $waGateway->api_key,
+                        'api_key' => $waGateway->api_key_wa_gateway,
                         'receiver' => strval($value->no_wa),
                         'data' => [
                             "message" => $request->pesan,

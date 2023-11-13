@@ -107,8 +107,6 @@ function rupiah2($angka)
 
 function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima, $footer)
 {
-
-
     if ($typePesan == 'daftar') {
         $paket = Package::findOrFail($request->paket_layanan)->first();
         $customer = Pelanggan::where('email', $request->email)->firstOrFail();

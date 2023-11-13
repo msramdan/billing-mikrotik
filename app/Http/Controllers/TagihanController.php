@@ -263,15 +263,21 @@ class TagihanController extends Controller
 
     public function sendTagihanWa($tagihan_id)
     {
-        $waGateway = WaGateway::findOrFail(1);
+        $waGateway = getCompany();
         $tagihans = DB::table('tagihans')
             ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
             ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.no_wa', 'pelanggans.jatuh_tempo')
             ->where('tagihans.id', '=', $tagihan_id)->first();
         if ($waGateway->is_active == 'Yes') {
             try {
-                set_time_limit(20);
-                $res = sendNotifWa($waGateway->url, $waGateway->api_key, $tagihans, 'tagihan', $tagihans->no_wa, $waGateway->footer_pesan_wa_tagihan);
+                $res = sendNotifWa(
+                    $waGateway->url_wa_gateway,
+                    $waGateway->api_key_wa_gateway,
+                    $tagihans,
+                    'tagihan',
+                    $tagihans->no_wa,
+                    $waGateway->footer_pesan_wa_tagihan
+                );
                 if ($res->status == true || $res->status == 'true') {
                     // update
                     DB::table('tagihans')
@@ -288,6 +294,10 @@ class TagihanController extends Controller
             } catch (\Exception $e) {
                 echo 'Caught exception: ', $e->getMessage(), "\n";
             }
+        } else {
+            return redirect()
+                ->route('tagihans.index')
+                ->with('error', __('Setting is active wa Off'));
         }
     }
 
@@ -297,7 +307,7 @@ class TagihanController extends Controller
         $tagihans = DB::table('tagihans')
             ->select('tagihans.*')
             ->where('tagihans.status_bayar', '=', 'Belum Bayar')->get();
-        $waGateway = WaGateway::findOrFail(1);
+        $waGateway = getCompany();
         foreach ($tagihans as $row) {
             try {
                 if ($waGateway->is_active == 'Yes') {
@@ -305,7 +315,7 @@ class TagihanController extends Controller
                         ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
                         ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.no_wa', 'pelanggans.jatuh_tempo')
                         ->where('tagihans.id', '=', $row->id)->first();
-                    sendNotifWa($waGateway->url, $waGateway->api_key, $req, 'tagihan', $req->no_wa, $waGateway->footer_pesan_wa_tagihan);
+                    sendNotifWa($waGateway->url_wa_gateway, $waGateway->api_key_wa_gateway, $req, 'tagihan', $req->no_wa, $waGateway->footer_pesan_wa_tagihan);
                 }
             } catch (\Exception $e) {
                 continue;
@@ -408,10 +418,10 @@ class TagihanController extends Controller
         }
         // id jika notif Yes kirim
         if ($request->notif == 'Yes') {
-            $waGateway = WaGateway::findOrFail(1);
+            $waGateway = getCompany();
             $pelanggan = Pelanggan::findOrFail($request->pelanggan_id);
             if ($waGateway->is_active == 'Yes') {
-                sendNotifWa($waGateway->url, $waGateway->api_key, $request, 'bayar', $pelanggan->no_wa, $waGateway->footer_pesan_wa_pembayaran);
+                sendNotifWa($waGateway->url_wa_gateway, $waGateway->api_key_wa_gateway, $request, 'bayar', $pelanggan->no_wa, $waGateway->footer_pesan_wa_pembayaran);
             }
         }
         return redirect()

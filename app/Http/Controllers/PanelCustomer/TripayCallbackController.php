@@ -15,7 +15,8 @@ class TripayCallbackController extends Controller
 
     public function handle(Request $request)
     {
-        $privateKey = getTripay()->private_key;
+        // ramdan error
+        $privateKey = getCompanyUser()->private_key;
         $callbackSignature = $request->server('HTTP_X_CALLBACK_SIGNATURE');
         $json = $request->getContent();
         $signature = hash_hmac('sha256', $json, $privateKey);
@@ -174,7 +175,7 @@ class TripayCallbackController extends Controller
                 // kirim wa
                 $waGateway = WaGateway::findOrFail(1)->first();
                 if ($waGateway->is_active == 'Yes') {
-                    sendNotifWa($waGateway->url, $waGateway->api_key, $invoice, 'bayar', $invoice->no_wa, $waGateway->footer_pesan_wa_pembayaran);
+                    sendNotifWa($waGateway->url_wa_gateway, $waGateway->api_key_wa_gateway, $invoice, 'bayar', $invoice->no_wa, $waGateway->footer_pesan_wa_pembayaran);
                 }
             }
             return Response::json(['success' => true]);
