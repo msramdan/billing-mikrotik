@@ -345,6 +345,7 @@ class TagihanController extends Controller
         DB::table('pemasukans')->insert([
             'nominal' => $request->nominal,
             'tanggal' => $tgl,
+            'company_id' =>  session('sessionCompany'),
             'keterangan' => 'Pembayaran Tagihan no Tagihan ' . $request->no_tagihan . ' a/n ' . $request->nama_pelanggan . ' Periode ' . $request->periode_waktu,
             'referense_id' => $request->tagihan_id,
             'created_at' => $tgl,
