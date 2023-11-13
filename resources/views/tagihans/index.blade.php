@@ -97,11 +97,6 @@
                                             <th>#</th>
                                             <th>{{ __('No Tagihan') }}</th>
                                             <th>{{ __('Pelanggan') }}</th>
-                                            {{-- <th>{{ __('Periode') }}</th>
-                                            <th>{{ __('Metode Bayar') }}</th>
-                                            <th>{{ __('Nominal Bayar') }}</th>
-                                            <th>{{ __('Potongan Bayar') }}</th>
-                                            <th>{{ __('PPN') }}</th> --}}
                                             <th>{{ __('Total Bayar') }}</th>
                                             <th>{{ __('Status Bayar') }}</th>
                                             <th>{{ __('Sudah Kirim Tagihan ?') }}</th>

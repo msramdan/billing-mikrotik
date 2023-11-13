@@ -120,6 +120,7 @@ class PelangganController extends Controller
         $router = Settingmikrotik::where('company_id', '=', session('sessionCompany'))->get();
         $x = DB::table('pelanggans')
             ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
+            ->where('pelanggans.company_id', '=', session('sessionCompany'))
             ->sum('packages.harga');
         return view('pelanggans.index', [
             'areaCoverages' => $areaCoverages,
@@ -509,21 +510,24 @@ class PelangganController extends Controller
 
     public function getTableArea($id)
     {
-        $data = DB::table('pelanggans')->where('coverage_area', $id)->get();
+        $data = DB::table('pelanggans')->where('company_id', '=', session('sessionCompany'))
+            ->where('coverage_area', $id)->get();
         $message = 'Berhasil mengambil data kota';
         return response()->json(compact('message', 'data'));
     }
 
     public function getTableOdc($id)
     {
-        $data = DB::table('pelanggans')->where('odc', $id)->get();
+        $data = DB::table('pelanggans')->where('company_id', '=', session('sessionCompany'))
+            ->where('odc', $id)->get();
         $message = 'Berhasil mengambil data kota';
         return response()->json(compact('message', 'data'));
     }
 
     public function getTableOdp($id)
     {
-        $data = DB::table('pelanggans')->where('odp', $id)->get();
+        $data = DB::table('pelanggans')->where('company_id', '=', session('sessionCompany'))
+            ->where('odp', $id)->get();
         $message = 'Berhasil mengambil data kota';
         return response()->json(compact('message', 'data'));
     }

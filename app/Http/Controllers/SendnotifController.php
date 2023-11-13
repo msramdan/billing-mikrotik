@@ -16,7 +16,7 @@ class SendnotifController extends Controller
     }
     public function index()
     {
-        $areaCoverages = AreaCoverage::all();
+        $areaCoverages = AreaCoverage::where('company_id', '=', session('sessionCompany'))->get();
         return view('sendnotifs.index', [
             'areaCoverages' => $areaCoverages,
         ]);
@@ -28,6 +28,7 @@ class SendnotifController extends Controller
             $odp = $request->odp;
             $pelanggan = Pelanggan::where('odp', $odp)
                 ->where('status_berlangganan', 'Aktif')
+                ->where('company_id', '=', session('sessionCompany'))
                 ->get();
             $waGateway = WaGateway::findOrFail(1)->first();
             foreach ($pelanggan as $value) {
@@ -47,6 +48,7 @@ class SendnotifController extends Controller
                 $odc = $request->odc;
                 $pelanggan = Pelanggan::where('odc', $odc)
                     ->where('status_berlangganan', 'Aktif')
+                    ->where('company_id', '=', session('sessionCompany'))
                     ->get();
                 $waGateway = WaGateway::findOrFail(1)->first();
                 foreach ($pelanggan as $value) {
@@ -65,6 +67,7 @@ class SendnotifController extends Controller
                 $coverage_area = $request->coverage_area;
                 $pelanggan = Pelanggan::where('coverage_area', $coverage_area)
                     ->where('status_berlangganan', 'Aktif')
+                    ->where('company_id', '=', session('sessionCompany'))
                     ->get();
                 $waGateway = WaGateway::findOrFail(1)->first();
                 foreach ($pelanggan as $value) {
