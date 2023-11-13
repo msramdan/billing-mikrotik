@@ -1,157 +1,263 @@
 @extends('layouts.frontend.frontend-master')
 
+@push('css')
+    <style>
+        .frame {
+            height: 65px;
+            width: 160px;
+            position: relative;
+        }
+
+        .img-aja {
+            max-height: 100%;
+            max-width: 100%;
+            width: auto;
+            height: auto;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            padding: 0.25rem;
+            background-color: #fff;
+            /* border: 1px solid #dee2e6; */
+            border-radius: 0.25rem;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, .075);
+        }
+    </style>
+
+    <style>
+        .special-card {
+            background-color: rgba(245, 245, 245, 0.6) !important;
+        }
+    </style>
+
+    <style>
+        .ribbon {
+            position: absolute;
+            right: -5px;
+            top: -5px;
+            z-index: 1;
+            overflow: hidden;
+            width: 93px;
+            height: 93px;
+            text-align: right;
+        }
+
+        .ribbon span {
+            font-size: 0.7rem;
+            color: #fff;
+            text-transform: uppercase;
+            text-align: center;
+            font-weight: bold;
+            line-height: 32px;
+            transform: rotate(45deg);
+            width: 125px;
+            display: block;
+            background: #79a70a;
+            background: linear-gradient(#9bc90d 0%, #79a70a 100%);
+            box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+            position: absolute;
+            top: 17px;
+            right: -29px;
+        }
+
+        .ribbon span::before {
+            content: '';
+            position: absolute;
+            left: 0px;
+            top: 100%;
+            z-index: -1;
+            border-left: 3px solid #79A70A;
+            border-right: 3px solid transparent;
+            border-bottom: 3px solid transparent;
+            border-top: 3px solid #79A70A;
+        }
+
+        .ribbon span::after {
+            content: '';
+            position: absolute;
+            right: 0%;
+            top: 100%;
+            z-index: -1;
+            border-right: 3px solid #79A70A;
+            border-left: 3px solid transparent;
+            border-bottom: 3px solid transparent;
+            border-top: 3px solid #79A70A;
+        }
+
+        .red span {
+            background: linear-gradient(#f70505 0%, #8f0808 100%);
+        }
+
+        .red span::before {
+            border-left-color: #8f0808;
+            border-top-color: #8f0808;
+        }
+
+        .red span::after {
+            border-right-color: #8f0808;
+            border-top-color: #8f0808;
+        }
+    </style>
+@endpush
+
 @section('content')
-    <!-- Start Main Banner Area -->
-    <div class="main-banner">
-        <div class="container">
-            <div class="row align-items-center m-0">
-                <div class="col-lg-6 p-0">
-                    <div class="main-banner-content">
-                        <span class="sub-title"><i class="flaticon-wifi-signal"></i> XXXXXXXXXXXXXXXXXX
-                            Broadband Service</span>
-                        <h1>Built for Internet Service</h1>
-                        <p>Dapatkan layanan internet murah berkualitas hanya di XXXXXXXXXXXXXXXXXX</p>
-                        <div class="price">
-                            @if (isset($packages[0]->harga))
-                                Rp {{ rupiah2($packages[0]->harga) }} <span>/ Bulan</span>
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-header"> <b>Masukan No Tagihan</b></div>
+                    <form action="">
+                        <div class="card-body special-card">
+                            @if ($no_tagihan != '')
+                                @if ($tagihan != null)
+                                    @if ($tagihan->status_bayar == 'Sudah Bayar')
+                                        <div class="ribbon"><span>Sudah Bayar</span></div>
+                                    @else
+                                        <div class="ribbon red"><span>Belum Bayar</span></div>
+                                    @endif
+                                @endif
+
                             @endif
-                        </div>
-                    </div>
-                </div>
+                            <div class="col-lg-12 col-md-12">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="no_tagihan" id="no_tagihan"
+                                        required="no_tagihan" value="{{ $no_tagihan }}" style="border-color: white">
 
-                <div class="col-lg-6 p-0">
-                    <div class="banner-image">
-                        <img src="{{ asset('frontend') }}/assets/img/banner-img1.png" alt="image">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="shape-img1"><img src="{{ asset('frontend') }}/assets/img/shape-image/1.png" alt="imgae"></div>
-    </div>
-    <!-- End Main Banner Area -->
-
-    <!-- Start Features Area -->
-    <section class="features-area bg-image ptb-100" style="margin-top: -100px;">
-        <div class="container">
-            <div class="section-title">
-                <span>
-                    <span class="icon">
-                        <i class="flaticon-wifi"></i>
-                    </span>
-
-                    <span>XXXXXXXXXXXXXXXXXX Isp Features</span>
-                </span>
-                <h2>
-                    Kami adalah perusahaan penyedia layanan internet di Bali</h2>
-            </div>
-
-            <div class="row">
-                {{-- @foreach ($features as $row)
-                    <div class="col-lg-4 col-md-6 col-sm-6">
-                        <div class="single-features-box" style="height: 325px">
-                            <div class="icon">
-                                {!! $row->icon !!}
-                            </div>
-
-                            <h3>{{ $row->judul }}</h3>
-
-                            <p style="text-align: justify">{{ $row->keterangan }}</p>
-
-                            <div class="back-icon">
-                                {!! $row->icon !!}
-                            </div>
-
-                            <div class="image-box">
-                                <img src="{{ asset('frontend') }}/assets/img/shape-image/2.png" alt="image">
-                                <img src="{{ asset('frontend') }}/assets/img/shape-image/2.png" alt="image">
-                            </div>
-                        </div>
-                    </div>
-                @endforeach --}}
-            </div>
-        </div>
-    </section>
-    <!-- End Features Area -->
-
-    <!-- Start About Area -->
-    <section class="about-area ptb-100">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6 col-md-12">
-                    <div class="about-content">
-                        <span class="sub-title"><i class="flaticon-care-about-environment"></i> Tentang
-                            Evdigi</span>
-                        <p style="text-align: justify"> Deskripsi Perusahaan</p>
-                    </div>
-                </div>
-
-                <div class="col-lg-6 col-md-12">
-                    <div class="about-image">
-                        <img src="{{ asset('frontend') }}/assets/img/about-img1.png" alt="image">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- End About Area -->
-
-    <section class="cta-area">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-8 col-md-12">
-                    <div class="cta-content">
-                        <h3>Telpon / Wa</h3>
-                        <a href="#">083874731480 / 6283874731480</a>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-12">
-                    <div class="cta-btn">
-                        <a href="/areaCoverage" class="btn btn-primary">Periksa cakupan area</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Start Pricing Area -->
-    <section class="pricing-area ptb-100 extra-mb pb-0">
-        <div class="container">
-            <div class="section-title">
-                <span>
-                    <span>Pilihan Paket XXXXXXXXXXXXXXXXXX</span>
-                </span>
-                <h5>Daftar Harga Layanan Paket Internet XXXXXXXXXXXXXXXXXX, Pilih sesuai keinginan dan
-                    kebutuhan Anda</h5>
-            </div>
-
-            <div class="row">
-                @foreach ($packages as $val)
-                    <div class="col-lg-4 col-md-6 col-sm-6">
-                        <div class="single-pricing-table active">
-                            <div class="pricing-header">
-                                <div class="icon">
-                                    <i class="flaticon-router"></i>
                                 </div>
-                                <span>Internet</span>
-                                <h3>{{ $val->nama_layanan }}</h3>
                             </div>
-                            <p>{{ $val->keterangan }}</p>
-                            <div class="price">
-                                <span>Harga</span>
-                                <span>Rp</span>
-                                {{ rupiah2($val->harga) }}
-                                <span>/ Bulan</span>
-                            </div>
-                            <div class="image-box">
-                                <img src="{{ asset('frontend') }}/assets/img/shape-image/2.png" alt="image">
-                                <img src="{{ asset('frontend') }}/assets/img/shape-image/2.png" alt="image">
+                            <div class="col-lg-12 col-md-12">
+                                <button type="submit" class="btn"
+                                    style="background-color: blue; color:white">Submit</button>
                             </div>
                         </div>
+                    </form>
+
+                </div>
+
+            </div>
+            <div class="col-md-8">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-header"> <b>Informasi</b></div>
+                    <div class="card-body special-card">
+
+                        @if ($no_tagihan == '')
+                            <center><b>Silahkan isi form Terlebih dahulu untuk melihat tagihan</b></center>
+                        @else
+                            @if ($tagihan != null)
+                                <table class="table table-hover table-striped">
+                                    <tr>
+                                        <td class="fw-bold">{{ __('No Tagihan') }}</td>
+                                        <td>{{ $tagihan->no_tagihan }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Pelanggan') }}</td>
+                                        <td>{{ $tagihan->nama }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Periode') }}</td>
+                                        <td>{{ $tagihan->periode }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Metode Bayar') }}</td>
+                                        <td>{{ $tagihan->metode_bayar }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Status Bayar') }}</td>
+                                        <td>{{ $tagihan->status_bayar }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Nominal Bayar') }}</td>
+                                        <td>{{ rupiah($tagihan->nominal_bayar) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Potongan Bayar') }}</td>
+                                        <td>{{ rupiah($tagihan->potongan_bayar) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('PPN') }}</td>
+                                        <td>{{ $tagihan->ppn }} - {{ rupiah($tagihan->nominal_ppn) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Total Bayar') }}</td>
+                                        <td>
+                                            (Nominal Bayar - Potongan Bayar) + PPN <br>
+                                            ({{ rupiah($tagihan->nominal_bayar) }} -
+                                            {{ rupiah($tagihan->potongan_bayar) }}) +
+                                            {{ rupiah($tagihan->nominal_ppn) }} <br>
+                                            <b>{{ rupiah($tagihan->total_bayar) }}</b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Tanggal Bayar') }}</td>
+                                        <td>{{ isset($tagihan->tanggal_bayar) ? $tagihan->tanggal_bayar : '' }}
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                @if ($tagihan->status_bayar == 'Belum Bayar')
+                                    <div class="accordion" id="accordionExample">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingTwo">
+                                                <button class="accordion-button collapsed" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                                                    aria-expanded="false" aria-controls="collapseTwo">
+                                                    <b>LANGSUNG BAYAR TAGIHAN</b>
+                                                </button>
+                                            </h2>
+                                            <div id="collapseTwo" class="accordion-collapse collapse"
+                                                aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                                <div class="accordion-body">
+                                                    <div class="col-md-12">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <div class="row">
+                                                                    @foreach ($metodeBayar as $row)
+                                                                        <div class="col-md-3 col-md-3 mb-3">
+                                                                            <div class="small-box bg-light"
+                                                                                style="border-radius: 5%">
+                                                                                <center>
+                                                                                    <div class="frame">
+                                                                                        <img src="{{ $row->icon_url }}"
+                                                                                            class="img-aja"
+                                                                                            style="height: 80%" />
+                                                                                    </div>
+                                                                                    <a href="{{ route('bayar', [
+                                                                                        'tagihan_id' => $tagihan->id,
+                                                                                        'metode' => $row->code,
+                                                                                    ]) }}"
+                                                                                        class="small-box-footer"
+                                                                                        style="color: blue"> <b>Pilih
+                                                                                            Metode</b>
+                                                                                        <i
+                                                                                            class="fas fa-arrow-circle-right"></i></a>
+                                                                                </center>
+
+
+                                                                            </div>
+                                                                        </div>
+                                                                    @endforeach
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                            @else
+                                <center><b>Data tidak ditemukan, Silahkan cek kembali no tagihan</b></center>
+                            @endif
+                        @endif
+
+
                     </div>
-                @endforeach
+                </div>
             </div>
         </div>
-    </section>
+    </div>
 @endsection

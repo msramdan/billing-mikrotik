@@ -4,22 +4,19 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ getCompany()->nama_perusahaan }}</title>
+    <title>Billing Wifi</title>
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <link rel="stylesheet" href="{{ asset('frontend/admin') }}/plugins/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('frontend/admin') }}/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <link rel="stylesheet" href="{{ asset('frontend/admin') }}/dist/css/adminlte.min.css">
-    <link rel="icon"
-        @if (getCompany()->favicon != null) href="{{ Storage::url('public/uploads/favicons/') . getCompany()->favicon }}" @endif
-        type="image/x-icon">
 </head>
 
 <body class="hold-transition login-page">
     <div class="login-box">
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
-                <a href="/" class="h1"><b>{{ getCompany()->nama_perusahaan }}</b></a>
+                <a href="/" class="h1"><b>Billing Wifi</b></a>
             </div>
             <div class="card-body">
                 <p class="login-box-msg">Halaman Login</p>
@@ -55,9 +52,6 @@
                         </div>
                     </div>
                 </form>
-                <p class="mb-0">
-                    <a href="{{ route('registerClient') }}" class="text-center">Daftar customer baru</a>
-                </p>
             </div>
         </div>
     </div>

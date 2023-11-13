@@ -17,12 +17,8 @@ Route::controller(App\Http\Controllers\PanelCustomer\TripayCallbackController::c
 Route::controller(App\Http\Controllers\Frontend\WebController::class)->group(function () {
     Route::get('/', 'index')->name('website');
     Route::get('/loginClient', 'loginClient')->name('loginClient');
-    Route::get('/registerClient', 'registerClient')->name('registerClient');
-    Route::post('/submitRegister', 'submitRegister')->name('submitRegister');
     Route::post('/submitLogin', 'submitLogin')->name('submitLogin');
-    Route::get('/speedTest', 'speedTest')->name('speedTest');
     Route::get('/cekTagihan', 'cekTagihan')->name('cekTagihan');
-    Route::get('/areaCoverage', 'areaCoverage')->name('areaCoverage');
     Route::get('/bayar/{tagihan_id}/{metode}', 'bayar')->name('bayar');
     Route::get('/detailBayar/{id}', 'detailBayar')->name('detailBayar');
 });

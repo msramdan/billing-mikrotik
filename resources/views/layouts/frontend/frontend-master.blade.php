@@ -16,17 +16,12 @@
     <link rel="stylesheet" href="{{ asset('frontend') }}/assets/css/style.css">
     <link rel="stylesheet" href="{{ asset('frontend') }}/assets/css/responsive.css">
     <link rel="stylesheet" href="{{ asset('frontend') }}/assets/css/dark-style.css">
-    <title> XXXXXXXXXXX </title>
-    {{-- <link rel="icon"
-        @if (getCompany()->favicon != null) href="{{ Storage::url('public/uploads/favicons/') . getCompany()->favicon }}" @endif
-        type="image/x-icon"> --}}
+    <title> Billing Wifi </title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
         integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
         crossorigin="" />
     <link href="{{ asset('mazer/assets/jqvmap/dist/jqvmap.min.css') }}" rel="stylesheet" />
-
 </head>
-
 @stack('css')
 
 <body>
@@ -36,62 +31,32 @@
                 <div class="row align-items-center">
                     <div class="col-lg-5 col-md-5">
                         <div class="top-header-left">
-                            <p><span>Telpon / Wa :</span> <a href="#">telpon /
-                                    Wa</a></p>
                         </div>
                     </div>
 
                     <div class="col-lg-7 col-md-7">
                         <div class="top-header-right">
                             <div class="login-signup-btn">
-                                <p><a href="{{ route('loginClient') }}">Login</a> <span>or</span> <a
-                                        href="{{ route('registerClient') }}">Register</a></p>
+                                <p><a href="{{ route('loginClient') }}">Login</a>
+                                </p>
                             </div>
-
-                            <ul class="social">
-                                <li><a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
-                                <li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>
-                                <li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
-                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Start Navbar Area -->
         <div class="navbar-area">
-            <div class="bahama-mobile-nav">
-                <div class="logo">
-                    <a href="/">
-                        <h1><b style="color: #FA8185">XXXXXXXXXXXXXXXXXXX</b></h1>
-                    </a>
-                </div>
-            </div>
-
             <div class="bahama-nav">
                 <div class="container">
                     <nav class="navbar navbar-expand-md navbar-light">
                         <a class="navbar-brand" href="/">
-                            <h1><b style="color: #FA8185">XXXXXXXXXXXXXXXXXXX</b></h1>
+                            <h1><b style="color: #FA8185">Billing Wifi</b></h1>
                         </a>
-
-                        <div class="collapse navbar-collapse mean-menu" id="navbarSupportedContent">
-                            <ul class="navbar-nav">
-                                <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
-                                <li class="nav-item"><a href="{{ route('cekTagihan') }}" class="nav-link">Cek
-                                        Tagihan</a></li>
-                                <li class="nav-item"><a href="{{ route('areaCoverage') }}" class="nav-link">Area
-                                        Coverage</a></li>
-                                {{-- <li class="nav-item"><a href="{{ route('speedTest') }}" class="nav-link">Speed Test</a>
-                                </li> --}}
-                            </ul>
-                        </div>
                     </nav>
                 </div>
             </div>
         </div>
-        <!-- End Navbar Area -->
     </header>
 
     @yield('content')
