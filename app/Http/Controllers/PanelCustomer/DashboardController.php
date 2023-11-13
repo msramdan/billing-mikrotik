@@ -79,6 +79,7 @@ class DashboardController extends Controller
         $bankAccounts = DB::table('bank_accounts')
             ->leftJoin('banks', 'bank_accounts.bank_id', '=', 'banks.id')
             ->select('bank_accounts.*', 'banks.nama_bank', 'banks.logo_bank')
+            ->where('bank_accounts.company_id', '=', session('sessionCompanyUser'))
             ->get();
 
         return view('panel-customer.caraPembayaran', [
@@ -93,14 +94,14 @@ class DashboardController extends Controller
             ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.jatuh_tempo', 'pelanggans.email as email_customer', 'pelanggans.alamat as alamat_customer', 'packages.nama_layanan', 'pelanggans.no_layanan')
             ->where('tagihans.id', '=', $id)
             ->first();
-        $pdf = PDF::loadView('tagihans.pdf', compact('data'));
+        $pdf = PDF::loadView('panel-customer.pdf', compact('data'));
         return $pdf->stream();
     }
 
     public function paymentList($id)
     {
-        $url =  getTripay()->url. 'merchant/payment-channel';
-        $api_key = getTripay()->api_key;
+        $url =  getCompanyUser()->url_tripay . 'merchant/payment-channel';
+        $api_key = getCompanyUser()->api_key_tripay;
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . $api_key
         ])->get($url);
@@ -119,11 +120,11 @@ class DashboardController extends Controller
             ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.jatuh_tempo', 'pelanggans.email as email_customer', 'pelanggans.no_wa', 'packages.nama_layanan', 'pelanggans.no_layanan')
             ->where('tagihans.id', '=', $tagihan_id)
             ->first();
-        $apiKey       = getTripay()->api_key;
-        $privateKey   = getTripay()->private_key;
-        $merchantCode = getTripay()->kode_merchant;
+        $apiKey       = getCompanyUser()->api_key_tripay;
+        $privateKey   = getCompanyUser()->private_key;
+        $merchantCode = getCompanyUser()->kode_merchant;
         $merchantRef  = $tagihans->no_tagihan;
-        $url =getTripay()->url. 'transaction/create';
+        $url = getCompanyUser()->url_tripay . 'transaction/create';
         $amount       =  $tagihans->total_bayar;
         $data = [
             'method'         => $method,
@@ -134,7 +135,7 @@ class DashboardController extends Controller
             'customer_phone' => $tagihans->no_wa,
             'order_items'    => [
                 [
-                    'sku'         => 'Internet ' .getCompany()->nama_perusahaan,
+                    'sku'         => 'Internet ' . getCompany()->nama_perusahaan,
                     'name'        => 'Pembayaran Internet',
                     'price'       => $tagihans->total_bayar,
                     'quantity'    => 1,
@@ -165,15 +166,16 @@ class DashboardController extends Controller
             'id' => $response->reference
         ]);
     }
+
     public function detailTagihan($reference)
     {
-        $apiKey = getTripay()->api_key;
+        $apiKey = getCompanyUser()->api_key_tripay;
         $payload = ['reference'    => $reference];
         $curl = curl_init();
 
         curl_setopt_array($curl, [
             CURLOPT_FRESH_CONNECT  => true,
-            CURLOPT_URL            => getTripay()->url. 'transaction/detail?' . http_build_query($payload),
+            CURLOPT_URL            => getCompanyUser()->url_tripay . 'transaction/detail?' . http_build_query($payload),
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HEADER         => false,
             CURLOPT_HTTPHEADER     => ['Authorization: Bearer ' . $apiKey],
@@ -188,7 +190,5 @@ class DashboardController extends Controller
         return view('panel-customer.detailTagihan', [
             'detail' => $response
         ]);
-
-
     }
 }

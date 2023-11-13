@@ -14,19 +14,17 @@
                                 <h4>Anda dapat melakukan pembayaran tagihan dengan cara : <br>
                                     <ul>
                                         <li>Lewat Virtual Account (Verifikasi Pembayaran Automatis)</li>
-                                        {{-- <img class="img-thumbnail" style="padding: 10px"
-                                            src="{{ asset('mazer/carabayar.jpg') }}" alt=""> --}}
-                                        <li>Transfer lewat Norek {{ getCompany()->nama_perusahaan }} dengan menyerahkan
+                                        <li>Transfer lewat Norek {{ getCompanyUser()->nama_perusahaan }} dengan menyerahkan
                                             bukti transfer lewat WA / datang ke kantor</li>
                                         <li>Bayar Cash dengan datang ke kantor</li>
                                     </ul>
                                     <hr>
-                                    Contact Person {{ getCompany()->nama_perusahaan }} : <br>
+                                    Contact Person {{ getCompanyUser()->nama_perusahaan }} : <br>
                                     <ul>
-                                        <li> No Wa : {{ getCompany()->no_wa }}</li>
-                                        <li>Telpon : {{ getCompany()->telepon_perusahaan }} </li>
-                                        <li>Email : {{ getCompany()->email }}</li>
-                                        <li>Alamat : {{ getCompany()->alamat }}</li>
+                                        <li> No Wa : {{ getCompanyUser()->no_wa }}</li>
+                                        <li>Telpon : {{ getCompanyUser()->telepon_perusahaan }} </li>
+                                        <li>Email : {{ getCompanyUser()->email }}</li>
+                                        <li>Alamat : {{ getCompanyUser()->alamat }}</li>
                                     </ul>
                                 </h4>
                             </div>
@@ -39,7 +37,7 @@
                         <div class="card-body">
                             <center>
                                 <div class="alert alert-primary" role="alert">
-                                    <h4>Daftar nomor rekening Pembayaran {{ getCompany()->nama_perusahaan }} </h4>
+                                    <h4>Daftar nomor rekening Pembayaran {{ getCompanyUser()->nama_perusahaan }} </h4>
                                 </div>
                                 <div class="row">
                                     @foreach ($bankAccounts as $row)

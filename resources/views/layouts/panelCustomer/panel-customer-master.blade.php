@@ -4,14 +4,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title> {{ getCompany()->nama_perusahaan }} </title>
+    <title> {{ getCompanyUser()->nama_perusahaan }} </title>
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <link rel="stylesheet" href="{{ asset('frontend') }}/admin/plugins/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('frontend') }}/admin/dist/css/adminlte.min.css">
-    <link rel="icon"
-        @if (getCompany()->favicon != null) href="{{ Storage::url('public/uploads/favicons/') . getCompany()->favicon }}" @endif
-        type="image/x-icon">
         @stack('css')
 </head>
 
@@ -28,7 +25,7 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <a href="{{ route('dashboardCustomer')}}" class="brand-link" style="margin-left: 10px">
                 <i class="fa fa-wifi fa-lg" aria-hidden="true"></i>
-                <span class="brand-text font-weight-light"> <b>{{ getCompany()->nama_perusahaan }}</b> </span>
+                <span class="brand-text font-weight-light"> <b>{{ getCompanyUser()->nama_perusahaan }}</b> </span>
             </a>
             <div class="sidebar">
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">

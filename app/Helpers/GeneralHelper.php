@@ -49,6 +49,16 @@ function getCompany()
     return $data;
 }
 
+function getCompanyUser()
+{
+    $data = DB::table('companies')
+        ->join('pakets', 'companies.paket_id', '=', 'pakets.id')
+        ->where('companies.id', '=', session('sessionCompanyUser'))
+        ->select('companies.*', 'pakets.nama_paket', 'pakets.jumlah_router', 'pakets.jumlah_pelanggan')
+        ->first();
+    return $data;
+}
+
 
 function cekAssign($company_id, $user_id)
 {
@@ -68,12 +78,12 @@ function hitungPelanggan()
     return Pelanggan::where('company_id',session('sessionCompany'))->count();
 }
 
-
 // function getTripay()
 // {
 //     $data = DB::table('payment_tripays')->first();
 //     return $data;
 // }
+
 
 function getCustomer()
 {

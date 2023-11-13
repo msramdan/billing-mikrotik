@@ -28,13 +28,19 @@ class WebController extends Controller
         $metodeBayar = [];
         $tagihan = DB::table('tagihans')
             ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
-            ->select('tagihans.*', 'pelanggans.nama')
+            ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.company_id')
             ->where('tagihans.no_tagihan', '=', $no_tagihan)
             ->first();
+
+
         if ($tagihan) {
+            // remove session company
+            $request->session()->forget('sessionCompanyUser');
+            // set session company
+            Session::put('sessionCompanyUser', $tagihan->company_id);
             if ($tagihan->status_bayar == 'Belum Bayar') {
-                $url =  getTripay()->url . 'merchant/payment-channel';
-                $api_key = getTripay()->api_key;
+                $url =  getCompanyUser()->url_tripay . 'merchant/payment-channel';
+                $api_key = getCompanyUser()->api_key_tripay;
                 $response = Http::withHeaders([
                     'Authorization' => 'Bearer ' . $api_key
                 ])->get($url);
@@ -76,10 +82,12 @@ class WebController extends Controller
         $email = $request->email;
         $password = $request->password;
         $data = Pelanggan::where('email', $email)->first();
+
         if ($data) {
             if ($data->status_berlangganan != 'Menunggu') {
                 if (Hash::check($password, $data->password)) {
                     Session::put('id-customer', $data->id);
+                    Session::put('sessionCompanyUser', $data->company_id);
                     Session::put('login-customer', TRUE);
                     Alert::success('Success', 'Login Berhasil');
                     return redirect()->route('dashboardCustomer');
@@ -100,6 +108,7 @@ class WebController extends Controller
     public function logoutCustomer(Request $request)
     {
         $request->session()->forget('id-customer');
+        $request->session()->forget('sessionCompanyUser');
         Alert::success('Success', 'Anda telah logout');
         return redirect()->route('dashboard');
     }
@@ -113,11 +122,11 @@ class WebController extends Controller
             ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.jatuh_tempo', 'pelanggans.email as email_customer', 'pelanggans.no_wa', 'packages.nama_layanan', 'pelanggans.no_layanan')
             ->where('tagihans.id', '=', $tagihan_id)
             ->first();
-        $apiKey       = getTripay()->api_key;
-        $privateKey   = getTripay()->private_key;
-        $merchantCode = getTripay()->kode_merchant;
+        $apiKey       = getCompanyUser()->api_key_tripay;
+        $privateKey   = getCompanyUser()->private_key;
+        $merchantCode = getCompanyUser()->kode_merchant;
         $merchantRef  = $tagihans->no_tagihan;
-        $url = getTripay()->url . 'transaction/create';
+        $url = getCompanyUser()->url_tripay . 'transaction/create';
         $amount       =  $tagihans->total_bayar;
         $data = [
             'method'         => $method,
@@ -128,7 +137,7 @@ class WebController extends Controller
             'customer_phone' => $tagihans->no_wa,
             'order_items'    => [
                 [
-                    'sku'         => 'Internet ' . getCompany()->nama_perusahaan,
+                    'sku'         => 'Internet ' . getCompanyUser()->nama_perusahaan,
                     'name'        => 'Pembayaran Internet',
                     'price'       => $tagihans->total_bayar,
                     'quantity'    => 1,
@@ -161,13 +170,13 @@ class WebController extends Controller
     }
     public function detailBayar($reference)
     {
-        $apiKey = getTripay()->api_key;
+        $apiKey = getCompanyUser()->api_key_tripay;
         $payload = ['reference'    => $reference];
         $curl = curl_init();
 
         curl_setopt_array($curl, [
             CURLOPT_FRESH_CONNECT  => true,
-            CURLOPT_URL            => getTripay()->url . 'transaction/detail?' . http_build_query($payload),
+            CURLOPT_URL            => getCompanyUser()->url_tripay . 'transaction/detail?' . http_build_query($payload),
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HEADER         => false,
             CURLOPT_HTTPHEADER     => ['Authorization: Bearer ' . $apiKey],

@@ -34,7 +34,7 @@ class CompanySeeder extends Seeder
             *BPD* 0140202752037 =(a/n ketut mistrawan)
             *BCA* 8271337914 (a/n ketut mistrawan)',
                 'footer_pesan_wa_pembayaran' => 'Terdepan membuka akses',
-                'url_tripay' => 'Terdepan membuka akses',
+                'url_tripay' => '	https://tripay.co.id/api/',
                 'api_key_tripay' => 'MipM6kIhJ1FZYX1VvyIxYikZXVXJovNYxjo3l5tq',
                 'kode_merchant' => 'T25408',
                 'private_key' => 'IyiQy-hKNM3-OnVGg-rojcs-EKHmL',
@@ -65,7 +65,7 @@ class CompanySeeder extends Seeder
             *BPD* 0140202752037 =(a/n ketut mistrawan)
             *BCA* 8271337914 (a/n ketut mistrawan)',
                 'footer_pesan_wa_pembayaran' => 'Terdepan membuka akses',
-                'url_tripay' => 'Terdepan membuka akses',
+                'url_tripay' => '	https://tripay.co.id/api/',
                 'api_key_tripay' => 'MipM6kIhJ1FZYX1VvyIxYikZXVXJovNYxjo3l5tq',
                 'kode_merchant' => 'T25408',
                 'private_key' => 'IyiQy-hKNM3-OnVGg-rojcs-EKHmL',
