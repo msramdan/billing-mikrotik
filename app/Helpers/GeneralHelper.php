@@ -70,12 +70,12 @@ function cekAssign($company_id, $user_id)
 
 function hitungRouter()
 {
-    return Settingmikrotik::where('company_id',session('sessionCompany'))->count();
+    return Settingmikrotik::where('company_id', session('sessionCompany'))->count();
 }
 
 function hitungPelanggan()
 {
-    return Pelanggan::where('company_id',session('sessionCompany'))->count();
+    return Pelanggan::where('company_id', session('sessionCompany'))->count();
 }
 
 // function getTripay()
@@ -107,20 +107,7 @@ function rupiah2($angka)
 
 function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima, $footer)
 {
-    if ($typePesan == 'daftar') {
-        $paket = Package::findOrFail($request->paket_layanan)->first();
-        $customer = Pelanggan::where('email', $request->email)->firstOrFail();
-        $url_detail = url('/pelanggans/' . $customer->id);
-        $message = 'Hello. admin ' . getCompany()->nama_perusahaan . "\n\n";
-        $message .= "Ada calon customer baru yang melakukan pendaftaran \n\n";
-        $message .= "*Nama :* " . $request->nama . "\n";
-        $message .= '*Email :* ' . $request->email . "\n";
-        $message .= '*No Wa :* ' . $request->no_wa . "\n";
-        $message .= '*No KTP :* ' .  $request->no_ktp . " \n";
-        $message .= '*Alamat :* ' .  $request->alamat . "\n";
-        $message .= '*Paket pilihan :* ' . $paket->nama_layanan . "\n\n";
-        $message .= "Detail pendaftaran bisa admin lihat disini : $url_detail \n\n";
-    } else if ($typePesan == 'bayar') {
+    if ($typePesan == 'bayar') {
         $message = 'Yth. ' . $request->nama_pelanggan . "\n\n";
         $message .= "Berikut ini adalah data pembayaran yang telah kami terima : \n\n";
         $message .= "*No Tagihan :* " . $request->no_tagihan . "\n";
@@ -166,8 +153,8 @@ function hitungUang($type)
 {
     if ($type == 'Pemasukan') {
         $pemasukan = DB::table('pemasukans')
-        ->where('company_id', '=', session('sessionCompany'))
-        ->sum('pemasukans.nominal');
+            ->where('company_id', '=', session('sessionCompany'))
+            ->sum('pemasukans.nominal');
         return $pemasukan;
     } else {
         $pengeluaran = DB::table('pengeluarans')

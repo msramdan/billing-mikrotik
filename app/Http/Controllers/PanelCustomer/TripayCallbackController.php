@@ -15,18 +15,8 @@ class TripayCallbackController extends Controller
 
     public function handle(Request $request)
     {
-        // ramdan error
-        $privateKey = getCompanyUser()->private_key;
         $callbackSignature = $request->server('HTTP_X_CALLBACK_SIGNATURE');
         $json = $request->getContent();
-        $signature = hash_hmac('sha256', $json, $privateKey);
-
-        if ($signature !== (string) $callbackSignature) {
-            return Response::json([
-                'success' => false,
-                'message' => 'Invalid signature',
-            ]);
-        }
 
         if ('payment_status' !== (string) $request->server('HTTP_X_CALLBACK_EVENT')) {
             return Response::json([
@@ -36,7 +26,6 @@ class TripayCallbackController extends Controller
         }
 
         $data = json_decode($json);
-
         if (JSON_ERROR_NONE !== json_last_error()) {
             return Response::json([
                 'success' => false,
@@ -45,14 +34,26 @@ class TripayCallbackController extends Controller
         }
 
         $invoiceId = $data->merchant_ref;
-        $tripayReference = $data->reference;
+        // $tripayReference = $data->reference;
         $status = strtoupper((string) $data->status);
 
         if ($data->is_closed_payment === 1) {
-            $invoice = Tagihan::where('no_tagihan', $invoiceId)
-                // ->where('tripay_reference', $tripayReference)
+            $invoice = DB::table('tagihans')
+                ->where('no_tagihan', $invoiceId)
                 ->where('status_bayar', '=', 'Belum Bayar')
+                ->join('companies', 'tagihans.company_id', '=', 'companies.id') // Sesuaikan kolom foreign key dan primary key
+                ->select('tagihans.*', 'companies.private_key')
                 ->first();
+
+            $privateKey = $invoice->private_key;
+            $signature = hash_hmac('sha256', $json, $privateKey);
+            if ($signature !== (string) $callbackSignature) {
+                return Response::json([
+                    'success' => false,
+                    'message' => 'Invalid signature',
+                ]);
+            }
+
             if (!$invoice) {
                 return Response::json([
                     'success' => false,
@@ -101,6 +102,7 @@ class TripayCallbackController extends Controller
                 // insert data pemasukan
                 DB::table('pemasukans')->insert([
                     'nominal' => $invoice->nominal,
+                    'company_id' => $invoice->company_id,
                     'tanggal' => date('Y-m-d H:i:s'),
                     'keterangan' => 'Pembayaran Tagihan no Tagihan ' . $invoice->no_tagihan . ' a/n ' . $invoice->nama_pelanggan . ' Periode ' . $invoice->periode,
                     'created_at' => date('Y-m-d H:i:s'),
@@ -173,9 +175,8 @@ class TripayCallbackController extends Controller
                 }
 
                 // kirim wa
-                $waGateway = WaGateway::findOrFail(1)->first();
-                if ($waGateway->is_active == 'Yes') {
-                    sendNotifWa($waGateway->url_wa_gateway, $waGateway->api_key_wa_gateway, $invoice, 'bayar', $invoice->no_wa, $waGateway->footer_pesan_wa_pembayaran);
+                if ($invoice->is_active == 'Yes') {
+                    sendNotifWa($invoice->url_wa_gateway, $invoice->api_key_wa_gateway, $invoice, 'bayar', $invoice->no_wa, $invoice->footer_pesan_wa_pembayaran);
                 }
             }
             return Response::json(['success' => true]);
