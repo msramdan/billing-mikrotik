@@ -184,7 +184,7 @@
     </div>
     <div class="col-md-6">
         <div class="form-group">
-            <label for="is-active">{{ __('Is Active') }}</label>
+            <label for="is-active">{{ __('Is Active WA') }}</label>
             <select class="form-select @error('is_active') is-invalid @enderror" name="is_active" id="is-active" class="form-control" required>
                 <option value="" selected disabled>-- {{ __('Select is active') }} --</option>
                 <option value="Yes" {{ isset($company) && $company->is_active == 'Yes' ? 'selected' : (old('is_active') == 'Yes' ? 'selected' : '') }}>Yes</option>

@@ -1,5 +1,5 @@
 <?php
-$koneksi = mysqli_connect("103.176.79.206","mikrotik","mikrotik","mikrotik");
+$koneksi = mysqli_connect("localhost","root","","billing-internet");
 
 // Check connection
 if (mysqli_connect_errno()){
