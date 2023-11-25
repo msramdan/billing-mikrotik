@@ -421,9 +421,6 @@ class PelangganController extends Controller
         }
     }
 
-
-
-
     public function setToExpired($pelanggan_id, $user_pppoe)
     {
         try {
