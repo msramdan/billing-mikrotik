@@ -44,9 +44,12 @@ class TripayCallbackController extends Controller
                 ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
                 ->where('tagihans.no_tagihan', $invoiceId)
                 ->where('tagihans.status_bayar', '=', 'Belum Bayar')
-                ->select('tagihans.*','pelanggans.id as pelanggan_id','pelanggans.nama as nama_pelanggan', 'pelanggans.jatuh_tempo', 'pelanggans.email as email_customer', 'pelanggans.no_wa', 'packages.nama_layanan', 'pelanggans.no_layanan')
+                ->select(
+                    'tagihans.*',
+                    'companies.private_key','companies.url_wa_gateway','companies.api_key_wa_gateway','companies.footer_pesan_wa_pembayaran',
+                    'pelanggans.id as pelanggan_id','pelanggans.nama as nama_pelanggan', 'pelanggans.jatuh_tempo', 'pelanggans.email as email_customer', 'pelanggans.no_wa',
+                    'packages.nama_layanan', 'pelanggans.no_layanan')
                 ->first();
-
             $privateKey = $invoice->private_key;
             $signature = hash_hmac('sha256', $json, $privateKey);
             if ($signature !== (string) $callbackSignature) {
