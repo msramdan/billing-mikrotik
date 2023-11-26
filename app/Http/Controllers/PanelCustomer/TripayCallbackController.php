@@ -115,7 +115,7 @@ class TripayCallbackController extends Controller
             if ($status == 'PAID') {
                 // insert data pemasukan
                 DB::table('pemasukans')->insert([
-                    'nominal' => $invoice->nominal,
+                    'nominal' => $invoice->total_bayar,
                     'company_id' => $invoice->company_id,
                     'tanggal' => date('Y-m-d H:i:s'),
                     'keterangan' => 'Pembayaran Tagihan no Tagihan ' . $invoice->no_tagihan . ' a/n ' . $invoice->nama_pelanggan . ' Periode ' . $invoice->periode,
