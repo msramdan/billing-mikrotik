@@ -46,9 +46,18 @@ class TripayCallbackController extends Controller
                 ->where('tagihans.status_bayar', '=', 'Belum Bayar')
                 ->select(
                     'tagihans.*',
-                    'companies.private_key','companies.url_wa_gateway','companies.api_key_wa_gateway','companies.footer_pesan_wa_pembayaran',
-                    'pelanggans.id as pelanggan_id','pelanggans.nama as nama_pelanggan', 'pelanggans.jatuh_tempo', 'pelanggans.email as email_customer', 'pelanggans.no_wa',
-                    'packages.nama_layanan', 'pelanggans.no_layanan')
+                    'companies.private_key',
+                    'companies.url_wa_gateway',
+                    'companies.api_key_wa_gateway',
+                    'companies.footer_pesan_wa_pembayaran',
+                    'pelanggans.id as pelanggan_id',
+                    'pelanggans.nama as nama_pelanggan',
+                    'pelanggans.jatuh_tempo',
+                    'pelanggans.email as email_customer',
+                    'pelanggans.no_wa',
+                    'packages.nama_layanan',
+                    'pelanggans.no_layanan'
+                )
                 ->first();
             $privateKey = $invoice->private_key;
             $signature = hash_hmac('sha256', $json, $privateKey);
@@ -68,7 +77,7 @@ class TripayCallbackController extends Controller
 
             switch ($status) {
                 case 'PAID':
-                    DB::table('invoices')
+                    DB::table('tagihans')
                         ->where('no_tagihan', $invoiceId)
                         ->update([
                             'status_bayar' => 'Sudah Bayar',
@@ -80,7 +89,7 @@ class TripayCallbackController extends Controller
                     break;
 
                 case 'EXPIRED':
-                    DB::table('invoices')
+                    DB::table('tagihans')
                         ->where('no_tagihan', $invoiceId)
                         ->update([
                             'status_bayar' => 'Belum Bayar',
@@ -89,7 +98,7 @@ class TripayCallbackController extends Controller
                     break;
 
                 case 'FAILED':
-                    DB::table('invoices')
+                    DB::table('tagihans')
                         ->where('no_tagihan', $invoiceId)
                         ->update([
                             'status_bayar' => 'Belum Bayar',
