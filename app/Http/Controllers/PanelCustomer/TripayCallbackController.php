@@ -39,10 +39,12 @@ class TripayCallbackController extends Controller
 
         if ($data->is_closed_payment === 1) {
             $invoice = DB::table('tagihans')
-                ->where('no_tagihan', $invoiceId)
-                ->where('status_bayar', '=', 'Belum Bayar')
-                ->join('companies', 'tagihans.company_id', '=', 'companies.id') // Sesuaikan kolom foreign key dan primary key
-                ->select('tagihans.*', 'companies.private_key')
+                ->leftJoin('companies', 'tagihans.company_id', '=', 'companies.id')
+                ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
+                ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
+                ->where('tagihans.no_tagihan', $invoiceId)
+                ->where('tagihans.status_bayar', '=', 'Belum Bayar')
+                ->select('tagihans.*','pelanggans.id as pelanggan_id','pelanggans.nama as nama_pelanggan', 'pelanggans.jatuh_tempo', 'pelanggans.email as email_customer', 'pelanggans.no_wa', 'packages.nama_layanan', 'pelanggans.no_layanan')
                 ->first();
 
             $privateKey = $invoice->private_key;
@@ -63,27 +65,33 @@ class TripayCallbackController extends Controller
 
             switch ($status) {
                 case 'PAID':
-                    $invoice->update([
-                        'status_bayar' => 'Sudah Bayar',
-                        'payload_tripay' => $json,
-                        'metode_bayar' => 'Payment Tripay',
-                        'tanggal_bayar' =>  date('Y-m-d H:i:s'),
-                        'tanggal_kirim_notif_wa' =>  date('Y-m-d H:i:s')
-                    ]);
+                    DB::table('invoices')
+                        ->where('no_tagihan', $invoiceId)
+                        ->update([
+                            'status_bayar' => 'Sudah Bayar',
+                            'payload_tripay' => $json,
+                            'metode_bayar' => 'Payment Tripay',
+                            'tanggal_bayar' => now(),
+                            'tanggal_kirim_notif_wa' => now()
+                        ]);
                     break;
 
                 case 'EXPIRED':
-                    $invoice->update([
-                        'status_bayar' => 'Belum Bayar',
-                        'payload_tripay' =>  $json
-                    ]);
+                    DB::table('invoices')
+                        ->where('no_tagihan', $invoiceId)
+                        ->update([
+                            'status_bayar' => 'Belum Bayar',
+                            'payload_tripay' =>  $json
+                        ]);
                     break;
 
                 case 'FAILED':
-                    $invoice->update([
-                        'status_bayar' => 'Belum Bayar',
-                        'payload_tripay' =>  $json,
-                    ]);
+                    DB::table('invoices')
+                        ->where('no_tagihan', $invoiceId)
+                        ->update([
+                            'status_bayar' => 'Belum Bayar',
+                            'payload_tripay' =>  $json,
+                        ]);
                     break;
                 default:
                     return Response::json([
@@ -93,12 +101,6 @@ class TripayCallbackController extends Controller
             }
 
             if ($status == 'PAID') {
-                $invoice = DB::table('tagihans')
-                    ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
-                    ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
-                    ->select('tagihans.no_tagihan', 'tagihans.periode', 'tagihans.total_bayar as nominal', 'tagihans.metode_bayar', 'pelanggans.id as pelanggan_id', 'pelanggans.nama as nama_pelanggan', 'pelanggans.jatuh_tempo', 'pelanggans.email as email_customer', 'pelanggans.no_wa', 'packages.nama_layanan', 'pelanggans.no_layanan')
-                    ->where('tagihans.no_tagihan', '=', $invoiceId)
-                    ->first();
                 // insert data pemasukan
                 DB::table('pemasukans')->insert([
                     'nominal' => $invoice->nominal,
