@@ -78,13 +78,6 @@ function hitungPelanggan()
     return Pelanggan::where('company_id', session('sessionCompany'))->count();
 }
 
-// function getTripay()
-// {
-//     $data = DB::table('payment_tripays')->first();
-//     return $data;
-// }
-
-
 function getCustomer()
 {
     $data = DB::table('pelanggans')->where('id', Session::get('id-customer'))->first();
@@ -112,7 +105,7 @@ function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima, $footer
         $message .= "Berikut ini adalah data pembayaran yang telah kami terima : \n\n";
         $message .= "*No Tagihan :* " . $request->no_tagihan . "\n";
         $message .= '*Nama Pelanggan :* ' . $request->nama_pelanggan . "\n";
-        $message .= '*Nominal :* ' . rupiah($request->nominal) . "\n";
+        $message .= '*Nominal :* ' . rupiah($request->total_bayar) . "\n";
         $message .= '*Metode Pembayaran :* ' .  $request->metode_bayar . " \n";
         $message .= '*Tanggal :* ' . date('Y-m-d H:i:s') . "\n\n";
         $message .= $footer;
