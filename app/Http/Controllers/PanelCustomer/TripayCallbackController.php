@@ -49,6 +49,7 @@ class TripayCallbackController extends Controller
                 ->select(
                     'tagihans.*',
                     'companies.private_key',
+                    'companies.is_active',
                     'companies.url_wa_gateway',
                     'companies.api_key_wa_gateway',
                     'companies.footer_pesan_wa_pembayaran',
