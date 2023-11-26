@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Olt;
 use \RouterOS\Client;
 use Illuminate\Support\Facades\DB;
 use \RouterOS\Exceptions\ConnectException;
@@ -44,7 +45,7 @@ function getCompany()
     $data = DB::table('companies')
         ->join('pakets', 'companies.paket_id', '=', 'pakets.id')
         ->where('companies.id', '=', session('sessionCompany'))
-        ->select('companies.*', 'pakets.nama_paket', 'pakets.jumlah_router', 'pakets.jumlah_pelanggan')
+        ->select('companies.*', 'pakets.nama_paket', 'pakets.jumlah_router', 'pakets.jumlah_pelanggan','pakets.jumlah_pelanggan')
         ->first();
     return $data;
 }
@@ -54,7 +55,7 @@ function getCompanyUser()
     $data = DB::table('companies')
         ->join('pakets', 'companies.paket_id', '=', 'pakets.id')
         ->where('companies.id', '=', session('sessionCompanyUser'))
-        ->select('companies.*', 'pakets.nama_paket', 'pakets.jumlah_router', 'pakets.jumlah_pelanggan')
+        ->select('companies.*', 'pakets.nama_paket', 'pakets.jumlah_router', 'pakets.jumlah_olt')
         ->first();
     return $data;
 }
@@ -76,6 +77,11 @@ function hitungRouter()
 function hitungPelanggan()
 {
     return Pelanggan::where('company_id', session('sessionCompany'))->count();
+}
+
+function hitungOlt()
+{
+    return Olt::where('company_id', session('sessionCompany'))->count();
 }
 
 function getCustomer()

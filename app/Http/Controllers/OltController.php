@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Olt;
 use App\Http\Requests\{StoreOltRequest, UpdateOltRequest};
 use Yajra\DataTables\Facades\DataTables;
+use Alert;
 
 class OltController extends Controller
 {
@@ -40,7 +41,13 @@ class OltController extends Controller
      */
     public function create()
     {
-        return view('olts.create');
+        if (hitungOlt() >= getCompany()->jumlah_olt) {
+            Alert::error('Limit OLT', 'Anda terkena limit OLT silahkan uprage paket');
+            return redirect()
+                ->route('olts.index');
+        } else {
+            return view('olts.create');
+        }
     }
 
     /**
@@ -51,12 +58,18 @@ class OltController extends Controller
      */
     public function store(StoreOltRequest $request)
     {
-        $attr = $request->validated();
-        $attr['company_id'] =  session('sessionCompany');
-        Olt::create($attr);
-        return redirect()
-            ->route('olts.index')
-            ->with('success', __('The olt was created successfully.'));
+        if (hitungOlt() >= getCompany()->jumlah_olt) {
+            Alert::error('Limit OLT', 'Anda terkena limit OLT silahkan uprage paket');
+            return redirect()
+                ->route('olts.index');
+        } else {
+            $attr = $request->validated();
+            $attr['company_id'] =  session('sessionCompany');
+            Olt::create($attr);
+            return redirect()
+                ->route('olts.index')
+                ->with('success', __('The olt was created successfully.'));
+        }
     }
 
     /**
