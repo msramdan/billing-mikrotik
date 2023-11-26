@@ -10,8 +10,8 @@ $pesan .= "Mulai Cron :  " . date('Y-m-d H:i:s') . "\n";
 sendTelegramNotification($pesan);
 
 $sql = "SELECT tagihans.*,companies.*,pelanggans.nama,pelanggans.no_wa, pelanggans.kirim_tagihan_wa,pelanggans.jatuh_tempo FROM tagihans
-join companies on companies.id = tagihans.pelanggan_id
-join pelanggans on pelanggans.id = tagihans.company_id
+join companies on companies.id = tagihans.company_id
+join pelanggans on pelanggans.id = tagihans.pelanggan_id
 where tagihans.status_bayar='Belum Bayar' and is_send='No' limit 10";
 $query = mysqli_query($koneksi, $sql);
 while ($data = mysqli_fetch_array($query)) {
