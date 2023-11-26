@@ -151,6 +151,7 @@ function hitungUang($type)
         return $pemasukan;
     } else {
         $pengeluaran = DB::table('pengeluarans')
+            ->where('company_id', '=', session('sessionCompany'))
             ->sum('pengeluarans.nominal');
         return $pengeluaran;
     }
