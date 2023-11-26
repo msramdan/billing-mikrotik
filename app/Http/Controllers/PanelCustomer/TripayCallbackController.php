@@ -9,6 +9,8 @@ use App\Models\Tagihan;
 use App\Models\WaGateway;
 use \RouterOS\Query;
 use Illuminate\Support\Facades\DB;
+use \RouterOS\Client;
+use \RouterOS\Exceptions\ConnectException;
 
 class TripayCallbackController extends Controller
 {
@@ -52,6 +54,7 @@ class TripayCallbackController extends Controller
                     'companies.footer_pesan_wa_pembayaran',
                     'pelanggans.id as pelanggan_id',
                     'pelanggans.nama as nama_pelanggan',
+                    'pelanggans.router',
                     'pelanggans.jatuh_tempo',
                     'pelanggans.email as email_customer',
                     'pelanggans.no_wa',
@@ -129,7 +132,7 @@ class TripayCallbackController extends Controller
                     ->count();
                 if ($cekTagihan < 1) {
                     // buka isolir
-                    $client = setRoute();
+                    $client = self::setRoute($invoice->router);
                     $pelanggan = DB::table('pelanggans')
                         ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
                         ->select(
@@ -160,7 +163,7 @@ class TripayCallbackController extends Controller
                             ->equal('.id', $idActive);
                         $client->query($queryDelete)->read();
                     } else {
-                        $client = setRoute();
+                        $client = self::setRoute($invoice->router);
                         // get ip by user static
                         $queryGet = (new Query('/queue/simple/print'))
                             ->where('name', $pelanggan->user_static);
@@ -194,6 +197,24 @@ class TripayCallbackController extends Controller
                 }
             }
             return Response::json(['success' => true]);
+        }
+    }
+
+    function setRoute($id)
+    {
+        $router = DB::table('settingmikrotiks')->where('id', $id)->first();
+        if ($router) {
+            try {
+                return new Client([
+                    'host' => $router->host,
+                    'user' => $router->username,
+                    'pass' => $router->password,
+                    'port' => (int) $router->port,
+                ]);
+            } catch (ConnectException $e) {
+                echo $e->getMessage() . PHP_EOL;
+                die();
+            }
         }
     }
 }
