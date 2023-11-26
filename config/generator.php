@@ -248,13 +248,13 @@ return [
                         'title' => 'Active Hotspot',
                         'route' => '/hotspotactives',
                         'permission' => 'hotspotactive view'
-                    ],
-                    [
-                        'title' => 'Mikhmon',
-                        'route' => '/mikhmon',
-                        'permission' => 'mikhmon view',
-                        'target' => '_blank'
                     ]
+                    // [
+                    //     'title' => 'Mikhmon',
+                    //     'route' => '/mikhmon',
+                    //     'permission' => 'mikhmon view',
+                    //     'target' => '_blank'
+                    // ]
                 ]
             ]
         ]
