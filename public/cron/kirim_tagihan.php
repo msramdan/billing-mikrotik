@@ -9,7 +9,7 @@ $pesan = "✅✅ [CRON SEND TAGIHAN] ✅✅\n";
 $pesan .= "Mulai Cron :  " . date('Y-m-d H:i:s') . "\n";
 sendTelegramNotification($pesan);
 
-$sql = "SELECT tagihans.*,companies.*,pelanggans.nama,pelanggans.no_wa, pelanggans.kirim_tagihan_wa,pelanggans.jatuh_tempo FROM tagihans
+$sql = "SELECT tagihans.*,tagihans.id as id_tagihan,companies.*,pelanggans.nama,pelanggans.no_wa, pelanggans.kirim_tagihan_wa,pelanggans.jatuh_tempo FROM tagihans
 join companies on companies.id = tagihans.company_id
 join pelanggans on pelanggans.id = tagihans.pelanggan_id
 where tagihans.status_bayar='Belum Bayar' and is_send='No' limit 10";
@@ -41,8 +41,8 @@ while ($data = mysqli_fetch_array($query)) {
             print_r($result);
             $res = json_decode($result);
             if ($res->status == true || $res->status == 'true') {
-                $tagihan_di = $data['id'];
-                $sqlUpdate = "UPDATE tagihans SET is_send='Yes' WHERE id='$tagihan_di'";
+                $tagihan_id = $data['id_tagihan'];
+                $sqlUpdate = "UPDATE tagihans SET is_send='Yes' WHERE id='$tagihan_id'";
                 mysqli_query($koneksi, $sqlUpdate);
 
                 $pesan = "✅✅ [CRON SEND TAGIHAN] ✅✅\n";
