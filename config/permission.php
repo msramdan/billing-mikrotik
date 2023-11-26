@@ -210,5 +210,5 @@ return [
         ['group' => 'statics', 'access' => ['static view']],
         ['group' => 'laporans', 'access' => ['laporan view']],
         ['group' => 'sendnotifs', 'access' => ['sendnotif view']],
-    ],
-];
+  ['group' => 'olts', 'access' => ['olt view', 'olt create', 'olt edit', 'olt delete']], 
+		],];
