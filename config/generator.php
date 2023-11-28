@@ -112,16 +112,31 @@ return [
         [
             'header' => 'Olts',
             'permissions' => [
-                'olt view'
+                'olt view',
+                'monitoring view'
             ],
             'menus' => [
                 [
                     'title' => 'OLT',
                     'icon' => '<i class="bi bi-device-ssd"></i>',
-                    'route' => '/olts',
-                    'permission' => 'olt view',
-                    'permissions' => [],
-                    'submenus' => []
+                    'route' => null,
+                    'permission' => null,
+                    'permissions' => [
+                        'olt view',
+                        'monitoring view'
+                    ],
+                    'submenus' => [
+                        [
+                            'title' => 'OLT Management',
+                            'route' => '/olts',
+                            'permission' => 'olt view'
+                        ],
+                        [
+                            'title' => 'OLT Monitoring',
+                            'route' => '/monitorings',
+                            'permission' => 'monitoring view'
+                        ]
+                    ]
                 ]
             ]
         ],

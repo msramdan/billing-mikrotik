@@ -141,3 +141,4 @@ Route::middleware(['auth', 'web'])->group(function () {
 });
 
 Route::resource('olts', App\Http\Controllers\OltController::class)->middleware('auth');
+Route::resource('monitorings', App\Http\Controllers\MonitoringController::class)->middleware('auth');

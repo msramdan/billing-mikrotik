@@ -45,7 +45,7 @@ function getCompany()
     $data = DB::table('companies')
         ->join('pakets', 'companies.paket_id', '=', 'pakets.id')
         ->where('companies.id', '=', session('sessionCompany'))
-        ->select('companies.*', 'pakets.nama_paket', 'pakets.jumlah_router', 'pakets.jumlah_pelanggan','pakets.jumlah_olt')
+        ->select('companies.*', 'pakets.nama_paket', 'pakets.jumlah_router', 'pakets.jumlah_pelanggan', 'pakets.jumlah_olt')
         ->first();
     return $data;
 }
@@ -182,4 +182,34 @@ function tanggal_indonesia($tanggal)
 
     $pecahkan = explode('-', $tanggal);
     return $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
+}
+
+
+function oltExec()
+{
+    $host = '103.122.65.234:8161';
+    $com = 'sawitro';
+
+    $var = [];
+    $namas = snmpwalk($host, $com, '.1.3.6.1.4.1.3902.1012.3.28.1.1.2');
+    // $redamann = snmpwalk($host, $com, '1.3.6.1.4.1.3902.1015.1010.11.2.1.2');
+    // $indexs = snmpwalk($host, $com, '.1.3.6.1.4.1.3902.1012.3.28.1.1.3');
+    foreach ($namas as $key => $value) {
+        $var[$key] = [
+            "index" => "",
+            "nama" => str_replace(["STRING:", '"'], ["", ""], $value),
+            "redaman" => "",
+        ];
+    }
+
+    // foreach ($redamann as $key => $value) {
+
+    //     $var[$key]["redaman"] =  number_format((int)str_replace('INTEGER: ', '', $value));
+    // }
+
+    // foreach ($indexs as $key => $value) {
+
+    //     $var[$key]["index"] =  str_replace(["STRING:", '"'], ["", ""], $value);
+    // }
+    return $var;
 }

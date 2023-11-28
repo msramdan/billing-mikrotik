@@ -108,14 +108,6 @@
                                             <th>#</th>
                                             <th>{{ __('No Layanan') }}</th>
                                             <th>{{ __('Nama') }}</th>
-                                            {{-- <th>{{ __('Tanggal Daftar') }}</th>
-                                            <th>{{ __('Wa') }}</th>
-                                            <th>{{ __('No Ktp') }}</th>
-                                            <th>{{ __('Status Berlangganan') }}</th>
-                                            <th>{{ __('Package') }}</th>
-                                            <th>{{ __('Router') }}</th>
-                                            <th>{{ __('Mode User') }}</th>
-                                            <th>{{ __('User') }}</th> --}}
                                             <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
