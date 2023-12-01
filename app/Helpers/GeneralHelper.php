@@ -205,6 +205,7 @@ function oltExec()
     $type = snmpwalk($host, $com, '1.3.6.1.4.1.3902.1012.3.28.1.1.1');
     $status = snmpwalk($host, $com, '.1.3.6.1.4.1.3902.1012.3.28.2.1.4');
     $rx_up = snmpwalk($host, $com, '1.3.6.1.4.1.3902.1015.1010.11.2.1.2');
+
     foreach ($onu as $key => $value) {
         $var[$key] = [
             "onu" => trim(str_replace(["STRING:", '"'], ["", ""], $value)),

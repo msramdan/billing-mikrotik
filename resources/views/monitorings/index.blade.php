@@ -512,15 +512,15 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive p-1">
-                                <table class="table table-striped" id="data-table" width="100%">
+                                <table class="table table-striped" id="example" width="100%">
                                     <thead>
                                         <tr>
                                             <th>{{ __('Onu ID') }}</th>
                                             <th>{{ __('Name') }}</th>
                                             <th>{{ __('Type') }}</th>
                                             <th>{{ __('Status') }}</th>
-                                            <th>{{ __('RX Signal') }}</th>
-                                            <th>{{ __('TX Signal') }}</th>
+                                            <th>{{ __('RX Uplink') }}</th>
+                                            <th>{{ __('RX Downlink') }}</th>
                                             <th>{{ __('Reason') }}</th>
                                         </tr>
                                     </thead>
@@ -591,8 +591,21 @@
     </div>
 @endsection
 
+@push('css')
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.12.0/datatables.min.css" />
+@endpush
+
 @push('js')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.12.0/datatables.min.js"></script>
+
+    <script>
+        new DataTable('#example', {
+            info: true,
+            ordering: true,
+            paging: true
+        });
+    </script>
     <script>
         $(document).ready(function() {
 
