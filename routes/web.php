@@ -134,6 +134,12 @@ Route::middleware(['auth', 'web'])->group(function () {
         Route::post('/update-session', 'updateSession')->name('updateSession');
         Route::post('/update-session-router', 'routerSelect')->name('routerSelect');
     });
+
+    Route::resource('monitorings', App\Http\Controllers\MonitoringController::class);
+    Route::controller(App\Http\Controllers\MonitoringController::class)->group(function () {
+        Route::post('/update-session-olt', 'oltSelect')->name('oltSelect');
+    });
+
     Route::resource('companies', App\Http\Controllers\CompanyController::class);
     Route::resource('pakets', App\Http\Controllers\PaketController::class);
     Route::resource('users', App\Http\Controllers\UserController::class);
@@ -141,4 +147,4 @@ Route::middleware(['auth', 'web'])->group(function () {
 });
 
 Route::resource('olts', App\Http\Controllers\OltController::class)->middleware('auth');
-Route::resource('monitorings', App\Http\Controllers\MonitoringController::class)->middleware('auth');
+

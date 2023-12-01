@@ -111,7 +111,7 @@ function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima, $footer
         $message .= "Berikut ini adalah data pembayaran yang telah kami terima : \n\n";
         $message .= "*No Tagihan :* " . $request->no_tagihan . "\n";
         $message .= '*Nama Pelanggan :* ' . $request->nama_pelanggan . "\n";
-        $message .= '*Nominal :* ' . rupiah($request->total_bayar) . "\n";
+        $message .= '*Nominal :* ' . rupiah($request->nominal) . "\n";
         $message .= '*Metode Pembayaran :* ' .  $request->metode_bayar . " \n";
         $message .= '*Tanggal :* ' . date('Y-m-d H:i:s') . "\n\n";
         $message .= $footer;
@@ -121,6 +121,7 @@ function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima, $footer
         $message .= 'Dengan no tagihan *' . $request->no_tagihan . '* sebesar *' . rupiah($request->total_bayar) . '*' . "\n";
         $message .= 'Pembayaran paling lambat di tanggal *' . addHari($request->tanggal_create_tagihan, $request->jatuh_tempo) . '* Untuk Menghindari Isolir off wifi otomatis di tempat anda.' . " \n\n";
         $message .= "*Note : Abaikan pesan ini jika sudah berbayar* \n\n";
+
         $message .= $footer;
     }
 
@@ -183,33 +184,97 @@ function tanggal_indonesia($tanggal)
     $pecahkan = explode('-', $tanggal);
     return $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
 }
+function convertIntegerToDecimal($stringValue)
+{
+    // Hapus "INTEGER: " dan konversi ke desimal sesuai dengan format yang diinginkan
+    $decimalValue = number_format((int) str_replace('INTEGER: ', '', $stringValue) / 1000, 1);
 
+    return $decimalValue;
+}
 
 function oltExec()
 {
-    $host = '103.122.65.234:8161';
-    $com = 'sawitro';
+
+
+    $oltSettings = Olt::findOrFail(session('sessionOlt'));
+    $host = $oltSettings->host;
+    $com = $oltSettings->ro;
+
+    dd($oltSettings);
 
     $var = [];
-    $namas = snmpwalk($host, $com, '.1.3.6.1.4.1.3902.1012.3.28.1.1.2');
-    // $redamann = snmpwalk($host, $com, '1.3.6.1.4.1.3902.1015.1010.11.2.1.2');
-    // $indexs = snmpwalk($host, $com, '.1.3.6.1.4.1.3902.1012.3.28.1.1.3');
-    foreach ($namas as $key => $value) {
+    $onu = snmpwalk($host, $com, '.1.3.6.1.4.1.3902.1012.3.28.1.1.3');
+    $nama = snmpwalk($host, $com, '.1.3.6.1.4.1.3902.1012.3.28.1.1.4');
+    $type = snmpwalk($host, $com, '1.3.6.1.4.1.3902.1012.3.28.1.1.1');
+    $status = snmpwalk($host, $com, '.1.3.6.1.4.1.3902.1012.3.28.2.1.4');
+    $rx_up = snmpwalk($host, $com, '1.3.6.1.4.1.3902.1015.1010.11.2.1.2');
+    foreach ($onu as $key => $value) {
         $var[$key] = [
-            "index" => "",
-            "nama" => str_replace(["STRING:", '"'], ["", ""], $value),
-            "redaman" => "",
+            "onu" => trim(str_replace(["STRING:", '"'], ["", ""], $value)),
+            "nama" => "",
+            "type" => "",
+            "mac" => "",
+            "status" => "",
+            "rx" => "",
         ];
     }
 
-    // foreach ($redamann as $key => $value) {
+    foreach ($nama as $key => $value) {
+        $var[$key]["nama"] = trim(str_replace(["STRING:", '"'], ["", ""], $value));
+    }
 
-    //     $var[$key]["redaman"] =  number_format((int)str_replace('INTEGER: ', '', $value));
-    // }
+    foreach ($type as $key => $value) {
+        $var[$key]["type"] = trim(str_replace(["STRING:", '"'], ["", ""], $value));
+    }
 
-    // foreach ($indexs as $key => $value) {
+    $jumlahOnline = $jumlahOffline = $power_fail = $los = $sync = 0;
 
-    //     $var[$key]["index"] =  str_replace(["STRING:", '"'], ["", ""], $value);
-    // }
-    return $var;
+    foreach ($status as $key => $value) {
+        $var[$key]["status"] = $value;
+
+        if ($value == "INTEGER: 3") {
+            $jumlahOnline++;
+        } else {
+            $jumlahOffline++;
+
+            if ($value == "INTEGER: 1") {
+                $los++;
+            } elseif ($value == "INTEGER: 2") {
+                $sync++;
+            } elseif ($value == "INTEGER: 4") {
+                $power_fail++;
+            }
+        }
+    }
+
+    $low_signal = 0;
+    $warning = 0;
+    $critical = 0;
+    foreach ($rx_up as $key => $value) {
+        $var[$key]["rx"] = $value;
+        $num = convertIntegerToDecimal($value);
+        if ($num < -26) {
+            $low_signal++;
+        }
+
+        if ($num < -26 && $num >= -31) {
+            $warning++;
+        }
+
+        if ($num < -31) {
+            $critical++;
+        }
+    }
+
+    return [
+        'online' => $jumlahOnline,
+        'offline' => $jumlahOffline,
+        'power_fail' => $power_fail,
+        'low_signal' => $low_signal,
+        'warning' => $warning,
+        'critical' => $critical,
+        'los' => $los,
+        'sync' => $sync,
+        'var' => $var,
+    ];
 }
