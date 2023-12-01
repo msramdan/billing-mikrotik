@@ -251,10 +251,13 @@ class CompanyController extends Controller
     public function updateSession(Request $request)
     {
         $value = $request->input('selectedValue');
-        session(['sessionCompany' => $value]);
-        $data = Settingmikrotik::where('company_id', '=', $value)->first();
         // remove session
         session()->forget('sessionRouter');
+        session()->forget('sessionOlt');
+        session()->forget('sessionCompany');
+        session(['sessionCompany' => $value]);
+        $data = Settingmikrotik::where('company_id', '=', $value)->first();
+
         // set session baru
         if ($data) {
             session(['sessionRouter' => $data->id]);
