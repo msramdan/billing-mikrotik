@@ -199,9 +199,6 @@ function oltExec()
     $oltSettings = Olt::findOrFail(session('sessionOlt'));
     $host = $oltSettings->host;
     $com = $oltSettings->ro;
-
-    dd($oltSettings);
-
     $var = [];
     $onu = snmpwalk($host, $com, '.1.3.6.1.4.1.3902.1012.3.28.1.1.3');
     $nama = snmpwalk($host, $com, '.1.3.6.1.4.1.3902.1012.3.28.1.1.4');
