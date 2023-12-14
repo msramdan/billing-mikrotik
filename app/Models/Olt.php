@@ -21,7 +21,7 @@ class Olt extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['name','company_id', 'type', 'host', 'ro', 'rw'];
+    protected $fillable = ['name','company_id', 'type', 'host','port', 'username', 'password'];
 
     /**
      * The attributes that should be cast.

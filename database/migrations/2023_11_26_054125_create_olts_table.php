@@ -19,8 +19,9 @@ return new class extends Migration
             $table->string('name');
             $table->enum('type', ['Zte', 'Huawei']);
             $table->string('host');
-            $table->string('ro');
-            $table->string('rw');
+            $table->integer('port');
+            $table->string('username');
+            $table->string('password');
             $table->timestamps();
         });
     }

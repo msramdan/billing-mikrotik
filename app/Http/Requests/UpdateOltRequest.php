@@ -25,10 +25,11 @@ class UpdateOltRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-			'type' => 'required|in:Zte,Huawei',
-			'host' => 'required|string',
-			'ro' => 'required|string',
-			'rw' => 'required|string',
+            'type' => 'required|in:Zte,Huawei',
+            'host' => 'required|string',
+            'port' => 'required',
+            'username' => 'required|string',
+            'password' => 'required|string',
         ];
     }
 }

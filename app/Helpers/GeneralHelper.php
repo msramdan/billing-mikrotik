@@ -200,7 +200,13 @@ function oltExec()
     $host = $oltSettings->host;
     $com = $oltSettings->ro;
     $var = [];
-    $onu = snmpwalk($host, $com, '.1.3.6.1.4.1.3902.1012.3.28.1.1.3');
+    // ONURXINDEX=".1.3.6.1.4.1.3902.1012.3.50.12.1.1.10."
+    $onu = snmpwalk($host, $com, '1.3.6.1.4.1.3902.1015.1010.5.56.1');
+
+    echo "<pre>";
+    var_dump($onu);
+    die();
+
     $nama = snmpwalk($host, $com, '.1.3.6.1.4.1.3902.1012.3.28.1.1.2');
     $type = snmpwalk($host, $com, '1.3.6.1.4.1.3902.1012.3.28.1.1.1');
     $status = snmpwalk($host, $com, '.1.3.6.1.4.1.3902.1012.3.28.2.1.4');

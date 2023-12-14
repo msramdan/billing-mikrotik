@@ -42,8 +42,9 @@
                                             <th>{{ __('Name') }}</th>
 											<th>{{ __('Type') }}</th>
 											<th>{{ __('Host') }}</th>
-											<th>{{ __('RO (Read Only)') }}</th>
-											<th>{{ __('RW (Read Write)') }}</th>
+                                            <th>{{ __('Port') }}</th>
+											<th>{{ __('Username') }}</th>
+											<th>{{ __('Password') }}</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
@@ -83,13 +84,17 @@
                     data: 'host',
                     name: 'host',
                 },
-				{
-                    data: 'ro',
-                    name: 'ro',
+                {
+                    data: 'port',
+                    name: 'port',
                 },
 				{
-                    data: 'rw',
-                    name: 'rw',
+                    data: 'username',
+                    name: 'username',
+                },
+				{
+                    data: 'password',
+                    name: 'password',
                 },
                 {
                     data: 'action',

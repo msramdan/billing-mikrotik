@@ -19,7 +19,7 @@ class SettingMikrotikSeeder extends Seeder
             'host' => '103.122.65.234',
             'port' => 83,
             'username' => 'sawitskylink',
-            'password' => 'sawit064199',
+            'password' => 'Sawit064199',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
@@ -30,7 +30,7 @@ class SettingMikrotikSeeder extends Seeder
             'host' => '103.122.65.234',
             'port' => 83,
             'username' => 'sawitskylink',
-            'password' => 'sawit064199',
+            'password' => 'Sawit064199',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
@@ -41,7 +41,7 @@ class SettingMikrotikSeeder extends Seeder
             'host' => '103.122.65.234',
             'port' => 83,
             'username' => 'sawitskylink',
-            'password' => 'sawit064199',
+            'password' => 'Sawit064199',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
@@ -52,7 +52,7 @@ class SettingMikrotikSeeder extends Seeder
             'host' => '103.122.65.234',
             'port' => 83,
             'username' => 'sawitskylink',
-            'password' => 'sawit064199',
+            'password' => 'Sawit064199',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);

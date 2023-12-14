@@ -36,11 +36,25 @@
             @enderror
         </div>
     </div>
+
     <div class="col-md-6">
         <div class="form-group">
-            <label for="ro">{{ __('RO (Read Only)') }}</label>
-            <input type="text" name="ro" id="ro" class="form-control @error('ro') is-invalid @enderror" value="{{ isset($olt) ? $olt->ro : old('ro') }}" placeholder="{{ __('RO (Read Only)') }}" required />
-            @error('ro')
+            <label for="port">{{ __('Port') }}</label>
+            <input type="number" name="port" id="port" class="form-control @error('port') is-invalid @enderror" value="{{ isset($olt) ? $olt->port : old('port') }}" placeholder="{{ __('Port') }}" required />
+            @error('port')
+                <span class="text-danger">
+                    {{ $message }}
+                </span>
+            @enderror
+        </div>
+    </div>
+
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="username">{{ __('Username') }}</label>
+            <input type="text" name="username" id="username" class="form-control @error('username') is-invalid @enderror" value="{{ isset($olt) ? $olt->username : old('username') }}" placeholder="{{ __('Username') }}" required />
+            @error('username')
                 <span class="text-danger">
                     {{ $message }}
                 </span>
@@ -49,9 +63,9 @@
     </div>
     <div class="col-md-6">
         <div class="form-group">
-            <label for="rw">{{ __('RW (Read Write)') }}</label>
-            <input type="text" name="rw" id="rw" class="form-control @error('rw') is-invalid @enderror" value="{{ isset($olt) ? $olt->rw : old('rw') }}" placeholder="{{ __('RW (Read Write)') }}" required />
-            @error('rw')
+            <label for="password">{{ __('Password') }}</label>
+            <input type="text" name="password" id="password" class="form-control @error('password') is-invalid @enderror" value="{{ isset($olt) ? $olt->password : old('password') }}" placeholder="{{ __('Password') }}" required />
+            @error('password')
                 <span class="text-danger">
                     {{ $message }}
                 </span>

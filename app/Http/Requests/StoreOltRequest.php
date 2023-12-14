@@ -27,8 +27,9 @@ class StoreOltRequest extends FormRequest
             'name' => 'required|string',
 			'type' => 'required|in:Zte,Huawei',
 			'host' => 'required|string',
-			'ro' => 'required|string',
-			'rw' => 'required|string',
+            'port' => 'required',
+			'username' => 'required|string',
+			'password' => 'required|string',
         ];
     }
 }

@@ -35,25 +35,29 @@
                             <div class="table-responsive">
                                 <table class="table table-hover table-striped">
                                     <tr>
-                                            <td class="fw-bold">{{ __('Name') }}</td>
-                                            <td>{{ $olt->name }}</td>
-                                        </tr>
-									<tr>
-                                            <td class="fw-bold">{{ __('Type') }}</td>
-                                            <td>{{ $olt->type }}</td>
-                                        </tr>
-									<tr>
-                                            <td class="fw-bold">{{ __('Host') }}</td>
-                                            <td>{{ $olt->host }}</td>
-                                        </tr>
-									<tr>
-                                            <td class="fw-bold">{{ __('Ro') }}</td>
-                                            <td>{{ $olt->ro }}</td>
-                                        </tr>
-									<tr>
-                                            <td class="fw-bold">{{ __('Rw') }}</td>
-                                            <td>{{ $olt->rw }}</td>
-                                        </tr>
+                                        <td class="fw-bold">{{ __('Name') }}</td>
+                                        <td>{{ $olt->name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Type') }}</td>
+                                        <td>{{ $olt->type }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Host') }}</td>
+                                        <td>{{ $olt->host }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Port') }}</td>
+                                        <td>{{ $olt->port }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Username') }}</td>
+                                        <td>{{ $olt->username }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Password') }}</td>
+                                        <td>{{ $olt->password }}</td>
+                                    </tr>
                                     <tr>
                                         <td class="fw-bold">{{ __('Created at') }}</td>
                                         <td>{{ $olt->created_at->format('d/m/Y H:i') }}</td>
