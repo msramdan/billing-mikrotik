@@ -9,6 +9,7 @@
         "barryvdh/laravel-dompdf": "^2.0",
         "evilfreelancer/routeros-api-php": "^1.5",
         "guzzlehttp/guzzle": "^7.8",
+        "guzzlehttp/promises": "^2.0",
         "laravel/fortify": "^1.17",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.2",

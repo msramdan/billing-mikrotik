@@ -370,6 +370,72 @@
 
 @section('content')
 
+    <div class="modal" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Detail</h4>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <table class="table" style="line-height: 11px">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Onu ID</th>
+                                <td>:</td>
+                                <td><span id="modalOnuId"></span></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Name</th>
+                                <td>:</td>
+                                <td><span id="modalName"></span></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">SN</th>
+                                <td>:</td>
+                                <td><span id="modalSN"></span></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Vlan</th>
+                                <td>:</td>
+                                <td><span id="modalVlan"></span></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">UP</th>
+                                <td>:</td>
+                                <td>
+                                    <p>RX : <span id="modal_up_rx"></span></p>
+                                    <p>TX : <span id="modal_up_tx"></p>
+                                    <p>Attenuation : <span id="modal_up_att"></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Down</th>
+                                <td>:</td>
+                                <td>
+                                    <p>RX : <span id="modal_down_rx"></span></p>
+                                    <p>TX : <span id="modal_down_tx"></p>
+                                    <p>Attenuation : <span id="modal_down_att"></p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
     <div id="loading-overlay">
         <div class="loading-spinner"></div>
     </div>
@@ -415,14 +481,14 @@
                     </div>
                 </div>
                 <section class="row">
-                    <div class="col-xl-3 col-sm-6 box-col-3">
+                    <div class="col-xl-4 col-sm-6 box-col-4">
                         <div class="card radius-10 border-start border-0 border-3 border-secondary">
                             <div class="card-body" style="padding: 10px">
                                 <div class="d-flex align-items-center">
                                     <div>
                                         <p class="mb-0 text-secondary">Waiting Auth</p>
                                         <h4 class="my-1 text-primary">
-                                            <a href="/hotspotactives" class=""> - </a>
+                                            <a href="/hotspotactives" class=""> {{ $uncf }} </a>
                                         </h4>
 
                                     </div>
@@ -432,12 +498,11 @@
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <a href="#"><b>Epon: 0</b></a>
-                                <a href="#"><b>Gpon: 0</b></a>
+                                <a href="#"><b>Klik For Register: {{ $uncf }} Gpon</b></a>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-sm-6 box-col-3">
+                    <div class="col-xl-4 col-sm-6 box-col-4">
                         <div class="card radius-10 border-start border-0 border-3 border-success">
                             <div class="card-body" style="padding: 10px">
                                 <div class="d-flex align-items-center">
@@ -458,7 +523,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-sm-6 box-col-3">
+                    <div class="col-xl-4 col-sm-6 box-col-4">
                         <div class="card radius-10 border-start border-0 border-3 border-danger">
                             <div class="card-body" style="padding: 10px">
                                 <div class="d-flex align-items-center">
@@ -475,31 +540,11 @@
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <a href="#"><b>PwrFail: {{ $power_fail }}</b></a>
-                                <a href="#"><b>LoS: {{ $los }}</b></a>
-                                <a href="#"><b>N/A: {{ $sync }}</b></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-sm-6 box-col-3">
-                        <div class="card radius-10 border-start border-0 border-3 border-warning">
-                            <div class="card-body" style="padding: 10px">
-                                <div class="d-flex align-items-center">
-                                    <div>
-                                        <p class="mb-0 text-secondary">Low Signals</p>
-                                        <h4 class="my-1 text-primary"><a href="#" class="">
-                                                {{ $low_signal }} </a>
-                                        </h4>
-
-                                    </div>
-                                    <div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto"><i
-                                            class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <a href="#"><b>Warning: {{ $warning }}</b></a>
-                                <a href="#"><b>Critical: {{ $critical }}</b></a>
+                                @foreach ($groupedCounts as $phase => $jumlah)
+                                    @if ($phase !== 'working')
+                                        <a href="#"><b>{{ $phase }}: {{ $jumlah }}</b></a>
+                                    @endif
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -515,71 +560,41 @@
                                 <table class="table table-striped" id="example" width="100%">
                                     <thead>
                                         <tr>
+                                            <th>#</th>
                                             <th>{{ __('Onu ID') }}</th>
                                             <th>{{ __('Name') }}</th>
-                                            <th>{{ __('Type') }}</th>
                                             <th>{{ __('Status') }}</th>
-                                            <th>{{ __('RX Uplink') }}</th>
-                                            <th>{{ __('RX Downlink') }}</th>
                                             <th>{{ __('Reason') }}</th>
+                                            <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($list_olt as $row)
+
+                                        @foreach ($list_olt as $item)
                                             <tr>
-                                                <th>{{ $row['onu'] }}</th>
-                                                <th>{{ $row['nama'] }}</th>
-                                                <th>{{ $row['type'] }}</th>
-                                                <th>
-                                                    @if ($row['status'] == 'INTEGER: 3')
-                                                        <span style="color: green"><i class="fas fa-globe text-success"></i>
-                                                            Online</span>
-                                                    @else
-                                                        <span style="color: red"><i class="fas fa-globe text-danger"></i>
-                                                            Offline</span>
-                                                    @endif
-                                                </th>
-                                                <th>
-                                                    @php
-                                                        $num = convertIntegerToDecimal($row['rx']);
-                                                    @endphp
-                                                    @if ($num >= -26)
-                                                        <button type="button"
-                                                            class="btn btn-success btn-sm btn-block">{{ $num }}</button>
-                                                    @elseif($num <= -26 && $num >= -31)
-                                                        <button type="button"
-                                                            class="btn btn-warning btn-sm btn-block">{{ $num }}</button>
-                                                    @elseif($num < -31)
-                                                        <button type="button"
-                                                            class="btn btn-danger btn-sm btn-block">{{ $num }}</button>
-                                                    @endif
-                                                </th>
-                                                <th>
-                                                    @php
-                                                        $num = convertIntegerToDecimal($row['rx']);
-                                                    @endphp
-                                                    @if ($num >= -26)
-                                                        <button type="button"
-                                                            class="btn btn-success btn-sm btn-block">{{ $num }}</button>
-                                                    @elseif($num <= -26 && $num >= -31)
-                                                        <button type="button"
-                                                            class="btn btn-warning btn-sm btn-block">{{ $num }}</button>
-                                                    @elseif($num < -31)
-                                                        <button type="button"
-                                                            class="btn btn-danger btn-sm btn-block">{{ $num }}</button>
-                                                    @endif
-                                                </th>
-                                                <th>
-                                                    <?php
-                                                    $status = $row['status'];
-                                                    if (array_key_exists($status, $statusMapping)) {
-                                                        echo '<span>' . $statusMapping[$status] . '</span>';
-                                                    } else {
-                                                        echo '<span>Undefined Status</span>';
-                                                    } ?>
-                                                </th>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $item->index }}</td>
+                                                <td>{{ $item->name }}</td>
+                                                @if ($item->phase == 'working')
+                                                    <td><span style="color: green"><i class="fa fa-globe"
+                                                                aria-hidden="true"></i> Online</span></td>
+                                                @else
+                                                    <td><span style="color: red"><i class="fa fa-globe"
+                                                                aria-hidden="true"></i> Offline</span></td>
+                                                @endif
+
+                                                @if ($item->phase == 'working')
+                                                    <td><span style="color: green">{{ $item->phase }}</span></td>
+                                                @else
+                                                    <td><span style="color: red">{{ $item->phase }}</span></td>
+                                                @endif
+                                                <td><button type="button" class="btn btn-primary open-modal-btn"
+                                                        data-onu="{{ $item->index }}"
+                                                        data-name="{{ $item->name }}">detail
+                                                    </button></td>
                                             </tr>
                                         @endforeach
+
                                     </tbody>
                                 </table>
                             </div>
@@ -598,18 +613,81 @@
 @push('js')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.12.0/datatables.min.js"></script>
-
     <script>
-        new DataTable('#example', {
-            info: true,
-            ordering: true,
-            paging: true
+        $(".open-modal-btn").click(function() {
+            var onuIndex = $(this).data('onu');
+            var onuName = $(this).data('name');
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+            $('#loading-overlay').show();
+            $.ajax({
+                type: "POST",
+                url: '{{ route('detailOlt') }}',
+                data: {
+                    onu_id: onuIndex,
+                    _token: csrfToken
+                },
+                success: function(response) {
+                    $('#loading-overlay').hide();
+                    $("#modalOnuId").text(onuIndex);
+                    $("#modalName").text(onuName);
+                    $("#modalSN").text(response.result.status.data.serial_number);
+                    $("#modalVlan").text(response.result.onuName.data);
+                    $("#modal_up_rx").text(response.result.uncf.data.up.Rx);
+                    $("#modal_up_tx").text(response.result.uncf.data.up.Tx);
+                    $("#modal_up_att").text(response.result.uncf.data.up.Attenuation);
+                    $("#modal_down_rx").text(response.result.uncf.data.down.Rx);
+                    $("#modal_down_tx").text(response.result.uncf.data.down.Tx);
+                    $("#modal_down_att").text(response.result.uncf.data.down.Attenuation);
+                    $('#myModal').modal('show');
+                    console.log(response);
+                },
+                error: function(error) {
+                    console.error('Error:', error);
+                },
+            });
         });
-    </script>
-    <script>
+
         $(document).ready(function() {
+            new DataTable('#example', {
+                info: true,
+                ordering: true,
+                paging: true
+            });
 
             addLoadingOverlay();
+            $(".open-modal-btn").click(function() {
+                var onuIndex = $(this).data('onu');
+                var onuName = $(this).data('name');
+                var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                showLoadingIndicator();
+                $.ajax({
+                    type: "POST",
+                    url: '{{ route('detailOlt') }}',
+                    data: {
+                        onu_id: onuIndex,
+                        _token: csrfToken
+                    },
+                    success: function(response) {
+                        hideLoadingIndicator();
+                        $("#modalOnuId").text(onuIndex);
+                        $("#modalName").text(onuName);
+                        $("#modalSN").text(response.result.status.data.serial_number);
+                        $("#modalVlan").text(response.result.onuName.data);
+                        $("#modal_up_rx").text(response.result.uncf.data.up.Rx);
+                        $("#modal_up_tx").text(response.result.uncf.data.up.Tx);
+                        $("#modal_up_att").text(response.result.uncf.data.up.Attenuation);
+                        $("#modal_down_rx").text(response.result.uncf.data.down.Rx);
+                        $("#modal_down_tx").text(response.result.uncf.data.down.Tx);
+                        $("#modal_down_att").text(response.result.uncf.data.down.Attenuation);
+                        $('#myModal').modal('show');
+                        console.log(response);
+                    },
+                    error: function(error) {
+                        console.error('Error:', error);
+                    },
+                });
+            });
+
             $('#oltSelect').on('change', function() {
                 var selectedValue = $(this).val();
                 changeSession(selectedValue);

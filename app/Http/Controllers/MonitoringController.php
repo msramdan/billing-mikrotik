@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Olt;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class MonitoringController extends Controller
 {
@@ -20,12 +21,6 @@ class MonitoringController extends Controller
      */
     public function index()
     {
-        $statusMapping = [
-            'INTEGER: 1' => 'Loss',
-            'INTEGER: 2' => 'Sync Mib',
-            'INTEGER: 3' => '-',
-            'INTEGER: 4' => 'Power Failed',
-        ];
 
         if (!session('sessionOlt')) {
             return view('monitorings.index', [
@@ -39,28 +34,72 @@ class MonitoringController extends Controller
                 'sync' => '-',
                 'low_signal' => '-',
                 'warning' => '-',
-                'critical' =>  '-',
-                'statusMapping' => $statusMapping
+                'critical' =>  '-'
             ]);
         }
 
+        // get data ke vm
         $hasil = oltExec();
-        $total_auth = $hasil['online'] + $hasil['offline'];
-
+        $data = $hasil->getData();
+        $data1 = $data->onuName->data;
+        $data2 = $data->status->data;
+        $data3 = $data->uncf->data;
+        $groupedCounts = [];
+        if (count($data1) === count($data2)) {
+            for ($i = 0; $i < count($data1); $i++) {
+                $data1[$i] = (object) array_merge((array) $data1[$i], (array) $data2[$i]);
+                // Menghitung jumlah data grup berdasarkan 'phase' dari $data2
+                $phase = $data2[$i]->phase;
+                if (!isset($groupedCounts[$phase])) {
+                    $groupedCounts[$phase] = 0;
+                }
+                $groupedCounts[$phase]++;
+            }
+        } else {
+            echo "Jumlah elemen dalam dua array tidak sama.";
+            die();
+        }
+        $jumlahWorking = isset($groupedCounts['working']) ? $groupedCounts['working'] : 0;
         return view('monitorings.index', [
             'olts' => Olt::where('company_id', session('sessionCompany'))->get(),
-            'list_olt' => $hasil['var'],
-            'online' => $hasil['online'],
-            'offline' => $hasil['offline'],
-            'total_auth' => $total_auth,
-            'power_fail' => $hasil['power_fail'],
-            'los' => $hasil['los'],
-            'sync' => $hasil['sync'],
-            'low_signal' => $hasil['low_signal'],
-            'warning' =>  $hasil['warning'],
-            'critical' =>  $hasil['critical'],
-            'statusMapping' => $statusMapping
+            'list_olt' => $data1,
+            'online' => $jumlahWorking,
+            'offline' => count($data1) - $jumlahWorking,
+            'total_auth' =>  count($data1),
+            'uncf' =>  count($data3),
+            'list_uncf' =>  $data3,
+            'groupedCounts' => $groupedCounts
         ]);
+    }
+
+    public function detailOlt(Request $request)
+    {
+        try {
+            $onuId = $request->input('onu_id');
+            $oltSettings = Olt::findOrFail(session('sessionOlt'));
+            $requestData = [
+                'host' => $oltSettings->host,
+                'port' => (int) $oltSettings->port,
+                'username' => $oltSettings->username,
+                'password' => $oltSettings->password,
+                'onu_id' =>  $onuId
+            ];
+            $vlan = 'http://localhost:8000/vlan';
+            $sn = 'http://localhost:8000/sn';
+            $redaman = 'http://localhost:8000/redaman';
+            $result = asyncApiCalls($requestData, $vlan, $sn, $redaman);
+            return response()->json([
+                'success' => true,
+                'result' => $result
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(
+                [
+                    'success' => false,
+                    'result' => ''
+                ]
+            );
+        }
     }
 
     public function oltSelect(Request $request)
@@ -74,20 +113,28 @@ class MonitoringController extends Controller
 
             $oltSettings = Olt::findOrFail($request->input('selectedValue'));
 
-            $testVar = snmpget($oltSettings->host, $oltSettings->ro, '.1.3.6.1.2.1.1.1.0');
+            // cek koneksi ke ip vps
+            $requestData = [
+                'host' =>  $oltSettings->host,
+                'port' => (int) $oltSettings->port,
+                'username' =>  $oltSettings->username,
+                'password' =>  $oltSettings->password,
+            ];
 
-            if ($testVar === false) {
+            $response = Http::post('http://103.176.79.206:9005/cek-koneksi', $requestData);
+            if ($response->successful()) {
+                $data = $response->json();
+                if ($data['status'] === true) {
+                    session(['sessionOlt' => $oltSettings->id]);
+                    return response()->json(['success' => true]);
+                } else {
+                    return response()->json(['success' => false]);
+                }
+            } else {
                 return response()->json(['success' => false]);
             }
-
-            session(['sessionOlt' => $oltSettings->id]);
-
-            return response()->json(['success' => true]);
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ]);
+            return response()->json(['success' => false]);
         }
     }
 }

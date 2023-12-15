@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Olt;
-use \RouterOS\Client;
 use Illuminate\Support\Facades\DB;
 use \RouterOS\Exceptions\ConnectException;
 use Illuminate\Support\Facades\Session;
@@ -10,6 +9,10 @@ use App\Models\Package;
 use App\Models\Pelanggan;
 use App\Models\Tagihan;
 use App\Models\Settingmikrotik;
+use GuzzleHttp\Promise;
+use Illuminate\Http\Request;
+use GuzzleHttp\Client as Client;
+use \RouterOS\Client as RouterOSClient;
 
 function formatBytes($bytes, $decimal = null)
 {
@@ -27,7 +30,7 @@ function setRoute()
     $router = DB::table('settingmikrotiks')->where('id', session('sessionRouter'))->first();
     if ($router) {
         try {
-            return new Client([
+            return new RouterOSClient([
                 'host' => $router->host,
                 'user' => $router->username,
                 'pass' => $router->password,
@@ -192,92 +195,58 @@ function convertIntegerToDecimal($stringValue)
     return $decimalValue;
 }
 
+
 function oltExec()
 {
-
-
-    $oltSettings = Olt::findOrFail(session('sessionOlt'));
-    $host = $oltSettings->host;
-    $com = $oltSettings->ro;
-    $var = [];
-    // ONURXINDEX=".1.3.6.1.4.1.3902.1012.3.50.12.1.1.10."
-    $onu = snmpwalk($host, $com, '1.3.6.1.4.1.3902.1015.1010.5.56.1');
-
-    echo "<pre>";
-    var_dump($onu);
-    die();
-
-    $nama = snmpwalk($host, $com, '.1.3.6.1.4.1.3902.1012.3.28.1.1.2');
-    $type = snmpwalk($host, $com, '1.3.6.1.4.1.3902.1012.3.28.1.1.1');
-    $status = snmpwalk($host, $com, '.1.3.6.1.4.1.3902.1012.3.28.2.1.4');
-    $rx_up = snmpwalk($host, $com, '1.3.6.1.4.1.3902.1015.1010.11.2.1.2');
-    foreach ($onu as $key => $value) {
-        $var[$key] = [
-            "onu" => trim(str_replace(["STRING:", '"'], ["", ""], $value)),
-            "nama" => "",
-            "type" => "",
-            "mac" => "",
-            "status" => "",
-            "rx" => "",
+    try {
+        $oltSettings = Olt::findOrFail(session('sessionOlt'));
+        $requestData = [
+            'host' => $oltSettings->host,
+            'port' => (int) $oltSettings->port,
+            'username' => $oltSettings->username,
+            'password' => $oltSettings->password,
         ];
+
+        // URL endpoint onu-name
+        $urlOnuName = 'http://localhost:8000/onu-name';
+
+        // URL endpoint status
+        $urlStatus = 'http://localhost:8000/status';
+
+        $urlUncf = 'http://localhost:8000/uncf';
+
+        // Panggil fungsi asynchronous
+        $result = asyncApiCalls($requestData, $urlOnuName, $urlStatus,$urlUncf);
+
+        return response()->json($result);
+    } catch (\Exception $e) {
+        dd('something error 3');
     }
+}
 
-    foreach ($nama as $key => $value) {
-        $var[$key]["nama"] = trim(str_replace(["STRING:", '"'], ["", ""], $value));
-    }
+function asyncApiCalls(array $requestData, string $urlOnuName, string $urlStatus,string $urlUncf): array
+{
+    // Membuat instance GuzzleHttp Client
+    $client = new Client();
 
-    foreach ($type as $key => $value) {
-        $var[$key]["type"] = trim(str_replace(["STRING:", '"'], ["", ""], $value));
-    }
-
-    $jumlahOnline = $jumlahOffline = $power_fail = $los = $sync = 0;
-
-    foreach ($status as $key => $value) {
-        $var[$key]["status"] = $value;
-
-        if ($value == "INTEGER: 3") {
-            $jumlahOnline++;
-        } else {
-            $jumlahOffline++;
-
-            if ($value == "INTEGER: 1") {
-                $los++;
-            } elseif ($value == "INTEGER: 2") {
-                $sync++;
-            } elseif ($value == "INTEGER: 4") {
-                $power_fail++;
-            }
-        }
-    }
-
-    $low_signal = 0;
-    $warning = 0;
-    $critical = 0;
-    foreach ($rx_up as $key => $value) {
-        $var[$key]["rx"] = $value;
-        $num = convertIntegerToDecimal($value);
-        if ($num < -26) {
-            $low_signal++;
-        }
-
-        if ($num < -26 && $num >= -31) {
-            $warning++;
-        }
-
-        if ($num < -31) {
-            $critical++;
-        }
-    }
-
-    return [
-        'online' => $jumlahOnline,
-        'offline' => $jumlahOffline,
-        'power_fail' => $power_fail,
-        'low_signal' => $low_signal,
-        'warning' => $warning,
-        'critical' => $critical,
-        'los' => $los,
-        'sync' => $sync,
-        'var' => $var,
+    // Membuat array promise untuk panggilan API paralel
+    $promises = [
+        'onuName' => asyncPostRequest($client, $urlOnuName, $requestData),
+        'status' => asyncPostRequest($client, $urlStatus, $requestData),
+        'uncf' => asyncPostRequest($client, $urlUncf, $requestData),
     ];
+
+    // Menunggu hasil panggilan API paralel
+    $results = [];
+    foreach ($promises as $key => $promise) {
+        $results[$key] = json_decode($promise->wait()->getBody()->getContents(), true);
+    }
+
+    return $results;
+}
+
+function asyncPostRequest(Client $client, string $url, array $data): \GuzzleHttp\Promise\PromiseInterface
+{
+    // Melakukan panggilan API asynchronous
+    return $client->postAsync($url, ['json' => $data]);
 }

@@ -138,6 +138,7 @@ Route::middleware(['auth', 'web'])->group(function () {
     Route::resource('monitorings', App\Http\Controllers\MonitoringController::class);
     Route::controller(App\Http\Controllers\MonitoringController::class)->group(function () {
         Route::post('/update-session-olt', 'oltSelect')->name('oltSelect');
+        Route::post('/detail-olt', 'detailOlt')->name('detailOlt');
     });
 
     Route::resource('companies', App\Http\Controllers\CompanyController::class);
