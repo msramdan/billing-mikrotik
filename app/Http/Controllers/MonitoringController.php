@@ -84,9 +84,9 @@ class MonitoringController extends Controller
                 'password' => $oltSettings->password,
                 'onu_id' =>  $onuId
             ];
-            $vlan = 'http://localhost:8000/vlan';
-            $sn = 'http://localhost:8000/sn';
-            $redaman = 'http://localhost:8000/redaman';
+            $vlan = 'http://103.176.79.206:9005/vlan';
+            $sn = 'http://103.176.79.206:9005/sn';
+            $redaman = 'http://103.176.79.206:9005/redaman';
             $result = asyncApiCalls($requestData, $vlan, $sn, $redaman);
             return response()->json([
                 'success' => true,
