@@ -29,12 +29,9 @@ class MonitoringController extends Controller
                 'online' => '-',
                 'offline' => '-',
                 'total_auth' => '-',
-                'power_fail' => '-',
-                'los' => '-',
-                'sync' => '-',
-                'low_signal' => '-',
-                'warning' => '-',
-                'critical' =>  '-'
+                'uncf' =>  '-',
+                'list_uncf' => [],
+                'groupedCounts' =>  []
             ]);
         }
 

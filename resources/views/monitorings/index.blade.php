@@ -406,23 +406,24 @@
                             <tr>
                                 <th scope="row">UP</th>
                                 <td>:</td>
-                                <td>
-                                    <p>RX : <span id="modal_up_rx"></span></p>
-                                    <p>TX : <span id="modal_up_tx"></p>
-                                    <p>Attenuation : <span id="modal_up_att"></p>
+                                <td>RX : <span id="modal_up_rx"></span>
                                 </td>
                             </tr>
                             <tr>
                                 <th scope="row">Down</th>
                                 <td>:</td>
-                                <td>
-                                    <p>RX : <span id="modal_down_rx"></span></p>
-                                    <p>TX : <span id="modal_down_tx"></p>
-                                    <p>Attenuation : <span id="modal_down_att"></p>
+                                <td>RX : <span id="modal_down_rx"></span>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
+
+                    <button type="button" class="btn btn-info btn-sm"><i class="fa fa-refresh" aria-hidden="true"></i>
+                        Reboot</button>
+                    <button type="button" class="btn btn-warning btn-sm"><i class="fa-solid fa-arrow-right-arrow-left"></i>
+                        Reset</button>
+                    <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash" aria-hidden="true"></i>
+                        Hapus</button>
                 </div>
 
                 <!-- Modal Footer -->
@@ -430,6 +431,42 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
 
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">List Uncf</h5>
+                </div>
+                <div class="modal-body">
+                    <table class="table" style="line-height: 11px">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Onu ID</th>
+                                <th scope="col">SN</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($list_uncf as $row)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $row->onu_index }}</td>
+                                    <td>{{ $row->sn }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    <span class="modal-title" id=""><b>Port Tersedia</b></span>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
@@ -472,7 +509,6 @@
                                                     {{ session('sessionOlt') == $row->id ? 'selected' : '' }}>
                                                     {{ $row->name }}</option>
                                             @endforeach
-
                                         </select>
                                     </div>
                                 </div>
@@ -490,15 +526,15 @@
                                         <h4 class="my-1 text-primary">
                                             <a href="/hotspotactives" class=""> {{ $uncf }} </a>
                                         </h4>
-
                                     </div>
-                                    <div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto"><i
-                                            class="fa fa-bell" aria-hidden="true"></i>
+                                    <div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto">
+                                        <i class="fa fa-bell" aria-hidden="true"></i>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <a href="#"><b>Klik For Register: {{ $uncf }} Gpon</b></a>
+                                <a href="#" id="port_tersedia"><b>Klik For
+                                        Register: {{ $uncf }} Gpon</b></a>
                             </div>
                         </div>
                     </div>
@@ -614,6 +650,26 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.12.0/datatables.min.js"></script>
     <script>
+        $("#port_tersedia").click(function() {
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+            $('#loading-overlay').show();
+            $.ajax({
+                type: "POST",
+                url: '{{ route('portTersedia') }}',
+                data: {
+                    _token: csrfToken
+                },
+                success: function(response) {
+                    $('#loading-overlay').hide();
+                    $('#exampleModal').modal('show');
+                    console.log(response);
+                },
+                error: function(error) {
+                    console.error('Error:', error);
+                },
+            });
+        });
+
         $(".open-modal-btn").click(function() {
             var onuIndex = $(this).data('onu');
             var onuName = $(this).data('name');
@@ -633,11 +689,7 @@
                     $("#modalSN").text(response.result.status.data.serial_number);
                     $("#modalVlan").text(response.result.onuName.data);
                     $("#modal_up_rx").text(response.result.uncf.data.up.Rx);
-                    $("#modal_up_tx").text(response.result.uncf.data.up.Tx);
-                    $("#modal_up_att").text(response.result.uncf.data.up.Attenuation);
                     $("#modal_down_rx").text(response.result.uncf.data.down.Rx);
-                    $("#modal_down_tx").text(response.result.uncf.data.down.Tx);
-                    $("#modal_down_att").text(response.result.uncf.data.down.Attenuation);
                     $('#myModal').modal('show');
                     console.log(response);
                 },
