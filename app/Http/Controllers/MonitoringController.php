@@ -14,14 +14,8 @@ class MonitoringController extends Controller
         $this->middleware('permission:monitoring view')->only('index', 'show');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-
         if (!session('sessionOlt')) {
             return view('monitorings.index', [
                 'olts' => Olt::where('company_id', session('sessionCompany'))->get(),
@@ -31,7 +25,9 @@ class MonitoringController extends Controller
                 'total_auth' => '-',
                 'uncf' =>  '-',
                 'list_uncf' => [],
-                'groupedCounts' =>  []
+                'groupedCounts' =>  [],
+                'missing_values' => [],
+                'max_values' => [],
             ]);
         }
 
@@ -42,6 +38,8 @@ class MonitoringController extends Controller
         $data2 = $data->status->data;
         $data3 = $data->uncf->data;
         $groupedCounts = [];
+
+        $result = self::processOnuData($data2);
         if (count($data1) === count($data2)) {
             for ($i = 0; $i < count($data1); $i++) {
                 $data1[$i] = (object) array_merge((array) $data1[$i], (array) $data2[$i]);
@@ -65,8 +63,36 @@ class MonitoringController extends Controller
             'total_auth' =>  count($data1),
             'uncf' =>  count($data3),
             'list_uncf' =>  $data3,
-            'groupedCounts' => $groupedCounts
+            'groupedCounts' => $groupedCounts,
+            'missing_values' => $result["missing_values"],
+            'max_values' => $result["max_values"]
         ]);
+    }
+
+    public function processOnuData($data)
+    {
+        $groups = array();
+        foreach ($data as $item) {
+            $onu_index_parts = explode(":", $item->onu_index);
+            $group = $onu_index_parts[0];
+            $groups[$group][] =  $item->onu_index;
+        }
+
+        $missing_values = array();
+        $max_values = array();
+
+        foreach ($groups as $group => $values) {
+            $values = array_map(function ($value) {
+                return intval(substr($value, strrpos($value, ":") + 1));
+            }, $values);
+
+            $max_value = max($values);
+            $max_values[$group] = $max_value;
+
+            $missing_values[$group] = array_diff(range(1, $max_value), $values);
+        }
+
+        return array("missing_values" => $missing_values, "max_values" => $max_values);
     }
 
     public function detailOlt(Request $request)

@@ -446,7 +446,7 @@
                     <h5 class="modal-title" id="exampleModalLabel">List Uncf</h5>
                 </div>
                 <div class="modal-body">
-                    <table class="table" style="line-height: 11px">
+                    <table class="table table-bordered" style="line-height: 11px">
                         <thead class="thead-light">
                             <tr>
                                 <th scope="col">#</th>
@@ -464,6 +464,53 @@
                             @endforeach
                         </tbody>
                     </table>
+                    <hr>
+                    <div class="alert alert-primary" role="alert">
+                        Port Terlewat
+                    </div>
+
+
+                    <table class="table table-bordered" style="line-height: 11px">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Port</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($missing_values as $key1 => $value1)
+                                @foreach ($value1 as $key2 => $value2)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>gpon-onu_{{ $key1 }}:{{ $value2 }}</td>
+                                    </tr>
+                                @endforeach
+                            @endforeach
+                        </tbody>
+                    </table>
+                    <hr>
+                    <div class="alert alert-primary" role="alert">
+                        Port Maksimal Terpakai
+                    </div>
+
+                    <table class="table table-bordered" style="line-height: 11px">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Port</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($max_values as $key => $value)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>gpon-onu_{{ $key }}:{{ $value }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
