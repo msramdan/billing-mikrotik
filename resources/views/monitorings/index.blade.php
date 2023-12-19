@@ -418,11 +418,14 @@
                         </tbody>
                     </table>
 
-                    <button type="button" class="btn btn-info btn-sm"><i class="fa fa-refresh" aria-hidden="true"></i>
+                    <button type="button" class="btn btn-info btn-sm" id="rebootButton"><i class="fa fa-refresh"
+                            aria-hidden="true"></i>
                         Reboot</button>
-                    <button type="button" class="btn btn-warning btn-sm"><i class="fa-solid fa-arrow-right-arrow-left"></i>
+                    <button type="button" class="btn btn-warning btn-sm" id="resetButton"><i
+                            class="fa-solid fa-arrow-right-arrow-left"></i>
                         Reset</button>
-                    <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash" aria-hidden="true"></i>
+                    <button type="button" class="btn btn-danger btn-sm" id="hapusButton"><i class="fa fa-trash"
+                            aria-hidden="true"></i>
                         Hapus</button>
                 </div>
 
@@ -461,8 +464,6 @@
                             @endforeach
                         </tbody>
                     </table>
-                    <span class="modal-title" id=""><b>Port Tersedia</b></span>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -470,7 +471,6 @@
             </div>
         </div>
     </div>
-
 
 
     <div id="loading-overlay">
@@ -650,24 +650,163 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.12.0/datatables.min.js"></script>
     <script>
+        $('#rebootButton').on('click', function() {
+            var onuId = $('#modalOnuId').text();
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This will reboot the device.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, reboot!',
+                cancelButtonText: 'No, cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '{{ route('oltReboot') }}',
+                        data: {
+                            onu_id: onuId,
+                            _token: csrfToken
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    title: 'Success',
+                                    text: response.message,
+                                    icon: 'success',
+                                    timer: 1000,
+                                    showConfirmButton: false
+                                }).then(function() {
+                                    $('#myModal').modal('hide');
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire('Error', response.message, 'error');
+                            }
+                        },
+
+
+                        error: function() {
+                            Swal.fire('Error',
+                                'Failed to communicate with the server', 'error'
+                            );
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $('#resetButton').on('click', function() {
+            var onuId = $('#modalOnuId').text();
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This will reset the device.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, reset!',
+                cancelButtonText: 'No, cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '{{ route('oltReset') }}',
+                        data: {
+                            onu_id: onuId,
+                            _token: csrfToken
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    title: 'Success',
+                                    text: response.message,
+                                    icon: 'success',
+                                    timer: 1000,
+                                    showConfirmButton: false
+                                }).then(function() {
+                                    $('#myModal').modal('hide');
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire('Error', response.message, 'error');
+                            }
+                        },
+
+
+                        error: function() {
+                            Swal.fire('Error',
+                                'Failed to communicate with the server', 'error'
+                            );
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $('#hapusButton').on('click', function() {
+            var onuId = $('#modalOnuId').text();
+            var colonIndex = onuId.indexOf(':');
+            var beforeColon = onuId.substring(0, colonIndex).trim();
+            var afterColon = onuId.substring(colonIndex + 1).trim();
+            console.log('hapus ONU Index:', beforeColon);
+            console.log('hapus number:', afterColon);
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This will delete the device.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete!',
+                cancelButtonText: 'No, cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '{{ route('oltHapus') }}',
+                        data: {
+                            onu_id: beforeColon,
+                            number: afterColon,
+                            _token: csrfToken
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    title: 'Success',
+                                    text: response.message,
+                                    icon: 'success',
+                                    timer: 1000,
+                                    showConfirmButton: false
+                                }).then(function() {
+                                    $('#myModal').modal('hide');
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire('Error', response.message, 'error');
+                            }
+                        },
+
+
+                        error: function() {
+                            Swal.fire('Error',
+                                'Failed to communicate with the server', 'error'
+                            );
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+
+
+    <script>
         $("#port_tersedia").click(function() {
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
-            $('#loading-overlay').show();
-            $.ajax({
-                type: "POST",
-                url: '{{ route('portTersedia') }}',
-                data: {
-                    _token: csrfToken
-                },
-                success: function(response) {
-                    $('#loading-overlay').hide();
-                    $('#exampleModal').modal('show');
-                    console.log(response);
-                },
-                error: function(error) {
-                    console.error('Error:', error);
-                },
-            });
+            $('#exampleModal').modal('show');
         });
 
         $(".open-modal-btn").click(function() {
@@ -691,7 +830,6 @@
                     $("#modal_up_rx").text(response.result.uncf.data.up.Rx);
                     $("#modal_down_rx").text(response.result.uncf.data.down.Rx);
                     $('#myModal').modal('show');
-                    console.log(response);
                 },
                 error: function(error) {
                     console.error('Error:', error);

@@ -32,8 +32,8 @@
                 },
                 success: function(res) {
                     if (res.success) {
-                        // window.location.href = '/dashboard';
-                        location.reload();
+                        window.location.href = '/dashboard';
+                        // location.reload();
                     }
                 },
                 error: function(error) {
@@ -59,8 +59,8 @@
                 },
                 success: function(res) {
                     if (res.success) {
-                        // window.location.href = '/dashboard';
-                        location.reload();
+                        window.location.href = '/dashboard';
+                        // location.reload();
                     }
                 },
                 error: function(error) {

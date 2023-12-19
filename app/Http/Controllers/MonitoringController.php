@@ -134,4 +134,123 @@ class MonitoringController extends Controller
             return response()->json(['success' => false]);
         }
     }
+
+    public function oltReboot(Request $request)
+    {
+        try {
+            $onuId = $request->input('onu_id');
+            $oltSettings = Olt::findOrFail(session('sessionOlt'));
+            $requestData = [
+                'host' => $oltSettings->host,
+                'port' => (int) $oltSettings->port,
+                'username' => $oltSettings->username,
+                'password' => $oltSettings->password,
+                'onu_id' =>  $onuId,
+            ];
+
+            $client = new \GuzzleHttp\Client();
+            $response = $client->post('http://103.176.79.206:9005/reboot', [
+                'json' => $requestData,
+            ]);
+
+            // Check the response from the Telnet server and return a corresponding JSON response
+            $responseData = json_decode($response->getBody(), true);
+            if ($responseData['status']) {
+                return response()->json([
+                    'success' => true,
+                    'message' => $responseData['message'],
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => $responseData['message'],
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error: ' . $e->getMessage(),
+            ]);
+        }
+    }
+
+    public function oltReset(Request $request)
+    {
+        try {
+            $onuId = $request->input('onu_id');
+            $oltSettings = Olt::findOrFail(session('sessionOlt'));
+            $requestData = [
+                'host' => $oltSettings->host,
+                'port' => (int) $oltSettings->port,
+                'username' => $oltSettings->username,
+                'password' => $oltSettings->password,
+                'onu_id' =>  $onuId,
+            ];
+
+            $client = new \GuzzleHttp\Client();
+            $response = $client->post('http://103.176.79.206:9005/reset', [
+                'json' => $requestData,
+            ]);
+
+            // Check the response from the Telnet server and return a corresponding JSON response
+            $responseData = json_decode($response->getBody(), true);
+            if ($responseData['status']) {
+                return response()->json([
+                    'success' => true,
+                    'message' => $responseData['message'],
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => $responseData['message'],
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error: ' . $e->getMessage(),
+            ]);
+        }
+    }
+
+    public function oltHapus(Request $request)
+    {
+        try {
+            $onuId = $request->input('onu_id');
+            $number = $request->input('number');
+            $oltSettings = Olt::findOrFail(session('sessionOlt'));
+            $requestData = [
+                'host' => $oltSettings->host,
+                'port' => (int) $oltSettings->port,
+                'username' => $oltSettings->username,
+                'password' => $oltSettings->password,
+                'onu_id' =>  $onuId,
+                'number' =>  $number
+            ];
+
+            $client = new \GuzzleHttp\Client();
+            $response = $client->post('http://103.176.79.206:9005/hapus', [
+                'json' => $requestData,
+            ]);
+
+            // Check the response from the Telnet server and return a corresponding JSON response
+            $responseData = json_decode($response->getBody(), true);
+            if ($responseData['status']) {
+                return response()->json([
+                    'success' => true,
+                    'message' => $responseData['message'],
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => $responseData['message'],
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error: ' . $e->getMessage(),
+            ]);
+        }
+    }
 }

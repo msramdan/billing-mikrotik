@@ -139,7 +139,9 @@ Route::middleware(['auth', 'web'])->group(function () {
     Route::controller(App\Http\Controllers\MonitoringController::class)->group(function () {
         Route::post('/update-session-olt', 'oltSelect')->name('oltSelect');
         Route::post('/detail-olt', 'detailOlt')->name('detailOlt');
-        Route::post('/port-tersedia', 'portTersedia')->name('portTersedia');
+        Route::post('/oltReboot', 'oltReboot')->name('oltReboot');
+        Route::post('/oltReset', 'oltReset')->name('oltReset');
+        Route::post('/oltHapus', 'oltHapus')->name('oltHapus');
     });
 
     Route::resource('companies', App\Http\Controllers\CompanyController::class);
