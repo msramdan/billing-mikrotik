@@ -243,6 +243,7 @@ class MonitoringController extends Controller
     {
         try {
             $onuId = $request->input('onu_id');
+            $updatedString = str_replace("onu", "olt", $onuId);
             $number = $request->input('number');
             $oltSettings = Olt::findOrFail(session('sessionOlt'));
             $requestData = [
@@ -250,7 +251,7 @@ class MonitoringController extends Controller
                 'port' => (int) $oltSettings->port,
                 'username' => $oltSettings->username,
                 'password' => $oltSettings->password,
-                'onu_id' =>  $onuId,
+                'onu_id' =>  $updatedString,
                 'number' =>  $number
             ];
 
