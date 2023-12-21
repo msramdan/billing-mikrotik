@@ -127,14 +127,14 @@ function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima, $footer
         $message .= "*Note : Abaikan pesan ini jika sudah berbayar* \n\n";
         $message .= $footer;
     } else if ($typePesan == 'daftar') {
-        $paket = DB::table('pakets')->find($request->paket_layanan);
+        $paket = DB::table('packages')->find($request->paket_layanan);
         $user = Auth::user();
         $message = 'Selamat datang di ' . getCompany()->nama_perusahaan . "\n\n";
         $message .= "Kami senang Anda telah bergabung dengan layanan WiFi kami. \n";
         $message .= "Penting yang perlu Anda ketahui: \n\n";
         $message .= "*Nama :* " . $request->nama . "\n";
         $message .= '*Alamat :* ' . $request->alamat . "\n";
-        $message .= '*Paket Layanan :* ' . $paket->nama_paket . "\n";
+        $message .= '*Paket Layanan :* ' . $paket->nama_layanan . "\n";
         $message .= '*No Layanan :* ' .  $request->no_layanan . " \n\n";
         $message .= 'Jika Anda memiliki pertanyaan atau membutuhkan bantuan tambahan, jangan ragu untuk menghubungi kami di ' . getCompany()->no_wa  . ' atau melalui email ke ' . getCompany()->email  . ".\n\n";
         $message .= "Terima kasih atas kepercayaan Anda kepada kami. Selamat menikmati koneksi internet yang stabil dan cepat!\n\n";
