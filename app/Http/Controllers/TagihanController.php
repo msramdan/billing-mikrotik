@@ -404,10 +404,13 @@ class TagihanController extends Controller
                     ->where('list', 'expired') // Filter by name
                     ->where('address', $fixIp);
                 $data = $client->query($queryGet)->read();
-                $idIP = $data[0]['.id'];
-                $queryRemove = (new Query('/ip/firewall/address-list/remove'))
-                    ->equal('.id', $idIP);
-                $client->query($queryRemove)->read();
+
+                if (isset($data[0]['.id'])) {
+                    $idIP = $data[0]['.id'];
+                    $queryRemove = (new Query('/ip/firewall/address-list/remove'))
+                        ->equal('.id', $idIP);
+                    $client->query($queryRemove)->read();
+                }
             }
             DB::table('pelanggans')
                 ->where('id', $request->pelanggan_id)
