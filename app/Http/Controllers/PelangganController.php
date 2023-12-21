@@ -1,543 +1,266 @@
 <?php
 
-namespace App\Http\Controllers;
-
-use App\Models\Pelanggan;
-use App\Http\Requests\{StorePelangganRequest, UpdatePelangganRequest};
-use Yajra\DataTables\Facades\DataTables;
-use Image;
+use App\Models\Olt;
 use Illuminate\Support\Facades\DB;
-use App\Models\AreaCoverage;
-use App\Models\Package;
-use App\Models\Settingmikrotik;
-use Illuminate\Http\Request;
-use \RouterOS\Query;
-use \RouterOS\Client;
 use \RouterOS\Exceptions\ConnectException;
-use Alert;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Http;
+use App\Models\Package;
+use App\Models\Pelanggan;
+use App\Models\Tagihan;
+use App\Models\Settingmikrotik;
+use GuzzleHttp\Promise;
+use Illuminate\Http\Request;
+use GuzzleHttp\Client as Client;
+use \RouterOS\Client as RouterOSClient;
+use Illuminate\Support\Facades\Auth;
 
-class PelangganController extends Controller
+function formatBytes($bytes, $decimal = null)
 {
-    public function __construct()
-    {
-        $this->middleware('permission:pelanggan view')->only('index', 'show');
-        $this->middleware('permission:pelanggan create')->only('create', 'store');
-        $this->middleware('permission:pelanggan edit')->only('edit', 'update');
-        $this->middleware('permission:pelanggan delete')->only('destroy');
+    $satuan = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    $i = 0;
+    while ($bytes > 1024) {
+        $bytes /= 1024;
+        $i++;
     }
+    return round($bytes, $decimal) . ' ' . $satuan[$i];
+}
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
-    {
-        if (request()->ajax()) {
-            $area_coverage = intval($request->query('area_coverage'));
-            $packagePilihan = intval($request->query('packagePilihan'));
-            $mikrotik = intval($request->query('mikrotik'));
-            $status = $request->query('status');
-            $mode_user = $request->query('mode_user');
-
-            $pelanggans = DB::table('pelanggans')
-                ->leftJoin('area_coverages', 'pelanggans.coverage_area', '=', 'area_coverages.id')
-                ->leftJoin('odcs', 'pelanggans.odc', '=', 'odcs.id')
-                ->leftJoin('odps', 'pelanggans.odp', '=', 'odps.id')
-                ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
-                ->leftJoin('settingmikrotiks', 'pelanggans.router', '=', 'settingmikrotiks.id')
-                ->where('pelanggans.company_id', '=', session('sessionCompany'))
-                ->select(
-                    'pelanggans.*',
-                    'area_coverages.kode_area',
-                    'area_coverages.nama as nama_area',
-                    'odcs.kode_odc',
-                    'odps.kode_odp',
-                    'packages.nama_layanan',
-                    'packages.harga',
-                    'settingmikrotiks.identitas_router'
-                );
-
-            if (isset($area_coverage) && !empty($area_coverage)) {
-                if ($area_coverage != 'All') {
-                    $pelanggans = $pelanggans->where('pelanggans.coverage_area', $area_coverage);
-                }
-            }
-
-            if (isset($packagePilihan) && !empty($packagePilihan)) {
-                if ($packagePilihan != 'All') {
-                    $pelanggans = $pelanggans->where('pelanggans.paket_layanan', $packagePilihan);
-                }
-            }
-
-            if (isset($mikrotik) && !empty($mikrotik)) {
-                if ($mikrotik != 'All') {
-                    $pelanggans = $pelanggans->where('pelanggans.router', $mikrotik);
-                }
-            }
-
-            if (isset($mode_user) && !empty($mode_user)) {
-                if ($mode_user != 'All') {
-                    $pelanggans = $pelanggans->where('pelanggans.mode_user', $mode_user);
-                }
-            }
-
-            if (isset($status) && !empty($status)) {
-                if ($status != 'All') {
-                    $pelanggans = $pelanggans->where('pelanggans.status_berlangganan', $status);
-                }
-            }
-
-            $pelanggans = $pelanggans->orderBy('pelanggans.id', 'DESC')->get();
-            return Datatables::of($pelanggans)
-                ->addIndexColumn()
-                ->addColumn('alamat', function ($row) {
-                    return str($row->alamat)->limit(100);
-                })
-                ->addColumn('area_coverage', function ($row) {
-                    return $row->kode_area . '-' . $row->nama_area;
-                })->addColumn('odc', function ($row) {
-                    return $row->kode_odc;
-                })->addColumn('user_mikrotik', function ($row) {
-                    if ($row->mode_user == 'Static') {
-                        return $row->user_static;
-                    } else {
-                        return $row->user_pppoe;
-                    }
-                    return $row->user_static;
-                })->addColumn('odp', function ($row) {
-                    return $row->kode_odp;
-                })->addColumn('package', function ($row) {
-                    return $row->nama_layanan . '-' . $row->harga;
-                })->addColumn('settingmikrotik', function ($row) {
-                    return $row->identitas_router;
-                })
-                ->addColumn('action', 'pelanggans.include.action')
-                ->toJson();
-        }
-        $areaCoverages = AreaCoverage::where('company_id', '=', session('sessionCompany'))->get();
-        $package = Package::where('company_id', '=', session('sessionCompany'))->get();
-        $router = Settingmikrotik::where('company_id', '=', session('sessionCompany'))->get();
-        $x = DB::table('pelanggans')
-            ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
-            ->where('pelanggans.company_id', '=', session('sessionCompany'))
-            ->sum('packages.harga');
-        return view('pelanggans.index', [
-            'areaCoverages' => $areaCoverages,
-            'package' => $package,
-            'router' => $router,
-            'pendapatan' => $x
-        ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        if (hitungPelanggan() >= getCompany()->jumlah_pelanggan) {
-            Alert::error('Limit Router', 'Anda terkena limit pelanggan silahkan uprage paket');
-            return redirect()
-                ->route('pelanggans.index');
-        } else {
-            return view('pelanggans.create');
-        }
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StorePelangganRequest $request)
-    {
-        if (hitungPelanggan() >= getCompany()->jumlah_pelanggan) {
-            Alert::error('Limit Router', 'Anda terkena limit pelanggan silahkan uprage paket');
-            return redirect()
-                ->route('pelanggans.index');
-        } else {
-            $attr = $request->validated();
-            $attr['password'] = bcrypt($request->password);
-            if ($request->file('photo_ktp') && $request->file('photo_ktp')->isValid()) {
-
-                $path = storage_path('app/public/uploads/photo_ktps/');
-                $filename = $request->file('photo_ktp')->hashName();
-
-                if (!file_exists($path)) {
-                    mkdir($path, 0777, true);
-                }
-                Image::make($request->file('photo_ktp')->getRealPath())->resize(500, 500, function ($constraint) {
-                    $constraint->upsize();
-                    $constraint->aspectRatio();
-                })->save($path . $filename);
-
-                $attr['photo_ktp'] = $filename;
-            }
-            $attr['company_id'] =  session('sessionCompany');
-            $cek = Pelanggan::create($attr);
-
-            if($cek){
-                $waGateway = getCompany();
-                sendNotifWa(
-                    $waGateway->url_wa_gateway,
-                    $waGateway->api_key_wa_gateway,
-                    $request,
-                    'daftar',
-                    $request->no_wa,
-                    $waGateway->footer_pesan_wa_tagihan
-                );
-            }
-            return redirect()
-                ->route('pelanggans.index')
-                ->with('success', __('The pelanggan was created successfully.'));
-        }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Pelanggan $pelanggan
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Pelanggan $pelanggan)
-    {
-        $pelanggan = DB::table('pelanggans')
-            ->leftJoin('area_coverages', 'pelanggans.coverage_area', '=', 'area_coverages.id')
-            ->leftJoin('odcs', 'pelanggans.odc', '=', 'odcs.id')
-            ->leftJoin('odps', 'pelanggans.odp', '=', 'odps.id')
-            ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
-            ->leftJoin('settingmikrotiks', 'pelanggans.router', '=', 'settingmikrotiks.id')
-            ->select(
-                'pelanggans.*',
-                'area_coverages.kode_area',
-                'area_coverages.nama as nama_area',
-                'odcs.kode_odc',
-                'odps.kode_odp',
-                'packages.nama_layanan',
-                'packages.harga',
-                'settingmikrotiks.identitas_router'
-            )->where('pelanggans.id', $pelanggan->id)->first();
-
-        return view('pelanggans.show', compact('pelanggan'));
-    }
-
-    public function edit(Pelanggan $pelanggan)
-    {
-        $pelanggan->load('area_coverage:id,kode_area', 'odc:id,kode_odc', 'odp:id,kode_odc', 'package:id,nama_layanan', 'settingmikrotik:id,identitas_router');
-        $dataOdcs = DB::table('odcs')->where('wilayah_odc',  $pelanggan->coverage_area)->get();
-        $dataodps = DB::table('odps')->where('kode_odc',  $pelanggan->odc)->get();
-        $dataPort = DB::table('odps')->where('id', $pelanggan->odp)->first();
-        $array = [];
-        if ($dataPort) {
-            $jmlPort = $dataPort->jumlah_port;
-            for ($x = 1; $x <=  $jmlPort; $x++) {
-                // find customer
-                $cek = DB::table('pelanggans')
-                    ->where('odp', $pelanggan->odp)
-                    ->where('no_port_odp', $x)
-                    ->first();
-                if ($cek) {
-                    $array[$x] = $cek->no_layanan . ' - ' . $cek->nama;
-                } else {
-                    $array[$x] = 'Kosong';
-                }
-            }
-        }
-        $router = DB::table('settingmikrotiks')->where('id', $pelanggan->router)->first();
-        if ($router) {
-            try {
-                $client = new Client([
-                    'host' => $router->host,
-                    'user' => $router->username,
-                    'pass' => $router->password,
-                    'port' => (int) $router->port,
-                ]);
-            } catch (ConnectException $e) {
-                echo $e->getMessage() . PHP_EOL;
-                die();
-            }
-            $query = new Query('/ppp/secret/print');
-            $secretPPoe = $client->query($query)->read();
-        } else {
-            $secretPPoe = [];
-        }
-
-        if ($router) {
-            try {
-                $clientstatik = new Client([
-                    'host' => $router->host,
-                    'user' => $router->username,
-                    'pass' => $router->password,
-                    'port' => (int) $router->port,
-                ]);
-            } catch (ConnectException $e) {
-                echo $e->getMessage() . PHP_EOL;
-                die();
-            }
-            $querystatik = (new Query('/queue/simple/print'))
-                ->where('dynamic', 'false');
-            $statik = $clientstatik->query($querystatik)->read();
-        } else {
-            $statik = [];
-        }
-        return view('pelanggans.edit', compact('pelanggan', 'dataOdcs', 'dataodps', 'array', 'secretPPoe', 'statik'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Pelanggan $pelanggan
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdatePelangganRequest $request, Pelanggan $pelanggan)
-    {
-        $attr = $request->validated();
-
-        if ($request->mode_user != $pelanggan->mode_user) {
-            if ($request->mode_user == 'Static') {
-                $attr['user_pppoe'] = null;
-            } else {
-                $attr['user_static'] = null;
-            }
-        }
-
-        switch (is_null($request->password)) {
-            case true:
-                unset($attr['password']);
-                break;
-            default:
-                $attr['password'] = bcrypt($request->password);
-                break;
-        }
-
-        if ($request->file('photo_ktp') && $request->file('photo_ktp')->isValid()) {
-
-            $path = storage_path('app/public/uploads/photo_ktps/');
-            $filename = $request->file('photo_ktp')->hashName();
-
-            if (!file_exists($path)) {
-                mkdir($path, 0777, true);
-            }
-
-            Image::make($request->file('photo_ktp')->getRealPath())->resize(500, 500, function ($constraint) {
-                $constraint->upsize();
-                $constraint->aspectRatio();
-            })->save($path . $filename);
-
-            // delete old photo_ktp from storage
-            if ($pelanggan->photo_ktp != null && file_exists($path . $pelanggan->photo_ktp)) {
-                unlink($path . $pelanggan->photo_ktp);
-            }
-
-            $attr['photo_ktp'] = $filename;
-        }
-
-        $pelanggan->update($attr);
-
-        return redirect()
-            ->route('pelanggans.index')
-            ->with('success', __('The pelanggan was updated successfully.'));
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Pelanggan $pelanggan
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Pelanggan $pelanggan)
-    {
+function setRoute()
+{
+    $router = DB::table('settingmikrotiks')->where('id', session('sessionRouter'))->first();
+    if ($router) {
         try {
-            $path = storage_path('app/public/uploads/photo_ktps/');
-
-            if ($pelanggan->photo_ktp != null && file_exists($path . $pelanggan->photo_ktp)) {
-                unlink($path . $pelanggan->photo_ktp);
-            }
-
-            $pelanggan->delete();
-
-            return redirect()
-                ->route('pelanggans.index')
-                ->with('success', __('The pelanggan was deleted successfully.'));
-        } catch (\Throwable $th) {
-            return redirect()
-                ->route('pelanggans.index')
-                ->with('error', __("The pelanggan can't be deleted because it's related to another table."));
-        }
-    }
-
-    public function setToExpiredStatic($pelanggan_id, $user_static)
-    {
-        try {
-            $client = setRoute();
-
-            // get ip by user static
-            $queryGet = (new Query('/queue/simple/print'))
-                ->where('name', $user_static);
-            $data = $client->query($queryGet)->read();
-            $ip = $data[0]['target'];
-            $parts = explode('/', $ip);
-            $fixIp = $parts[0];
-
-            $queryAdd = (new Query('/ip/firewall/address-list/add'))
-                ->equal('list', 'expired')
-                ->equal('address', $fixIp);
-            $client->query($queryAdd)->read();
-            // update status pelanggan jadi non aktif
-            $affected = DB::table('pelanggans')
-                ->where('id', $pelanggan_id)
-                ->update(['status_berlangganan' => 'Non Aktif']);
-            return redirect()
-                ->route('pelanggans.index')
-                ->with('success', __('Internet pelanggan berhasil di set Expired'));
+            return new RouterOSClient([
+                'host' => $router->host,
+                'user' => $router->username,
+                'pass' => $router->password,
+                'port' => (int) $router->port,
+            ]);
         } catch (ConnectException $e) {
             echo $e->getMessage() . PHP_EOL;
             die();
         }
     }
+}
 
-    public function setNonToExpiredStatic($pelanggan_id, $user_static)
-    {
-        try {
-            $client = setRoute();
-            // get ip by user static
-            $queryGet = (new Query('/queue/simple/print'))
-                ->where('name', $user_static);
-            $data = $client->query($queryGet)->read();
-            $ip = $data[0]['target'];
-            $parts = explode('/', $ip);
-            $fixIp = $parts[0];
-            // get id
-            $queryGet = (new Query('/ip/firewall/address-list/print'))
-                ->where('list', 'expired') // Filter by name
-                ->where('address', $fixIp);
-            $data = $client->query($queryGet)->read();
-            $idIP = $data[0]['.id'];
-            $queryRemove = (new Query('/ip/firewall/address-list/remove'))
-                ->equal('.id', $idIP);
-            $client->query($queryRemove)->read();
-            // update status pelanggan jadi non aktif
-            $affected = DB::table('pelanggans')
-                ->where('id', $pelanggan_id)
-                ->update(['status_berlangganan' => 'Aktif']);
-            return redirect()
-                ->route('pelanggans.index')
-                ->with('success', __('Internet pelanggan berhasil di set Tidak Expired 2'));
-        } catch (ConnectException $e) {
-            echo $e->getMessage() . PHP_EOL;
-            die();
-        }
+function getCompany()
+{
+    $data = DB::table('companies')
+        ->join('pakets', 'companies.paket_id', '=', 'pakets.id')
+        ->where('companies.id', '=', session('sessionCompany'))
+        ->select('companies.*', 'pakets.nama_paket', 'pakets.jumlah_router', 'pakets.jumlah_pelanggan', 'pakets.jumlah_olt')
+        ->first();
+    return $data;
+}
+
+function getCompanyUser()
+{
+    $data = DB::table('companies')
+        ->join('pakets', 'companies.paket_id', '=', 'pakets.id')
+        ->where('companies.id', '=', session('sessionCompanyUser'))
+        ->select('companies.*', 'pakets.nama_paket', 'pakets.jumlah_router', 'pakets.jumlah_olt')
+        ->first();
+    return $data;
+}
+
+
+function cekAssign($company_id, $user_id)
+{
+    return DB::table('assign_company')
+        ->where('company_id', $company_id)
+        ->where('user_id', $user_id)
+        ->count();
+}
+
+function hitungRouter()
+{
+    return Settingmikrotik::where('company_id', session('sessionCompany'))->count();
+}
+
+function hitungPelanggan()
+{
+    return Pelanggan::where('company_id', session('sessionCompany'))->count();
+}
+
+function hitungOlt()
+{
+    return Olt::where('company_id', session('sessionCompany'))->count();
+}
+
+function getCustomer()
+{
+    $data = DB::table('pelanggans')->where('id', Session::get('id-customer'))->first();
+    return $data;
+}
+
+function rupiah($angka)
+{
+
+    $hasil_rupiah = "Rp " . number_format($angka, 2, ',', '.');
+    return $hasil_rupiah;
+}
+
+function rupiah2($angka)
+{
+
+    $a = number_format($angka, 0, ',', '.');
+    return $a;
+}
+
+function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima, $footer)
+{
+    if ($typePesan == 'bayar') {
+        $message = 'Yth. ' . $request->nama_pelanggan . "\n\n";
+        $message .= "Berikut ini adalah data pembayaran yang telah kami terima : \n\n";
+        $message .= "*No Tagihan :* " . $request->no_tagihan . "\n";
+        $message .= '*Nama Pelanggan :* ' . $request->nama_pelanggan . "\n";
+        $message .= '*Nominal :* ' . rupiah($request->nominal) . "\n";
+        $message .= '*Metode Pembayaran :* ' .  $request->metode_bayar . " \n";
+        $message .= '*Tanggal :* ' . date('Y-m-d H:i:s') . "\n\n";
+        $message .= $footer;
+    } else if ($typePesan == 'tagihan') {
+        $message = 'Pelanggan ' . getCompany()->nama_perusahaan . ' Yth. ' . $request->nama . "\n\n";
+        $message .= 'Kami sampaikan tagihan layanan internet bulan *' . tanggal_indonesia($request->periode)  . '*' . "\n";
+        $message .= 'Dengan no tagihan *' . $request->no_tagihan . '* sebesar *' . rupiah($request->total_bayar) . '*' . "\n";
+        $message .= 'Pembayaran paling lambat di tanggal *' . addHari($request->tanggal_create_tagihan, $request->jatuh_tempo) . '* Untuk Menghindari Isolir off wifi otomatis di tempat anda.' . " \n\n";
+        $message .= "*Note : Abaikan pesan ini jika sudah berbayar* \n\n";
+        $message .= $footer;
+    } else if ($typePesan == 'daftar') {
+        $paket = DB::table('packages')->find($request->paket_layanan);
+        $user = Auth::user();
+        $message = 'Selamat datang di ' . getCompany()->nama_perusahaan . "\n\n";
+        $message .= "Kami senang Anda telah bergabung dengan layanan WiFi kami. \n";
+        $message .= "Penting yang perlu Anda ketahui: \n\n";
+        $message .= "*Nama :* " . $request->nama . "\n";
+        $message .= '*Alamat :* ' . $request->alamat . "\n";
+        $message .= '*Paket Layanan :* ' . $paket->nama_layanan . "\n";
+        $message .= '*No Layanan :* ' .  $request->no_layanan . " \n\n";
+        $message .= 'Jika Anda memiliki pertanyaan atau membutuhkan bantuan tambahan, jangan ragu untuk menghubungi kami di ' . getCompany()->no_wa  . ' atau melalui email ke ' . getCompany()->email  . ".\n\n";
+        $message .= "Terima kasih atas kepercayaan Anda kepada kami. Selamat menikmati koneksi internet yang stabil dan cepat!\n\n";
+        $message .= "Salam hangat,\n";
+        $message .= $user->name .'-'. getCompany()->nama_perusahaan;
     }
 
-    public function setToExpired($pelanggan_id, $user_pppoe)
-    {
-        try {
-            $client = setRoute();
-            $queryGet = (new Query('/ppp/secret/print'))
-                ->where('name', $user_pppoe);
-            $data = $client->query($queryGet)->read();
-            $idSecret = $data[0]['.id'];
-            // set komen
-            $comment = 'Di set expired Tanggal : ' . date('Y-m-d H:i:s');
-            $queryComment = (new Query('/ppp/secret/set'))
-                ->equal('.id', $idSecret)
-                ->equal('profile', 'EXPIRED')
-                ->equal('comment', $comment);
-            $client->query($queryComment)->read();
-            // get name from active ppp
-            $queryGet = (new Query('/ppp/active/print'))
-                ->where('name', $user_pppoe);
-            $dataActive = $client->query($queryGet)->read();
-            // remove session
-            $idActive = $dataActive[0]['.id'];
-            $queryDelete = (new Query('/ppp/active/remove'))
-                ->equal('.id', $idActive);
-            $client->query($queryDelete)->read();
-            // update status pelanggan jadi non aktif
-            $affected = DB::table('pelanggans')
-                ->where('id', $pelanggan_id)
-                ->update(['status_berlangganan' => 'Non Aktif']);
+    $endpoint_wa = $url . 'send-message';
+    $response = Http::post($endpoint_wa, [
+        'api_key' => $api_key,
+        'receiver' => strval($no_penerima),
+        'data' => [
+            "message" => $message,
+        ]
+    ]);
+    return json_decode($response);
+}
 
-            return redirect()
-                ->route('pelanggans.index')
-                ->with('success', __('Internet pelanggan berhasil di set Expired'));
-        } catch (ConnectException $e) {
-            echo $e->getMessage() . PHP_EOL;
-            die();
-        }
+function totalStatusBayar($status)
+{
+    $totalStatus = Tagihan::where('company_id', '=', session('sessionCompany'))->where('status_bayar', $status)
+        ->get();
+    return  $totalStatus->count();
+}
+
+function addHari($tgl, $jatuh_tempo)
+{
+    $tgl    = date('Y-m-d', strtotime('+' . $jatuh_tempo . 'days', strtotime($tgl)));
+    return $tgl;
+}
+
+function hitungUang($type)
+{
+    if ($type == 'Pemasukan') {
+        $pemasukan = DB::table('pemasukans')
+            ->where('company_id', '=', session('sessionCompany'))
+            ->sum('pemasukans.nominal');
+        return $pemasukan;
+    } else {
+        $pengeluaran = DB::table('pengeluarans')
+            ->where('company_id', '=', session('sessionCompany'))
+            ->sum('pengeluarans.nominal');
+        return $pengeluaran;
+    }
+}
+
+function tanggal_indonesia($tanggal)
+{
+    $bulan = array(
+        1 =>   'Januari',
+        'Februari',
+        'Maret',
+        'April',
+        'Mei',
+        'Juni',
+        'Juli',
+        'Agustus',
+        'September',
+        'Oktober',
+        'November',
+        'Desember'
+    );
+
+    $pecahkan = explode('-', $tanggal);
+    return $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
+}
+function convertIntegerToDecimal($stringValue)
+{
+    // Hapus "INTEGER: " dan konversi ke desimal sesuai dengan format yang diinginkan
+    $decimalValue = number_format((int) str_replace('INTEGER: ', '', $stringValue) / 1000, 1);
+
+    return $decimalValue;
+}
+
+
+function oltExec()
+{
+    try {
+        $oltSettings = Olt::findOrFail(session('sessionOlt'));
+        $requestData = [
+            'host' => $oltSettings->host,
+            'port' => (int) $oltSettings->port,
+            'username' => $oltSettings->username,
+            'password' => $oltSettings->password,
+        ];
+
+        // URL endpoint onu-name
+        $urlOnuName = 'http://103.176.79.206:9005/onu-name';
+
+        // URL endpoint status
+        $urlStatus = 'http://103.176.79.206:9005/status';
+
+        $urlUncf = 'http://103.176.79.206:9005/uncf';
+
+        // Panggil fungsi asynchronous
+        $result = asyncApiCalls($requestData, $urlOnuName, $urlStatus, $urlUncf);
+
+        return response()->json($result);
+    } catch (\Exception $e) {
+        dd('something error 3');
+    }
+}
+
+function asyncApiCalls(array $requestData, string $urlOnuName, string $urlStatus, string $urlUncf): array
+{
+    // Membuat instance GuzzleHttp Client
+    $client = new Client();
+
+    // Membuat array promise untuk panggilan API paralel
+    $promises = [
+        'onuName' => asyncPostRequest($client, $urlOnuName, $requestData),
+        'status' => asyncPostRequest($client, $urlStatus, $requestData),
+        'uncf' => asyncPostRequest($client, $urlUncf, $requestData),
+    ];
+
+    // Menunggu hasil panggilan API paralel
+    $results = [];
+    foreach ($promises as $key => $promise) {
+        $results[$key] = json_decode($promise->wait()->getBody()->getContents(), true);
     }
 
-    public function setNonToExpired($pelanggan_id, $user_pppoe)
-    {
+    return $results;
+}
 
-        try {
-            $client = setRoute();
-            $queryGet = (new Query('/ppp/secret/print'))
-                ->where('name', $user_pppoe);
-            $data = $client->query($queryGet)->read();
-            $idSecret = $data[0]['.id'];
-            // get paket asal
-            $pelanggan = DB::table('pelanggans')
-                ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
-                ->select(
-                    'packages.profile',
-                )->where('pelanggans.id', $pelanggan_id)->first();
-            // balikan paket
-            $comment = 'Di set tidak expired Tanggal : ' . date('Y-m-d H:i:s');
-            $queryComment = (new Query('/ppp/secret/set'))
-                ->equal('.id', $idSecret)
-                ->equal('profile', $pelanggan->profile)
-                ->equal('comment', $comment);
-            $client->query($queryComment)->read();
-            // get name
-            $queryGet = (new Query('/ppp/active/print'))
-                ->where('name', $user_pppoe);
-            $data = $client->query($queryGet)->read();
-            // remove session
-            $idActive = $data[0]['.id'];
-            $queryDelete = (new Query('/ppp/active/remove'))
-                ->equal('.id', $idActive);
-            $client->query($queryDelete)->read();
-
-            // update status pelanggan jadi aktif
-            $affected = DB::table('pelanggans')
-                ->where('id', $pelanggan_id)
-                ->update(['status_berlangganan' => 'Aktif']);
-
-            return redirect()
-                ->route('pelanggans.index')
-                ->with('success', __('Internet pelanggan berhasil di set Tidak Expired'));
-        } catch (ConnectException $e) {
-            echo $e->getMessage() . PHP_EOL;
-            die();
-        }
-    }
-
-    public function getTableArea($id)
-    {
-        $data = DB::table('pelanggans')->where('company_id', '=', session('sessionCompany'))
-            ->where('coverage_area', $id)->get();
-        $message = 'Berhasil mengambil data kota';
-        return response()->json(compact('message', 'data'));
-    }
-
-    public function getTableOdc($id)
-    {
-        $data = DB::table('pelanggans')->where('company_id', '=', session('sessionCompany'))
-            ->where('odc', $id)->get();
-        $message = 'Berhasil mengambil data kota';
-        return response()->json(compact('message', 'data'));
-    }
-
-    public function getTableOdp($id)
-    {
-        $data = DB::table('pelanggans')->where('company_id', '=', session('sessionCompany'))
-            ->where('odp', $id)->get();
-        $message = 'Berhasil mengambil data kota';
-        return response()->json(compact('message', 'data'));
-    }
+function asyncPostRequest(Client $client, string $url, array $data): \GuzzleHttp\Promise\PromiseInterface
+{
+    // Melakukan panggilan API asynchronous
+    return $client->postAsync($url, ['json' => $data]);
 }
