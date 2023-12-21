@@ -340,7 +340,7 @@
     <div class="col-md-2">
         <div class="form-group">
             <label for="jatuh-tempo">{{ __('Jatuh Tempo') }}</label>
-            <input required type="number" min="1" max="5" name="jatuh_tempo" id="jatuh-tempo"
+            <input required type="number" min="1" max="20" name="jatuh_tempo" id="jatuh-tempo"
                 class="form-control @error('jatuh_tempo') is-invalid @enderror"
                 value="{{ isset($pelanggan) ? $pelanggan->jatuh_tempo : old('jatuh_tempo') }}"
                 placeholder="{{ __('Jatuh Tempo') }}" />

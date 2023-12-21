@@ -177,7 +177,19 @@ class PelangganController extends Controller
                 $attr['photo_ktp'] = $filename;
             }
             $attr['company_id'] =  session('sessionCompany');
-            Pelanggan::create($attr);
+            $cek = Pelanggan::create($attr);
+
+            if($cek){
+                $waGateway = getCompany();
+                sendNotifWa(
+                    $waGateway->url_wa_gateway,
+                    $waGateway->api_key_wa_gateway,
+                    $request,
+                    'daftar',
+                    $request->no_wa,
+                    $waGateway->footer_pesan_wa_tagihan
+                );
+            }
             return redirect()
                 ->route('pelanggans.index')
                 ->with('success', __('The pelanggan was created successfully.'));

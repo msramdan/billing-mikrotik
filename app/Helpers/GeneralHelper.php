@@ -13,6 +13,7 @@ use GuzzleHttp\Promise;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client as Client;
 use \RouterOS\Client as RouterOSClient;
+use Illuminate\Support\Facades\Auth;
 
 function formatBytes($bytes, $decimal = null)
 {
@@ -124,8 +125,21 @@ function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima, $footer
         $message .= 'Dengan no tagihan *' . $request->no_tagihan . '* sebesar *' . rupiah($request->total_bayar) . '*' . "\n";
         $message .= 'Pembayaran paling lambat di tanggal *' . addHari($request->tanggal_create_tagihan, $request->jatuh_tempo) . '* Untuk Menghindari Isolir off wifi otomatis di tempat anda.' . " \n\n";
         $message .= "*Note : Abaikan pesan ini jika sudah berbayar* \n\n";
-
         $message .= $footer;
+    } else if ($typePesan == 'daftar') {
+        $paket = DB::table('pakets')->find($request->paket_layanan);
+        $user = Auth::user();
+        $message = 'Selamat datang di ' . getCompany()->nama_perusahaan . "\n\n";
+        $message .= "Kami senang Anda telah bergabung dengan layanan WiFi kami. \n";
+        $message .= "Penting yang perlu Anda ketahui: \n\n";
+        $message .= "*Nama :* " . $request->nama . "\n";
+        $message .= '*Alamat :* ' . $request->alamat . "\n";
+        $message .= '*Paket Layanan :* ' . $paket->nama_paket . "\n";
+        $message .= '*No Layanan :* ' .  $request->no_layanan . " \n\n";
+        $message .= 'Jika Anda memiliki pertanyaan atau membutuhkan bantuan tambahan, jangan ragu untuk menghubungi kami di ' . getCompany()->no_wa  . ' atau melalui email ke ' . getCompany()->email  . ".\n\n";
+        $message .= "Terima kasih atas kepercayaan Anda kepada kami. Selamat menikmati koneksi internet yang stabil dan cepat!\n\n";
+        $message .= "Salam hangat,\n";
+        $message .= $user->name .'-'. getCompany()->nama_perusahaan;
     }
 
     $endpoint_wa = $url . 'send-message';
@@ -216,7 +230,7 @@ function oltExec()
         $urlUncf = 'http://103.176.79.206:9005/uncf';
 
         // Panggil fungsi asynchronous
-        $result = asyncApiCalls($requestData, $urlOnuName, $urlStatus,$urlUncf);
+        $result = asyncApiCalls($requestData, $urlOnuName, $urlStatus, $urlUncf);
 
         return response()->json($result);
     } catch (\Exception $e) {
@@ -224,7 +238,7 @@ function oltExec()
     }
 }
 
-function asyncApiCalls(array $requestData, string $urlOnuName, string $urlStatus,string $urlUncf): array
+function asyncApiCalls(array $requestData, string $urlOnuName, string $urlStatus, string $urlUncf): array
 {
     // Membuat instance GuzzleHttp Client
     $client = new Client();
