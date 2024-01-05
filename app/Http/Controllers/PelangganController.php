@@ -37,6 +37,7 @@ class PelangganController extends Controller
             $area_coverage = intval($request->query('area_coverage'));
             $packagePilihan = intval($request->query('packagePilihan'));
             $mikrotik = intval($request->query('mikrotik'));
+            $tgl_daftar = $request->query('tgl_daftar');
             $status = $request->query('status');
             $mode_user = $request->query('mode_user');
 
@@ -73,6 +74,12 @@ class PelangganController extends Controller
             if (isset($mikrotik) && !empty($mikrotik)) {
                 if ($mikrotik != 'All') {
                     $pelanggans = $pelanggans->where('pelanggans.router', $mikrotik);
+                }
+            }
+
+            if (isset($tgl_daftar) && !empty($tgl_daftar)) {
+                if ($tgl_daftar != 'All') {
+                    $pelanggans = $pelanggans->whereRaw('DAY(pelanggans.tanggal_daftar) = ?', [$tgl_daftar]);
                 }
             }
 
