@@ -209,7 +209,7 @@
                                 @csrf
                                 @method('PUT')
 
-                                @include('area-coverages.include.form')
+                                @include('area-coverages.include.form_edit')
 
                                 <a href="{{ url()->previous() }}" class="btn btn-secondary">{{ __('Back') }}</a>
 

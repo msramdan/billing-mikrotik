@@ -208,7 +208,7 @@
                                 @csrf
                                 @method('PUT')
 
-                                @include('odps.include.form')
+                                @include('odps.include.form_edit')
 
                                 <a href="{{ url()->previous() }}" class="btn btn-secondary">{{ __('Back') }}</a>
 
