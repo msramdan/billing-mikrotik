@@ -9,6 +9,7 @@ use Image;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Settingmikrotik;
+use Illuminate\Support\Facades\Auth;
 
 class CompanyController extends Controller
 {
@@ -28,10 +29,15 @@ class CompanyController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $companies = DB::table('companies')
-                ->leftJoin('pakets', 'companies.paket_id', '=', 'pakets.id')
-                ->select('companies.*', 'pakets.nama_paket');
-            $companies = $companies->orderBy('companies.id', 'DESC')->get();
+            $userId = Auth::user()->id;
+            $companies = DB::table('assign_company')
+                ->join('companies', 'assign_company.company_id', '=', 'companies.id')
+                ->join('pakets', 'companies.paket_id', '=', 'pakets.id')
+                ->where('assign_company.user_id', '=', $userId)
+                ->orderBy('assign_company.id', 'desc')
+                ->select('assign_company.user_id', 'pakets.nama_paket', 'companies.*')
+                ->get();
+
 
             return Datatables::of($companies)
                 ->addColumn('alamat', function ($row) {
