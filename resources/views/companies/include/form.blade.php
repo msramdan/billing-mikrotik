@@ -341,23 +341,21 @@
                 @enderror
             </div>
         </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="expired">{{ __('Expired') }}</label>
+                <input type="date" name="expired" id="expired"
+                    class="form-control @error('expired') is-invalid @enderror"
+                    value="{{ isset($company) ? $company->expired : old('expired') }}" placeholder="{{ __('Expired') }}"
+                    required />
+                @error('expired')
+                    <span class="text-danger">
+                        {{ $message }}
+                    </span>
+                @enderror
+            </div>
+        </div>
     @endcan
 
 
-
-
-    <div class="col-md-6">
-        <div class="form-group">
-            <label for="expired">{{ __('Expired') }}</label>
-            <input type="date" name="expired" id="expired"
-                class="form-control @error('expired') is-invalid @enderror"
-                value="{{ isset($company) ? $company->expired : old('expired') }}" placeholder="{{ __('Expired') }}"
-                required />
-            @error('expired')
-                <span class="text-danger">
-                    {{ $message }}
-                </span>
-            @enderror
-        </div>
-    </div>
 </div>

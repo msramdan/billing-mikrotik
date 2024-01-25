@@ -43,7 +43,7 @@ class UpdateCompanyRequest extends FormRequest
 			'kode_merchant' => 'required|string|max:255',
 			'private_key' => 'required|string|max:255',
 			// 'paket_id' => 'required|exists:App\Models\Paket,id',
-            'expired' => 'required',
+            // 'expired' => 'required',
         ];
     }
 }
