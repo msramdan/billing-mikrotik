@@ -310,7 +310,7 @@
             <input type="number" min="1" max="20" name="jatuh_tempo" id="jatuh-tempo"
                 class="form-control @error('jatuh_tempo') is-invalid @enderror"
                 value="{{ isset($pelanggan) ? $pelanggan->jatuh_tempo : old('jatuh_tempo') }}"
-                placeholder="{{ __('Jatuh Tempo') }}" required  />
+                placeholder="{{ __('Jatuh Tempo') }}" required />
             @error('jatuh_tempo')
                 <span class="text-danger">
                     {{ $message }}
@@ -403,8 +403,9 @@
         </div>
         <div class="form-group" id="user_static_mode" style="display: none">
             <label for="user-pppoe">{{ __('User Static') }}</label> <br>
-            <select style="width: 100%" class="form-select js-example-basic-single  @error('user_static') is-invalid @enderror" name="user_static"
-                id="user_static" class="form-control">
+            <select style="width: 100%"
+                class="form-select js-example-basic-single  @error('user_static') is-invalid @enderror"
+                name="user_static" id="user_static" class="form-control">
                 <option value="" selected disabled>-- {{ __('Select') }} --</option>
             </select>
             @error('user_static')
@@ -416,8 +417,9 @@
 
         <div class="form-group" id="user_ppoe_mode" style="display: none">
             <label for="user-pppoe">{{ __('User Pppoe') }}</label> <br>
-            <select style="width: 100%"  class="form-select js-example-basic-single @error('user_pppoe') is-invalid @enderror" name="user_pppoe" id="user_pppoe"
-                class="form-control">
+            <select style="width: 100%"
+                class="form-select js-example-basic-single @error('user_pppoe') is-invalid @enderror"
+                name="user_pppoe" id="user_pppoe" class="form-control">
                 <option value="" selected disabled>-- {{ __('Select') }} --</option>
             </select>
             @error('user_pppoe')
@@ -461,37 +463,134 @@
                 </div>
             </div>
 
-
             <div class="col-md-12">
                 <div class="card">
-                    <div class="mb-3 search-box">
-                        <div class="input-group" style="width: 100%">
-                            <input type="text" class="form-control @error('place') is-invalid @enderror"
-                                name="place" id="search_place" placeholder="Cari Lokasi"
-                                value="{{ old('place') }}" autocomplete="off">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="basic-addon1"><button type="button"
-                                        class="btn" onclick="getCurrentLocation()">
-                                        <i class='fas fa-map-marker-alt'></i>
-                                    </button></span>
-                            </div>
-                            <span class="d-none" style="color: red;" id="error-place"></span>
-                            @error('place')
-                                <span style="color: red;">{{ $message }}</span>
-                            @enderror
-                        </div>
-                        <ul class="results">
-                            <li style="text-align: center;padding: 50% 0; max-height: 25hv;">Masukan Pencarian</li>
-                        </ul>
-                    </div>
-                    <div class="map-embed" id="map" style="border-radius: 5px"></div>
+                    <input type="text" id="locationInput" class="form-control" placeholder="Enter location"
+                        style="margin-bottom: 5px">
+                    <button type="button" class="btn btn-success" onclick="showMyLocation()"
+                        style="margin-bottom: 5px">
+                        <i class="fa fa-map-marker" aria-hidden="true"></i> Show My Location
+                    </button>
+                    <div class="map-embed" id="map"></div>
                 </div>
             </div>
         </div>
     </div>
+
+
 </div>
 
 @push('js')
+<script>
+    let map;
+    let geocoder;
+    let autocomplete;
+    let markers = [];
+
+    function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: { lat: -6.2088, lng: 106.8456 },
+            zoom: 12
+        });
+        geocoder = new google.maps.Geocoder();
+
+        autocomplete = new google.maps.places.Autocomplete(
+            document.getElementById('locationInput'), { types: ['geocode'] }
+        );
+        autocomplete.addListener('place_changed', onPlaceChanged);
+
+        map.addListener('click', onMapClick);
+    }
+
+    function onMapClick(event) {
+        clearMarkers();
+
+        const marker = new google.maps.Marker({
+            position: event.latLng,
+            map: map,
+            draggable: true
+        });
+
+        document.getElementById('latitude').value = event.latLng.lat();
+        document.getElementById('longitude').value = event.latLng.lng();
+
+        marker.addListener('dragend', onMarkerDragEnd);
+
+        markers.push(marker);
+    }
+
+    function onMarkerDragEnd() {
+        document.getElementById('latitude').value = markers[0].getPosition().lat();
+        document.getElementById('longitude').value = markers[0].getPosition().lng();
+    }
+
+    function onPlaceChanged() {
+        clearMarkers();
+
+        const place = autocomplete.getPlace();
+        if (place.geometry) {
+            map.panTo(place.geometry.location);
+            map.setZoom(15);
+
+            const marker = new google.maps.Marker({
+                position: place.geometry.location,
+                map: map
+            });
+
+            document.getElementById('latitude').value = place.geometry.location.lat();
+            document.getElementById('longitude').value = place.geometry.location.lng();
+
+            markers.push(marker);
+        } else {
+            document.getElementById('locationInput').placeholder = 'Enter location';
+        }
+    }
+
+    function showMyLocation() {
+        clearMarkers();
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                const myLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+                map.panTo(myLocation);
+                map.setZoom(15);
+
+                const marker = new google.maps.Marker({
+                    position: myLocation,
+                    map: map,
+                    title: 'My Location'
+                });
+
+                document.getElementById('latitude').value = myLocation.lat();
+                document.getElementById('longitude').value = myLocation.lng();
+
+                markers.push(marker);
+            }, function (error) {
+                console.error('Error getting location:', error.message);
+                alert('Error getting your location. Please make sure location services are enabled.');
+            });
+        } else {
+            alert('Geolocation is not supported by your browser.');
+        }
+    }
+
+    function clearMarkers() {
+        for (let i = 0; i < markers.length; i++) {
+            markers[i].setMap(null);
+        }
+        markers = [];
+    }
+</script>
+
+
+
+
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDnPKw1Dmau8umIdqkvLZa4ULmjAt8Dk_o&libraries=places&callback=initMap">
+    </script>
+
+
     <script>
         function generateNoLayanan() {
             let password = "";
