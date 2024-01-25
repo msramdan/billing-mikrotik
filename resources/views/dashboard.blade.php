@@ -651,16 +651,23 @@
             }
         });
     </script>
+    <script>
+        const googleMapsApiKey = '{{ config('app.google_maps_api_key') }}';
+    </script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key={{ config('app.google_maps_api_key') }}&libraries=places&callback=initMap">
+    </script>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDnPKw1Dmau8umIdqkvLZa4ULmjAt8Dk_o&callback=initMap" async
-        defer></script>
     <script>
         // Inisialisasi data pelanggan dari Blade template
         const pelangganData = @json($pelanggan);
 
         function initMap() {
             const map = new google.maps.Map(document.getElementById('map'), {
-                center: { lat: -2.5489, lng: 118.0149 }, // Koordinat tengah Indonesia
+                center: {
+                    lat: -2.5489,
+                    lng: 118.0149
+                }, // Koordinat tengah Indonesia
                 zoom: 5,
             });
 

@@ -24,7 +24,7 @@
         <div class="form-group">
             <label for="odc">{{ __('Odc') }}</label>
             <select class="form-select js-example-basic-single @error('odc') is-invalid @enderror" name="odc"
-                id="odc" class="form-control" >
+                id="odc" class="form-control">
                 <option value="" selected disabled>-- {{ __('Select odc') }} --</option>
 
                 @foreach ($dataOdcs as $odc)
@@ -45,7 +45,7 @@
         <div class="form-group">
             <label for="odp">{{ __('Odp') }}</label>
             <select class="form-select  js-example-basic-single @error('odp') is-invalid @enderror" name="odp"
-                id="odp" class="form-control" >
+                id="odp" class="form-control">
                 <option value="" selected disabled>-- {{ __('Select odp') }} --</option>
 
                 @foreach ($dataodps as $odp)
@@ -443,15 +443,16 @@
 
         <div class="form-group" id="user_static_mode" style="display: none">
             <label for="user-pppoe">{{ __('User Static') }}</label> <br>
-            <select style="width: 100%" class="form-select js-example-basic-single  @error('user_static') is-invalid @enderror" name="user_static"
-                id="user_static" class="form-control">
+            <select style="width: 100%"
+                class="form-select js-example-basic-single  @error('user_static') is-invalid @enderror"
+                name="user_static" id="user_static" class="form-control">
                 <option value="" selected disabled>-- {{ __('Select') }} --</option>
                 @foreach ($statik as $x)
-                <option value="{{ $x['name'] }}"
-                    {{ isset($pelanggan) && $pelanggan->user_static == $x['name'] ? 'selected' : (old('user_static') == $x['name'] ? 'selected' : '') }}>
-                    {{ $x['name'] }}
-                </option>
-            @endforeach
+                    <option value="{{ $x['name'] }}"
+                        {{ isset($pelanggan) && $pelanggan->user_static == $x['name'] ? 'selected' : (old('user_static') == $x['name'] ? 'selected' : '') }}>
+                        {{ $x['name'] }}
+                    </option>
+                @endforeach
 
             </select>
             @error('user_static')
@@ -463,8 +464,9 @@
 
         <div class="form-group" id="user_ppoe_mode" style="display: none">
             <label for="user-pppoe">{{ __('User Pppoe') }}</label> <br>
-            <select style="width: 100%"  class="form-select js-example-basic-single @error('user_pppoe') is-invalid @enderror" name="user_pppoe" id="user_pppoe"
-                class="form-control">
+            <select style="width: 100%"
+                class="form-select js-example-basic-single @error('user_pppoe') is-invalid @enderror"
+                name="user_pppoe" id="user_pppoe" class="form-control">
                 <option value="" selected disabled>-- {{ __('Select') }} --</option>
                 @foreach ($secretPPoe as $settingmikrotik)
                     <option value="{{ $settingmikrotik['name'] }}"
@@ -511,27 +513,16 @@
                     @enderror
                 </div>
             </div>
-            <div class="card px-2 py-1">
-                <div class="mb-3 search-box">
-                    <div class="input-group" style="width: 100%">
-                        <input type="text" class="form-control @error('place') is-invalid @enderror"
-                            name="place" id="search_place" placeholder="Cari Lokasi" value="{{ old('place') }}"
-                            autocomplete="off" >
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1"><button type="button" class="btn"  onclick="getCurrentLocation()" >
-                                <i class='fas fa-map-marker-alt'></i>
-                            </button></span>
-                        </div>
-                    </div>
-                    <span class="d-none" style="color: red;" id="error-place"></span>
-                    @error('place')
-                        <span style="color: red;">{{ $message }}</span>
-                    @enderror
-                    <ul class="results">
-                        <li style="text-align: center;padding: 50% 0; max-height: 25hv;">Masukan Pencarian</li>
-                    </ul>
+            <div class="col-md-12">
+                <div class="card">
+                    <input type="text" id="locationInput" class="form-control" placeholder="Enter location"
+                        style="margin-bottom: 5px">
+                    <button type="button" class="btn btn-success" onclick="showMyLocation()"
+                        style="margin-bottom: 5px">
+                        <i class="fa fa-map-marker" aria-hidden="true"></i> Show My Location
+                    </button>
+                    <div class="map-embed" id="map"></div>
                 </div>
-                <div class="map-embed" id="map" style="border-radius: 5px"></div>
             </div>
         </div>
 
@@ -539,6 +530,160 @@
 </div>
 
 @push('js')
+    <script>
+        let map;
+        let geocoder;
+        let autocomplete;
+        let initialMarker; // Marker dari database
+        let markers = [];
+
+        function initMap() {
+            var initialLatitude = parseFloat("{{ isset($odc) ? $odc->latitude : -6.2088 }}");
+            var initialLongitude = parseFloat("{{ isset($odc) ? $odc->longitude : 106.8456 }}");
+
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: {
+                    lat: initialLatitude,
+                    lng: initialLongitude
+                },
+                zoom: 12
+            });
+
+            // Tambahkan marker di posisi awal dari database
+            initialMarker = new google.maps.Marker({
+                position: {
+                    lat: initialLatitude,
+                    lng: initialLongitude
+                },
+                map: map,
+                draggable: true // Sesuaikan dengan kebutuhan
+            });
+
+            markers.push(initialMarker);
+
+            geocoder = new google.maps.Geocoder();
+
+            autocomplete = new google.maps.places.Autocomplete(
+                document.getElementById('locationInput'), {
+                    types: ['geocode']
+                }
+            );
+            autocomplete.addListener('place_changed', onPlaceChanged);
+
+            map.addListener('click', onMapClick);
+        }
+
+        function onMapClick(event) {
+            const clickedLatLng = event.latLng;
+
+            // Periksa apakah ada marker di posisi yang sama
+            const existingMarkerIndex = findExistingMarkerIndex(clickedLatLng);
+
+            if (existingMarkerIndex !== -1) {
+                // Jika marker sudah ada, ganti posisi marker yang sudah ada
+                markers[existingMarkerIndex].setPosition(clickedLatLng);
+            } else {
+                // Jika tidak ada, tambahkan marker baru
+                clearMarkers();
+
+                const marker = new google.maps.Marker({
+                    position: clickedLatLng,
+                    map: map,
+                    draggable: true
+                });
+
+                document.getElementById('latitude').value = clickedLatLng.lat();
+                document.getElementById('longitude').value = clickedLatLng.lng();
+
+                marker.addListener('dragend', onMarkerDragEnd);
+
+                markers.push(marker);
+            }
+        }
+
+        function onMarkerDragEnd() {
+            document.getElementById('latitude').value = markers[0].getPosition().lat();
+            document.getElementById('longitude').value = markers[0].getPosition().lng();
+        }
+
+        function onPlaceChanged() {
+            clearMarkers();
+
+            const place = autocomplete.getPlace();
+            if (place.geometry) {
+                map.panTo(place.geometry.location);
+                map.setZoom(15);
+
+                const marker = new google.maps.Marker({
+                    position: place.geometry.location,
+                    map: map
+                });
+
+                document.getElementById('latitude').value = place.geometry.location.lat();
+                document.getElementById('longitude').value = place.geometry.location.lng();
+
+                markers.push(marker);
+            } else {
+                document.getElementById('locationInput').placeholder = 'Enter location';
+            }
+        }
+
+        function showMyLocation() {
+            clearMarkers();
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const myLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+                    map.panTo(myLocation);
+                    map.setZoom(15);
+
+                    const marker = new google.maps.Marker({
+                        position: myLocation,
+                        map: map,
+                        title: 'My Location'
+                    });
+
+                    document.getElementById('latitude').value = myLocation.lat();
+                    document.getElementById('longitude').value = myLocation.lng();
+
+                    markers.push(marker);
+                }, function(error) {
+                    console.error('Error getting location:', error.message);
+                    alert('Error getting your location. Please make sure location services are enabled.');
+                });
+            } else {
+                alert('Geolocation is not supported by your browser.');
+            }
+        }
+
+        function clearMarkers() {
+            for (let i = 0; i < markers.length; i++) {
+                markers[i].setMap(null);
+            }
+            markers = [];
+            // Tambahkan marker dari database kembali setelah menghapus marker
+            markers.push(initialMarker);
+        }
+
+        function findExistingMarkerIndex(latLng) {
+            // Fungsi untuk mencari indeks marker yang sudah ada di dalam array
+            for (let i = 0; i < markers.length; i++) {
+                if (markers[i].getPosition().equals(latLng)) {
+                    return i;
+                }
+            }
+            return -1; // Mengembalikan -1 jika marker tidak ditemukan
+        }
+    </script>
+
+    <script>
+        const googleMapsApiKey = '{{ config('app.google_maps_api_key') }}';
+    </script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key={{ config('app.google_maps_api_key') }}&libraries=places&callback=initMap">
+    </script>
+
     <script>
         function generateNoLayanan() {
             let password = "";
@@ -555,3 +700,211 @@
             $('#no-layanan').val(shuffled);
         }
     </script>
+
+    <script>
+        const options_temp = '<option value="" selected disabled>-- Select --</option>';
+        $('#coverage-area').change(function() {
+            $('#odc, #odp, #no_port_odp').html(options_temp);
+            if ($(this).val() != "") {
+                getOdc($(this).val());
+            }
+        })
+
+        $('#odc').change(function() {
+            $('#odp, #no_port_odp').html(options_temp);
+            if ($(this).val() != "") {
+                getOdp($(this).val());
+            }
+        })
+
+
+        $('#odp').change(function() {
+            $('#no_port_odp').html(options_temp);
+            if ($(this).val() != "") {
+                getPort($(this).val());
+            }
+        })
+
+        $(document).ready(function() {
+            $("#alert").hide();
+            var x = $("#mode_user").val();
+            if (x == 'Static') {
+                $("#user_static_mode").show();
+                $("#user_ppoe_mode").hide();
+                $('#user_static').attr('required', true);
+                $('#user_pppoe').attr('required', false);
+            } else {
+                $("#user_static_mode").hide();
+                $("#user_ppoe_mode").show();
+                $('#user_static').attr('required', false);
+                $('#user_pppoe').attr('required', true);
+            }
+
+            $('#router').change(function() {
+                $('#mode_user').html(options_temp);
+                $('#user_static').html(options_temp);
+                $('#user_pppoe').html(options_temp);
+                if ($(this).val() != "") {
+                    $("#alert").show();
+                    $("#user_static_mode").hide();
+                    $("#user_ppoe_mode").hide();
+                    $('#user_static').attr('required', false);
+                    $('#user_pppoe').attr('required', false);
+                    if ($(this).val() != "") {
+                        $("#mode_user").append(new Option("PPOE", "PPOE"));
+                        $("#mode_user").append(new Option("Static", "Static"));
+                    }
+                }
+            })
+        });
+
+        $(document).ready(function() {
+            $("#mode_user").change(function() {
+                $("#alert").hide();
+                $('#user_static').html(options_temp);
+                $('#user_pppoe').html(options_temp);
+                var id = $('#router').val();
+                if (this.value == 'Static') {
+                    $('#user_static').html(options_temp);
+                    $("#user_static_mode").show();
+                    $("#user_ppoe_mode").hide();
+                    $('#user_static').attr('required', true);
+                    $('#user_pppoe').attr('required', false);
+                    getStatic(id);
+
+                } else {
+                    $('#user_pppoe').html(options_temp);
+                    $("#user_static_mode").hide();
+                    $("#user_ppoe_mode").show();
+                    $('#user_static').attr('required', false);
+                    $('#user_pppoe').attr('required', true);
+                    getProfile(id);
+                }
+            });
+        });
+
+
+        function getOdc(areaId) {
+            let url = '{{ route('api.odc', ':id') }}';
+            url = url.replace(':id', areaId)
+            $.ajax({
+                url,
+                method: 'GET',
+                beforeSend: function() {
+                    $('#odc').prop('disabled', true);
+                },
+                success: function(res) {
+                    const options = res.data.map(value => {
+                        return `<option value="${value.id}">${value.kode_odc}</option>`
+                    });
+                    $('#odc').html(options_temp + options)
+                    $('#odc').prop('disabled', false);
+                },
+                error: function(err) {
+                    $('#odc').prop('disabled', false);
+                    alert(JSON.stringify(err))
+                }
+
+            })
+        }
+
+        function getOdp(odcId) {
+            let url = '{{ route('api.odp', ':id') }}';
+            url = url.replace(':id', odcId)
+            $.ajax({
+                url,
+                method: 'GET',
+                beforeSend: function() {
+                    $('#odp').prop('disabled', true);
+                },
+                success: function(res) {
+                    const options = res.data.map(value => {
+                        return `<option value="${value.id}">${value.kode_odp}</option>`
+                    });
+                    $('#odp').html(options_temp + options);
+                    $('#odp').prop('disabled', false);
+                },
+                error: function(err) {
+                    alert(JSON.stringify(err))
+                    $('#odp').prop('disabled', false);
+                }
+            })
+        }
+
+        function getPort(odpId) {
+            let url = '{{ route('api.getPort', ':id') }}';
+            url = url.replace(':id', odpId)
+            $.ajax({
+                url,
+                method: 'GET',
+                beforeSend: function() {
+                    $('#no_port_odp').prop('disabled', true);
+                },
+                success: function(res) {
+                    dataArray = res.array
+                    const options = $.each(dataArray, function(key, value) {
+                        if (value == 'Kosong') {
+                            $('#no_port_odp').append('<option value="' + key + '">Port ' + key +
+                                ' || ' + value + '</option>');
+                        } else {
+                            $('#no_port_odp').append('<option disabled value="' + key + '">Port ' +
+                                key + ' || ' + value + '</option>');
+                        }
+
+                    });
+                    $('#no_port_odp').prop('disabled', false);
+                },
+                error: function(err) {
+                    alert(JSON.stringify(err))
+                    $('#no_port_odp').prop('disabled', false);
+                }
+            })
+        }
+
+        function getProfile(router) {
+            let url = '{{ route('api.getProfile', ':id') }}';
+            url = url.replace(':id', router)
+            $.ajax({
+                url,
+                method: 'GET',
+                beforeSend: function() {
+                    $('#user_pppoe').prop('disabled', true);
+                },
+                success: function(res) {
+                    const options = res.data.map(value => {
+                        return `<option value="${value.name}">${value.name}</option>`
+                    });
+                    $('#user_pppoe').html(options_temp + options);
+                    $('#user_pppoe').prop('disabled', false);
+                },
+                error: function(err) {
+                    alert(JSON.stringify(err))
+                    $('#user_pppoe').prop('disabled', false);
+                }
+            })
+        }
+
+        function getStatic(router) {
+            let url = '{{ route('api.getStatic', ':id') }}';
+            url = url.replace(':id', router)
+            $.ajax({
+                url,
+                method: 'GET',
+                beforeSend: function() {
+                    $('#user_static').prop('disabled', true);
+                },
+                success: function(res) {
+                    const options = res.data.map(value => {
+                        return `<option value="${value.name}">${value.name}</option>`
+                    });
+                    $('#user_static').html(options_temp + options);
+                    $('#user_static').prop('disabled', false);
+                },
+                error: function(err) {
+                    alert(JSON.stringify(err))
+                    $('#user_static').prop('disabled', false);
+                }
+            })
+        }
+    </script>
+@endpush

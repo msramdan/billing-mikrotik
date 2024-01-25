@@ -481,115 +481,119 @@
 </div>
 
 @push('js')
-<script>
-    let map;
-    let geocoder;
-    let autocomplete;
-    let markers = [];
+    <script>
+        let map;
+        let geocoder;
+        let autocomplete;
+        let markers = [];
 
-    function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-            center: { lat: -6.2088, lng: 106.8456 },
-            zoom: 12
-        });
-        geocoder = new google.maps.Geocoder();
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: {
+                    lat: -6.2088,
+                    lng: 106.8456
+                },
+                zoom: 12
+            });
+            geocoder = new google.maps.Geocoder();
 
-        autocomplete = new google.maps.places.Autocomplete(
-            document.getElementById('locationInput'), { types: ['geocode'] }
-        );
-        autocomplete.addListener('place_changed', onPlaceChanged);
+            autocomplete = new google.maps.places.Autocomplete(
+                document.getElementById('locationInput'), {
+                    types: ['geocode']
+                }
+            );
+            autocomplete.addListener('place_changed', onPlaceChanged);
 
-        map.addListener('click', onMapClick);
-    }
+            map.addListener('click', onMapClick);
+        }
 
-    function onMapClick(event) {
-        clearMarkers();
-
-        const marker = new google.maps.Marker({
-            position: event.latLng,
-            map: map,
-            draggable: true
-        });
-
-        document.getElementById('latitude').value = event.latLng.lat();
-        document.getElementById('longitude').value = event.latLng.lng();
-
-        marker.addListener('dragend', onMarkerDragEnd);
-
-        markers.push(marker);
-    }
-
-    function onMarkerDragEnd() {
-        document.getElementById('latitude').value = markers[0].getPosition().lat();
-        document.getElementById('longitude').value = markers[0].getPosition().lng();
-    }
-
-    function onPlaceChanged() {
-        clearMarkers();
-
-        const place = autocomplete.getPlace();
-        if (place.geometry) {
-            map.panTo(place.geometry.location);
-            map.setZoom(15);
+        function onMapClick(event) {
+            clearMarkers();
 
             const marker = new google.maps.Marker({
-                position: place.geometry.location,
-                map: map
+                position: event.latLng,
+                map: map,
+                draggable: true
             });
 
-            document.getElementById('latitude').value = place.geometry.location.lat();
-            document.getElementById('longitude').value = place.geometry.location.lng();
+            document.getElementById('latitude').value = event.latLng.lat();
+            document.getElementById('longitude').value = event.latLng.lng();
+
+            marker.addListener('dragend', onMarkerDragEnd);
 
             markers.push(marker);
-        } else {
-            document.getElementById('locationInput').placeholder = 'Enter location';
         }
-    }
 
-    function showMyLocation() {
-        clearMarkers();
+        function onMarkerDragEnd() {
+            document.getElementById('latitude').value = markers[0].getPosition().lat();
+            document.getElementById('longitude').value = markers[0].getPosition().lng();
+        }
 
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                const myLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        function onPlaceChanged() {
+            clearMarkers();
 
-                map.panTo(myLocation);
+            const place = autocomplete.getPlace();
+            if (place.geometry) {
+                map.panTo(place.geometry.location);
                 map.setZoom(15);
 
                 const marker = new google.maps.Marker({
-                    position: myLocation,
-                    map: map,
-                    title: 'My Location'
+                    position: place.geometry.location,
+                    map: map
                 });
 
-                document.getElementById('latitude').value = myLocation.lat();
-                document.getElementById('longitude').value = myLocation.lng();
+                document.getElementById('latitude').value = place.geometry.location.lat();
+                document.getElementById('longitude').value = place.geometry.location.lng();
 
                 markers.push(marker);
-            }, function (error) {
-                console.error('Error getting location:', error.message);
-                alert('Error getting your location. Please make sure location services are enabled.');
-            });
-        } else {
-            alert('Geolocation is not supported by your browser.');
+            } else {
+                document.getElementById('locationInput').placeholder = 'Enter location';
+            }
         }
-    }
 
-    function clearMarkers() {
-        for (let i = 0; i < markers.length; i++) {
-            markers[i].setMap(null);
+        function showMyLocation() {
+            clearMarkers();
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const myLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+                    map.panTo(myLocation);
+                    map.setZoom(15);
+
+                    const marker = new google.maps.Marker({
+                        position: myLocation,
+                        map: map,
+                        title: 'My Location'
+                    });
+
+                    document.getElementById('latitude').value = myLocation.lat();
+                    document.getElementById('longitude').value = myLocation.lng();
+
+                    markers.push(marker);
+                }, function(error) {
+                    console.error('Error getting location:', error.message);
+                    alert('Error getting your location. Please make sure location services are enabled.');
+                });
+            } else {
+                alert('Geolocation is not supported by your browser.');
+            }
         }
-        markers = [];
-    }
-</script>
 
-
-
-
-    <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDnPKw1Dmau8umIdqkvLZa4ULmjAt8Dk_o&libraries=places&callback=initMap">
+        function clearMarkers() {
+            for (let i = 0; i < markers.length; i++) {
+                markers[i].setMap(null);
+            }
+            markers = [];
+        }
     </script>
 
+    <script>
+        const googleMapsApiKey = '{{ config('app.google_maps_api_key') }}';
+    </script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key={{ config('app.google_maps_api_key') }}&libraries=places&callback=initMap">
+    </script>
 
     <script>
         function generateNoLayanan() {
@@ -607,4 +611,197 @@
             $('#no-layanan').val(shuffled);
         }
     </script>
+        <script>
+            const options_temp = '<option value="" selected disabled>-- Select --</option>';
+            $('#coverage-area').change(function() {
+                $('#odc, #odp, #no_port_odp').html(options_temp);
+                if ($(this).val() != "") {
+                    getOdc($(this).val());
+                }
+            })
+
+            $('#odc').change(function() {
+                $('#odp, #no_port_odp').html(options_temp);
+                if ($(this).val() != "") {
+                    getOdp($(this).val());
+                }
+            })
+
+
+            $('#odp').change(function() {
+                $('#no_port_odp').html(options_temp);
+                if ($(this).val() != "") {
+                    getPort($(this).val());
+                }
+            });
+
+
+            $(document).ready(function() {
+                $('#router').change(function() {
+                    $('#mode_user').html(options_temp);
+                    $('#user_static').html(options_temp);
+                    $('#user_pppoe').html(options_temp);
+                    if ($(this).val() != "") {
+                        $("#alert").show();
+                        $("#user_static_mode").hide();
+                        $("#user_ppoe_mode").hide();
+                        $('#user_static').attr('required', false);
+                        $('#user_pppoe').attr('required', false);
+
+                        if ($(this).val() != "") {
+                            $("#mode_user").append(new Option("PPOE", "PPOE"));
+                            $("#mode_user").append(new Option("Static", "Static"));
+                        }
+                    }
+                })
+            });
+
+            $(document).ready(function() {
+                $("#mode_user").change(function() {
+                    $("#alert").hide();
+                    $('#user_static').html(options_temp);
+                    $('#user_pppoe').html(options_temp);
+                    var id = $('#router').val();
+                    if (this.value == 'Static') {
+                        $('#user_static').html(options_temp);
+                        $("#user_static_mode").show();
+                        $("#user_ppoe_mode").hide();
+                        $('#user_static').attr('required', true);
+                        $('#user_pppoe').attr('required', false);
+                        getStatic(id);
+                    } else {
+                        $('#user_pppoe').html(options_temp);
+                        $("#user_static_mode").hide();
+                        $("#user_ppoe_mode").show();
+                        $('#user_static').attr('required', false);
+                        $('#user_pppoe').attr('required', true);
+                        getProfile(id);
+                    }
+                });
+            });
+
+
+            function getOdc(areaId) {
+                let url = '{{ route('api.odc', ':id') }}';
+                url = url.replace(':id', areaId)
+                $.ajax({
+                    url,
+                    method: 'GET',
+                    beforeSend: function() {
+                        $('#odc').prop('disabled', true);
+                    },
+                    success: function(res) {
+                        const options = res.data.map(value => {
+                            return `<option value="${value.id}">${value.kode_odc}</option>`
+                        });
+                        $('#odc').html(options_temp + options)
+                        $('#odc').prop('disabled', false);
+                    },
+                    error: function(err) {
+                        $('#odc').prop('disabled', false);
+                        alert(JSON.stringify(err))
+                    }
+
+                })
+            }
+
+            function getOdp(odcId) {
+                let url = '{{ route('api.odp', ':id') }}';
+                url = url.replace(':id', odcId)
+                $.ajax({
+                    url,
+                    method: 'GET',
+                    beforeSend: function() {
+                        $('#odp').prop('disabled', true);
+                    },
+                    success: function(res) {
+                        const options = res.data.map(value => {
+                            return `<option value="${value.id}">${value.kode_odp}</option>`
+                        });
+                        $('#odp').html(options_temp + options);
+                        $('#odp').prop('disabled', false);
+                    },
+                    error: function(err) {
+                        alert(JSON.stringify(err))
+                        $('#odp').prop('disabled', false);
+                    }
+                })
+            }
+
+            function getPort(odpId) {
+                let url = '{{ route('api.getPort', ':id') }}';
+                url = url.replace(':id', odpId)
+                $.ajax({
+                    url,
+                    method: 'GET',
+                    beforeSend: function() {
+                        $('#no_port_odp').prop('disabled', true);
+                    },
+                    success: function(res) {
+                        dataArray = res.array
+                        const options = $.each(dataArray, function(key, value) {
+                            if (value == 'Kosong') {
+                                $('#no_port_odp').append('<option value="' + key + '">Port ' + key +
+                                    ' || ' + value + '</option>');
+                            } else {
+                                $('#no_port_odp').append('<option disabled value="' + key + '">Port ' +
+                                    key + ' || ' + value + '</option>');
+                            }
+
+                        });
+                        $('#no_port_odp').prop('disabled', false);
+                    },
+                    error: function(err) {
+                        alert(JSON.stringify(err))
+                        $('#no_port_odp').prop('disabled', false);
+                    }
+                })
+            }
+
+            function getProfile(router) {
+                let url = '{{ route('api.getProfile', ':id') }}';
+                url = url.replace(':id', router)
+                $.ajax({
+                    url,
+                    method: 'GET',
+                    beforeSend: function() {
+                        $('#user_pppoe').prop('disabled', true);
+                    },
+                    success: function(res) {
+                        const options = res.data.map(value => {
+                            return `<option value="${value.name}">${value.name}</option>`
+                        });
+                        $('#user_pppoe').html(options_temp + options);
+                        $('#user_pppoe').prop('disabled', false);
+                    },
+                    error: function(err) {
+                        alert(JSON.stringify(err))
+                        $('#user_pppoe').prop('disabled', false);
+                    }
+                })
+            }
+
+            function getStatic(router) {
+                let url = '{{ route('api.getStatic', ':id') }}';
+                url = url.replace(':id', router)
+                $.ajax({
+                    url,
+                    method: 'GET',
+                    beforeSend: function() {
+                        $('#user_static').prop('disabled', true);
+                    },
+                    success: function(res) {
+                        const options = res.data.map(value => {
+                            return `<option value="${value.name}">${value.name}</option>`
+                        });
+                        $('#user_static').html(options_temp + options);
+                        $('#user_static').prop('disabled', false);
+                    },
+                    error: function(err) {
+                        alert(JSON.stringify(err))
+                        $('#user_static').prop('disabled', false);
+                    }
+                })
+            }
+        </script>
 @endpush

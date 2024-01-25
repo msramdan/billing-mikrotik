@@ -18,6 +18,9 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+
+    'google_maps_api_key' => env('GOOGLE_MAPS_API_KEY', ''),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
