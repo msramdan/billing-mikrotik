@@ -652,74 +652,41 @@
         });
     </script>
 
-
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDnPKw1Dmau8umIdqkvLZa4ULmjAt8Dk_o&callback=initMap" async
+        defer></script>
     <script>
-        $(document).ready(function() {
-            var i = 1;
+        // Inisialisasi data pelanggan dari Blade template
+        const pelangganData = @json($pelanggan);
 
-            function checkKosongLatLong() {
-                if ($('#latitude').val() == '' || $('#longitude').val() == '') {
-                    $('.alert-choose-loc').show();
-                } else {
-                    $('.alert-choose-loc').hide();
-                }
-            }
-            var delay = (function() {
-                var timer = 0;
-                return function(callback, ms) {
-                    clearTimeout(timer);
-                    timer = setTimeout(callback, ms);
-                };
-            })()
-            // initialize map
-            const getLocationMap = L.map('map');
-            // initialize OSM
-            const osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-            const osmAttrib = 'Leaflet © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors';
-            const osm = new L.TileLayer(osmUrl, {
-                // minZoom: 0,
-                // maxZoom: 3,
-                attribution: osmAttrib
+        function initMap() {
+            const map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: -2.5489, lng: 118.0149 }, // Koordinat tengah Indonesia
+                zoom: 5,
             });
-            // render map
-            getLocationMap.scrollWheelZoom.disable()
-            @foreach ($pelanggan as $ins)
-                getLocationMap.setView(new L.LatLng("{{ $ins->latitude }}", "{{ $ins->longitude }}"), 7);
-            @endforeach
-            getLocationMap.addLayer(osm)
-            let location = '';
 
-            @foreach ($pelanggan as $pelanggan)
-                getToLoc("{{ $pelanggan->latitude }}", "{{ $pelanggan->longitude }}", getLocationMap,
-                    "{{ $pelanggan->id }}", "{{ $pelanggan->nama }}", "pelanggan");
-            @endforeach
-
-            function getToLoc(lat, lng, getLocationMap, id, name, type) {
-                const zoom = 1;
-                var url_edit = "";
-                $.ajax({
-                    url: `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`,
-                    dataType: 'json',
-                    success: function(result) {
-                        var marker = L.marker([lat, lng], {
-                            icon: L.AwesomeMarkers.icon({
-                                icon: 'users',
-                                prefix: 'fa',
-                                markerColor: 'darkblue',
-                            })
-                        }).addTo(getLocationMap);
-                        let list_of_location_html = '';
-                        list_of_location_html += '<div>';
-                        list_of_location_html += `<b>Pelanggan : ${name}</b><br>`;
-                        list_of_location_html += `<b>${result.display_name}</b><br>`;
-                        list_of_location_html += `<span>latitude : ${result.lat}</span><br>`;
-                        list_of_location_html += `<span>longitude: ${result.lon}</span><br>`;
-                        list_of_location_html += '</div>';
-                        marker.bindPopup(list_of_location_html);
-
-                    }
+            // Tampilkan marker untuk setiap pelanggan
+            pelangganData.forEach(pelanggan => {
+                const marker = new google.maps.Marker({
+                    position: {
+                        lat: parseFloat(pelanggan.latitude),
+                        lng: parseFloat(pelanggan.longitude)
+                    },
+                    map: map,
+                    title: pelanggan.nama,
                 });
-            }
+
+                const infowindow = new google.maps.InfoWindow({
+                    content: `<strong>${pelanggan.nama}</strong><br>Latitude: ${pelanggan.latitude}<br>Longitude: ${pelanggan.longitude}`,
+                });
+
+                marker.addListener('click', () => {
+                    infowindow.open(map, marker);
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initMap();
         });
     </script>
 @endpush
