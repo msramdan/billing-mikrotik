@@ -152,7 +152,7 @@
                     <label for="latitude">{{ __('Latitude') }}</label>
                     <input type="text" name="latitude" id="latitude"
                         class="form-control @error('latitude') is-invalid @enderror"
-                        value="{{ isset($odc) ? $odc->latitude : old('latitude') }}"
+                        value="{{ isset($odp) ? $odp->latitude : old('latitude') }}"
                         placeholder="{{ __('Latitude') }}" required readonly />
                     @error('latitude')
                         <span class="text-danger">
@@ -166,7 +166,7 @@
                     <label for="longitude">{{ __('Longitude') }}</label>
                     <input type="text" name="longitude" id="longitude"
                         class="form-control @error('longitude') is-invalid @enderror"
-                        value="{{ isset($odc) ? $odc->longitude : old('longitude') }}"
+                        value="{{ isset($odp) ? $odp->longitude : old('longitude') }}"
                         placeholder="{{ __('Longitude') }}" required readonly />
                     @error('longitude')
                         <span class="text-danger">
@@ -175,31 +175,173 @@
                     @enderror
                 </div>
             </div>
-            <div class="card px-2 py-1">
-                <div class="mb-3 search-box">
-                    <div class="input-group" style="width: 100%">
-                        <input type="text" class="form-control @error('place') is-invalid @enderror"
-                            name="place" id="search_place" placeholder="Cari Lokasi"
-                            value="{{ old('place') }}" autocomplete="off">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1"><button type="button"
-                                    class="btn" onclick="getCurrentLocation()">
-                                    <i class='fas fa-map-marker-alt'></i>
-                                </button></span>
-                        </div>
-                        <span class="d-none" style="color: red;" id="error-place"></span>
-                        @error('place')
-                            <span style="color: red;">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <ul class="results">
-                        <li style="text-align: center;padding: 50% 0; max-height: 25hv;">Masukan Pencarian</li>
-                    </ul>
+            <div class="col-md-12">
+                <div class="card">
+                    <input type="text" id="locationInput" class="form-control" placeholder="Enter location"
+                        style="margin-bottom: 5px">
+                    <button type="button" class="btn btn-success" onclick="showMyLocation()"
+                        style="margin-bottom: 5px">
+                        <i class="fa fa-map-marker" aria-hidden="true"></i> Show My Location
+                    </button>
+                    <div class="map-embed" id="map"></div>
                 </div>
-                <div class="map-embed" id="map" style="border-radius: 5px"></div>
             </div>
         </div>
 
     </div>
 </div>
+@push('js')
+    <script>
+        let map;
+        let geocoder;
+        let autocomplete;
+        let initialMarker; // Marker dari database
+        let markers = [];
+
+        function initMap() {
+            var initialLatitude = parseFloat("{{ isset($odc) ? $odc->latitude : -6.2088 }}");
+            var initialLongitude = parseFloat("{{ isset($odc) ? $odc->longitude : 106.8456 }}");
+
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: {
+                    lat: initialLatitude,
+                    lng: initialLongitude
+                },
+                zoom: 12
+            });
+
+            // Tambahkan marker di posisi awal dari database
+            initialMarker = new google.maps.Marker({
+                position: {
+                    lat: initialLatitude,
+                    lng: initialLongitude
+                },
+                map: map,
+                draggable: true // Sesuaikan dengan kebutuhan
+            });
+
+            markers.push(initialMarker);
+
+            geocoder = new google.maps.Geocoder();
+
+            autocomplete = new google.maps.places.Autocomplete(
+                document.getElementById('locationInput'), {
+                    types: ['geocode']
+                }
+            );
+            autocomplete.addListener('place_changed', onPlaceChanged);
+
+            map.addListener('click', onMapClick);
+        }
+
+        function onMapClick(event) {
+            const clickedLatLng = event.latLng;
+
+            // Periksa apakah ada marker di posisi yang sama
+            const existingMarkerIndex = findExistingMarkerIndex(clickedLatLng);
+
+            if (existingMarkerIndex !== -1) {
+                // Jika marker sudah ada, ganti posisi marker yang sudah ada
+                markers[existingMarkerIndex].setPosition(clickedLatLng);
+            } else {
+                // Jika tidak ada, tambahkan marker baru
+                clearMarkers();
+
+                const marker = new google.maps.Marker({
+                    position: clickedLatLng,
+                    map: map,
+                    draggable: true
+                });
+
+                document.getElementById('latitude').value = clickedLatLng.lat();
+                document.getElementById('longitude').value = clickedLatLng.lng();
+
+                marker.addListener('dragend', onMarkerDragEnd);
+
+                markers.push(marker);
+            }
+        }
+
+        function onMarkerDragEnd() {
+            document.getElementById('latitude').value = markers[0].getPosition().lat();
+            document.getElementById('longitude').value = markers[0].getPosition().lng();
+        }
+
+        function onPlaceChanged() {
+            clearMarkers();
+
+            const place = autocomplete.getPlace();
+            if (place.geometry) {
+                map.panTo(place.geometry.location);
+                map.setZoom(15);
+
+                const marker = new google.maps.Marker({
+                    position: place.geometry.location,
+                    map: map
+                });
+
+                document.getElementById('latitude').value = place.geometry.location.lat();
+                document.getElementById('longitude').value = place.geometry.location.lng();
+
+                markers.push(marker);
+            } else {
+                document.getElementById('locationInput').placeholder = 'Enter location';
+            }
+        }
+
+        function showMyLocation() {
+            clearMarkers();
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const myLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+                    map.panTo(myLocation);
+                    map.setZoom(15);
+
+                    const marker = new google.maps.Marker({
+                        position: myLocation,
+                        map: map,
+                        title: 'My Location'
+                    });
+
+                    document.getElementById('latitude').value = myLocation.lat();
+                    document.getElementById('longitude').value = myLocation.lng();
+
+                    markers.push(marker);
+                }, function(error) {
+                    console.error('Error getting location:', error.message);
+                    alert('Error getting your location. Please make sure location services are enabled.');
+                });
+            } else {
+                alert('Geolocation is not supported by your browser.');
+            }
+        }
+
+        function clearMarkers() {
+            for (let i = 0; i < markers.length; i++) {
+                markers[i].setMap(null);
+            }
+            markers = [];
+            // Tambahkan marker dari database kembali setelah menghapus marker
+            markers.push(initialMarker);
+        }
+
+        function findExistingMarkerIndex(latLng) {
+            // Fungsi untuk mencari indeks marker yang sudah ada di dalam array
+            for (let i = 0; i < markers.length; i++) {
+                if (markers[i].getPosition().equals(latLng)) {
+                    return i;
+                }
+            }
+            return -1; // Mengembalikan -1 jika marker tidak ditemukan
+        }
+    </script>
+
+    <script>
+        const googleMapsApiKey = '{{ config('app.google_maps_api_key') }}';
+    </script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key={{ config('app.google_maps_api_key') }}&libraries=places&callback=initMap">
+    </script>
+@endpush
