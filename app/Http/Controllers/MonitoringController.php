@@ -287,16 +287,17 @@ class MonitoringController extends Controller
     public function clearRedis()
     {
         $oltExec = session('sessionOlt') . '_oltExec_*';
+
+        $keysExec = Redis::keys($oltExec);
+        foreach ($keysExec as $row) {
+            Redis::del($row);
+        }
+
+
         $detail = session('sessionOlt') . '_detailOlt_*';
-        $patternsToDelete = [
-            $oltExec,
-            $detail,
-        ];
-        foreach ($patternsToDelete as $key) {
-            $keys = Redis::keys($detail);
-            foreach ($keys as $key) {
-                Redis::del($key);
-            }
+        $keys = Redis::keys($detail);
+        foreach ($keys as $key) {
+            Redis::del($key);
         }
 
         echo "success";
