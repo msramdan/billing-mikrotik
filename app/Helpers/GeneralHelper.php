@@ -222,12 +222,12 @@ function oltExec()
         ];
 
         // URL endpoint onu-name
-        $urlOnuName = 'http://103.176.79.206:9005/onu-name';
+        $urlOnuName = 'http://103.127.132.33:9005/onu-name';
 
         // URL endpoint status
-        $urlStatus = 'http://103.176.79.206:9005/status';
+        $urlStatus = 'http://103.127.132.33:9005/status';
 
-        $urlUncf = 'http://103.176.79.206:9005/uncf';
+        $urlUncf = 'http://103.127.132.33:9005/uncf';
 
         // Panggil fungsi asynchronous
         $result = asyncApiCalls($requestData, $urlOnuName, $urlStatus, $urlUncf);

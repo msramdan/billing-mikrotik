@@ -107,9 +107,9 @@ class MonitoringController extends Controller
                 'password' => $oltSettings->password,
                 'onu_id' =>  $onuId
             ];
-            $vlan = 'http://103.176.79.206:9005/vlan';
-            $sn = 'http://103.176.79.206:9005/sn';
-            $redaman = 'http://103.176.79.206:9005/redaman';
+            $vlan = 'http://103.127.132.33:9005/vlan';
+            $sn = 'http://103.127.132.33:9005/sn';
+            $redaman = 'http://103.127.132.33:9005/redaman';
             $result = asyncApiCalls($requestData, $vlan, $sn, $redaman);
             return response()->json([
                 'success' => true,
@@ -144,7 +144,7 @@ class MonitoringController extends Controller
                 'password' =>  $oltSettings->password,
             ];
 
-            $response = Http::post('http://103.176.79.206:9005/cek-koneksi', $requestData);
+            $response = Http::post('http://103.127.132.33:9005/cek-koneksi', $requestData);
             if ($response->successful()) {
                 $data = $response->json();
                 if ($data['status'] === true) {
@@ -175,7 +175,7 @@ class MonitoringController extends Controller
             ];
 
             $client = new \GuzzleHttp\Client();
-            $response = $client->post('http://103.176.79.206:9005/reboot', [
+            $response = $client->post('http://103.127.132.33:9005/reboot', [
                 'json' => $requestData,
             ]);
 
@@ -214,7 +214,7 @@ class MonitoringController extends Controller
             ];
 
             $client = new \GuzzleHttp\Client();
-            $response = $client->post('http://103.176.79.206:9005/reset', [
+            $response = $client->post('http://103.127.132.33:9005/reset', [
                 'json' => $requestData,
             ]);
 
@@ -256,7 +256,7 @@ class MonitoringController extends Controller
             ];
 
             $client = new \GuzzleHttp\Client();
-            $response = $client->post('http://103.176.79.206:9005/hapus', [
+            $response = $client->post('http://103.127.132.33:9005/hapus', [
                 'json' => $requestData,
             ]);
 
