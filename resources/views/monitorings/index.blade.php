@@ -548,21 +548,32 @@
                             <div class="card"
                                 style="background: linear-gradient(to right, #4CAF50, #3498db); color: #fff;">
                                 <div class="card-body">
-                                    <div class="col-md-3">
-                                        <select name="status" id="oltSelect" class="form-control">
-                                            <option value="" selected disabled>-- Select OLT -- </option>
-                                            @foreach ($olts as $row)
-                                                <option value="{{ $row->id }}"
-                                                    {{ session('sessionOlt') == $row->id ? 'selected' : '' }}>
-                                                    {{ $row->name }}</option>
-                                            @endforeach
-                                        </select>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <select name="status" id="oltSelect" class="form-control">
+                                                <option value="" selected disabled>-- Select OLT -- </option>
+                                                @foreach ($olts as $row)
+                                                    <option value="{{ $row->id }}"
+                                                        {{ session('sessionOlt') == $row->id ? 'selected' : '' }}>
+                                                        {{ $row->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        @if (session('sessionOlt'))
+                                            <div class="col-md-2">
+                                                <button id="clear-redis-menu" class="btn btn-primary"><i
+                                                        class="fas fa-sync"></i> Sync
+                                                    Data</button>
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
                 <section class="row">
                     <div class="col-xl-4 col-sm-6 box-col-4">
                         <div class="card radius-10 border-start border-0 border-3 border-secondary">
@@ -892,39 +903,6 @@
             });
 
             addLoadingOverlay();
-            $(".open-modal-btn").click(function() {
-                var onuIndex = $(this).data('onu');
-                var onuName = $(this).data('name');
-                var csrfToken = $('meta[name="csrf-token"]').attr('content');
-                showLoadingIndicator();
-                $.ajax({
-                    type: "POST",
-                    url: '{{ route('detailOlt') }}',
-                    data: {
-                        onu_id: onuIndex,
-                        _token: csrfToken
-                    },
-                    success: function(response) {
-                        hideLoadingIndicator();
-                        $("#modalOnuId").text(onuIndex);
-                        $("#modalName").text(onuName);
-                        $("#modalSN").text(response.result.status.data.serial_number);
-                        $("#modalVlan").text(response.result.onuName.data);
-                        $("#modal_up_rx").text(response.result.uncf.data.up.Rx);
-                        $("#modal_up_tx").text(response.result.uncf.data.up.Tx);
-                        $("#modal_up_att").text(response.result.uncf.data.up.Attenuation);
-                        $("#modal_down_rx").text(response.result.uncf.data.down.Rx);
-                        $("#modal_down_tx").text(response.result.uncf.data.down.Tx);
-                        $("#modal_down_att").text(response.result.uncf.data.down.Attenuation);
-                        $('#myModal').modal('show');
-                        console.log(response);
-                    },
-                    error: function(error) {
-                        console.error('Error:', error);
-                    },
-                });
-            });
-
             $('#oltSelect').on('change', function() {
                 var selectedValue = $(this).val();
                 changeSession(selectedValue);
@@ -990,6 +968,60 @@
             function hideLoadingIndicator() {
                 $('#loading-overlay').hide();
             }
+        });
+    </script>
+    <script>
+        document.querySelector('#clear-redis-menu').addEventListener('click', function(e) {
+            var form = this;
+            e.preventDefault();
+            Swal.fire({
+                title: "Sync Data With Server OLT ?",
+                text: "Semua data akan di ambil dari server, mohon tunggu!",
+                icon: "warning",
+                showCancelButton: `No, cancel !`,
+                confirmButtonText: `Yes, Sync !`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Show loading indicator
+                    Swal.fire({
+                        title: 'Loading...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        onBeforeOpen: () => {
+                            Swal.showLoading();
+                        },
+                    });
+
+                    // Perform AJAX request
+                    $.ajax({
+                        type: 'GET',
+                        url: '{{ route('clearRedis') }}',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        },
+                        data: '',
+                        success: function(res) {
+                            // Close the loading indicator
+                            Swal.close();
+
+                            if (res == 'success') {
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: 'Data pada cache berhasil di reset',
+                                    icon: 'success'
+                                })
+                                    location.reload();
+                            } else {
+                                Swal.fire({
+                                    title: 'Failed!',
+                                    text: 'Data pada cache gagal di reset',
+                                    icon: 'error'
+                                })
+                            }
+                        },
+                    });
+                }
+            });
         });
     </script>
 @endpush

@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use GuzzleHttp\Client as Client;
 use \RouterOS\Client as RouterOSClient;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redis;
 
 function formatBytes($bytes, $decimal = null)
 {
@@ -139,7 +140,7 @@ function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima, $footer
         $message .= 'Jika Anda memiliki pertanyaan atau membutuhkan bantuan tambahan, jangan ragu untuk menghubungi kami di ' . getCompany()->no_wa  . ' atau melalui email ke ' . getCompany()->email  . ".\n\n";
         $message .= "Terima kasih atas kepercayaan Anda kepada kami. Selamat menikmati koneksi internet yang stabil dan cepat!\n\n";
         $message .= "Salam hangat,\n";
-        $message .= $user->name .'-'. getCompany()->nama_perusahaan;
+        $message .= $user->name . '-' . getCompany()->nama_perusahaan;
     }
 
     $endpoint_wa = $url . 'send-message';
@@ -220,6 +221,8 @@ function oltExec()
             'username' => $oltSettings->username,
             'password' => $oltSettings->password,
         ];
+        $keyOnu = $oltSettings->username . $oltSettings->password;
+        $key = session('sessionOlt') . '_oltExec_' . '' . md5($keyOnu);
 
         // URL endpoint onu-name
         $urlOnuName = 'http://103.127.132.33:9005/onu-name';
@@ -230,7 +233,7 @@ function oltExec()
         $urlUncf = 'http://103.127.132.33:9005/uncf';
 
         // Panggil fungsi asynchronous
-        $result = asyncApiCalls($requestData, $urlOnuName, $urlStatus, $urlUncf);
+        $result = asyncApiCalls($requestData, $urlOnuName, $urlStatus, $urlUncf, $key, env('TTL_REDIS_LONG'));
 
         return response()->json($result);
     } catch (\Exception $e) {
@@ -238,22 +241,27 @@ function oltExec()
     }
 }
 
-function asyncApiCalls(array $requestData, string $urlOnuName, string $urlStatus, string $urlUncf): array
+function asyncApiCalls(array $requestData, string $urlOnuName, string $urlStatus, string $urlUncf, $keyOnuExec, $redis_expired_time): array
 {
-    // Membuat instance GuzzleHttp Client
-    $client = new Client();
+    $oltExec = Redis::get($keyOnuExec);
+    if (!isset($oltExec)) {
+        $expired = 'EX';
+        $client = new Client();
+        $promises = [
+            'onuName' => asyncPostRequest($client, $urlOnuName, $requestData),
+            'status' => asyncPostRequest($client, $urlStatus, $requestData),
+            'uncf' => asyncPostRequest($client, $urlUncf, $requestData),
+        ];
 
-    // Membuat array promise untuk panggilan API paralel
-    $promises = [
-        'onuName' => asyncPostRequest($client, $urlOnuName, $requestData),
-        'status' => asyncPostRequest($client, $urlStatus, $requestData),
-        'uncf' => asyncPostRequest($client, $urlUncf, $requestData),
-    ];
-
-    // Menunggu hasil panggilan API paralel
-    $results = [];
-    foreach ($promises as $key => $promise) {
-        $results[$key] = json_decode($promise->wait()->getBody()->getContents(), true);
+        // Menunggu hasil panggilan API paralel
+        $results = [];
+        foreach ($promises as $key => $promise) {
+            $results[$key] = json_decode($promise->wait()->getBody()->getContents(), true);
+        }
+        $dataOltExec = json_encode($results);
+        Redis::set($keyOnuExec, $dataOltExec, $expired, $redis_expired_time);
+    } else {
+        $results = json_decode($oltExec, true);
     }
 
     return $results;

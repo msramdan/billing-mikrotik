@@ -6,6 +6,7 @@ use App\Models\Olt;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Redis;
 
 class MonitoringController extends Controller
 {
@@ -110,7 +111,9 @@ class MonitoringController extends Controller
             $vlan = 'http://103.127.132.33:9005/vlan';
             $sn = 'http://103.127.132.33:9005/sn';
             $redaman = 'http://103.127.132.33:9005/redaman';
-            $result = asyncApiCalls($requestData, $vlan, $sn, $redaman);
+            $keyOnu = $oltSettings->username . $oltSettings->password;
+            $keyOnuExec = session('sessionOlt') . '_detailOlt_' . '' . md5($keyOnu . $onuId);
+            $result = asyncApiCalls($requestData, $vlan, $sn, $redaman, $keyOnuExec,  env('TTL_REDIS_SHORT'));
             return response()->json([
                 'success' => true,
                 'result' => $result
@@ -279,5 +282,23 @@ class MonitoringController extends Controller
                 'message' => 'Error: ' . $e->getMessage(),
             ]);
         }
+    }
+
+    public function clearRedis()
+    {
+        $oltExec = session('sessionOlt') . '_oltExec_*';
+        $detail = session('sessionOlt') . '_detailOlt_*';
+        $patternsToDelete = [
+            $oltExec,
+            $detail,
+        ];
+        foreach ($patternsToDelete as $key) {
+            $keys = Redis::keys($detail);
+            foreach ($keys as $key) {
+                Redis::del($key);
+            }
+        }
+
+        echo "success";
     }
 }

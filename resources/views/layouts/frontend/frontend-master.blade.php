@@ -17,9 +17,6 @@
     <link rel="stylesheet" href="{{ asset('frontend') }}/assets/css/responsive.css">
     <link rel="stylesheet" href="{{ asset('frontend') }}/assets/css/dark-style.css">
     <title> Billing Wifi </title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
-        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-        crossorigin="" />
     <link href="{{ asset('mazer/assets/jqvmap/dist/jqvmap.min.css') }}" rel="stylesheet" />
 </head>
 @stack('css')
@@ -77,9 +74,6 @@
     <script src="{{ asset('mazer/assets/jqvmap/dist/jquery.vmap.js') }}"></script>
     <script src="{{ asset('mazer/assets/jqvmap/dist/maps/jquery.vmap.world.js') }}"></script>
     <script src="{{ asset('mazer/assets/jqvmap/examples/js/jquery.vmap.sampledata.js') }}"></script>
-    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
-        integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
-        crossorigin=""></script>
     @include('sweetalert::alert')
     @stack('js')
 </body>
