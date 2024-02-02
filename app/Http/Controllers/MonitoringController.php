@@ -108,9 +108,13 @@ class MonitoringController extends Controller
                 'password' => $oltSettings->password,
                 'onu_id' =>  $onuId
             ];
-            $vlan = 'http://103.127.132.33:9005/vlan';
-            $sn = 'http://103.127.132.33:9006/sn';
-            $redaman = 'http://103.127.132.33:9007/redaman';
+
+            $zteServer4 = env('ZTE_SERVER_4');
+            $zteServer5 = env('ZTE_SERVER_5');
+            $zteServer6 = env('ZTE_SERVER_6');
+            $vlan = $zteServer4 . '/vlan';
+            $sn = $zteServer5 . '/sn';
+            $redaman = $zteServer6 . '/redaman';
             $result = asyncApiCalls($requestData, $vlan, $sn, $redaman);
             return response()->json([
                 'success' => true,
@@ -176,7 +180,9 @@ class MonitoringController extends Controller
             ];
 
             $client = new \GuzzleHttp\Client();
-            $response = $client->post('http://103.127.132.33:9005/reboot', [
+            $zteServer7 = env('ZTE_SERVER_7');
+
+            $response = $client->post($zteServer7 . '/reboot', [
                 'json' => $requestData,
             ]);
 
@@ -215,7 +221,8 @@ class MonitoringController extends Controller
             ];
 
             $client = new \GuzzleHttp\Client();
-            $response = $client->post('http://103.127.132.33:9006/reset', [
+            $zteServer7 = env('ZTE_SERVER_7');
+            $response = $client->post($zteServer7 . '/reset', [
                 'json' => $requestData,
             ]);
 
@@ -257,7 +264,8 @@ class MonitoringController extends Controller
             ];
 
             $client = new \GuzzleHttp\Client();
-            $response = $client->post('http://103.127.132.33:9007/hapus', [
+            $zteServer7 = env('ZTE_SERVER_7');
+            $response = $client->post($zteServer7 . '/hapus', [
                 'json' => $requestData,
             ]);
 
@@ -281,5 +289,4 @@ class MonitoringController extends Controller
             ]);
         }
     }
-
 }

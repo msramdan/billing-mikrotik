@@ -222,15 +222,12 @@ function oltExec()
             'password' => $oltSettings->password,
         ];
 
-        // URL endpoint onu-name
-        $urlOnuName = 'http://103.127.132.33:9005/onu-name';
-
-        // URL endpoint status
-        $urlStatus = 'http://103.127.132.33:9006/status';
-
-        $urlUncf = 'http://103.127.132.33:9007/uncf';
-
-        // Panggil fungsi asynchronous
+        $zteServer1 = env('ZTE_SERVER_1');
+        $zteServer2 = env('ZTE_SERVER_2');
+        $zteServer3 = env('ZTE_SERVER_3');
+        $urlOnuName = $zteServer1 . '/onu-name';;
+        $urlStatus = $zteServer2 . '/status';
+        $urlUncf = $zteServer3 . '/uncf';
         $result = asyncApiCalls($requestData, $urlOnuName, $urlStatus, $urlUncf);
 
         return response()->json($result);
