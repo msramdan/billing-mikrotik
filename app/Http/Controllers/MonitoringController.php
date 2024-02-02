@@ -215,7 +215,7 @@ class MonitoringController extends Controller
             ];
 
             $client = new \GuzzleHttp\Client();
-            $response = $client->post('http://103.127.132.33:9005/reset', [
+            $response = $client->post('http://103.127.132.33:9006/reset', [
                 'json' => $requestData,
             ]);
 
@@ -257,7 +257,7 @@ class MonitoringController extends Controller
             ];
 
             $client = new \GuzzleHttp\Client();
-            $response = $client->post('http://103.127.132.33:9005/hapus', [
+            $response = $client->post('http://103.127.132.33:9007/hapus', [
                 'json' => $requestData,
             ]);
 
