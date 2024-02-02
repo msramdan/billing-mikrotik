@@ -109,11 +109,9 @@ class MonitoringController extends Controller
                 'onu_id' =>  $onuId
             ];
             $vlan = 'http://103.127.132.33:9005/vlan';
-            $sn = 'http://103.127.132.33:9005/sn';
-            $redaman = 'http://103.127.132.33:9005/redaman';
-            $keyOnu = $oltSettings->username . $oltSettings->password;
-            $keyOnuExec = session('sessionOlt') . '_detailOlt_' . '' . md5($keyOnu . $onuId);
-            $result = asyncApiCalls($requestData, $vlan, $sn, $redaman, $keyOnuExec,  env('TTL_REDIS_SHORT'));
+            $sn = 'http://103.127.132.33:9006/sn';
+            $redaman = 'http://103.127.132.33:9007/redaman';
+            $result = asyncApiCalls($requestData, $vlan, $sn, $redaman);
             return response()->json([
                 'success' => true,
                 'result' => $result
@@ -284,22 +282,4 @@ class MonitoringController extends Controller
         }
     }
 
-    public function clearRedis()
-    {
-        $oltExec = session('sessionOlt') . '_oltExec_*';
-
-        $keysExec = Redis::keys($oltExec);
-        foreach ($keysExec as $row) {
-            Redis::del($row);
-        }
-
-
-        $detail = session('sessionOlt') . '_detailOlt_*';
-        $keys = Redis::keys($detail);
-        foreach ($keys as $key) {
-            Redis::del($key);
-        }
-
-        echo "success";
-    }
 }

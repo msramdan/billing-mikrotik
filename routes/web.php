@@ -142,7 +142,6 @@ Route::middleware(['auth', 'web'])->group(function () {
         Route::post('/oltReboot', 'oltReboot')->name('oltReboot');
         Route::post('/oltReset', 'oltReset')->name('oltReset');
         Route::post('/oltHapus', 'oltHapus')->name('oltHapus');
-        Route::get('/clearRedis', 'clearRedis')->name('clearRedis');
     });
 
     Route::resource('companies', App\Http\Controllers\CompanyController::class);

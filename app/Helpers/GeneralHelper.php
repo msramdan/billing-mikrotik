@@ -221,19 +221,17 @@ function oltExec()
             'username' => $oltSettings->username,
             'password' => $oltSettings->password,
         ];
-        $keyOnu = $oltSettings->username . $oltSettings->password;
-        $key = session('sessionOlt') . '_oltExec_' . '' . md5($keyOnu);
 
         // URL endpoint onu-name
         $urlOnuName = 'http://103.127.132.33:9005/onu-name';
 
         // URL endpoint status
-        $urlStatus = 'http://103.127.132.33:9005/status';
+        $urlStatus = 'http://103.127.132.33:9006/status';
 
-        $urlUncf = 'http://103.127.132.33:9005/uncf';
+        $urlUncf = 'http://103.127.132.33:9007/uncf';
 
         // Panggil fungsi asynchronous
-        $result = asyncApiCalls($requestData, $urlOnuName, $urlStatus, $urlUncf, $key, env('TTL_REDIS_LONG'));
+        $result = asyncApiCalls($requestData, $urlOnuName, $urlStatus, $urlUncf);
 
         return response()->json($result);
     } catch (\Exception $e) {
@@ -241,27 +239,19 @@ function oltExec()
     }
 }
 
-function asyncApiCalls(array $requestData, string $urlOnuName, string $urlStatus, string $urlUncf, $keyOnuExec, $redis_expired_time): array
+function asyncApiCalls(array $requestData, string $urlOnuName, string $urlStatus, string $urlUncf): array
 {
-    $oltExec = Redis::get($keyOnuExec);
-    if (!isset($oltExec)) {
-        $expired = 'EX';
-        $client = new Client();
-        $promises = [
-            'onuName' => asyncPostRequest($client, $urlOnuName, $requestData),
-            'status' => asyncPostRequest($client, $urlStatus, $requestData),
-            'uncf' => asyncPostRequest($client, $urlUncf, $requestData),
-        ];
+    $client = new Client();
+    $promises = [
+        'onuName' => asyncPostRequest($client, $urlOnuName, $requestData),
+        'status' => asyncPostRequest($client, $urlStatus, $requestData),
+        'uncf' => asyncPostRequest($client, $urlUncf, $requestData),
+    ];
 
-        // Menunggu hasil panggilan API paralel
-        $results = [];
-        foreach ($promises as $key => $promise) {
-            $results[$key] = json_decode($promise->wait()->getBody()->getContents(), true);
-        }
-        $dataOltExec = json_encode($results);
-        Redis::set($keyOnuExec, $dataOltExec, $expired, $redis_expired_time);
-    } else {
-        $results = json_decode($oltExec, true);
+    // Menunggu hasil panggilan API paralel
+    $results = [];
+    foreach ($promises as $key => $promise) {
+        $results[$key] = json_decode($promise->wait()->getBody()->getContents(), true);
     }
 
     return $results;

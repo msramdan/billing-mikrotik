@@ -560,13 +560,6 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        @if (session('sessionOlt'))
-                                            <div class="col-md-2">
-                                                <button id="clear-redis-menu" class="btn btn-primary"><i
-                                                        class="fas fa-sync"></i> Sync
-                                                    Data</button>
-                                            </div>
-                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -605,7 +598,6 @@
                                         <h4 class="my-1 text-primary"><a href="#" class="">
                                                 {{ $online }} </a>
                                         </h4>
-
                                     </div>
                                     <div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto"><i
                                             class="fa fa-check"></i>
@@ -968,60 +960,6 @@
             function hideLoadingIndicator() {
                 $('#loading-overlay').hide();
             }
-        });
-    </script>
-    <script>
-        document.querySelector('#clear-redis-menu').addEventListener('click', function(e) {
-            var form = this;
-            e.preventDefault();
-            Swal.fire({
-                title: "Sync Data With Server OLT ?",
-                text: "Semua data akan di ambil dari server, mohon tunggu!",
-                icon: "warning",
-                showCancelButton: `No, cancel !`,
-                confirmButtonText: `Yes, Sync !`,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Show loading indicator
-                    Swal.fire({
-                        title: 'Loading...',
-                        allowOutsideClick: false,
-                        showConfirmButton: false,
-                        onBeforeOpen: () => {
-                            Swal.showLoading();
-                        },
-                    });
-
-                    // Perform AJAX request
-                    $.ajax({
-                        type: 'GET',
-                        url: '{{ route('clearRedis') }}',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        },
-                        data: '',
-                        success: function(res) {
-                            // Close the loading indicator
-                            Swal.close();
-
-                            if (res == 'success') {
-                                Swal.fire({
-                                    title: 'Success!',
-                                    text: 'Data pada cache berhasil di reset',
-                                    icon: 'success'
-                                })
-                                    location.reload();
-                            } else {
-                                Swal.fire({
-                                    title: 'Failed!',
-                                    text: 'Data pada cache gagal di reset',
-                                    icon: 'error'
-                                })
-                            }
-                        },
-                    });
-                }
-            });
         });
     </script>
 @endpush
