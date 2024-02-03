@@ -260,6 +260,7 @@ class CompanyController extends Controller
         // remove session
         session()->forget('sessionRouter');
         session()->forget('sessionOlt');
+        session()->forget('sessionOltName');
         session()->forget('sessionCompany');
         session(['sessionCompany' => $value]);
         $data = Settingmikrotik::where('company_id', '=', $value)->first();

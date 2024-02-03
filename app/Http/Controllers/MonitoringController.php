@@ -138,6 +138,7 @@ class MonitoringController extends Controller
             ]);
 
             session()->forget('sessionOlt');
+            session()->forget('sessionOltName');
 
             $oltSettings = Olt::findOrFail($request->input('selectedValue'));
 
@@ -153,7 +154,10 @@ class MonitoringController extends Controller
             if ($response->successful()) {
                 $data = $response->json();
                 if ($data['status'] === true) {
-                    session(['sessionOlt' => $oltSettings->id]);
+                    session([
+                        'sessionOlt' => $oltSettings->id,
+                        'sessionOltName' => $oltSettings->name
+                    ]);
                     return response()->json(['success' => true]);
                 } else {
                     return response()->json(['success' => false]);

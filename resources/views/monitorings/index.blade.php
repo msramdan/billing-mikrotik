@@ -383,28 +383,30 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="input1" class="form-label mb-1">OLT name</label>
-                                    <input type="text" class="form-control" id="input1" name="input1" readonly>
+                                    <label for="modal_olt_name" class="form-label mb-1">OLT name</label>
+                                    <input type="text" class="form-control" id="modal_olt_name"
+                                        value="{{ session('sessionOltName') }}" name="modal_olt_name" readonly>
                                 </div>
                             </div>
 
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="input4" class="form-label mb-1">SN ONU</label>
-                                    <input type="text" class="form-control" id="input4" name="input4" readonly>
+                                    <label for="modal_sn" class="form-label mb-1">SN ONU</label>
+                                    <input type="text" class="form-control" id="modal_sn" name="modal_sn" readonly>
                                 </div>
                             </div>
 
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="input3" class="form-label mb-1">Interface</label>
-                                    <input type="text" class="form-control" id="input3" name="input3" readonly>
+                                    <label for="modal_interface" class="form-label mb-1">Interface</label>
+                                    <input type="text" class="form-control" id="modal_interface" name="modal_interface"
+                                        readonly>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="input4" class="form-label mb-1">Index Available</label>
-                                    <input type="text" class="form-control" id="input4" name="input4" readonly>
+                                    <label for="modal_index" class="form-label mb-1">Index Available</label>
+                                    <input type="text" class="form-control" id="modal_index" name="modal_index" readonly>
                                 </div>
                             </div>
 
@@ -413,20 +415,24 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="input2" class="form-label mb-1">ONU Name</label>
-                                    <input type="text" class="form-control" id="input2" name="input2">
+                                    <label for="modal_onu_name" class="form-label mb-1">ONU Name</label>
+                                    <input type="text" class="form-control" id="modal_onu_name" name="modal_onu_name">
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="input3" class="form-label mb-1">ONU Type</label>
-                                    <input type="text" class="form-control" id="input3" name="input3">
+                                    <select id="" class="form-select">
+                                        <option value="" selected disabled>-- Select --</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="input4" class="form-label mb-1">T-Con Profile</label>
-                                    <input type="text" class="form-control" id="input4" name="input4">
+                                    <select id="" class="form-select">
+                                        <option value="" selected disabled>-- Select --</option>
+                                    </select>
                                 </div>
                             </div>
 
@@ -437,19 +443,33 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="input3" class="form-label mb-1">Profile Vlan</label>
-                                    <input type="text" class="form-control" id="input3" name="input3">
+                                    <select id="" class="form-select">
+                                        <option value="" selected disabled>-- Select --</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="input4" class="form-label mb-1">Provile Vlan</label>
-                                    <input type="text" class="form-control" id="input4" name="input4">
+                                    <label for="input4" class="form-label mb-1">CVlan</label>
+                                    <select id="" class="form-select">
+                                        <option value="" selected disabled>-- Select --</option>
+                                    </select>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="input4" class="form-label mb-1">Tag Vlan</label>
-                                    <input type="text" class="form-control" id="input4" name="input4">
+                                    <label for="input4" class="form-label mb-1">Service Port 1</label>
+                                    <select id="" class="form-select">
+                                        <option value="" selected disabled>-- Select --</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="input4" class="form-label mb-1">Service Port 2</label>
+                                    <select id="" class="form-select">
+                                        <option value="" selected disabled>-- Select --</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -458,27 +478,35 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="input3" class="form-label mb-1">Vlan Port Wifi</label>
-                                    <input type="text" class="form-control" id="input3" name="input3">
+                                    <select id="" class="form-select">
+                                        <option value="" selected disabled>-- Select --</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="input4" class="form-label mb-1">Vlan Port eth 1</label>
-                                    <input type="text" class="form-control" id="input4" name="input4">
+                                    <select id="" class="form-select">
+                                        <option value="" selected disabled>-- Select --</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="input4" class="form-label mb-1">Vlan Port eth 2</label>
-                                    <input type="text" class="form-control" id="input4" name="input4">
+                                    <select id="" class="form-select">
+                                        <option value="" selected disabled>-- Select --</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="input3" class="form-label mb-1">Mikrotik</label>
-                                    <input type="text" class="form-control" id="input3" name="input3">
+                                    <label for="input3" class="form-label mb-1">Router Mikrotik</label>
+                                    <select id="modal_router" class="form-select">
+                                        <option value="" selected disabled>-- Select Router --</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -603,8 +631,9 @@
                                     <td>{{ $row->onu_index }}</td>
                                     <td>{{ $row->sn }}</td>
                                     <td class="text-center">
-                                        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#register-onu">
+                                        <button type="button" class="btn btn-success btn-sm open-modal"
+                                            data-bs-toggle="modal" data-bs-target="#register-onu"
+                                            data-onu-index="{{ $row->onu_index }}" data-sn="{{ $row->sn }}">
                                             <i class="fa fa-plus" aria-hidden="true"></i>
                                         </button>
                                     </td>
@@ -1108,6 +1137,39 @@
             function hideLoadingIndicator() {
                 $('#loading-overlay').hide();
             }
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('.open-modal').click(function() {
+                var onuIndex = $(this).data('onu-index');
+                var sn = $(this).data('sn');
+                var extractedOnuIndex = onuIndex.split(':')[0];
+                $('#modal_interface').val(extractedOnuIndex);
+                $('#modal_sn').val(sn);
+
+                $.ajax({
+                    url: '{{ route("getMikrotikRouters") }}',
+                    method: 'GET',
+                    success: function(response) {
+                        var routerSelect = $('#modal_router');
+                        routerSelect.empty();
+                        routerSelect.append(
+                            '<option value="" selected disabled>-- Select Router --</option>'
+                            );
+                        $.each(response.routers, function(index, router) {
+                            routerSelect.append('<option value="' + router.id + '">' +
+                                router.identitas_router + '</option>');
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+
+
+            });
         });
     </script>
 @endpush

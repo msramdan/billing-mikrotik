@@ -159,4 +159,11 @@ class SettingmikrotikController extends Controller
     {
         return view('no-mikrotik');
     }
+
+    public function getMikrotikRouters()
+    {
+        $routers = Settingmikrotik::where('company_id', '=', session('sessionCompany'))->get();
+        $response = ['routers' => $routers];
+        return response()->json($response);
+    }
 }

@@ -71,6 +71,7 @@ Route::middleware(['auth', 'web', 'cek-expired'])->group(function () {
     Route::resource('settingmikrotiks', App\Http\Controllers\SettingmikrotikController::class);
     Route::controller(App\Http\Controllers\SettingmikrotikController::class)->group(function () {
         Route::get('setActive', 'setActive')->name('setActive')->middleware('no_mikrotik');
+        Route::get('getMikrotikRouters', 'getMikrotikRouters')->name('getMikrotikRouters');
     });
     Route::resource('statusrouters', App\Http\Controllers\StatusrouterController::class)->middleware('no_mikrotik');
     Route::controller(App\Http\Controllers\StatusrouterController::class)->group(function () {
