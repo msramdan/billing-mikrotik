@@ -370,6 +370,147 @@
 
 @section('content')
 
+    <!-- Modal Register -->
+    <div class="modal fade" id="register-onu" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+        data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Register ONU</h5>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="input1" class="form-label mb-1">OLT name</label>
+                                    <input type="text" class="form-control" id="input1" name="input1" readonly>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="input4" class="form-label mb-1">SN ONU</label>
+                                    <input type="text" class="form-control" id="input4" name="input4" readonly>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="input3" class="form-label mb-1">Interface</label>
+                                    <input type="text" class="form-control" id="input3" name="input3" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="input4" class="form-label mb-1">Index Available</label>
+                                    <input type="text" class="form-control" id="input4" name="input4" readonly>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="input2" class="form-label mb-1">ONU Name</label>
+                                    <input type="text" class="form-control" id="input2" name="input2">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="input3" class="form-label mb-1">ONU Type</label>
+                                    <input type="text" class="form-control" id="input3" name="input3">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="input4" class="form-label mb-1">T-Con Profile</label>
+                                    <input type="text" class="form-control" id="input4" name="input4">
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="input3" class="form-label mb-1">Profile Vlan</label>
+                                    <input type="text" class="form-control" id="input3" name="input3">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="input4" class="form-label mb-1">Provile Vlan</label>
+                                    <input type="text" class="form-control" id="input4" name="input4">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="input4" class="form-label mb-1">Tag Vlan</label>
+                                    <input type="text" class="form-control" id="input4" name="input4">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="input3" class="form-label mb-1">Vlan Port Wifi</label>
+                                    <input type="text" class="form-control" id="input3" name="input3">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="input4" class="form-label mb-1">Vlan Port eth 1</label>
+                                    <input type="text" class="form-control" id="input4" name="input4">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="input4" class="form-label mb-1">Vlan Port eth 2</label>
+                                    <input type="text" class="form-control" id="input4" name="input4">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="input3" class="form-label mb-1">Mikrotik</label>
+                                    <input type="text" class="form-control" id="input3" name="input3">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="input4" class="form-label mb-1">Profile PPOE</label>
+                                    <input type="text" class="form-control" id="input4" name="input4">
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="input3" class="form-label mb-1">Username PPOE</label>
+                                    <input type="text" class="form-control" id="input3" name="input3">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="input4" class="form-label mb-1">Password PPOE</label>
+                                    <input type="text" class="form-control" id="input4" name="input4">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal" id="myModal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -452,6 +593,7 @@
                                 <th scope="col">#</th>
                                 <th scope="col">Onu ID</th>
                                 <th scope="col">SN</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -460,6 +602,12 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $row->onu_index }}</td>
                                     <td>{{ $row->sn }}</td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#register-onu">
+                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
