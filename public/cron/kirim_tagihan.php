@@ -17,11 +17,12 @@ $query = mysqli_query($koneksi, $sql);
 while ($data = mysqli_fetch_array($query)) {
     try {
         $url = $data['url_wa_gateway'] . 'send-message';
-        $message = 'Pelanggan ' . $data['nama_perusahaan'] . ' Yth. ' . $data['nama'] . "\n\n";
+        $message = 'Pelanggan ' . $data['nama_perusahaan'] . "\n\n"; 
+        $message .= 'Yth. *' . $data['nama'] . '*' . "\n\n";
         $message .= 'Kami sampaikan tagihan layanan internet bulan *' . tanggal_indonesia($data['periode'])  . '*' . "\n";
-        $message .= 'Dengan no tagihan *' . $data['no_tagihan'] . '* sebesar *' . rupiah($data['total_bayar']) . '*' . "\n";
-        $message .= 'Pembayaran paling lambat di tanggal *' . addHari($data['tanggal_create_tagihan'], $data['jatuh_tempo']) . '* Untuk Menghindari Isolir otomatis di tempat anda.' . " \n\n";
-        $message .= "_*Note : Abaikan pesan ini jika sudah membayar*_ \n\n";
+        $message .= 'No tagihan *' . $data['no_tagihan'] . '*' . "\n\n";
+        $message .= 'sebesar *' . rupiah($data['total_bayar']) . '*' . "\n\n";
+        $message .= 'Pembayaran paling lambat di tanggal *' . addHari($data['tanggal_create_tagihan'], $data['jatuh_tempo']) . '*  Untuk Menghindari Isolir (wifi mati sementara) di jaringan anda.' . " \n\n";
         $message .= $data['footer_pesan_wa_tagihan'];
         if ($data['kirim_tagihan_wa'] == 'Yes') {
             $dataPesan = array(
