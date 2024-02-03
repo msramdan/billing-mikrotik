@@ -148,8 +148,8 @@ class MonitoringController extends Controller
                 'username' =>  $oltSettings->username,
                 'password' =>  $oltSettings->password,
             ];
-
-            $response = Http::post('http://103.127.132.33:9005/cek-koneksi', $requestData);
+            $zteServer7 = env('ZTE_SERVER_7');
+            $response = Http::post($zteServer7 . '/cek-koneksi', $requestData);
             if ($response->successful()) {
                 $data = $response->json();
                 if ($data['status'] === true) {
