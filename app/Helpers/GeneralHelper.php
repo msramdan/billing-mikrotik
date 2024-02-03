@@ -120,12 +120,14 @@ function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima, $footer
         $message .= '*Metode Pembayaran :* ' .  $request->metode_bayar . " \n";
         $message .= '*Tanggal :* ' . date('Y-m-d H:i:s') . "\n\n";
         $message .= $footer;
-    } else if ($typePesan == 'tagihan') {
-        $message = 'Pelanggan ' . getCompany()->nama_perusahaan . ' Yth. ' . $request->nama . "\n\n";
+   } else if ($typePesan == 'tagihan') {
+        $message = 'Pelanggan ' . getCompany()->nama_perusahaan .  "\n\n";
+        $message .= 'Yth. *' . $request->nama . '*' . "\n\n";
+
         $message .= 'Kami sampaikan tagihan layanan internet bulan *' . tanggal_indonesia($request->periode)  . '*' . "\n";
-        $message .= 'Dengan no tagihan *' . $request->no_tagihan . '* sebesar *' . rupiah($request->total_bayar) . '*' . "\n";
-        $message .= 'Pembayaran paling lambat di tanggal *' . addHari($request->tanggal_create_tagihan, $request->jatuh_tempo) . '* Untuk Menghindari Isolir off wifi otomatis di tempat anda.' . " \n\n";
-        $message .= "*Note : Abaikan pesan ini jika sudah berbayar* \n\n";
+        $message .= 'Dengan no tagihan *' . $request->no_tagihan . '*'. "\n\n";
+        $message .= 'Sebesar *' . rupiah($request->total_bayar) . '*' . "\n\n";
+        $message .= 'Pembayaran paling lambat di tanggal *' . addHari($request->tanggal_create_tagihan, $request->jatuh_tempo) . '* Untuk Menghindari Isolir (wifi mati sementara) di jaringan anda.' . " \n\n";
         $message .= $footer;
     } else if ($typePesan == 'daftar') {
         $paket = DB::table('packages')->find($request->paket_layanan);
