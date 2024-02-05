@@ -5,7 +5,7 @@
 
 @push('css')
     <style>
-        #loading-overlay {
+        #loading-overlay-regis {
             display: none;
             position: fixed;
             top: 0;
@@ -406,7 +406,7 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Register ONU</h5>
                     </div>
-                    <div id="loading-overlay">
+                    <div id="loading-overlay-regis">
                         <div class="spinner-border text-primary" role="status" id="loading-indicator">
                             <span class="visually-hidden">Loading...</span>
                         </div>
@@ -1426,7 +1426,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('registerForm');
-            const loadingOverlay = document.getElementById('loading-overlay');
+            const loadingOverlay = document.getElementById('loading-overlay-regis');
 
             form.addEventListener('submit', function() {
                 // Show the loading overlay
