@@ -406,7 +406,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="modal_index" class="form-label mb-1">Index Available</label>
-                                    <input type="text" class="form-control" id="modal_index" name="modal_index" readonly>
+                                    <input type="text" class="form-control" id="modal_index" name="modal_index">
                                 </div>
                             </div>
 
@@ -1028,8 +1028,6 @@
             });
         });
     </script>
-
-
     <script>
         $("#port_tersedia").click(function() {
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
@@ -1146,18 +1144,32 @@
                 var onuIndex = $(this).data('onu-index');
                 var sn = $(this).data('sn');
                 var extractedOnuIndex = onuIndex.split(':')[0];
+                var karakterSetelahUnderscore = extractedOnuIndex.split('_')[1];
+                var data =  @json($missing_values);
+                if (data.hasOwnProperty(karakterSetelahUnderscore)) {
+                    var subObject = data[karakterSetelahUnderscore];
+                    if (!$.isEmptyObject(subObject)) {
+                        var indexTersedia = Object.values(subObject)[0];
+                    } else {
+                        var myArray =  @json($max_values);
+                        var indexTersedia = myArray[karakterSetelahUnderscore];
+                    }
+                } else {
+                    console.log("Kunci '" + karakterSetelahUnderscore + "' tidak ditemukan.");
+                }
                 $('#modal_interface').val(extractedOnuIndex);
                 $('#modal_sn').val(sn);
+                $('#modal_index').val(indexTersedia);
 
                 $.ajax({
-                    url: '{{ route("getMikrotikRouters") }}',
+                    url: '{{ route('getMikrotikRouters') }}',
                     method: 'GET',
                     success: function(response) {
                         var routerSelect = $('#modal_router');
                         routerSelect.empty();
                         routerSelect.append(
                             '<option value="" selected disabled>-- Select Router --</option>'
-                            );
+                        );
                         $.each(response.routers, function(index, router) {
                             routerSelect.append('<option value="' + router.id + '">' +
                                 router.identitas_router + '</option>');
