@@ -375,7 +375,9 @@
         data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <form action="" method="POST">
+                <form action="{{route('registerOnu')}}" method="POST">
+                    @csrf
+                    @method('POST')
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Register ONU</h5>
                     </div>

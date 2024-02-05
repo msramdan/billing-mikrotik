@@ -436,4 +436,8 @@ class MonitoringController extends Controller
             ]);
         }
     }
+
+    public function registerOnu(Request $request){
+        dd('here');
+    }
 }

@@ -147,6 +147,7 @@ Route::middleware(['auth', 'web'])->group(function () {
         Route::post('/onuType', 'onuType')->name('onuType');
         Route::post('/tCon', 'tCon')->name('tCon');
         Route::post('/vlanProfile', 'vlanProfile')->name('vlanProfile');
+        Route::post('/registerOnu', 'registerOnu')->name('registerOnu');
     });
 
     Route::resource('companies', App\Http\Controllers\CompanyController::class);
