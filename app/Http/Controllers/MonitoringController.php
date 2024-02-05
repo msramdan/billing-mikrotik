@@ -321,4 +321,43 @@ class MonitoringController extends Controller
         }
         return response()->json(['success' => false, 'error' => 'Router not found']);
     }
+
+
+    public function onuType(Request $request)
+    {
+        try {
+            $oltSettings = Olt::findOrFail(session('sessionOlt'));
+            $requestData = [
+                'host' => $oltSettings->host,
+                'port' => (int) $oltSettings->port,
+                'username' => $oltSettings->username,
+                'password' => $oltSettings->password,
+            ];
+
+            $client = new \GuzzleHttp\Client();
+            $zteServer8 = env('ZTE_SERVER_8');
+            $response = $client->post($zteServer8 . '/onu-type', [
+                'json' => $requestData,
+            ]);
+
+            $responseData = json_decode($response->getBody(), true);
+            if ($responseData['status']) {
+                return response()->json([
+                    'success' => true,
+                    'message' => $responseData['message'],
+                    'data' => $responseData['data'],
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => $responseData['message'],
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error: ' . $e->getMessage(),
+            ]);
+        }
+    }
 }

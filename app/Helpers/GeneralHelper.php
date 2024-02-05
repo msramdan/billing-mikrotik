@@ -227,7 +227,7 @@ function oltExec()
         $zteServer1 = env('ZTE_SERVER_1');
         $zteServer2 = env('ZTE_SERVER_2');
         $zteServer3 = env('ZTE_SERVER_3');
-        $urlOnuName = $zteServer1 . '/onu-name';;
+        $urlOnuName = $zteServer1 . '/onu-name';
         $urlStatus = $zteServer2 . '/status';
         $urlUncf = $zteServer3 . '/uncf';
         $result = asyncApiCalls($requestData, $urlOnuName, $urlStatus, $urlUncf);

@@ -144,6 +144,9 @@ Route::middleware(['auth', 'web'])->group(function () {
         Route::post('/oltReset', 'oltReset')->name('oltReset');
         Route::post('/oltHapus', 'oltHapus')->name('oltHapus');
         Route::get('/getProfile', 'getProfile')->name('getProfile');
+        Route::post('/onuType', 'onuType')->name('onuType');
+        Route::post('/tCon', 'tCon')->name('tCon');
+        Route::post('/vlanProfile', 'vlanProfile')->name('vlanProfile');
     });
 
     Route::resource('companies', App\Http\Controllers\CompanyController::class);

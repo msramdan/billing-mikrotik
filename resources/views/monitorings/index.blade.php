@@ -375,11 +375,11 @@
         data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Register ONU</h5>
-                </div>
-                <div class="modal-body">
-                    <form>
+                <form action="" method="POST">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Register ONU</h5>
+                    </div>
+                    <div class="modal-body">
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
@@ -406,7 +406,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="modal_index" class="form-label mb-1">Index Available</label>
-                                    <input type="text" class="form-control" id="modal_index" name="modal_index">
+                                    <input required type="text" class="form-control" id="modal_index" name="modal_index">
                                 </div>
                             </div>
 
@@ -416,13 +416,14 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="modal_onu_name" class="form-label mb-1">ONU Name</label>
-                                    <input type="text" class="form-control" id="modal_onu_name" name="modal_onu_name">
+                                    <input required type="text" class="form-control" id="modal_onu_name"
+                                        name="modal_onu_name">
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="input3" class="form-label mb-1">ONU Type</label>
-                                    <select id="" class="form-select">
+                                    <label for="modal_onu_type" class="form-label mb-1">ONU Type</label>
+                                    <select id="modal_onu_type" class="form-select" required>
                                         <option value="" selected disabled>-- Select --</option>
                                     </select>
                                 </div>
@@ -430,7 +431,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="input4" class="form-label mb-1">T-Con Profile</label>
-                                    <select id="" class="form-select">
+                                    <select id="" class="form-select" required>
                                         <option value="" selected disabled>-- Select --</option>
                                     </select>
                                 </div>
@@ -443,7 +444,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="input3" class="form-label mb-1">Profile Vlan</label>
-                                    <select id="" class="form-select">
+                                    <select id="" class="form-select" required>
                                         <option value="" selected disabled>-- Select --</option>
                                     </select>
                                 </div>
@@ -451,7 +452,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="input4" class="form-label mb-1">CVlan</label>
-                                    <select id="" class="form-select">
+                                    <select id="" class="form-select" required>
                                         <option value="" selected disabled>-- Select --</option>
                                     </select>
                                 </div>
@@ -459,7 +460,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="input4" class="form-label mb-1">Service Port 1</label>
-                                    <select id="" class="form-select">
+                                    <select id="" class="form-select" required>
                                         <option value="" selected disabled>-- Select --</option>
                                     </select>
                                 </div>
@@ -467,7 +468,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="input4" class="form-label mb-1">Service Port 2</label>
-                                    <select id="" class="form-select">
+                                    <select id="" class="form-select" required>
                                         <option value="" selected disabled>-- Select --</option>
                                     </select>
                                 </div>
@@ -478,7 +479,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="input3" class="form-label mb-1">Vlan Port Wifi</label>
-                                    <select id="" class="form-select">
+                                    <select id="" class="form-select" required>
                                         <option value="" selected disabled>-- Select --</option>
                                     </select>
                                 </div>
@@ -486,7 +487,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="input4" class="form-label mb-1">Vlan Port eth 1</label>
-                                    <select id="" class="form-select">
+                                    <select id="" class="form-select" required>
                                         <option value="" selected disabled>-- Select --</option>
                                     </select>
                                 </div>
@@ -494,7 +495,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="input4" class="form-label mb-1">Vlan Port eth 2</label>
-                                    <select id="" class="form-select">
+                                    <select id="" class="form-select" required>
                                         <option value="" selected disabled>-- Select --</option>
                                     </select>
                                 </div>
@@ -504,7 +505,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="input3" class="form-label mb-1">Router Mikrotik</label>
-                                    <select id="modal_router" class="form-select">
+                                    <select id="modal_router" class="form-select" required>
                                         <option value="" selected disabled>-- Select Router --</option>
                                     </select>
                                 </div>
@@ -512,7 +513,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="input4" class="form-label mb-1">Profile PPOE</label>
-                                    <select id="modal_profile_router" class="form-select">
+                                    <select id="modal_profile_router" class="form-select" required>
                                         <option value="" selected disabled>-- Select Profile --</option>
                                     </select>
                                 </div>
@@ -521,22 +522,23 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="input3" class="form-label mb-1">Username PPOE</label>
-                                    <input type="text" class="form-control" id="input3" name="input3">
+                                    <input required type="text" class="form-control" id="input3" name="input3">
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="input4" class="form-label mb-1">Password PPOE</label>
-                                    <input type="text" class="form-control" id="input4" name="input4">
+                                    <input required type="text" class="form-control" id="input4" name="input4">
                                 </div>
                             </div>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Submit</button>
-                </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -1148,44 +1150,80 @@
                 var extractedOnuIndex = onuIndex.split(':')[0];
                 var karakterSetelahUnderscore = extractedOnuIndex.split('_')[1];
                 var data = @json($missing_values);
+                var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                var indexTersedia;
+
                 if (data.hasOwnProperty(karakterSetelahUnderscore)) {
                     var subObject = data[karakterSetelahUnderscore];
                     if (!$.isEmptyObject(subObject)) {
-                        var indexTersedia = Object.values(subObject)[0];
+                        indexTersedia = Object.values(subObject)[0];
                     } else {
                         var myArray = @json($max_values);
-                        var indexTersedia = myArray[karakterSetelahUnderscore];
+                        indexTersedia = myArray[karakterSetelahUnderscore];
                     }
                 } else {
                     console.log("Kunci '" + karakterSetelahUnderscore + "' tidak ditemukan.");
                 }
+
                 $('#modal_interface').val(extractedOnuIndex);
                 $('#modal_sn').val(sn);
                 $('#modal_index').val(indexTersedia);
 
-                $.ajax({
+                // Parallel Ajax requests using $.when
+                var ajaxRequest1 = $.ajax({
                     url: '{{ route('getMikrotikRouters') }}',
                     method: 'GET',
-                    success: function(response) {
+                    beforeSend: function() {
                         var routerSelect = $('#modal_router');
-                        routerSelect.empty();
-                        routerSelect.append(
-                            '<option value="" selected disabled>-- Select Router --</option>'
+                        routerSelect.empty().append(
+                            '<option value="" selected disabled>Loading...</option>'
                         );
-                        $.each(response.routers, function(index, router) {
-                            routerSelect.append('<option value="' + router.id + '">' +
-                                router.identitas_router + '</option>');
-                        });
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(error);
                     }
                 });
 
+                var ajaxRequest2 = $.ajax({
+                    url: '{{ route('onuType') }}',
+                    method: 'POST',
+                    data: {
+                        _token: csrfToken
+                    },
+                    beforeSend: function() {
+                        var onuType = $('#modal_onu_type');
+                        onuType.empty().append(
+                            '<option value="" selected disabled>Loading...</option>');
+                    }
+                });
 
+                // Use $.when to coordinate the two Ajax requests
+                $.when(ajaxRequest1, ajaxRequest2).done(function(response1, response2) {
+                    // Handle the success of the first Ajax request
+                    var routerSelect = $('#modal_router');
+                    routerSelect.empty();
+                    routerSelect.append(
+                        '<option value="" selected disabled>-- Select Router --</option>'
+                    );
+                    $.each(response1[0].routers, function(index, router) {
+                        routerSelect.append('<option value="' + router.id + '">' +
+                            router.identitas_router + '</option>');
+                    });
+
+                    // Handle the success of the second Ajax request
+                    var onuType = $('#modal_onu_type');
+                    onuType.empty();
+                    onuType.append(
+                        '<option value="" selected disabled>-- Select --</option>');
+                    $.each(response2[0].data, function(index, value) {
+                        onuType.append('<option value="' + value + '">' + value +
+                            '</option>');
+                    });
+                }).fail(function(xhr, status, error) {
+                    console.error(error);
+                });
             });
         });
     </script>
+
+
 
     <script>
         $(document).ready(function() {
@@ -1205,26 +1243,26 @@
                             var profileData = response.data;
                             $('#modal_profile_router').append(
                                 '<option value="" selected disabled>-- Select Profile --</option>'
-                                );
+                            );
                             $.each(profileData, function(index, profile) {
                                 $('#modal_profile_router').append($('<option>', {
                                     value: profile
-                                    .name, // Change this according to your data structure
+                                        .name, // Change this according to your data structure
                                     text: profile
-                                    .name, // Change this according to your data structure
+                                        .name, // Change this according to your data structure
                                 }));
                             });
                         } else {
                             $('#modal_profile_router').append(
                                 '<option value="" selected disabled>Error loading profiles</option>'
-                                );
+                            );
                         }
                     },
                     error: function(xhr, status, error) {
                         console.error(error);
                         $('#modal_profile_router').html(
                             '<option value="" selected disabled>Error loading profiles</option>'
-                            );
+                        );
                     }
                 });
             });
