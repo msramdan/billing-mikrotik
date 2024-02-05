@@ -24,6 +24,12 @@
             height: 3rem;
         }
 
+        #loading-message {
+            margin-top: 10px;
+            /* Adjust the margin as needed */
+            text-align: center;
+        }
+
         .card-footer {
             display: flex;
             justify-content: space-between;
@@ -403,6 +409,9 @@
                     <div id="loading-overlay">
                         <div class="spinner-border text-primary" role="status" id="loading-indicator">
                             <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <div id="loading-message">
+                            <h4>Harap tunggu sedang proses...</h4>
                         </div>
                     </div>
                     <div class="modal-body">
@@ -1414,15 +1423,20 @@
         });
     </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('registerForm');
-        const loadingOverlay = document.getElementById('loading-overlay');
-        form.addEventListener('submit', function () {
-            loadingOverlay.style.display = 'flex';
-            const submitButton = form.querySelector('[type="submit"]');
-            submitButton.disabled = true;
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('registerForm');
+            const loadingOverlay = document.getElementById('loading-overlay');
+
+            form.addEventListener('submit', function() {
+                // Show the loading overlay
+                loadingOverlay.style.display = 'flex';
+
+                // You may want to disable form elements during submission
+                // Example: Disable submit button
+                const submitButton = form.querySelector('[type="submit"]');
+                submitButton.disabled = true;
+            });
         });
-    });
-</script>
+    </script>
 @endpush
