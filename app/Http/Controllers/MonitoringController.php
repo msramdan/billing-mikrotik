@@ -437,7 +437,25 @@ class MonitoringController extends Controller
         }
     }
 
-    public function registerOnu(Request $request){
-        dd('here');
+    public function registerOnu(Request $request)
+    {
+        $client = setRoute();
+        $queryAdd = (new Query('/ppp/secret/add'))
+            ->equal('name', $request->modal_username)
+            ->equal('password', $request->modal_password)
+            ->equal('service', 'pppoe')
+            ->equal('profile', $request->modal_profile_router)
+            ->equal('comment',  '');
+        $status = $client->query($queryAdd)->read();
+        $cek  =  $status['after'];
+        if (array_key_exists("ret", $cek)) {
+            return redirect()
+                ->route('monitorings.index')
+                ->with('success', __('Register ONU successfully.'));
+        } else {
+            return redirect()
+                ->route('monitorings.index')
+                ->with('success', __($status['after']['message']));
+        }
     }
 }

@@ -514,8 +514,8 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="input4" class="form-label mb-1">Profile PPOE</label>
-                                    <select id="modal_profile_router" class="form-select" required>
+                                    <label for="modal_profile_router" class="form-label mb-1">Profile PPOE</label>
+                                    <select id="modal_profile_router" name="modal_profile_router" class="form-select" required>
                                         <option value="" selected disabled>-- Select Profile --</option>
                                     </select>
                                 </div>
@@ -523,14 +523,14 @@
 
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="input3" class="form-label mb-1">Username PPOE</label>
-                                    <input required type="text" class="form-control" id="input3" name="input3">
+                                    <label for="modal_username" class="form-label mb-1">Username PPOE</label>
+                                    <input required type="text" name="modal_username" class="form-control" id="modal_username">
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="input4" class="form-label mb-1">Password PPOE</label>
-                                    <input required type="text" class="form-control" id="input4" name="input4">
+                                    <label for="modal_password" class="form-label mb-1">Password PPOE</label>
+                                    <input required type="text" class="form-control" id="modal_password" name="modal_password">
                                 </div>
                             </div>
                         </div>
@@ -725,6 +725,7 @@
 
         <section class="section">
             <div class="row">
+                <x-alert></x-alert>
                 <div class="col-md-12">
                     <div class="row">
                         <div class="container mt-5">
