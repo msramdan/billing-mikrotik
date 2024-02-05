@@ -5,6 +5,25 @@
 
 @push('css')
     <style>
+        #loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            /* You can adjust the background color and opacity */
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #loading-indicator {
+            width: 3rem;
+            height: 3rem;
+        }
+
         .card-footer {
             display: flex;
             justify-content: space-between;
@@ -375,18 +394,23 @@
         data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <form action="{{route('registerOnu')}}" method="POST">
+                <form id="registerForm" action="{{ route('registerOnu') }}" method="POST">
                     @csrf
                     @method('POST')
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Register ONU</h5>
-
+                    </div>
+                    <div id="loading-overlay">
+                        <div class="spinner-border text-primary" role="status" id="loading-indicator">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
                     </div>
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="modal_olt_name" class="form-label mb-1">OLT name<span style="color: red">*</span></label>
+                                    <label for="modal_olt_name" class="form-label mb-1">OLT name<span
+                                            style="color: red">*</span></label>
                                     <input type="text" class="form-control" id="modal_olt_name"
                                         value="{{ session('sessionOltName') }}" name="modal_olt_name" readonly>
                                 </div>
@@ -394,22 +418,26 @@
 
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="modal_sn" class="form-label mb-1">SN ONU<span style="color: red">*</span></label>
+                                    <label for="modal_sn" class="form-label mb-1">SN ONU<span
+                                            style="color: red">*</span></label>
                                     <input type="text" class="form-control" id="modal_sn" name="modal_sn" readonly>
                                 </div>
                             </div>
 
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="modal_interface" class="form-label mb-1">Interface<span style="color: red">*</span></label>
+                                    <label for="modal_interface" class="form-label mb-1">Interface<span
+                                            style="color: red">*</span></label>
                                     <input type="text" class="form-control" id="modal_interface" name="modal_interface"
                                         readonly>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="modal_index" class="form-label mb-1">Index Available<span style="color: red">*</span></label>
-                                    <input required type="text" class="form-control" id="modal_index" name="modal_index" readonly>
+                                    <label for="modal_index" class="form-label mb-1">Index Available<span
+                                            style="color: red">*</span></label>
+                                    <input required type="text" class="form-control" id="modal_index" name="modal_index"
+                                        readonly>
                                 </div>
                             </div>
 
@@ -418,14 +446,16 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="modal_onu_name" class="form-label mb-1">ONU Name<span style="color: red">*</span></label>
+                                    <label for="modal_onu_name" class="form-label mb-1">ONU Name<span
+                                            style="color: red">*</span></label>
                                     <input required type="text" class="form-control" id="modal_onu_name"
                                         name="modal_onu_name">
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="modal_onu_type" class="form-label mb-1">ONU Type<span style="color: red">*</span></label>
+                                    <label for="modal_onu_type" class="form-label mb-1">ONU Type<span
+                                            style="color: red">*</span></label>
                                     <select id="modal_onu_type" name="modal_onu_type" class="form-select" required>
                                         <option value="" selected disabled>-- Select --</option>
                                     </select>
@@ -433,7 +463,8 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="modal_tcon" class="form-label mb-1">T-Con Profile<span style="color: red">*</span></label>
+                                    <label for="modal_tcon" class="form-label mb-1">T-Con Profile<span
+                                            style="color: red">*</span></label>
                                     <select id="modal_tcon" name="modal_tcon" class="form-select" required>
                                         <option value="" selected disabled>-- Select --</option>
                                     </select>
@@ -441,12 +472,11 @@
                             </div>
 
                         </div>
-
-
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="modal_profile_vlan" class="form-label mb-1">Profile Vlan<span style="color: red">*</span></label>
+                                    <label for="modal_profile_vlan" class="form-label mb-1">Profile Vlan<span
+                                            style="color: red">*</span></label>
                                     <select id="modal_profile_vlan" name="modal_profile_vlan" class="form-select" required>
                                         <option value="" selected disabled>-- Select --</option>
                                     </select>
@@ -454,7 +484,8 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="modal_cvlan" class="form-label mb-1">CVlan<span style="color: red">*</span></label>
+                                    <label for="modal_cvlan" class="form-label mb-1">CVlan<span
+                                            style="color: red">*</span></label>
                                     <select id="modal_cvlan" name="modal_cvlan" class="form-select" required>
                                         <option value="" selected disabled>-- Select --</option>
                                     </select>
@@ -463,7 +494,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="modal_service_port2" class="form-label mb-1">Service Port 2</label>
-                                    <select id="modal_service_port2" name="modal_service_port2" class="form-select" >
+                                    <select id="modal_service_port2" name="modal_service_port2" class="form-select">
                                         <option value="" selected disabled>-- Select --</option>
                                     </select>
                                 </div>
@@ -471,19 +502,18 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="modal_port_wifi" class="form-label mb-1">Vlan Port Wifi</label>
-                                    <select id="modal_port_wifi" name="modal_port_wifi" class="form-select" >
+                                    <select id="modal_port_wifi" name="modal_port_wifi" class="form-select">
                                         <option value="" selected disabled>-- Select --</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
-
                         <div class="row">
 
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="modal_port_eht1" class="form-label mb-1">Vlan Port eth 1</label>
-                                    <select id="modal_port_eht1" name="modal_port_eht1" class="form-select" >
+                                    <select id="modal_port_eht1" name="modal_port_eht1" class="form-select">
                                         <option value="" selected disabled>-- Select --</option>
                                     </select>
                                 </div>
@@ -491,14 +521,15 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="modal_port_eht2" class="form-label mb-1">Vlan Port eth 2</label>
-                                    <select id="modal_port_eht2" name="modal_port_eht2" class="form-select" >
+                                    <select id="modal_port_eht2" name="modal_port_eht2" class="form-select">
                                         <option value="" selected disabled>-- Select --</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="input3" class="form-label mb-1">Router Mikrotik<span style="color: red">*</span></label>
+                                    <label for="input3" class="form-label mb-1">Router Mikrotik<span
+                                            style="color: red">*</span></label>
                                     <select id="modal_router" class="form-select" required>
                                         <option value="" selected disabled>-- Select Router --</option>
                                     </select>
@@ -506,8 +537,10 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="modal_profile_router" class="form-label mb-1">Profile PPOE<span style="color: red">*</span></label>
-                                    <select id="modal_profile_router" name="modal_profile_router" class="form-select" required>
+                                    <label for="modal_profile_router" class="form-label mb-1">Profile PPOE<span
+                                            style="color: red">*</span></label>
+                                    <select id="modal_profile_router" name="modal_profile_router" class="form-select"
+                                        required>
                                         <option value="" selected disabled>-- Select Profile --</option>
                                     </select>
                                 </div>
@@ -516,19 +549,22 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="modal_username" class="form-label mb-1">Username PPOE<span style="color: red">*</span></label>
-                                    <input required type="text" name="modal_username" class="form-control" id="modal_username">
+                                    <label for="modal_username" class="form-label mb-1">Username PPOE<span
+                                            style="color: red">*</span></label>
+                                    <input required type="text" name="modal_username" class="form-control"
+                                        id="modal_username">
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="modal_password" class="form-label mb-1">Password PPOE<span style="color: red">*</span></label>
-                                    <input required type="text" class="form-control" id="modal_password" name="modal_password">
+                                    <label for="modal_password" class="form-label mb-1">Password PPOE<span
+                                            style="color: red">*</span></label>
+                                    <input required type="text" class="form-control" id="modal_password"
+                                        name="modal_password">
                                 </div>
                             </div>
                             <p style="color: red">Note : (*) Wajib diisi</p>
                         </div>
-
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -1377,4 +1413,16 @@
             });
         });
     </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('registerForm');
+        const loadingOverlay = document.getElementById('loading-overlay');
+        form.addEventListener('submit', function () {
+            loadingOverlay.style.display = 'flex';
+            const submitButton = form.querySelector('[type="submit"]');
+            submitButton.disabled = true;
+        });
+    });
+</script>
 @endpush
