@@ -512,7 +512,9 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="input4" class="form-label mb-1">Profile PPOE</label>
-                                    <input type="text" class="form-control" id="input4" name="input4">
+                                    <select id="modal_profile_router" class="form-select">
+                                        <option value="" selected disabled>-- Select Profile --</option>
+                                    </select>
                                 </div>
                             </div>
 
@@ -1145,13 +1147,13 @@
                 var sn = $(this).data('sn');
                 var extractedOnuIndex = onuIndex.split(':')[0];
                 var karakterSetelahUnderscore = extractedOnuIndex.split('_')[1];
-                var data =  @json($missing_values);
+                var data = @json($missing_values);
                 if (data.hasOwnProperty(karakterSetelahUnderscore)) {
                     var subObject = data[karakterSetelahUnderscore];
                     if (!$.isEmptyObject(subObject)) {
                         var indexTersedia = Object.values(subObject)[0];
                     } else {
-                        var myArray =  @json($max_values);
+                        var myArray = @json($max_values);
                         var indexTersedia = myArray[karakterSetelahUnderscore];
                     }
                 } else {
@@ -1181,6 +1183,50 @@
                 });
 
 
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('#modal_router').on('change', function() {
+                var selectedRouter = $(this).val();
+                $('#modal_profile_router').html('<option value="" selected disabled>Loading...</option>');
+
+                $.ajax({
+                    url: '{{ route('getProfile') }}',
+                    method: 'GET',
+                    data: {
+                        selectedRouter: selectedRouter,
+                    },
+                    success: function(response) {
+                        $('#modal_profile_router').empty();
+                        if (response.success) {
+                            var profileData = response.data;
+                            $('#modal_profile_router').append(
+                                '<option value="" selected disabled>-- Select Profile --</option>'
+                                );
+                            $.each(profileData, function(index, profile) {
+                                $('#modal_profile_router').append($('<option>', {
+                                    value: profile
+                                    .name, // Change this according to your data structure
+                                    text: profile
+                                    .name, // Change this according to your data structure
+                                }));
+                            });
+                        } else {
+                            $('#modal_profile_router').append(
+                                '<option value="" selected disabled>Error loading profiles</option>'
+                                );
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                        $('#modal_profile_router').html(
+                            '<option value="" selected disabled>Error loading profiles</option>'
+                            );
+                    }
+                });
             });
         });
     </script>

@@ -7,6 +7,10 @@ use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Redis;
+use \RouterOS\Query;
+use Illuminate\Support\Facades\DB;
+use \RouterOS\Client as RouterOSClient;
+use \RouterOS\Exceptions\ConnectException;
 
 class MonitoringController extends Controller
 {
@@ -292,5 +296,29 @@ class MonitoringController extends Controller
                 'message' => 'Error: ' . $e->getMessage(),
             ]);
         }
+    }
+
+    public function getProfile(Request $request)
+    {
+        $selectedRouter = $request->input('selectedRouter');
+        $router = DB::table('settingmikrotiks')->where('id', $selectedRouter)->first();
+
+        if ($router) {
+            try {
+                $client =  new RouterOSClient([
+                    'host' => $router->host,
+                    'user' => $router->username,
+                    'pass' => $router->password,
+                    'port' => (int) $router->port,
+                ]);
+                $query = new Query('/ppp/profile/print');
+                $profile = $client->query($query)->read();
+                return response()->json(['success' => true, 'data' => $profile]);
+            } catch (\Exception $e) {
+
+                return response()->json(['success' => false, 'error' => $e->getMessage()]);
+            }
+        }
+        return response()->json(['success' => false, 'error' => 'Router not found']);
     }
 }
