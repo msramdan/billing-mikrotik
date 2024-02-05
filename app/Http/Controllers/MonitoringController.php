@@ -449,13 +449,48 @@ class MonitoringController extends Controller
         $status = $client->query($queryAdd)->read();
         $cek  =  $status['after'];
         if (array_key_exists("ret", $cek)) {
-            return redirect()
-                ->route('monitorings.index')
-                ->with('success', __('Register ONU successfully.'));
+            $oltSettings = Olt::findOrFail(session('sessionOlt'));
+            $result = str_replace("gpon-onu_", "", $request->modal_interface);
+            $requestData = [
+                'host' => $oltSettings->host,
+                'port' => (int) $oltSettings->port,
+                'username' => $oltSettings->username,
+                'password' => $oltSettings->password,
+                "interface" => $result,
+                "index" => $request->modal_index,
+                "onu_type" => $request->modal_onu_type,
+                "sn" => $request->modal_sn,
+                "tcon_profile" => $request->modal_tcon,
+                "onu_name" => $request->modal_onu_name,
+                "cvlan" => $request->modal_cvlan,
+                "service_port2" => $request->modal_service_port2,
+                "pppoe_username" => $request->modal_username,
+                "pppoe_password" => $request->modal_password,
+                "profile_vlan" => $request->modal_profile_vlan,
+                "wifi_port" => $request->modal_port_wifi,
+                "eth1" => $request->modal_port_eht1,
+                "eth2" => $request->modal_port_eht2
+            ];
+
+            $client = new \GuzzleHttp\Client();
+            $zteServer11 = env('ZTE_SERVER_11');
+            $response = $client->post($zteServer11 . '/register', [
+                'json' => $requestData,
+            ]);
+            $responseData = json_decode($response->getBody(), true);
+            if ($responseData['status']) {
+                return redirect()
+                    ->route('monitorings.index')
+                    ->with('success', __('Submit ONU successfully.'));
+            } else {
+                return redirect()
+                    ->route('monitorings.index')
+                    ->with('error', __('Ada error register.'));
+            }
         } else {
             return redirect()
                 ->route('monitorings.index')
-                ->with('success', __($status['after']['message']));
+                ->with('error', __($status['after']['message']));
         }
     }
 }

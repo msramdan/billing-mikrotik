@@ -426,7 +426,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="modal_onu_type" class="form-label mb-1">ONU Type<span style="color: red">*</span></label>
-                                    <select id="modal_onu_type" class="form-select" required>
+                                    <select id="modal_onu_type" name="modal_onu_type" class="form-select" required>
                                         <option value="" selected disabled>-- Select --</option>
                                     </select>
                                 </div>
@@ -434,7 +434,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="modal_tcon" class="form-label mb-1">T-Con Profile<span style="color: red">*</span></label>
-                                    <select id="modal_tcon" class="form-select" required>
+                                    <select id="modal_tcon" name="modal_tcon" class="form-select" required>
                                         <option value="" selected disabled>-- Select --</option>
                                     </select>
                                 </div>
@@ -447,7 +447,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="modal_profile_vlan" class="form-label mb-1">Profile Vlan<span style="color: red">*</span></label>
-                                    <select id="modal_profile_vlan" class="form-select" required>
+                                    <select id="modal_profile_vlan" name="modal_profile_vlan" class="form-select" required>
                                         <option value="" selected disabled>-- Select --</option>
                                     </select>
                                 </div>
@@ -455,15 +455,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="modal_cvlan" class="form-label mb-1">CVlan<span style="color: red">*</span></label>
-                                    <select id="modal_cvlan" class="form-select" required>
-                                        <option value="" selected disabled>-- Select --</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label for="modal_service_port1" class="form-label mb-1">Service Port 1</label>
-                                    <select id="modal_service_port1" class="form-select" >
+                                    <select id="modal_cvlan" name="modal_cvlan" class="form-select" required>
                                         <option value="" selected disabled>-- Select --</option>
                                     </select>
                                 </div>
@@ -471,7 +463,15 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="modal_service_port2" class="form-label mb-1">Service Port 2</label>
-                                    <select id="modal_service_port2" class="form-select" >
+                                    <select id="modal_service_port2" name="modal_service_port2" class="form-select" >
+                                        <option value="" selected disabled>-- Select --</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="modal_port_wifi" class="form-label mb-1">Vlan Port Wifi</label>
+                                    <select id="modal_port_wifi" name="modal_port_wifi" class="form-select" >
                                         <option value="" selected disabled>-- Select --</option>
                                     </select>
                                 </div>
@@ -479,18 +479,11 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="modal_port_wifi" class="form-label mb-1">Vlan Port Wifi</label>
-                                    <select id="modal_port_wifi" class="form-select" >
-                                        <option value="" selected disabled>-- Select --</option>
-                                    </select>
-                                </div>
-                            </div>
+
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="modal_port_eht1" class="form-label mb-1">Vlan Port eth 1</label>
-                                    <select id="modal_port_eht1" class="form-select" >
+                                    <select id="modal_port_eht1" name="modal_port_eht1" class="form-select" >
                                         <option value="" selected disabled>-- Select --</option>
                                     </select>
                                 </div>
@@ -498,13 +491,11 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="modal_port_eht2" class="form-label mb-1">Vlan Port eth 2</label>
-                                    <select id="modal_port_eht2" class="form-select" >
+                                    <select id="modal_port_eht2" name="modal_port_eht2" class="form-select" >
                                         <option value="" selected disabled>-- Select --</option>
                                     </select>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="input3" class="form-label mb-1">Router Mikrotik<span style="color: red">*</span></label>
@@ -521,7 +512,8 @@
                                     </select>
                                 </div>
                             </div>
-
+                        </div>
+                        <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="modal_username" class="form-label mb-1">Username PPOE<span style="color: red">*</span></label>
@@ -534,7 +526,6 @@
                                     <input required type="text" class="form-control" id="modal_password" name="modal_password">
                                 </div>
                             </div>
-
                             <p style="color: red">Note : (*) Wajib diisi</p>
                         </div>
 
@@ -1165,7 +1156,7 @@
                         indexTersedia = Object.values(subObject)[0];
                     } else {
                         var myArray = @json($max_values);
-                        indexTersedia = myArray[karakterSetelahUnderscore];
+                        indexTersedia = myArray[karakterSetelahUnderscore] + 1;
                     }
                 } else {
                     console.log("Kunci '" + karakterSetelahUnderscore + "' tidak ditemukan.");
@@ -1222,7 +1213,6 @@
                     beforeSend: function() {
                         var modal_profile_vlan = $('#modal_profile_vlan');
                         var modal_cvlan = $('#modal_cvlan');
-                        var modal_service_port1 = $('#modal_service_port1');
                         var modal_service_port2 = $('#modal_service_port2');
                         var modal_port_wifi = $('#modal_port_wifi');
                         var modal_port_eht1 = $('#modal_port_eht1');
@@ -1231,8 +1221,6 @@
                         modal_profile_vlan.empty().append(
                             '<option value="" selected disabled>Loading...</option>');
                         modal_cvlan.empty().append(
-                            '<option value="" selected disabled>Loading...</option>');
-                        modal_service_port1.empty().append(
                             '<option value="" selected disabled>Loading...</option>');
                         modal_service_port2.empty().append(
                             '<option value="" selected disabled>Loading...</option>');
@@ -1282,7 +1270,6 @@
                     // Handle the success of the 4 Ajax request
                     var modal_profile_vlan = $('#modal_profile_vlan');
                     var modal_cvlan = $('#modal_cvlan');
-                    var modal_service_port1 = $('#modal_service_port1');
                     var modal_service_port2 = $('#modal_service_port2');
                     var modal_port_wifi = $('#modal_port_wifi');
                     var modal_port_eht1 = $('#modal_port_eht1');
@@ -1290,7 +1277,6 @@
 
                     modal_profile_vlan.empty();
                     modal_cvlan.empty();
-                    modal_service_port1.empty();
                     modal_service_port2.empty();
                     modal_port_wifi.empty();
                     modal_port_eht1.empty();
@@ -1299,8 +1285,6 @@
                     modal_profile_vlan.append(
                         '<option value="" selected disabled>-- Select --</option>');
                     modal_cvlan.append(
-                        '<option value="" selected disabled>-- Select --</option>');
-                    modal_service_port1.append(
                         '<option value="" selected disabled>-- Select --</option>');
                     modal_service_port2.append(
                         '<option value="" selected disabled>-- Select --</option>');
@@ -1318,11 +1302,6 @@
                     });
                     $.each(response4[0].data, function(index, value) {
                         modal_cvlan.append('<option value="' + value.cvlan +
-                            '">' + value.cvlan +
-                            '</option>');
-                    });
-                    $.each(response4[0].data, function(index, value) {
-                        modal_service_port1.append('<option value="' + value.cvlan +
                             '">' + value.cvlan +
                             '</option>');
                     });
