@@ -510,7 +510,7 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="modal_port_wifi" class="form-label mb-1">Vlan Port Wifi</label>
+                                    <label for="modal_port_wifi" class="form-label mb-1">Vlan SSID 2</label>
                                     <select id="modal_port_wifi" name="modal_port_wifi" class="form-select">
                                         <option value="" selected disabled>-- Select --</option>
                                     </select>
