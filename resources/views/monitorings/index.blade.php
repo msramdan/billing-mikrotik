@@ -406,7 +406,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="modal_index" class="form-label mb-1">Index Available</label>
-                                    <input required type="text" class="form-control" id="modal_index" name="modal_index">
+                                    <input required type="text" class="form-control" id="modal_index" name="modal_index" readonly>
                                 </div>
                             </div>
 
@@ -1348,25 +1348,6 @@
             });
         });
     </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     <script>
         $(document).ready(function() {
