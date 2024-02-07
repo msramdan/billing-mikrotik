@@ -127,7 +127,7 @@ function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima, $footer
         $message .= 'Kami sampaikan tagihan layanan internet bulan *' . tanggal_indonesia($request->periode)  . '*' . "\n";
         $message .= 'Dengan no tagihan *' . $request->no_tagihan . '*'. "\n\n";
         $message .= 'Sebesar *' . rupiah($request->total_bayar) . '*' . "\n\n";
-        $message .= 'Pembayaran paling lambat di tanggal *' . addHari($request->tanggal_create_tagihan, $request->jatuh_tempo) . '* Untuk Menghindari Isolir (wifi mati sementara) di jaringan anda.' . " \n\n";
+        $message .= 'Pembayaran paling lambat di tanggal *' . addHari($request->tanggal_create_tagihan, $request->jatuh_tempo) . '* Untuk Menghindari Isolir *(kecepatan menurun otomatis)* di jaringan anda.' . " \n\n";
         $message .= $footer;
     } else if ($typePesan == 'daftar') {
         $paket = DB::table('packages')->find($request->paket_layanan);
