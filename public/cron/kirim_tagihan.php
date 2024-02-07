@@ -22,7 +22,7 @@ while ($data = mysqli_fetch_array($query)) {
         $message .= 'Kami sampaikan tagihan layanan internet bulan *' . tanggal_indonesia($data['periode'])  . '*' . "\n";
         $message .= 'No tagihan *' . $data['no_tagihan'] . '*' . "\n\n";
         $message .= 'sebesar *' . rupiah($data['total_bayar']) . '*' . "\n\n";
-        $message .= 'Pembayaran paling lambat di tanggal *' . addHari($data['tanggal_create_tagihan'], $data['jatuh_tempo']) . '*  Untuk Menghindari Isolir (wifi mati sementara) di jaringan anda.' . " \n\n";
+        $message .= 'Pembayaran paling lambat di tanggal *' . addHari($data['tanggal_create_tagihan'], $data['jatuh_tempo']) . '*  Untuk Menghindari Isolir *(kecepatan menurun otomatis)* di jaringan anda.' . " \n\n";
         $message .= $data['footer_pesan_wa_tagihan'];
         if ($data['kirim_tagihan_wa'] == 'Yes') {
             $dataPesan = array(
