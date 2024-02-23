@@ -17,7 +17,7 @@ $query = mysqli_query($koneksi, $sql);
 while ($data = mysqli_fetch_array($query)) {
     try {
         $url = $data['url_wa_gateway'] . 'send-message';
-        $message = 'Pelanggan ' . $data['nama_perusahaan'] . "\n\n"; 
+        $message = 'Pelanggan ' . $data['nama_perusahaan'] . "\n\n";
         $message .= 'Yth. *' . $data['nama'] . '*' . "\n\n";
         $message .= 'Kami sampaikan tagihan layanan internet bulan *' . tanggal_indonesia($data['periode'])  . '*' . "\n";
         $message .= 'No tagihan *' . $data['no_tagihan'] . '*' . "\n\n";
