@@ -42,8 +42,8 @@ class UpdateCompanyRequest extends FormRequest
 			'api_key_tripay' => 'required|string|max:255',
 			'kode_merchant' => 'required|string|max:255',
 			'private_key' => 'required|string|max:255',
-			// 'paket_id' => 'required|exists:App\Models\Paket,id',
-            // 'expired' => 'required',
+			'paket_id' => 'exists:App\Models\Paket,id',
+            'expired' => 'nullable',
         ];
     }
 }
