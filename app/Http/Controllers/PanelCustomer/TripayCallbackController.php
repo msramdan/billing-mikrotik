@@ -48,6 +48,7 @@ class TripayCallbackController extends Controller
                 ->where('tagihans.status_bayar', '=', 'Belum Bayar')
                 ->select(
                     'tagihans.*',
+                    'tagihans.total_bayar as nominal',
                     'companies.private_key',
                     'companies.is_active',
                     'companies.url_wa_gateway',
@@ -63,6 +64,14 @@ class TripayCallbackController extends Controller
                     'pelanggans.no_layanan'
                 )
                 ->first();
+            // Periksa apakah invoice ditemukan
+            if (!$invoice) {
+                return Response::json([
+                    'success' => false,
+                    'message' => 'No invoice found or already paid: ' . $invoiceId,
+                ]);
+            }
+
             $privateKey = $invoice->private_key;
             $signature = hash_hmac('sha256', $json, $privateKey);
             if ($signature !== (string) $callbackSignature) {
@@ -127,6 +136,10 @@ class TripayCallbackController extends Controller
                     'updated_at' => date('Y-m-d H:i:s'),
                 ]);
 
+                if ($invoice->is_active == 'Yes') {
+                    sendNotifWa($invoice->url_wa_gateway, $invoice->api_key_wa_gateway, $invoice, 'bayar', $invoice->no_wa, $invoice->footer_pesan_wa_pembayaran);
+                }
+
                 // set status jadi aktif handle klo kena isolir duluan dan tidak ada tagihan belum di bayar lain nya
                 $cekTagihan = Tagihan::where('pelanggan_id', $invoice->pelanggan_id)
                     ->where('status_bayar', 'Belum Bayar')
@@ -140,7 +153,7 @@ class TripayCallbackController extends Controller
                             'packages.profile',
                             'pelanggans.mode_user',
                             'pelanggans.user_pppoe',
-                            'pelanggans.user_static',
+                            'pelanggans.user_static'
                         )->where('pelanggans.id', $invoice->pelanggan_id)->first();
                     if ($pelanggan->mode_user == 'PPOE') {
                         $queryGet = (new Query('/ppp/secret/print'))
@@ -193,11 +206,6 @@ class TripayCallbackController extends Controller
                                 'status_berlangganan' => 'Aktif',
                             ]
                         );
-                }
-
-                // kirim wa
-                if ($invoice->is_active == 'Yes') {
-                    sendNotifWa($invoice->url_wa_gateway, $invoice->api_key_wa_gateway, $invoice, 'bayar', $invoice->no_wa, $invoice->footer_pesan_wa_pembayaran);
                 }
             }
             return Response::json(['success' => true]);
