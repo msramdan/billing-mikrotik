@@ -28,9 +28,31 @@ class LaporanController extends Controller
             ->where('status_bayar', 'Sudah Bayar')
             ->where('company_id', '=', session('sessionCompany'))
             ->count();
+
         $nominalTagiahnBayar = DB::table('tagihans')
             ->where('periode', $month)
             ->where('status_bayar', 'Sudah Bayar')
+            ->where('company_id', '=', session('sessionCompany'))
+            ->sum('tagihans.total_bayar');
+
+        $nominalTagiahnBayarCash = DB::table('tagihans')
+            ->where('periode', $month)
+            ->where('status_bayar', 'Sudah Bayar')
+            ->where('metode_bayar', 'Cash')
+            ->where('company_id', '=', session('sessionCompany'))
+            ->sum('tagihans.total_bayar');
+
+        $nominalTagiahnBayarPayment = DB::table('tagihans')
+            ->where('periode', $month)
+            ->where('status_bayar', 'Sudah Bayar')
+            ->where('metode_bayar', 'Payment Tripay')
+            ->where('company_id', '=', session('sessionCompany'))
+            ->sum('tagihans.total_bayar');
+
+        $nominalTagiahnBayarTrf = DB::table('tagihans')
+            ->where('periode', $month)
+            ->where('status_bayar', 'Sudah Bayar')
+            ->where('metode_bayar', 'Transfer Bank')
             ->where('company_id', '=', session('sessionCompany'))
             ->sum('tagihans.total_bayar');
 
@@ -68,6 +90,9 @@ class LaporanController extends Controller
         return view('laporans.index', [
             'month' => $month,
             'tagiahnBayar' => $tagiahnBayar,
+            'nominalTagiahnBayarCash' => $nominalTagiahnBayarCash,
+            'nominalTagiahnBayarPayment' => $nominalTagiahnBayarPayment,
+            'nominalTagiahnBayarTrf' => $nominalTagiahnBayarTrf,
             'nominalTagiahnBayar' => $nominalTagiahnBayar,
             'tagiahnBelumBayar' => $tagiahnBelumBayar,
             'nominalTtagiahnBayar' => $nominalTtagiahnBayar,

@@ -91,7 +91,6 @@ class TagihanController extends Controller
         }
 
         $pelanggans = DB::table('pelanggans')->where('company_id', '=', session('sessionCompany'))->get();
-
         return view('tagihans.index', [
             'pelanggans' => $pelanggans
         ]);
@@ -316,7 +315,7 @@ class TagihanController extends Controller
                         ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
                         ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.no_wa', 'pelanggans.jatuh_tempo')
                         ->where('tagihans.id', '=', $row->id)->first();
-                    sendNotifWa($waGateway->url_wa_gateway, $waGateway->api_key_wa_gateway,$waGateway->sender, $req, 'tagihan', $req->no_wa, $waGateway->footer_pesan_wa_tagihan);
+                    sendNotifWa($waGateway->url_wa_gateway, $waGateway->api_key_wa_gateway, $waGateway->sender, $req, 'tagihan', $req->no_wa, $waGateway->footer_pesan_wa_tagihan);
                 }
             } catch (\Exception $e) {
                 continue;
@@ -331,17 +330,26 @@ class TagihanController extends Controller
     {
         $tgl = date('Y-m-d H:i:s');
         // update tagihan
-        DB::table('tagihans')
-            ->where('id', $request->tagihan_id)
-            ->update(
-                [
-                    'tanggal_bayar' => $tgl,
-                    'metode_bayar' => $request->metode_bayar,
-                    'status_bayar' => 'Sudah Bayar',
-                    'tanggal_kirim_notif_wa' => $tgl,
-                    'user_id' => Auth::user()->id
-                ]
-            );
+        if ($request->metode_bayar == 'Cash' || $request->metode_bayar == 'Transfer Bank') {
+            $updateData = [
+                'tanggal_bayar' => $tgl,
+                'metode_bayar' => $request->metode_bayar,
+                'status_bayar' => 'Sudah Bayar',
+                'tanggal_kirim_notif_wa' => $tgl,
+                'user_id' => Auth::user()->id
+            ];
+
+            if ($request->metode_bayar == 'Transfer Bank') {
+                $updateData['bank_account_id'] = $request->bank_account_id;
+            }
+
+            DB::table('tagihans')
+                ->where('id', $request->tagihan_id)
+                ->update($updateData);
+        } else {
+            dd('Error metode bayar');
+        }
+
         // insert pemasukan
         DB::table('pemasukans')->insert([
             'nominal' => $request->nominal,

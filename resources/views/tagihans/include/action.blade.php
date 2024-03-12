@@ -77,7 +77,8 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="ppn">{{ __('Metode Bayar') }}</label>
-                                        <select class="form-select" name="metode_bayar"required class="form-control">
+                                        <select class="form-select" name="metode_bayar" required class="form-control"
+                                            onchange="toggleBankAccount(this)">
                                             <option value="" selected disabled>-- {{ __('Select metode bayar') }} --
                                             </option>
                                             <option value="Cash">Cash</option>
@@ -85,6 +86,28 @@
                                         </select>
                                     </div>
                                 </div>
+
+                                <div class="col-md-12" id="input-bank-account" style="display: none;">
+                                    <div class="form-group">
+                                        <label for="ppn">{{ __('Bank Account') }}</label>
+                                        <select class="form-select" name="bank_account_id" required class="form-control">
+                                            <option value="" selected disabled>-- {{ __('Select bank account') }} --
+                                            </option>
+                                            @php
+                                                $bankAccount = DB::table('bank_accounts')
+                                                    ->join('banks', 'bank_accounts.bank_id', '=', 'banks.id')
+                                                    ->select('bank_accounts.*', 'banks.nama_bank')
+                                                    ->where('bank_accounts.company_id', '=', session('sessionCompany'))
+                                                    ->get();
+                                            @endphp
+                                            @foreach ($bankAccount as $row)
+                                                <option value="{{ $row->id }}">{{ $row->nama_bank }} -
+                                                    {{ $row->pemilik_rekening }} - {{ $row->nomor_rekening }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="Yes" id="notif"
                                         name="notif" checked>
@@ -105,7 +128,8 @@
         @endif
     @endcan
     @if ($model->status_bayar == 'Sudah Bayar')
-        <button disabled class="btn btn-outline-success btn-sm" title="Kirim Notif Tagihan WA"><i class="ace-icon bi bi-whatsapp"></i></button>
+        <button disabled class="btn btn-outline-success btn-sm" title="Kirim Notif Tagihan WA"><i
+                class="ace-icon bi bi-whatsapp"></i></button>
 
         @can('tagihan edit')
             <button disabled class="btn btn-outline-primary btn-sm" title="Edit Tagihan"><i
@@ -154,3 +178,17 @@
         @endcan
     @endif
 </td>
+
+
+<script>
+    function toggleBankAccount(selectElement) {
+        var bankAccountInput = document.getElementById("input-bank-account");
+        if (selectElement.value === "Cash") {
+            bankAccountInput.style.display = "none";
+            bankAccountInput.querySelector("select").removeAttribute("required");
+        } else {
+            bankAccountInput.style.display = "block";
+            bankAccountInput.querySelector("select").setAttribute("required", "required");
+        }
+    }
+</script>

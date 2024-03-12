@@ -109,6 +109,15 @@ function rupiah2($angka)
     return $a;
 }
 
+function konversiTanggal($tanggal) {
+    setlocale(LC_TIME, 'id_ID');
+    $date = DateTime::createFromFormat('Y-m', $tanggal);
+    $tanggal_indonesia = strftime('%B %Y', $date->getTimestamp());
+    return $tanggal_indonesia;
+}
+
+
+
 function sendNotifWa($url, $api_key,$sender,$request, $typePesan, $no_penerima, $footer)
 {
     if ($typePesan == 'bayar') {

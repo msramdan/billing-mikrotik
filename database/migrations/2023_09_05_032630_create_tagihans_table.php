@@ -20,6 +20,7 @@ return new class extends Migration
 			$table->foreignId('pelanggan_id')->nullable()->constrained('pelanggans')->restrictOnUpdate()->nullOnDelete();
             $table->string('periode', 10);
 			$table->enum('metode_bayar', ['Cash', 'Transfer Bank', 'Payment Tripay'])->nullable();
+            $table->foreignId('bank_account_id')->nullable()->constrained('bank_accounts')->restrictOnUpdate()->nullOnDelete();
 			$table->enum('status_bayar', ['Sudah Bayar', 'Belum Bayar']);
 			$table->integer('nominal_bayar');
 			$table->integer('potongan_bayar');
