@@ -9,8 +9,10 @@ $queryCekNotifWa = mysqli_query($koneksi, $cekNotifWa);
 $datanya = mysqli_fetch_array($queryCekNotifWa);
 
 if ($datanya['is_active'] == 'Yes') {
-    $sql = "SELECT tagihans.*,pelanggans.nama,pelanggans.no_wa, pelanggans.kirim_tagihan_wa,pelanggans.jatuh_tempo FROM tagihans
-    join pelanggans on pelanggans.id = tagihans.pelanggan_id where tagihans.status_bayar='Belum Bayar'";
+    $sql = "SELECT tagihans.*,tagihans.id as id_tagihan,companies.*,pelanggans.nama,pelanggans.no_wa, pelanggans.kirim_tagihan_wa,pelanggans.jatuh_tempo FROM tagihans
+    join companies on companies.id = tagihans.company_id
+    join pelanggans on pelanggans.id = tagihans.pelanggan_id
+    where tagihans.status_bayar='Belum Bayar' and is_send='No' limit 10";
     $query = mysqli_query($koneksi, $sql);
     while ($data = mysqli_fetch_array($query)) {
         try {
@@ -18,7 +20,7 @@ if ($datanya['is_active'] == 'Yes') {
             $message = 'Pelanggan SawitSkyLink Yth. ' . $data['nama'] . "\n\n";
             $message .= 'Kami sampaikan tagihan layanan internet bulan *' . tanggal_indonesia($data['periode'])  . '*' . "\n";
             $message .= 'Dengan no tagihan *' . $data['no_tagihan'] . '* sebesar *' . rupiah($data['total_bayar']) . '*' . "\n";
-            $message .= 'Pembayaran paling lambat di tanggal *' . addHari($data['tanggal_create_tagihan'],$data['jatuh_tempo']) . '* Untuk Menghindari Isolir off wifi otomatis di tempat anda.'." \n\n";
+            $message .= 'Pembayaran paling lambat di tanggal *' . addHari($data['tanggal_create_tagihan'], $data['jatuh_tempo']) . '* Untuk Menghindari Isolir off wifi otomatis di tempat anda.' . " \n\n";
             $message .= "*Note : Abaikan pesan ini jika sudah berbayar* \n\n";
             $message .= "Anda dapat melakukan pembayaran tagihan dengan cara : \n";
             $message .= "1. Lewat Virtual Account (Verifikasi Pembayaran Automatis) \n";
@@ -30,11 +32,10 @@ if ($datanya['is_active'] == 'Yes') {
 
             if ($data['kirim_tagihan_wa'] == 'Yes') {
                 $data = array(
-                    'api_key'  => $datanya['api_key'],
-                    'receiver' => $data['no_wa'],
-                    'data'     => [
-                        'message' => $message,
-                    ],
+                    'api_key'  => $data['api_key_wa_gateway'],
+                    'sender'  => $data['sender'],
+                    'number' => $data['no_wa'],
+                    'message' => $message,
                 );
                 $body = json_encode($data);
                 $ch = curl_init($url);
@@ -84,7 +85,6 @@ function tanggal_indonesia($tanggal)
 
 function addHari($tgl, $jatuh_tempo)
 {
-    $tgl    = date('Y-m-d', strtotime('+'.$jatuh_tempo.'days', strtotime($tgl)));
+    $tgl    = date('Y-m-d', strtotime('+' . $jatuh_tempo . 'days', strtotime($tgl)));
     return $tgl;
 }
-

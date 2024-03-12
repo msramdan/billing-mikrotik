@@ -35,6 +35,7 @@ class StoreCompanyRequest extends FormRequest
 			'favicon' => 'nullable|image|max:3000',
 			'url_wa_gateway' => 'required|url|max:255',
 			'api_key_wa_gateway' => 'required|string|max:255',
+            'sender' => 'required|string|max:15',
 			'is_active' => 'required|in:Yes,No',
 			'footer_pesan_wa_tagihan' => 'nullable|string',
 			'footer_pesan_wa_pembayaran' => 'nullable|string',

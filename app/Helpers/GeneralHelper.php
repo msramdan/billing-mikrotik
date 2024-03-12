@@ -109,7 +109,7 @@ function rupiah2($angka)
     return $a;
 }
 
-function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima, $footer)
+function sendNotifWa($url, $api_key,$sender,$request, $typePesan, $no_penerima, $footer)
 {
     if ($typePesan == 'bayar') {
         $message = 'Yth. ' . $request->nama_pelanggan . "\n\n";
@@ -120,12 +120,12 @@ function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima, $footer
         $message .= '*Metode Pembayaran :* ' .  $request->metode_bayar . " \n";
         $message .= '*Tanggal :* ' . date('Y-m-d H:i:s') . "\n\n";
         $message .= $footer;
-   } else if ($typePesan == 'tagihan') {
+    } else if ($typePesan == 'tagihan') {
         $message = 'Pelanggan ' . getCompany()->nama_perusahaan .  "\n\n";
         $message .= 'Yth. *' . $request->nama . '*' . "\n\n";
 
         $message .= 'Kami sampaikan tagihan layanan internet bulan *' . tanggal_indonesia($request->periode)  . '*' . "\n";
-        $message .= 'Dengan no tagihan *' . $request->no_tagihan . '*'. "\n\n";
+        $message .= 'Dengan no tagihan *' . $request->no_tagihan . '*' . "\n\n";
         $message .= 'Sebesar *' . rupiah($request->total_bayar) . '*' . "\n\n";
         $message .= 'Pembayaran paling lambat di tanggal *' . addHari($request->tanggal_create_tagihan, $request->jatuh_tempo) . '* Untuk Menghindari Isolir *(kecepatan menurun otomatis)* di jaringan anda.' . " \n\n";
         $message .= $footer;
@@ -144,14 +144,12 @@ function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima, $footer
         $message .= "Salam hangat,\n";
         $message .= $user->name . '-' . getCompany()->nama_perusahaan;
     }
-
     $endpoint_wa = $url . 'send-message';
     $response = Http::post($endpoint_wa, [
         'api_key' => $api_key,
-        'receiver' => strval($no_penerima),
-        'data' => [
-            "message" => $message,
-        ]
+        'sender'  => strval($sender),
+        'number' => strval($no_penerima),
+        'message' => $message,
     ]);
     return json_decode($response);
 }

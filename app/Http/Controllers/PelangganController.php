@@ -191,6 +191,7 @@ class PelangganController extends Controller
                 sendNotifWa(
                     $waGateway->url_wa_gateway,
                     $waGateway->api_key_wa_gateway,
+                    $waGateway->sender,
                     $request,
                     'daftar',
                     $request->no_wa,

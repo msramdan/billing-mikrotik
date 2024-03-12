@@ -27,10 +27,9 @@ while ($data = mysqli_fetch_array($query)) {
         if ($data['kirim_tagihan_wa'] == 'Yes') {
             $dataPesan = array(
                 'api_key'  => $data['api_key_wa_gateway'],
-                'receiver' => $data['no_wa'],
-                'data'     => [
-                    'message' => $message,
-                ],
+                'sender'  => $data['sender'],
+                'number' => $data['no_wa'],
+                'message' => $message,
             );
             $body = json_encode($dataPesan);
             $ch = curl_init($url);

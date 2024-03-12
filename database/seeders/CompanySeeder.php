@@ -26,6 +26,7 @@ class CompanySeeder extends Seeder
                 'favicon' => null,
                 'url_wa_gateway' => 'https://sawitskylink.my.id/api/',
                 'api_key_wa_gateway' => 'c851ba7398c8b2713cd424fccdd997be18b5da2b',
+                'sender' => '6283874731480',
                 'is_active' => 'No',
                 'footer_pesan_wa_tagihan' => 'silahkan kunjungi link di bawah ini untuk bayar tagihan dan cek tagihan. *https://sawit.rajabilling.my.id/*
             pembayaran bisa di lakukan melalui, *indomaret*, *alfamart*, *virtual akun*,  melalui link tersebut tanpa perlu kirim bukti transfer.
@@ -57,6 +58,7 @@ class CompanySeeder extends Seeder
                 'favicon' => null,
                 'url_wa_gateway' => 'https://sawitskylink.my.id/api/',
                 'api_key_wa_gateway' => 'c851ba7398c8b2713cd424fccdd997be18b5da2b',
+                'sender' => '6283874731480',
                 'is_active' => 'No',
                 'footer_pesan_wa_tagihan' => 'silahkan kunjungi link di bawah ini untuk bayar tagihan dan cek tagihan. *https://sawit.rajabilling.my.id/*
             pembayaran bisa di lakukan melalui, *indomaret*, *alfamart*, *virtual akun*,  melalui link tersebut tanpa perlu kirim bukti transfer.
