@@ -77,8 +77,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="ppn">{{ __('Metode Bayar') }}</label>
-                                        <select class="form-select" name="metode_bayar" required class="form-control"
-                                            onchange="toggleBankAccount(this)">
+                                        <select class="form-select" name="metode_bayar" required class="form-control">
                                             <option value="" selected disabled>-- {{ __('Select metode bayar') }} --
                                             </option>
                                             <option value="Cash">Cash</option>
@@ -87,7 +86,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-12" id="input-bank-account" style="display: none;">
+                                <div class="col-md-12 bank-account-field" >
                                     <div class="form-group">
                                         <label for="ppn">{{ __('Bank Account') }}</label>
                                         <select class="form-select" name="bank_account_id" required class="form-control">
@@ -179,16 +178,25 @@
     @endif
 </td>
 
-
 <script>
-    function toggleBankAccount(selectElement) {
-        var bankAccountInput = document.getElementById("input-bank-account");
-        if (selectElement.value === "Cash") {
-            bankAccountInput.style.display = "none";
-            bankAccountInput.querySelector("select").removeAttribute("required");
-        } else {
-            bankAccountInput.style.display = "block";
-            bankAccountInput.querySelector("select").setAttribute("required", "required");
-        }
-    }
+    $(document).ready(function(){
+        // Semula sembunyikan input Bank Account
+        $('.bank-account-field').hide();
+        
+        // Ketika dropdown Metode Bayar berubah
+        $('select[name="metode_bayar"]').change(function(){
+            // Periksa apakah nilai yang dipilih adalah "Transfer Bank"
+            if($(this).val() === 'Transfer Bank') {
+                // Jika ya, tampilkan input Bank Account
+                $('.bank-account-field').show();
+                // Jadikan input Bank Account wajib diisi
+                $('select[name="bank_account_id"]').prop('required', true);
+            } else {
+                // Jika tidak, sembunyikan input Bank Account
+                $('.bank-account-field').hide();
+                // Buat input Bank Account tidak wajib diisi
+                $('select[name="bank_account_id"]').prop('required', false);
+            }
+        });
+    });
 </script>
