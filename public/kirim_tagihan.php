@@ -31,11 +31,12 @@ if ($datanya['is_active'] == 'Yes') {
             $message .= "Admin SawitSkyLink \n";
 
             if ($data['kirim_tagihan_wa'] == 'Yes') {
-                $data = array(
+                $dataPesan = array(
                     'api_key'  => $data['api_key_wa_gateway'],
-                    'sender'  => $data['sender'],
-                    'number' => $data['no_wa'],
-                    'message' => $message,
+                    'receiver' => $data['no_wa'],
+                    'data'     => [
+                        'message' => $message,
+                    ],
                 );
                 $body = json_encode($data);
                 $ch = curl_init($url);

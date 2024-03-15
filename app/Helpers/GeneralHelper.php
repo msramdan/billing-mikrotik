@@ -118,7 +118,7 @@ function konversiTanggal($tanggal) {
 
 
 
-function sendNotifWa($url, $api_key,$sender,$request, $typePesan, $no_penerima, $footer)
+function sendNotifWa($url, $api_key,$request, $typePesan, $no_penerima, $footer)
 {
     if ($typePesan == 'bayar') {
         $message = 'Yth. ' . $request->nama_pelanggan . "\n\n";
@@ -156,9 +156,10 @@ function sendNotifWa($url, $api_key,$sender,$request, $typePesan, $no_penerima, 
     $endpoint_wa = $url . 'send-message';
     $response = Http::post($endpoint_wa, [
         'api_key' => $api_key,
-        'sender'  => strval($sender),
-        'number' => strval($no_penerima),
-        'message' => $message,
+        'receiver' => strval($no_penerima),
+        'data' => [
+            "message" => $message,
+        ]
     ]);
     return json_decode($response);
 }

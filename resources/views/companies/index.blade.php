@@ -90,10 +90,6 @@
                 '<td>' + d.api_key_wa_gateway + '</td>' +
                 '</tr>' +
                 '<tr>' +
-                '<td>Sender WA</td>' +
-                '<td>' + d.sender + '</td>' +
-                '</tr>' +
-                '<tr>' +
                 '<td>Is Active</td>' +
                 '<td>' + d.is_active + '</td>' +
                 '</tr>' +

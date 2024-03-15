@@ -215,20 +215,6 @@
             @enderror
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="form-group">
-            <label for="api-key-wa-gateway">{{ __('Sender WA') }}</label>
-            <input type="text" name="sender" id="api-key-wa-gateway"
-                class="form-control @error('sender') is-invalid @enderror"
-                value="{{ isset($company) ? $company->sender : old('sender') }}"
-                placeholder="{{ __('Sender WA : Harus 62') }}" required />
-            @error('sender')
-                <span class="text-danger">
-                    {{ $message }}
-                </span>
-            @enderror
-        </div>
-    </div>
 
     <div class="col-md-6">
         <div class="form-group">

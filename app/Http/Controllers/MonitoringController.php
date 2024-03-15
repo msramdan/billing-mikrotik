@@ -43,7 +43,6 @@ class MonitoringController extends Controller
         $data2 = $data->status->data;
         $data3 = $data->uncf->data;
         $groupedCounts = [];
-
         $result = self::processOnuData($data2);
         if (count($data1) === count($data2)) {
             for ($i = 0; $i < count($data1); $i++) {

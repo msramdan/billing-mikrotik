@@ -53,7 +53,6 @@ class TripayCallbackController extends Controller
                     'companies.is_active',
                     'companies.url_wa_gateway',
                     'companies.api_key_wa_gateway',
-                    'companies.sender',
                     'companies.footer_pesan_wa_pembayaran',
                     'pelanggans.id as pelanggan_id',
                     'pelanggans.nama as nama_pelanggan',
@@ -138,7 +137,7 @@ class TripayCallbackController extends Controller
                 ]);
 
                 if ($invoice->is_active == 'Yes') {
-                    sendNotifWa($invoice->url_wa_gateway, $invoice->api_key_wa_gateway,$invoice->sender, $invoice, 'bayar', $invoice->no_wa, $invoice->footer_pesan_wa_pembayaran);
+                    sendNotifWa($invoice->url_wa_gateway, $invoice->api_key_wa_gateway,$invoice, 'bayar', $invoice->no_wa, $invoice->footer_pesan_wa_pembayaran);
                 }
 
                 // set status jadi aktif handle klo kena isolir duluan dan tidak ada tagihan belum di bayar lain nya

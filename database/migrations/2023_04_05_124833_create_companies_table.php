@@ -26,7 +26,6 @@ return new class extends Migration
 			$table->string('favicon')->nullable();
 			$table->string('url_wa_gateway', 255);
 			$table->string('api_key_wa_gateway', 255);
-            $table->string('sender', 15);
 			$table->enum('is_active', ['Yes', 'No']);
 			$table->text('footer_pesan_wa_tagihan')->nullable();
 			$table->text('footer_pesan_wa_pembayaran')->nullable();

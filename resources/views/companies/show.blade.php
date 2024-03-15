@@ -99,10 +99,6 @@
                                         <td>{{ $company->api_key_wa_gateway }}</td>
                                     </tr>
                                     <tr>
-                                        <td class="fw-bold">{{ __('Sender WA') }}</td>
-                                        <td>{{ $company->sender }}</td>
-                                    </tr>
-                                    <tr>
                                         <td class="fw-bold">{{ __('Is Active') }}</td>
                                         <td>{{ $company->is_active }}</td>
                                     </tr>

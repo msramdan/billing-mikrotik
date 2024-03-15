@@ -35,10 +35,12 @@ class SendnotifController extends Controller
                 $endpoint_wa = $waGateway->url_wa_gateway . 'send-message';
                 $response = Http::post($endpoint_wa, [
                     'api_key' => $waGateway->api_key_wa_gateway,
-                    'sender'  => strval($waGateway->sender),
-                    'number' => strval($value->no_wa),
-                    'message' => $request->pesan,
+                    'receiver' => strval($value->no_wa),
+                    'data' => [
+                        "message" => $request->pesan,
+                    ]
                 ]);
+
                 \Log::info($response);
             }
         } else {
@@ -54,10 +56,12 @@ class SendnotifController extends Controller
                     $endpoint_wa = $waGateway->url_wa_gateway . 'send-message';
                     $response = Http::post($endpoint_wa, [
                         'api_key' => $waGateway->api_key_wa_gateway,
-                        'sender'  => strval($waGateway->sender),
-                        'number' => strval($value->no_wa),
-                        'message' => $request->pesan,
+                        'receiver' => strval($value->no_wa),
+                        'data' => [
+                            "message" => $request->pesan,
+                        ]
                     ]);
+
                     \Log::info($response);
                 }
             } else {
@@ -72,9 +76,10 @@ class SendnotifController extends Controller
                     $endpoint_wa = $waGateway->url_wa_gateway . 'send-message';
                     $response = Http::post($endpoint_wa, [
                         'api_key' => $waGateway->api_key_wa_gateway,
-                        'sender'  => strval($waGateway->sender),
-                        'number' => strval($value->no_wa),
-                        'message' => $request->pesan,
+                        'receiver' => strval($value->no_wa),
+                        'data' => [
+                            "message" => $request->pesan,
+                        ]
                     ]);
                     \Log::info($response);
                 }
