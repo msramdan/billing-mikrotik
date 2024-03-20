@@ -882,7 +882,7 @@
                                         @foreach ($list_olt as $value)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $value['index'] }}</td>
+                                                <td>gpon-onu_{{ $value['index'] }}</td>
                                                 <td>{{ $value['name'] }}</td>
                                                 @if ($value['phase'] == 'working')
                                                     <td><span style="color: green"><i class="fa fa-globe"
@@ -897,7 +897,7 @@
                                                     <td><span style="color: red">{{ $value['phase'] }}</span></td>
                                                 @endif
                                                 <td><button type="button" class="btn btn-primary open-modal-btn"
-                                                        data-onu="{{ $value['index'] }}"
+                                                        data-onu="gpon-onu_{{ $value['index'] }}"
                                                         data-name="{{ $value['name'] }}">detail
                                                     </button>
                                                 </td>

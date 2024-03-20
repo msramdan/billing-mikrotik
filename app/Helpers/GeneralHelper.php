@@ -12,8 +12,6 @@ use GuzzleHttp\Promise;
 use GuzzleHttp\Client as Client;
 use \RouterOS\Client as RouterOSClient;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redis;
-
 
 
 function oltExec()
@@ -36,7 +34,8 @@ function oltExec()
         $responses = Promise\Utils::all([$promiseApi1, $promiseApi2])->wait();
         $response1 = json_decode($responses[0]->getBody()->getContents());
         $response2 = json_decode($responses[1]->getBody()->getContents());
-        $onuName = snmpwalk('103.162.205.97:201', 'onewanro', '.1.3.6.1.4.1.3902.1012.3.28.1.1.2');
+        $hostSnmp =  $oltSettings->host . ':' . $oltSettings->snmp_port;
+        $onuName = snmpwalk($hostSnmp, $oltSettings->ro_community, '.1.3.6.1.4.1.3902.1012.3.28.1.1.2');
         $list_olt = [];
         foreach ($onuName as $key => $value) {
             $list_olt[$key]["index"] = $response1->data[$key]->onu_index;
@@ -254,4 +253,29 @@ function convertIntegerToDecimal($stringValue)
     $decimalValue = number_format((int) str_replace('INTEGER: ', '', $stringValue) / 1000, 1);
 
     return $decimalValue;
+}
+
+
+function asyncApiCalls(array $requestData, string $urlOnuName, string $urlStatus, string $urlUncf): array
+{
+    $client = new Client();
+    $promises = [
+        'onuName' => asyncPostRequest($client, $urlOnuName, $requestData),
+        'status' => asyncPostRequest($client, $urlStatus, $requestData),
+        'uncf' => asyncPostRequest($client, $urlUncf, $requestData),
+    ];
+
+    // Menunggu hasil panggilan API paralel
+    $results = [];
+    foreach ($promises as $key => $promise) {
+        $results[$key] = json_decode($promise->wait()->getBody()->getContents(), true);
+    }
+
+    return $results;
+}
+
+function asyncPostRequest(Client $client, string $url, array $data): \GuzzleHttp\Promise\PromiseInterface
+{
+    // Melakukan panggilan API asynchronous
+    return $client->postAsync($url, ['json' => $data]);
 }
