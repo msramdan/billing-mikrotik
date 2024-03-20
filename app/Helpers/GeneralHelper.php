@@ -54,6 +54,7 @@ function oltExec()
         }
         return [
             'list_olt' => $list_olt,
+            'status' => $response1,
             'uncf' => $response2,
             'workingCount' => $workingCount,
             'groupedCounts' => $groupedCounts,
