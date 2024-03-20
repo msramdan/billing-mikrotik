@@ -37,14 +37,27 @@ function oltExec()
         $hostSnmp =  $oltSettings->host . ':' . $oltSettings->snmp_port;
         $onuName = snmpwalk($hostSnmp, $oltSettings->ro_community, '.1.3.6.1.4.1.3902.1012.3.28.1.1.2');
         $list_olt = [];
+        $workingCount = 0;
+        $groupedCounts = array();
         foreach ($onuName as $key => $value) {
             $list_olt[$key]["index"] = $response1->data[$key]->onu_index;
             $list_olt[$key]["name"] = trim(str_replace(["STRING:", '"'], ["", ""], $value));
             $list_olt[$key]["phase"] = $response1->data[$key]->phase;
+            if ($response1->data[$key]->phase === 'working') {
+                $workingCount++;
+            }
+            $phase = $response1->data[$key]->phase;
+            if (!isset($groupedCounts[$phase])) {
+                $groupedCounts[$phase] = 0;
+            }
+            $groupedCounts[$phase]++;
         }
         return [
             'list_olt' => $list_olt,
             'uncf' => $response2,
+            'workingCount' => $workingCount,
+            'groupedCounts' => $groupedCounts,
+
         ];
     } catch (\Exception $e) {
         dd($e->getMessage());

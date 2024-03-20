@@ -38,7 +38,6 @@ class MonitoringController extends Controller
         $hasil = oltExec();
         $list_olt = $hasil['list_olt'];
         $list_uncf = $hasil['uncf']->data;
-        $groupedCounts = [];
         // $result = self::processOnuData($data2);
         // if (count($data1) === count($data2)) {
         //     for ($i = 0; $i < count($data1); $i++) {
@@ -53,16 +52,16 @@ class MonitoringController extends Controller
         //     echo "Jumlah elemen dalam dua array tidak sama";
         //     die();
         // }
-        // $jumlahWorking = isset($groupedCounts['working']) ? $groupedCounts['working'] : 0;
+        $jumlahWorking = isset($groupedCounts['working']) ? $groupedCounts['working'] : 0;
         return view('monitorings.index', [
             'olts' => Olt::where('company_id', session('sessionCompany'))->get(),
             'list_olt' => $list_olt,
-            'online' => 0,
-            'offline' => count($list_olt) - 0,
+            'online' =>  $hasil['workingCount'],
+            'offline' => count($list_olt) - $hasil['workingCount'],
             'list_uncf' =>  $list_uncf,
             'total_auth' =>  count($list_olt),
             'uncf' =>  count($list_uncf),
-            'groupedCounts' => $groupedCounts,
+            'groupedCounts' => $hasil['groupedCounts'],
             'missing_values' => [],
             'max_values' => []
         ]);
