@@ -16,6 +16,7 @@
         "laravel/tinker": "^2.8",
         "predis/predis": "^2.2",
         "realrashid/sweet-alert": "^7.1",
+        "spatie/async": "^1.6",
         "spatie/laravel-permission": "^5.10",
         "spatie/ssh": "^1.9"
     },

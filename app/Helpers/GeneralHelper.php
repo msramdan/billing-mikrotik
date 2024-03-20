@@ -15,7 +15,42 @@ use GuzzleHttp\Client as Client;
 use \RouterOS\Client as RouterOSClient;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redis;
+use Spatie\Async\Pool;
 
+
+
+function oltExec()
+{
+    try {
+        $startTime = microtime(true);
+        $oltSettings = Olt::findOrFail(session('sessionOlt'));
+        $postData = [
+            'host' => $oltSettings->host,
+            'port' => (int) $oltSettings->port,
+            'username' => $oltSettings->username,
+            'password' => $oltSettings->password,
+        ];
+        $responses = Http::pool(function ($http) use ($postData) {
+            $http->post('http://103.127.132.33:9101/status', $postData);
+            $http->post('http://103.127.132.33:9102/uncf', $postData);
+        });
+        $onuName = snmpwalk('103.122.65.234:77', 'sawitro', '.1.3.6.1.4.1.3902.1012.3.28.1.1.2');
+        $response1 = json_decode($responses[0]->body());
+        $response2 = json_decode($responses[1]->body());
+        $endTime = microtime(true);
+
+        echo "<pre>";
+        var_dump($onuName);
+        var_dump($response1);
+        var_dump($response2);
+
+        $totalTime = $endTime - $startTime;
+        echo "Total waktu yang dibutuhkan: " . $totalTime . " detik";
+        die();
+    } catch (\Exception $e) {
+        dd($e->getMessage());
+    }
+}
 function formatBytes($bytes, $decimal = null)
 {
     $satuan = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
@@ -109,7 +144,8 @@ function rupiah2($angka)
     return $a;
 }
 
-function konversiTanggal($tanggal) {
+function konversiTanggal($tanggal)
+{
     setlocale(LC_TIME, 'id_ID');
     $date = DateTime::createFromFormat('Y-m', $tanggal);
     $tanggal_indonesia = strftime('%B %Y', $date->getTimestamp());
@@ -118,7 +154,7 @@ function konversiTanggal($tanggal) {
 
 
 
-function sendNotifWa($url, $api_key,$request, $typePesan, $no_penerima, $footer)
+function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima, $footer)
 {
     if ($typePesan == 'bayar') {
         $message = 'Yth. ' . $request->nama_pelanggan . "\n\n";
@@ -218,54 +254,4 @@ function convertIntegerToDecimal($stringValue)
     $decimalValue = number_format((int) str_replace('INTEGER: ', '', $stringValue) / 1000, 1);
 
     return $decimalValue;
-}
-
-
-function oltExec()
-{
-    try {
-        $oltSettings = Olt::findOrFail(session('sessionOlt'));
-        $requestData = [
-            'host' => $oltSettings->host,
-            'port' => (int) $oltSettings->port,
-            'username' => $oltSettings->username,
-            'password' => $oltSettings->password,
-        ];
-
-        $zteServer1 = env('ZTE_SERVER_1');
-        $zteServer2 = env('ZTE_SERVER_2');
-        $zteServer3 = env('ZTE_SERVER_3');
-        $urlOnuName = $zteServer1 . '/onu-name';
-        $urlStatus = $zteServer2 . '/status';
-        $urlUncf = $zteServer3 . '/uncf';
-        $result = asyncApiCalls($requestData, $urlOnuName, $urlStatus, $urlUncf);
-
-        return response()->json($result);
-    } catch (\Exception $e) {
-        dd('something error 3');
-    }
-}
-
-function asyncApiCalls(array $requestData, string $urlOnuName, string $urlStatus, string $urlUncf): array
-{
-    $client = new Client();
-    $promises = [
-        'onuName' => asyncPostRequest($client, $urlOnuName, $requestData),
-        'status' => asyncPostRequest($client, $urlStatus, $requestData),
-        'uncf' => asyncPostRequest($client, $urlUncf, $requestData),
-    ];
-
-    // Menunggu hasil panggilan API paralel
-    $results = [];
-    foreach ($promises as $key => $promise) {
-        $results[$key] = json_decode($promise->wait()->getBody()->getContents(), true);
-    }
-
-    return $results;
-}
-
-function asyncPostRequest(Client $client, string $url, array $data): \GuzzleHttp\Promise\PromiseInterface
-{
-    // Melakukan panggilan API asynchronous
-    return $client->postAsync($url, ['json' => $data]);
 }
