@@ -5,48 +5,48 @@ use Illuminate\Support\Facades\DB;
 use \RouterOS\Exceptions\ConnectException;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Http;
-use App\Models\Package;
 use App\Models\Pelanggan;
 use App\Models\Tagihan;
 use App\Models\Settingmikrotik;
 use GuzzleHttp\Promise;
-use Illuminate\Http\Request;
 use GuzzleHttp\Client as Client;
 use \RouterOS\Client as RouterOSClient;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redis;
-use Spatie\Async\Pool;
 
 
 
 function oltExec()
 {
     try {
-        $startTime = microtime(true);
         $oltSettings = Olt::findOrFail(session('sessionOlt'));
         $postData = [
             'host' => $oltSettings->host,
-            'port' => (int) $oltSettings->port,
-            'username' => $oltSettings->username,
-            'password' => $oltSettings->password,
+            'port' => (int) $oltSettings->telnet_port,
+            'username' => $oltSettings->telnet_username,
+            'password' => $oltSettings->telnet_password,
         ];
-        $responses = Http::pool(function ($http) use ($postData) {
-            $http->post('http://103.127.132.33:9101/status', $postData);
-            $http->post('http://103.127.132.33:9102/uncf', $postData);
-        });
-        $onuName = snmpwalk('103.122.65.234:77', 'sawitro', '.1.3.6.1.4.1.3902.1012.3.28.1.1.2');
-        $response1 = json_decode($responses[0]->body());
-        $response2 = json_decode($responses[1]->body());
-        $endTime = microtime(true);
 
-        echo "<pre>";
-        var_dump($onuName);
-        var_dump($response1);
-        var_dump($response2);
-
-        $totalTime = $endTime - $startTime;
-        echo "Total waktu yang dibutuhkan: " . $totalTime . " detik";
-        die();
+        $client = new Client();
+        // $zteServer1 = env('ZTE_SERVER_1');
+        $zteServer2 = env('ZTE_SERVER_2');
+        $zteServer3 = env('ZTE_SERVER_3');
+        $promiseApi1 = $client->postAsync($zteServer2 . '/status', ['json' => $postData]);
+        $promiseApi2 = $client->postAsync($zteServer3 . '/uncf', ['json' => $postData]);
+        $responses = Promise\Utils::all([$promiseApi1, $promiseApi2])->wait();
+        $response1 = json_decode($responses[0]->getBody()->getContents());
+        $response2 = json_decode($responses[1]->getBody()->getContents());
+        $onuName = snmpwalk('103.162.205.97:201', 'onewanro', '.1.3.6.1.4.1.3902.1012.3.28.1.1.2');
+        $list_olt = [];
+        foreach ($onuName as $key => $value) {
+            $list_olt[$key]["index"] = $response1->data[$key]->onu_index;
+            $list_olt[$key]["name"] = trim(str_replace(["STRING:", '"'], ["", ""], $value));
+            $list_olt[$key]["phase"] = $response1->data[$key]->phase;
+        }
+        return [
+            'list_olt' => $list_olt,
+            'uncf' => $response2,
+        ];
     } catch (\Exception $e) {
         dd($e->getMessage());
     }

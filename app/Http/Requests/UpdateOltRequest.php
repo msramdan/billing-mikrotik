@@ -27,9 +27,11 @@ class UpdateOltRequest extends FormRequest
             'name' => 'required|string',
             'type' => 'required|in:Zte,Huawei',
             'host' => 'required|string',
-            'port' => 'required',
-            'username' => 'required|string',
-            'password' => 'required|string',
+            'telnet_port' => 'required',
+            'telnet_username' => 'required|string',
+            'telnet_password' => 'required|string',
+            'snmp_port' => 'required',
+            'ro_community' => 'required|string',
         ];
     }
 }

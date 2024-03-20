@@ -42,9 +42,11 @@
                                             <th>{{ __('Name') }}</th>
 											<th>{{ __('Type') }}</th>
 											<th>{{ __('Host') }}</th>
-                                            <th>{{ __('Port') }}</th>
-											<th>{{ __('Username') }}</th>
-											<th>{{ __('Password') }}</th>
+                                            <th>{{ __('Telnet Port') }}</th>
+											<th>{{ __('Telnet Username') }}</th>
+											<th>{{ __('Telnet Password') }}</th>
+                                            <th>{{ __('Snmp Port') }}</th>
+                                            <th>{{ __('Ro Community') }}</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
@@ -85,16 +87,24 @@
                     name: 'host',
                 },
                 {
-                    data: 'port',
-                    name: 'port',
+                    data: 'telnet_port',
+                    name: 'telnet_port',
                 },
 				{
-                    data: 'username',
-                    name: 'username',
+                    data: 'telnet_username',
+                    name: 'telnet_username',
                 },
 				{
-                    data: 'password',
-                    name: 'password',
+                    data: 'telnet_password',
+                    name: 'telnet_password',
+                },
+                {
+                    data: 'snmp_port',
+                    name: 'snmp_port',
+                },
+                {
+                    data: 'ro_community',
+                    name: 'ro_community',
                 },
                 {
                     data: 'action',

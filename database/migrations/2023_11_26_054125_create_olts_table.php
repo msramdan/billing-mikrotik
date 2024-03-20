@@ -19,9 +19,11 @@ return new class extends Migration
             $table->string('name');
             $table->enum('type', ['Zte', 'Huawei']);
             $table->string('host');
-            $table->integer('port');
-            $table->string('username');
-            $table->string('password');
+            $table->integer('telnet_port');
+            $table->string('telnet_username');
+            $table->string('telnet_password');
+            $table->string('snmp_port');
+            $table->string('ro_community');
             $table->timestamps();
         });
     }

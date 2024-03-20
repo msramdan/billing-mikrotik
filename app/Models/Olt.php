@@ -9,7 +9,7 @@ class Olt extends Model
 {
     use HasFactory;
 
-     /**
+    /**
      * The table associated with the model.
      *
      * @var string
@@ -21,14 +21,5 @@ class Olt extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['name','company_id', 'type', 'host','port', 'username', 'password'];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var string[]
-     */
-    protected $casts = ['name' => 'string', 'host' => 'string', 'ro' => 'string', 'rw' => 'string', 'created_at' => 'datetime:d/m/Y H:i', 'updated_at' => 'datetime:d/m/Y H:i'];
-
-
+    protected $fillable = ['name', 'company_id', 'type', 'host', 'telnet_port', 'telnet_username', 'telnet_password', 'snmp_port', 'ro_community'];
 }

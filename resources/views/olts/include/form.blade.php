@@ -39,9 +39,9 @@
 
     <div class="col-md-6">
         <div class="form-group">
-            <label for="port">{{ __('Port') }}</label>
-            <input type="number" name="port" id="port" class="form-control @error('port') is-invalid @enderror" value="{{ isset($olt) ? $olt->port : old('port') }}" placeholder="{{ __('Port') }}" required />
-            @error('port')
+            <label for="telnet_port">{{ __('Telnet Port') }}</label>
+            <input type="number" name="telnet_port" id="telnet_port" class="form-control @error('telnet_port') is-invalid @enderror" value="{{ isset($olt) ? $olt->telnet_port : old('telnet_port') }}" placeholder="{{ __('Telnet Port') }}" required />
+            @error('telnet_port')
                 <span class="text-danger">
                     {{ $message }}
                 </span>
@@ -52,9 +52,9 @@
 
     <div class="col-md-6">
         <div class="form-group">
-            <label for="username">{{ __('Username') }}</label>
-            <input type="text" name="username" id="username" class="form-control @error('username') is-invalid @enderror" value="{{ isset($olt) ? $olt->username : old('username') }}" placeholder="{{ __('Username') }}" required />
-            @error('username')
+            <label for="telnet_username">{{ __('Telnet Username') }}</label>
+            <input type="text" name="telnet_username" id="telnet_username" class="form-control @error('telnet_username') is-invalid @enderror" value="{{ isset($olt) ? $olt->telnet_username : old('telnet_username') }}" placeholder="{{ __('Telnet Username') }}" required />
+            @error('telnet_username')
                 <span class="text-danger">
                     {{ $message }}
                 </span>
@@ -63,9 +63,33 @@
     </div>
     <div class="col-md-6">
         <div class="form-group">
-            <label for="password">{{ __('Password') }}</label>
-            <input type="text" name="password" id="password" class="form-control @error('password') is-invalid @enderror" value="{{ isset($olt) ? $olt->password : old('password') }}" placeholder="{{ __('Password') }}" required />
-            @error('password')
+            <label for="telnet_password">{{ __('Telnet Password') }}</label>
+            <input type="text" name="telnet_password" id="telnet_password" class="form-control @error('telnet_password') is-invalid @enderror" value="{{ isset($olt) ? $olt->telnet_password : old('telnet_password') }}" placeholder="{{ __('Password') }}" required />
+            @error('telnet_password')
+                <span class="text-danger">
+                    {{ $message }}
+                </span>
+            @enderror
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="snmp_port">{{ __('Snmp Port') }}</label>
+            <input type="number" name="snmp_port" id="snmp_port" class="form-control @error('snmp_port') is-invalid @enderror" value="{{ isset($olt) ? $olt->snmp_port : old('snmp_port') }}" placeholder="{{ __('Snmp Port') }}" required />
+            @error('snmp_port')
+                <span class="text-danger">
+                    {{ $message }}
+                </span>
+            @enderror
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="ro_community">{{ __('Ro Community') }}</label>
+            <input type="text" name="ro_community" id="ro_community" class="form-control @error('ro_community') is-invalid @enderror" value="{{ isset($olt) ? $olt->ro_community : old('ro_community') }}" placeholder="{{ __('Ro Community') }}" required />
+            @error('ro_community')
                 <span class="text-danger">
                     {{ $message }}
                 </span>

@@ -879,28 +879,28 @@
                                     </thead>
                                     <tbody>
 
-                                        @foreach ($list_olt as $item)
+                                        @foreach ($list_olt as $value)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $item->index }}</td>
-                                                <td>{{ $item->name }}</td>
-                                                @if ($item->phase == 'working')
+                                                <td>{{ $value['index'] }}</td>
+                                                <td>{{ $value['name'] }}</td>
+                                                @if ($value['phase'] == 'working')
                                                     <td><span style="color: green"><i class="fa fa-globe"
                                                                 aria-hidden="true"></i> Online</span></td>
                                                 @else
                                                     <td><span style="color: red"><i class="fa fa-globe"
                                                                 aria-hidden="true"></i> Offline</span></td>
                                                 @endif
-
-                                                @if ($item->phase == 'working')
-                                                    <td><span style="color: green">{{ $item->phase }}</span></td>
+                                                @if ($value['phase'] == 'working')
+                                                    <td><span style="color: green">{{ $value['phase'] }}</span></td>
                                                 @else
-                                                    <td><span style="color: red">{{ $item->phase }}</span></td>
+                                                    <td><span style="color: red">{{ $value['phase'] }}</span></td>
                                                 @endif
                                                 <td><button type="button" class="btn btn-primary open-modal-btn"
-                                                        data-onu="{{ $item->index }}"
-                                                        data-name="{{ $item->name }}">detail
-                                                    </button></td>
+                                                        data-onu="{{ $value['index'] }}"
+                                                        data-name="{{ $value['name'] }}">detail
+                                                    </button>
+                                                </td>
                                             </tr>
                                         @endforeach
 

@@ -35,11 +35,20 @@ class MonitoringController extends Controller
                 'max_values' => [],
             ]);
         }
+
         $hasil = oltExec();
-        $list_olt = $hasil['list_olt'];
-        $list_uncf = $hasil['uncf']->data;
-        $groupedCounts = [];
-        // $result = self::processOnuData($data2);
+        $data1 = $hasil['status']->data;
+        $data2 = $hasil['onuName'];
+        $data3 = $hasil['uncf']->data;
+
+        echo "<pre>";
+        var_dump($data1);
+        var_dump($data2);
+        die();
+
+
+        // $groupedCounts = [];
+        $result = self::processOnuData($data2);
         // if (count($data1) === count($data2)) {
         //     for ($i = 0; $i < count($data1); $i++) {
         //         $data1[$i] = (object) array_merge((array) $data1[$i], (array) $data2[$i]);
@@ -50,21 +59,23 @@ class MonitoringController extends Controller
         //         $groupedCounts[$phase]++;
         //     }
         // } else {
-        //     echo "Jumlah elemen dalam dua array tidak sama";
+        //     echo "Jumlah elemen dalam dua array tidak sama.";
         //     die();
         // }
         // $jumlahWorking = isset($groupedCounts['working']) ? $groupedCounts['working'] : 0;
         return view('monitorings.index', [
             'olts' => Olt::where('company_id', session('sessionCompany'))->get(),
-            'list_olt' => $list_olt,
-            'online' => 0,
-            'offline' => count($list_olt) - 0,
-            'list_uncf' =>  $list_uncf,
-            'total_auth' =>  count($list_olt),
-            'uncf' =>  count($list_uncf),
-            'groupedCounts' => $groupedCounts,
-            'missing_values' => [],
-            'max_values' => []
+            'list_olt' => $data1,
+            'online' => $jumlahWorking,
+            'offline' => count($data1) - $jumlahWorking,
+
+            'status' => $data1,
+            'onuName' => $data1,
+            'list_uncf' =>  $data3,
+            'total_auth' =>  count($data1),
+            'uncf' =>  count($data3),
+            'missing_values' => $result["missing_values"],
+            'max_values' => $result["max_values"]
         ]);
     }
 
