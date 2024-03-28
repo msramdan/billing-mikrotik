@@ -154,6 +154,7 @@ Route::middleware(['auth', 'web'])->group(function () {
     Route::resource('pakets', App\Http\Controllers\PaketController::class);
     Route::resource('users', App\Http\Controllers\UserController::class);
     Route::resource('roles', App\Http\Controllers\RoleAndPermissionController::class);
+    Route::resource('olts', App\Http\Controllers\OltController::class);
+    Route::resource('vouchers', App\Http\Controllers\VoucherController::class);
 });
 
-Route::resource('olts', App\Http\Controllers\OltController::class)->middleware('auth');
