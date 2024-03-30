@@ -55,7 +55,39 @@ class HotspotprofileController extends Controller
                     $ponlogin = $row['on-login'];
                     $getexpmode = explode(",", $ponlogin);
                     return isset($getexpmode[6]) ? $getexpmode[6] : '';
-                })->addColumn('rate-limit', function ($row) {
+                })
+
+                ->addColumn('price', function ($row) {
+                    $ponlogin = $row['on-login'];
+                    $getexpmode = explode(",", $ponlogin);
+                    if (isset($getexpmode[2])) {
+                        if ($getexpmode[2] == '' || $getexpmode[2] == '0') {
+                            $nilai = '';
+                        } else {
+                            $nilai = rupiah($getexpmode[2]);
+                        }
+                    } else {
+                        $nilai = '';
+                    }
+                    return $nilai;
+                })
+
+                ->addColumn('selling', function ($row) {
+                    $ponlogin = $row['on-login'];
+                    $getexpmode = explode(",", $ponlogin);
+                    if (isset($getexpmode[4])) {
+                        if ($getexpmode[4] == '' || $getexpmode[4] == '0') {
+                            $nilai = '';
+                        } else {
+                            $nilai = rupiah($getexpmode[4]);
+                        }
+                    } else {
+                        $nilai = '';
+                    }
+                    return $nilai;
+                })
+
+                ->addColumn('rate-limit', function ($row) {
                     return isset($row['rate-limit']) ? $row['rate-limit'] : '';
                 })
                 ->addColumn('action', 'hotspotprofiles.include.action')
@@ -92,7 +124,7 @@ class HotspotprofileController extends Controller
      */
     public function store(Request $request)
     {
-        $name = (preg_replace('/\s+/', '-', $_POST['name']));
+        $name = $_POST['name'];
         $sharedusers = ($_POST['sharedusers']);
         $ratelimit = ($_POST['ratelimit']);
         $expmode = ($_POST['expmode']);
@@ -127,7 +159,6 @@ class HotspotprofileController extends Controller
 
         $onlogin = ':put (",' . $expmode . ',' . $price . ',' . $validity . ',' . $sprice . ',,' . $getlock . ',"); {:local comment [ /ip hotspot user get [/ip hotspot user find where name="$user"] comment]; :local ucode [:pic $comment 0 2]; :if ($ucode = "vc" or $ucode = "up" or $comment = "") do={ :local date [ /system clock get date ];:local year [ :pick $date 7 11 ];:local month [ :pick $date 0 3 ]; /sys sch add name="$user" disable=no start-date=$date interval="' . $validity . '"; :delay 5s; :local exp [ /sys sch get [ /sys sch find where name="$user" ] next-run]; :local getxp [len $exp]; :if ($getxp = 15) do={ :local d [:pic $exp 0 6]; :local t [:pic $exp 7 16]; :local s ("/"); :local exp ("$d$s$year $t"); /ip hotspot user set comment="$exp" [find where name="$user"];}; :if ($getxp = 8) do={ /ip hotspot user set comment="$date $exp" [find where name="$user"];}; :if ($getxp > 15) do={ /ip hotspot user set comment="$exp" [find where name="$user"];};:delay 5s; /sys sch remove [find where name="$user"]';
 
-
         if ($expmode == "rem") {
             $onlogin = $onlogin . $lock . "}}";
             $mode = "remove";
@@ -142,27 +173,13 @@ class HotspotprofileController extends Controller
             $mode = "set limit-uptime=1s";
         } elseif ($expmode == "0" && $price != "") {
             $onlogin = ':put (",,' . $price . ',,,noexp,' . $getlock . ',")' . $lock;
-            $mode = "";
         } else {
             $onlogin = "";
-            $mode = "";
         }
-
-        $bgservice = ':local dateint do={:local montharray ( "jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec" );:local days [ :pick $d 4 6 ];:local month [ :pick $d 0 3 ];:local year [ :pick $d 7 11 ];:local monthint ([ :find $montharray $month]);:local month ($monthint + 1);:if ( [len $month] = 1) do={:local zero ("0");:return [:tonum ("$year$zero$month$days")];} else={:return [:tonum ("$year$month$days")];}}; :local timeint do={ :local hours [ :pick $t 0 2 ]; :local minutes [ :pick $t 3 5 ]; :return ($hours * 60 + $minutes) ; }; :local date [ /system clock get date ]; :local time [ /system clock get time ]; :local today [$dateint d=$date] ; :local curtime [$timeint t=$time] ; :foreach i in [ /ip hotspot user find where profile="' . $name . '" ] do={ :local comment [ /ip hotspot user get $i comment]; :local name [ /ip hotspot user get $i name]; :local gettime [:pic $comment 12 20]; :if ([:pic $comment 3] = "/" and [:pic $comment 6] = "/") do={:local expd [$dateint d=$comment] ; :local expt [$timeint t=$gettime] ; :if (($expd < $today and $expt < $curtime) or ($expd < $today and $expt > $curtime) or ($expd = $today and $expt < $curtime)) do={ [ /ip hotspot user ' . $mode . ' $i ]; [ /ip hotspot active remove [find where user=$name] ];}}}';
-
-        // $API->comm("/ip/hotspot/user/profile/add", array(
-        //     "name" => "$name",
-        //     "address-pool" => "$addrpool",
-        //     "rate-limit" => "$ratelimit",
-        //     "shared-users" => "$sharedusers",
-        //     "status-autorefresh" => "1m",
-        //     "on-login" => "$onlogin",
-        //     "parent-queue" => "$parent",
-        // ));
 
         $client = setRoute();
         $queryAdd = (new Query('/ip/hotspot/user/profile/add'))
-            ->equal('name', $addrpool)
+            ->equal('name', $name)
             ->equal('address-pool', $addrpool)
             ->equal('rate-limit', $ratelimit)
             ->equal('shared-users', $sharedusers)
@@ -171,37 +188,17 @@ class HotspotprofileController extends Controller
             ->equal('parent-queue',  $parent);
         $client->query($queryAdd)->read();
 
-        // if ($expmode != "0") {
-        //     if (empty($monid)) {
-        //         $API->comm("/system/scheduler/add", array(
-        //             "name" => "$name",
-        //             "start-time" => "$randstarttime",
-        //             "interval" => "$randinterval",
-        //             "on-event" => "$bgservice",
-        //             "disabled" => "no",
-        //             "comment" => "Monitor Profile $name",
-        //         ));
-        //     } else {
-        //         $API->comm("/system/scheduler/set", array(
-        //             ".id" => "$monid",
-        //             "name" => "$name",
-        //             "start-time" => "$randstarttime",
-        //             "interval" => "$randinterval",
-        //             "on-event" => "$bgservice",
-        //             "disabled" => "no",
-        //             "comment" => "Monitor Profile $name",
-        //         ));
-        //     }
-        // } else {
-        //     $API->comm("/system/scheduler/remove", array(
-        //         ".id" => "$monid"
-        //     ));
-        // }
-
-        // $getprofile = $API->comm("/ip/hotspot/user/profile/print", array(
-        //     "?name" => "$name",
-        // ));
-
+        if ($expmode != "0") {
+            $bgservice = ':local dateint do={:local montharray ( "jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec" );:local days [ :pick $d 4 6 ];:local month [ :pick $d 0 3 ];:local year [ :pick $d 7 11 ];:local monthint ([ :find $montharray $month]);:local month ($monthint + 1);:if ( [len $month] = 1) do={:local zero ("0");:return [:tonum ("$year$zero$month$days")];} else={:return [:tonum ("$year$month$days")];}}; :local timeint do={ :local hours [ :pick $t 0 2 ]; :local minutes [ :pick $t 3 5 ]; :return ($hours * 60 + $minutes) ; }; :local date [ /system clock get date ]; :local time [ /system clock get time ]; :local today [$dateint d=$date] ; :local curtime [$timeint t=$time] ; :foreach i in [ /ip hotspot user find where profile="' . $name . '" ] do={ :local comment [ /ip hotspot user get $i comment]; :local name [ /ip hotspot user get $i name]; :local gettime [:pic $comment 12 20]; :if ([:pic $comment 3] = "/" and [:pic $comment 6] = "/") do={:local expd [$dateint d=$comment] ; :local expt [$timeint t=$gettime] ; :if (($expd < $today and $expt < $curtime) or ($expd < $today and $expt > $curtime) or ($expd = $today and $expt < $curtime)) do={ [ /ip hotspot user ' . $mode . ' $i ]; [ /ip hotspot active remove [find where user=$name] ];}}}';
+            $schedulerAdd = (new Query('/system/scheduler/add'))
+                ->equal('name', $name)
+                ->equal('start-time', $randstarttime)
+                ->equal('interval', $randinterval)
+                ->equal('on-event', $bgservice)
+                ->equal('disabled',  "no")
+                ->equal('comment',  "Monitor Profile $name");
+            $client->query($schedulerAdd)->read();
+        }
         return redirect()
             ->route('hotspotprofiles.index')
             ->with('success', __('The hotspot profile was created successfully.'));
@@ -264,7 +261,7 @@ class HotspotprofileController extends Controller
             if ($data) {
                 // remove scheduler
                 $idActive = $data[0]['.id'];
-                $removeProfile = (new Query('/ip/hotspot/user/profile/remove'))
+                $removeProfile = (new Query('/system/scheduler/remove'))
                     ->equal('.id', $idActive);
                 $client->query($removeProfile)->read();
             }

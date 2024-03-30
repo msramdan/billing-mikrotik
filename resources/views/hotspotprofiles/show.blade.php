@@ -36,7 +36,7 @@
                                 <table class="table table-striped" id="data-table" width="100%">
                                     <thead>
                                         <tr>
-                                            <th style="min-width:50px;" class="align-middle text-center" id="cuser">3</th>
+                                            <th style="min-width:50px;" class="align-middle text-center" id="cuser">{{count($counttuser)}}</th>
                                             <th style="min-width:50px;" class="pointer"> Server</th>
                                             <th class="pointer">Name</th>
                                             <th>Print</th>

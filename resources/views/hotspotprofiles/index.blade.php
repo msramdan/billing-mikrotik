@@ -45,6 +45,8 @@
 											<th>{{ __('Expired Mode') }}</th>
                                             <th>Validity</th>
                                             <th>Lock User</th>
+                                            <th>Price Rp</th>
+                                            <th>Selling Price Rp</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
@@ -95,6 +97,14 @@
                 {
                     data: 'lock',
                     name: 'lock',
+                },
+                {
+                    data: 'price',
+                    name: 'price',
+                },
+                {
+                    data: 'selling',
+                    name: 'selling',
                 },
                 {
                     data: 'action',
