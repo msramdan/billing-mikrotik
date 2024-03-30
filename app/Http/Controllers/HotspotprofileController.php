@@ -18,11 +18,6 @@ class HotspotprofileController extends Controller
         $this->middleware('permission:hotspotprofile delete')->only('destroy');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         if (request()->ajax()) {
@@ -96,11 +91,6 @@ class HotspotprofileController extends Controller
         return view('hotspotprofiles.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $client = setRoute();
@@ -116,12 +106,6 @@ class HotspotprofileController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $name = $_POST['name'];
@@ -212,28 +196,38 @@ class HotspotprofileController extends Controller
             ->where('profile', $name);
         $counttuser = $client->query($query)->read();
         return view('hotspotprofiles.show', [
-            'counttuser' => $counttuser
+            'counttuser' => $counttuser,
+            'name' => $name
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Hotspotprofile  $hotspotprofile
-     * @return \Illuminate\Http\Response
-     */
+    public function enable($id)
+    {
+        $client = setRoute();
+        $queryAdd = (new Query('/ip/hotspot/user/set'))
+            ->equal('.id', $id)
+            ->equal('disabled', "no");
+        $client->query($queryAdd)->read();
+        return redirect()->back()->with('success', __('Enabled hotspot profile was successfully.'));
+
+    }
+
+    public function disable($id)
+    {
+        $client = setRoute();
+        $queryAdd = (new Query('/ip/hotspot/user/set'))
+            ->equal('.id', $id)
+            ->equal('disabled', "yes");
+        $client->query($queryAdd)->read();
+        return redirect()->back()->with('success', __('Disabled hotspot profile was successfully.'));
+    }
+
+
     public function edit(Hotspotprofile $hotspotprofile)
     {
         return view('hotspotprofiles.edit', compact('hotspotprofile'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Hotspotprofile  $hotspotprofile
-     * @return \Illuminate\Http\Response
-     */
     public function update(UpdateHotspotprofileRequest $request, Hotspotprofile $hotspotprofile)
     {
 

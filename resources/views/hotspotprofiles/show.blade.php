@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', __('Detail of Hotspotprofiles'))
+@section('title', __('Detail of Hotspot profiles'))
 
 @section('content')
     <div class="page-heading">
         <div class="page-title">
             <div class="row">
                 <div class="col-12 col-md-8 order-md-1 order-last">
-                    <h3>{{ __('Hotspotprofiles') }}</h3>
+                    <h3>{{ __('Hotspot profiles') }}</h3>
                     <p class="text-subtitle text-muted">
                         {{ __('Detail of hotspotprofile.') }}
                     </p>
@@ -18,7 +18,7 @@
                         <a href="/">{{ __('Dashboard') }}</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="{{ route('hotspotprofiles.index') }}">{{ __('Hotspotprofiles') }}</a>
+                        <a href="{{ route('hotspotprofiles.index') }}">{{ __('Hotspot profiles') }}</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
                         {{ __('Detail') }}
@@ -28,6 +28,7 @@
         </div>
 
         <section class="section">
+            <x-alert></x-alert>
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
@@ -37,14 +38,13 @@
                                     <thead>
                                         <tr>
                                             <th>Action</th>
-                                            <th style="min-width:50px;" class="pointer"> Server</th>
                                             <th class="pointer">Name</th>
-                                            <th>Print</th>
                                             <th class="pointer">Profile</th>
-                                            <th class="pointer"> Mac Address</th>
                                             <th class="pointer"> Uptime</th>
                                             <th class="pointer"> Bytes In </th>
                                             <th class="pointer"> Bytes Out </th>
+                                            <th class="pointer"> Mac Address</th>
+                                            <th class="pointer"> Server</th>
                                             <th class="pointer">Comment</th>
                                         </tr>
                                     </thead>
@@ -53,9 +53,6 @@
                                         <?php
     for ($i = 0; $i < count($counttuser); $i++) {
       $userdetails = $counttuser[$i];
-
-
-
       $uid = $userdetails['.id'];
       $userver =isset($userdetails['server']) ? $userdetails['server'] : null;
       $uname = $userdetails['name'];
@@ -87,12 +84,19 @@
                                         <?php
     if ($udisabled == "true") {
         $uriprocess = '';
-        echo '<td><a href="' . $uriprocess . '" class="text-warning pointer" title="Enable User ' . $uname . '"><i class="fa fa-lock"></i></a></td>';
+        echo '<td>
+            <a href="' . route('hotspotprofiles.enable', ['id' => $uid]) . '" class="text-warning pointer" title="Enable User ' . $uname . '"><i class="fa fa-lock"></i></a>&nbsp
+            <a title="Print ' . $uname . '" href=""><i class="fa fa-print"></i></a>&nbsp
+            <a title="Print ' . $uname . '" href=""><i class="fa fa-qrcode"></i> </a>
+            </td>';
     } else {
-        $uriprocess = '';
-        echo '<td><a href="' . $uriprocess . '" class="pointer" title="Disable User ' . $uname . '"><i class="fa fa-unlock"></i></a></td>';
+        $uriprocess = '/?';
+        echo '<td>
+            <a href="' . route('hotspotprofiles.disable', ['id' => $uid]) . '" class="pointer" title="Disable User ' . $uname . '"><i class="fa fa-unlock"></i></a>&nbsp
+            <a title="Print ' . $uname . '" href=""><i class="fa fa-print"></i></a>&nbsp
+            <a title="Print ' . $uname . '" href=""><i class="fa fa-qrcode"></i> </a>
+            </td>';
     }
-      echo "<td>" . $userver . "</td>";
       if ($uname == $upass) {
         $usermode = "vc";
       } else {
@@ -100,13 +104,13 @@
       }
       $popup = "javascript:window.open('').print();";
       $popupQR = "javascript:window.open('').print();";
-      echo "<td><a title='Open User " . $uname . "' href='#'><i class='fa fa-edit'></i> " . $uname . " </a></td>";
-      echo '<td><a title="Print ' . $uname . '" href=""><i class="fa fa-print"></i></a> &nbsp <a title="Print ' . $uname . '" href=""><i class="fa fa-qrcode"></i> </a></td>';
+      echo "<td>" . $uname . "</td>";
       echo "<td>" . $uprofile . "</td>";
-      echo "<td >" . $umacadd . "</td>";
       echo "<td>" . $uuptime . "</td>";
       echo "<td>" . $ubytesi . "</td>";
       echo "<td>" . $ubyteso . "</td>";
+      echo "<td>" . $umacadd . "</td>";
+      echo "<td>" . $userver . "</td>";
       echo "<td>";
         if ($uname == "default-trial") {
         } else if (substr($ucomment, 0, 3) == "vc-" || substr($ucomment, 0, 3) == "up-") {
@@ -124,7 +128,7 @@
 
                                 </table>
                             </div>
-                            <a href="{{ url()->previous() }}" class="btn btn-secondary">{{ __('Back') }}</a>
+                            <a href="{{ route('hotspotprofiles.index') }}" class="btn btn-secondary">{{ __('Back') }}</a>
                         </div>
                     </div>
                 </div>
@@ -132,3 +136,22 @@
         </section>
     </div>
 @endsection
+
+@push('css')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.12.0/datatables.min.css" />
+@endpush
+
+@push('js')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.12.0/datatables.min.js"></script>
+    <script>
+        $('#data-table').DataTable({
+            processing: true,
+        });
+    </script>
+@endpush
