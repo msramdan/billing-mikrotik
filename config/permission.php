@@ -213,5 +213,6 @@ return [
         ['group' => 'olts', 'access' => ['olt view', 'olt create', 'olt edit', 'olt delete']],
         ['group' => 'monitorings', 'access' => ['monitoring view']],
         ['group' => 'vouchers', 'access' => ['voucher view', 'voucher create']],
+        ['group' => 'hotspotprofiles', 'access' => ['hotspotprofile view', 'hotspotprofile create', 'hotspotprofile edit', 'hotspotprofile delete']],
     ],
 ];

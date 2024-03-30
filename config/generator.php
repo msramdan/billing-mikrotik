@@ -258,7 +258,8 @@ return [
         'permissions' => [
             'hotspotactive view',
             'hotspotuser view',
-            'voucher view'
+            'voucher view',
+            'hotspotprofile view'
         ],
         'menus' => [
             [
@@ -269,13 +270,19 @@ return [
                 'permissions' => [
                     'hotspotactive view',
                     'hotspotuser view',
-                    'voucher view'
+                    'voucher view',
+                    'hotspotprofile view'
                 ],
                 'submenus' => [
                     [
                         'title' => 'Vouchers',
                         'route' => '/vouchers',
                         'permission' => 'voucher view'
+                    ],
+                    [
+                        'title' => 'Profile Hotspot',
+                        'route' => '/hotspotprofiles',
+                        'permission' => 'hotspotprofile view'
                     ],
                     [
                         'title' => 'Users Hotspot',

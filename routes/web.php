@@ -63,6 +63,12 @@ Route::middleware(['auth', 'web', 'cek-expired'])->group(function () {
         Route::put('disableSecret/{id}/{name}', 'disable')->name('secret-ppps.disable')->middleware('no_mikrotik');
         Route::delete('deleteSecret/{id}/{name}', 'deleteSecret')->name('secret-ppps.deleteSecret')->middleware('no_mikrotik');
     });
+    Route::resource('hotspotprofiles', App\Http\Controllers\HotspotprofileController::class)->middleware('no_mikrotik');
+    Route::controller(App\Http\Controllers\HotspotprofileController::class)->group(function () {
+        Route::delete('deleteSecret/{id}/{name}', 'deleteSecret')->name('hotspotprofiles.deleteSecret')->middleware('no_mikrotik');
+    });
+
+
     Route::resource('secret-ppps', App\Http\Controllers\SecretPppController::class)->middleware('no_mikrotik');
     Route::resource('logs', App\Http\Controllers\LogController::class)->middleware('no_mikrotik');
     Route::resource('dhcps', App\Http\Controllers\DhcpController::class)->middleware('no_mikrotik');
@@ -157,4 +163,3 @@ Route::middleware(['auth', 'web'])->group(function () {
     Route::resource('olts', App\Http\Controllers\OltController::class);
     Route::resource('vouchers', App\Http\Controllers\VoucherController::class);
 });
-
