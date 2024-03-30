@@ -36,8 +36,6 @@
                 <option value="0">None</option>
                 <option value="rem">Remove</option>
                 <option value="ntf">Notice</option>
-                <option value="remc">Remove & Record</option>
-                <option value="ntfc">Notice & Record</option>
             </select>
         </td>
     </tr>
