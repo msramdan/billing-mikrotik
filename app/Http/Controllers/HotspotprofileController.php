@@ -211,7 +211,7 @@ class HotspotprofileController extends Controller
         $query = (new Query('/ip/hotspot/user/print'))
             ->where('profile', 'default');
         $counttuser = $client->query($query)->read();
-        dd($counttuser);
+
 
         return view('hotspotprofiles.show', [
             'counttuser' => $counttuser
