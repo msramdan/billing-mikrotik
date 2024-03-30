@@ -21,16 +21,20 @@
 
         <section class="section">
             <x-alert></x-alert>
-
+            <div class="d-flex justify-content-end">
+                @can('voucher create')
+                    <a href="{{ route('vouchers.create') }}" class="btn btn-success mb-3">
+                        <i class="fas fa-file"></i>
+                        {{ __('Generate Voucher') }}
+                    </a>&nbsp;
+                @endcan
                 @can('hotspotuser create')
-                <div class="d-flex justify-content-end">
                     <a href="{{ route('hotspotusers.create') }}" class="btn btn-primary mb-3">
                         <i class="fas fa-plus"></i>
-                        {{ __('Create a new hotspotuser') }}
+                        {{ __('Create Manual') }}
                     </a>
-                </div>
                 @endcan
-
+            </div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
@@ -40,12 +44,13 @@
                                     <thead>
                                         <tr>
                                             <th>{{ __('Name') }}</th>
-											<th>{{ __('Password') }}</th>
-											<th>{{ __('Profile') }}</th>
-											<th>{{ __('Uptime') }}</th>
-											<th>{{ __('Download') }}</th>
-											<th>{{ __('Upload') }}</th>
+                                            <th>{{ __('Password') }}</th>
+                                            <th>{{ __('Profile') }}</th>
+                                            <th>{{ __('Uptime') }}</th>
+                                            <th>{{ __('Download') }}</th>
+                                            <th>{{ __('Upload') }}</th>
                                             <th>{{ __('Disable') }}</th>
+                                            <th>Comment</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
@@ -60,24 +65,24 @@
 @endsection
 
 @push('css')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.12.0/datatables.min.css" />
 @endpush
 
 @push('js')
-
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.12.0/datatables.min.js"></script>
     <script>
         $('#data-table').DataTable({
             processing: true,
             serverSide: true,
             ajax: "{{ route('hotspotusers.index') }}",
-            columns: [
-                {
+            columns: [{
                     data: 'name',
                     name: 'name',
                 },
-				{
+                {
                     data: 'password',
                     name: 'password',
                     render: function(data, type, full, meta) {
@@ -88,19 +93,19 @@
                         }
                     }
                 },
-				{
+                {
                     data: 'profile',
                     name: 'profile',
                 },
-				{
+                {
                     data: 'uptime',
                     name: 'uptime',
                 },
-				{
+                {
                     data: 'bytes_out',
                     name: 'bytes_out',
                 },
-				{
+                {
                     data: 'bytes_in',
                     name: 'bytes_in',
                 },
@@ -114,6 +119,10 @@
                             return '<button type="button" class="btn btn-success btn-sm">Tidak</button>';
                         }
                     }
+                },
+                {
+                    data: 'comment',
+                    name: 'comment',
                 },
                 {
                     data: 'action',

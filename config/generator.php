@@ -274,20 +274,20 @@ return [
                     'hotspotprofile view'
                 ],
                 'submenus' => [
+                    // [
+                    //     'title' => 'Generate Vouchers',
+                    //     'route' => '/vouchers',
+                    //     'permission' => 'voucher view'
+                    // ],
                     [
-                        'title' => 'Vouchers',
-                        'route' => '/vouchers',
-                        'permission' => 'voucher view'
+                        'title' => 'Users Hotspot',
+                        'route' => '/hotspotusers',
+                        'permission' => 'hotspotuser view'
                     ],
                     [
                         'title' => 'Profile Hotspot',
                         'route' => '/hotspotprofiles',
                         'permission' => 'hotspotprofile view'
-                    ],
-                    [
-                        'title' => 'Users Hotspot',
-                        'route' => '/hotspotusers',
-                        'permission' => 'hotspotuser view'
                     ],
                     [
                         'title' => 'Active Hotspot',

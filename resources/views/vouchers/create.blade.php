@@ -35,8 +35,8 @@
                             <form action="{{ route('vouchers.store') }}" method="POST">
                                 @csrf
                                 @method('POST')
-
                                 @include('vouchers.include.form')
+                                <a href="{{route('hotspotusers.index')}}" class="btn btn-secondary">{{ __('Back') }}</a>
                                 <button type="submit" class="btn btn-primary">{{ __('Submit') }}</button>
                             </form>
                         </div>

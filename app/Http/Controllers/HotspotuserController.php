@@ -36,6 +36,9 @@ class HotspotuserController extends Controller
                 ->addColumn('bytes_in', function ($row) {
                     return formatBytes($row['bytes-in'], 2);
                 })
+                ->addColumn('comment', function ($row) {
+                    return isset($row['comment']) ? $row['comment'] : null;
+                })
                 ->addColumn('action', 'hotspotusers.include.action')
                 ->toJson();
         }

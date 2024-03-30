@@ -10,37 +10,20 @@ class VoucherController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:voucher create')->only('index');
+        $this->middleware('permission:voucher view')->only('index');
         $this->middleware('permission:voucher create')->only('create');
     }
 
-    public function index()
+    public function create()
     {
-
-
-
         $client = setRoute();
         $hotspotprofile = new Query('/ip/hotspot/user/profile/print');
         $hotspotprofile = $client->query($hotspotprofile)->read();
-        dd($hotspotprofile );
-
-
-
-
-
-
-
         $srvlist = new Query('/ip/hotspot/print');
         $srvlist = $client->query($srvlist)->read();
 
         $hotspotprofile = new Query('/ip/hotspot/user/profile/print');
         $hotspotprofile = $client->query($hotspotprofile)->read();
-
-
-
-
-
-
         return view('vouchers.create',[
             'srvlist' => $srvlist,
             'getprofile' => $hotspotprofile
