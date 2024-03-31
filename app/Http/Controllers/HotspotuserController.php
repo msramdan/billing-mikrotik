@@ -42,8 +42,17 @@ class HotspotuserController extends Controller
                 ->addColumn('action', 'hotspotusers.include.action')
                 ->toJson();
         }
+        $client = setRoute();
+        $query = new Query('/ip/hotspot/user/profile/print');
+        $getprofile = $client->query($query)->read();
 
-        return view('hotspotusers.index');
+        $query = new Query('/ip/hotspot/user/print');
+        $getuser = $client->query($query)->read();
+
+        return view('hotspotusers.index',[
+            'getprofile' => $getprofile,
+            'getuser' => $getuser
+        ]);
     }
 
     /**

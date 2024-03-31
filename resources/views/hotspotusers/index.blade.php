@@ -39,6 +39,48 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="row g-3">
+                                        <div class="col-md-3">
+                                            <select id="profile" name="profile" class="form-control">
+                                                <option value="All">All Profile
+                                                </option>
+                                                <?php
+                                                $TotalReg = count($getprofile);
+                                                for ($i = 0; $i < $TotalReg; $i++) {
+                                                    echo '<option>' . $getprofile[$i]['name'] . '</option>';
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <select id="comment" name="comment" class="form-control">
+                                                <option value="All">All Comment
+                                                </option>
+                                                <?php
+                                                $TotalReg = count($getuser);
+                                                $acomment = '';
+                                                for ($i = 0; $i < $TotalReg; $i++) {
+                                                    $ucomment = isset($getuser[$i]['comment']) ? $getuser[$i]['comment'] : "Nan Comment";
+                                                    $uprofile =  isset($getuser[$i]['profile']) ? $getuser[$i]['profile'] : "Nan Profile";
+                                                    $acomment .= ',' . $ucomment . '#' . $uprofile;
+                                                }
+                                                $ocomment = explode(',', $acomment);
+                                                $comments = array_count_values($ocomment);
+                                                foreach ($comments as $tcomment => $value) {
+                                                    if (is_numeric(substr($tcomment, 3, 3))) {
+                                                        echo "<option value='" . explode('#', $tcomment)[0] . "' >" . explode('#', $tcomment)[0] . ' ' . explode('#', $tcomment)[1] . ' [' . $value . ']</option>';
+                                                    }
+                                                }
+                                            ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+
                             <div class="table-responsive p-1">
                                 <table class="table table-striped" id="data-table" width="100%">
                                     <thead>
@@ -77,6 +119,8 @@
         $('#data-table').DataTable({
             processing: true,
             serverSide: true,
+            // info: false,
+            searching: false,
             ajax: "{{ route('hotspotusers.index') }}",
             columns: [{
                     data: 'name',
