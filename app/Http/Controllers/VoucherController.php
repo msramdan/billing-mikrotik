@@ -44,6 +44,23 @@ class VoucherController extends Controller
         $datalimit = ($_POST['datalimit']);
         $adcomment = ($_POST['adcomment']);
         $mbgb = ($_POST['mbgb']);
+
+        $getProfile = (new Query('/ip/hotspot/user/profile/print'))
+            ->where('name', $profile);
+        $getProfile = $client->query($getProfile)->read();
+        // get harga/nilai dari profile
+        $ponlogin = $getProfile[0]['on-login'];
+        $getexpmode = explode(",", $ponlogin);
+        if (isset($getexpmode[2])) {
+            if ($getexpmode[2] == '' || $getexpmode[2] == '0') {
+                $nilai = 0;
+            } else {
+                $nilai = $getexpmode[2];
+            }
+        } else {
+            $nilai = 0;
+        }
+
         if ($timelimit == "") {
             $timelimit = "0";
         } else {
@@ -118,7 +135,7 @@ class VoucherController extends Controller
                         'name' => $u[$i],
                         'password' => $p[$i],
                         'profile' => $profile,
-                        'price' => 100,
+                        'price' => $nilai,
                         'is_aktif' => 'No',
                         'created_at' => now(),
                         'updated_at' => now(),
@@ -200,7 +217,7 @@ class VoucherController extends Controller
                         'name' => $u[$i],
                         'password' => $p[$i],
                         'profile' => $profile,
-                        'price' => 100,
+                        'price' =>  $nilai,
                         'is_aktif' => 'No',
                         'created_at' => now(),
                         'updated_at' => now(),

@@ -114,6 +114,8 @@
                                                 <div class="input-group-append">
                                                     <button id="confirmButton" class="btn btn-danger" type="button"><i
                                                             class="fa fa-trash" aria-hidden="true"></i> By Comment</button>
+                                                    <button id="" class="btn btn-secondary" type="button"><i
+                                                            class="fa fa-print" aria-hidden="true"></i> Cetak</button>
                                                 </div>
                                                 <?php endif; ?>
                                             </div>
