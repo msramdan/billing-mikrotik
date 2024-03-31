@@ -214,7 +214,39 @@ class HotspotuserController extends Controller
 
     public function cetakVoucher()
     {
-        return view('vouchers.print');
+        $client = setRoute();
+        $query = (new Query('/ip/hotspot/user/print'))
+            ->where('comment', request()->query('filter_comment'))
+            ->where('uptime', "0s");
+        $hotspotusers = $client->query($query)->read();
+
+
+
+        $getuprofile = $hotspotusers[0]['profile'];
+
+        $getProfile = (new Query('/ip/hotspot/user/profile/print'))
+            ->where('name', $getuprofile);
+        $getProfile = $client->query($getProfile)->read();
+        $ponlogin = $getProfile[0]['on-login'];
+        $getexpmode = explode(",", $ponlogin);
+        if (isset($getexpmode[4])) {
+            if ($getexpmode[4] == '' || $getexpmode[4] == '0') {
+                $seller_price = 0;
+            } else {
+                $seller_price = $getexpmode[2];
+            }
+        } else {
+            $seller_price = 0;
+        }
+        $validity = isset($getexpmode[3]) ? $getexpmode[3] : '';
+        return view('vouchers.print', [
+            'company' => getCompany(),
+            'seller_price' => $seller_price,
+            'validity' => $validity,
+            'timelimit' =>'',
+            'datalimit' =>'',
+            'hotspotusers' => $hotspotusers
+        ]);
     }
 
     public function deleteByComment()

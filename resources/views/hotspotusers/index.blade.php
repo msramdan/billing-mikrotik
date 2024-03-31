@@ -110,15 +110,17 @@
                                                     }
                                                     ?>
                                                 </select>
-                                                <?php if (request()->input('filter_comment')): ?>
-                                                <div class="input-group-append">
-                                                    <button id="confirmButton" class="btn btn-danger" type="button"><i
-                                                            class="fa fa-trash" aria-hidden="true"></i> By Comment</button>
-                                                    <a href="{{ route('hotspotusers.cetakVoucher') }}" target="_blank" class="btn btn-secondary" type="button"><i class="fa fa-print" aria-hidden="true"></i> Cetak</a>
-                                                </div>
-                                                <?php endif; ?>
                                             </div>
                                         </div>
+                                        <?php if (request()->input('filter_comment')): ?>
+                                        <div class="col-md-2">
+                                            <button id="confirmButton" class="btn btn-danger" type="button"><i
+                                                    class="fa fa-trash" aria-hidden="true"></i> By Comment</button>
+                                            <a href="{{ route('hotspotusers.cetakVoucher') }}?filter_comment=<?php echo urlencode(request()->input('filter_comment')); ?>"
+                                                target="_blank" class="btn btn-secondary" type="button"><i
+                                                    class="fa fa-print" aria-hidden="true"></i> Cetak</a>
+                                        </div>
+                                        <?php endif; ?>
 
                                     </div>
                                 </div>

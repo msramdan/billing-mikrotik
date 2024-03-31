@@ -65,7 +65,7 @@ Route::middleware(['auth', 'web', 'cek-expired'])->group(function () {
     });
     Route::resource('hotspotprofiles', App\Http\Controllers\HotspotprofileController::class)->middleware('no_mikrotik');
     Route::controller(App\Http\Controllers\HotspotprofileController::class)->group(function () {
-        Route::delete('deleteSecret/{id}/{name}', 'deleteSecret')->name('hotspotprofiles.deleteSecret')->middleware('no_mikrotik');
+        Route::delete('deleteProfile/{id}/{name}', 'deleteProfile')->name('hotspotprofiles.deleteProfile')->middleware('no_mikrotik');
     });
 
 
