@@ -201,7 +201,6 @@ class VoucherController extends Controller
                 }
             }
             for ($i = 1; $i <= $qty; $i++) {
-
                 $query = (new Query('/ip/hotspot/user/add'))
                     ->equal('server', $server)
                     ->equal('name',  $u[$i])
@@ -215,7 +214,7 @@ class VoucherController extends Controller
                     DB::table('voucher_hotspot')->insert([
                         'generate_voucher_id' => $generate_voucher_id,
                         'name' => $u[$i],
-                        'password' => $p[$i],
+                        'password' => $u[$i],
                         'profile' => $profile,
                         'price' =>  $nilai,
                         'is_aktif' => 'No',
