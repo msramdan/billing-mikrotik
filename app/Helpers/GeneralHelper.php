@@ -379,22 +379,115 @@ function formatDTM($dtm)
     return $format;
 }
 
-function formatBytes2($size, $decimals = 0){
+function formatBytes2($size, $decimals = 0)
+{
     $unit = array(
-    '0' => 'Byte',
-    '1' => 'KiB',
-    '2' => 'MiB',
-    '3' => 'GiB',
-    '4' => 'TiB',
-    '5' => 'PiB',
-    '6' => 'EiB',
-    '7' => 'ZiB',
-    '8' => 'YiB'
+        '0' => 'Byte',
+        '1' => 'KiB',
+        '2' => 'MiB',
+        '3' => 'GiB',
+        '4' => 'TiB',
+        '5' => 'PiB',
+        '6' => 'EiB',
+        '7' => 'ZiB',
+        '8' => 'YiB'
     );
 
-    for($i = 0; $size >= 1024 && $i <= count($unit); $i++){
-    $size = $size/1024;
+    for ($i = 0; $size >= 1024 && $i <= count($unit); $i++) {
+        $size = $size / 1024;
     }
 
-    return round($size, $decimals).' '.$unit[$i];
+    return round($size, $decimals) . ' ' . $unit[$i];
+}
+
+
+
+function randN($length)
+{
+    $chars = "23456789";
+    $charArray = str_split($chars);
+    $charCount = strlen($chars);
+    $result = "";
+    for ($i = 1; $i <= $length; $i++) {
+        $randChar = rand(0, $charCount - 1);
+        $result .= $charArray[$randChar];
     }
+    return $result;
+}
+
+function randUC($length)
+{
+    $chars = "ABCDEFGHJKLMNPRSTUVWXYZ";
+    $charArray = str_split($chars);
+    $charCount = strlen($chars);
+    $result = "";
+    for ($i = 1; $i <= $length; $i++) {
+        $randChar = rand(0, $charCount - 1);
+        $result .= $charArray[$randChar];
+    }
+    return $result;
+}
+function randLC($length)
+{
+    $chars = "abcdefghijkmnprstuvwxyz";
+    $charArray = str_split($chars);
+    $charCount = strlen($chars);
+    $result = "";
+    for ($i = 1; $i <= $length; $i++) {
+        $randChar = rand(0, $charCount - 1);
+        $result .= $charArray[$randChar];
+    }
+    return $result;
+}
+
+function randULC($length)
+{
+    $chars = "ABCDEFGHJKLMNPRSTUVWXYZabcdefghijkmnprstuvwxyz";
+    $charArray = str_split($chars);
+    $charCount = strlen($chars);
+    $result = "";
+    for ($i = 1; $i <= $length; $i++) {
+        $randChar = rand(0, $charCount - 1);
+        $result .= $charArray[$randChar];
+    }
+    return $result;
+}
+
+function randNLC($length)
+{
+    $chars = "23456789abcdefghijkmnprstuvwxyz";
+    $charArray = str_split($chars);
+    $charCount = strlen($chars);
+    $result = "";
+    for ($i = 1; $i <= $length; $i++) {
+        $randChar = rand(0, $charCount - 1);
+        $result .= $charArray[$randChar];
+    }
+    return $result;
+}
+
+function randNUC($length)
+{
+    $chars = "23456789ABCDEFGHJKLMNPRSTUVWXYZ";
+    $charArray = str_split($chars);
+    $charCount = strlen($chars);
+    $result = "";
+    for ($i = 1; $i <= $length; $i++) {
+        $randChar = rand(0, $charCount - 1);
+        $result .= $charArray[$randChar];
+    }
+    return $result;
+}
+
+function randNULC($length)
+{
+    $chars = "23456789ABCDEFGHJKLMNPRSTUVWXYZabcdefghijkmnprstuvwxyz";
+    $charArray = str_split($chars);
+    $charCount = strlen($chars);
+    $result = "";
+    for ($i = 1; $i <= $length; $i++) {
+        $randChar = rand(0, $charCount - 1);
+        $result .= $charArray[$randChar];
+    }
+    return $result;
+}

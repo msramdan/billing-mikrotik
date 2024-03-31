@@ -77,7 +77,6 @@ class HotspotuserController extends Controller
      */
     public function store(StoreHotspotuserRequest $request)
     {
-        $attr = $request->validated();
         $client = setRoute();
         $query = (new Query('/ip/hotspot/user/add'))
             ->equal('name',  $request->name)
@@ -136,11 +135,8 @@ class HotspotuserController extends Controller
      */
     public function update(UpdateHotspotuserRequest $request, Hotspotuser $hotspotuser)
     {
-
         $hotspotuser->update($request->validated());
-
-        return redirect()
-            ->route('hotspotusers.index')
+        return redirect()->back()
             ->with('success', __('The Hotspot User was updated successfully.'));
     }
 
@@ -167,12 +163,10 @@ class HotspotuserController extends Controller
                     ->equal('.id', $idActive);
                 $client->query($queryDelete)->read();
             }
-            return redirect()
-                ->route('hotspotusers.index')
-                ->with('success', __('The Hotspot User was deleted successfully.'));
+            return redirect()->back()->with('success', __('The Hotspot User was deleted successfully.'));
+
         } catch (\Throwable $th) {
-            return redirect()
-                ->route('hotspotusers.index')
+            return redirect()->back()
                 ->with('error', __("The Hotspot User can't be deleted because it's related to another table."));
         }
     }
@@ -194,8 +188,7 @@ class HotspotuserController extends Controller
                 ->equal('.id', $idActive);
             $client->query($queryDelete)->read();
         }
-        return redirect()
-            ->route('hotspotusers.index')
+        return redirect()->back()
             ->with('success', __('The Hotspot was disable successfully.'));
     }
 
@@ -205,8 +198,7 @@ class HotspotuserController extends Controller
         $query = (new Query('/ip/hotspot/user/enable'))
             ->equal('.id', $id);
         $client->query($query)->read();
-        return redirect()
-            ->route('hotspotusers.index')
+        return redirect()->back()
             ->with('success', __('The Hotspot was enable successfully.'));
     }
 
@@ -216,13 +208,7 @@ class HotspotuserController extends Controller
         $query = (new Query('/ip/hotspot/user/reset-counters'))
             ->equal('.id', $id);
         $client->query($query)->read();
-        return redirect()
-            ->route('hotspotusers.index')
+        return redirect()->back()
             ->with('success', __('The Hotspot was reset counter successfully.'));
-    }
-
-    public function mikhmon()
-    {
-        return redirect('/mikhmon');
     }
 }
