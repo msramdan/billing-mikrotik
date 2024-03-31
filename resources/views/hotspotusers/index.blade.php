@@ -2,7 +2,37 @@
 
 @section('title', __('Hotspot Users'))
 
+@push('css')
+    <style>
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.5);
+            /* warna latar belakang dengan opacity */
+            z-index: 9999;
+            /* pastikan lebih tinggi dari konten lain */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .overlay-content {
+            text-align: center;
+        }
+    </style>
+@endpush
 @section('content')
+    <div id="overlay" style="display: none;">
+        <div class="overlay-content">
+            <!-- Isi indikator loading di sini -->
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
     <div class="page-heading">
         <div class="page-title">
             <div class="row">
@@ -82,8 +112,8 @@
                                                 </select>
                                                 <?php if (request()->input('filter_comment')): ?>
                                                 <div class="input-group-append">
-                                                    <button id="confirmButton" class="btn btn-danger" type="button"><i class="fa fa-trash"
-                                                            aria-hidden="true"></i> By Comment</button>
+                                                    <button id="confirmButton" class="btn btn-danger" type="button"><i
+                                                            class="fa fa-trash" aria-hidden="true"></i> By Comment</button>
                                                 </div>
                                                 <?php endif; ?>
                                             </div>
@@ -245,23 +275,28 @@
         $(document).ready(function() {
             $('#confirmButton').click(function() {
                 var filterComment = $('#filter_comment').val();
-                console.log(filterComment);
                 var confirmation = confirm("Apakah Anda yakin ingin melanjutkan?");
                 if (confirmation) {
+                    $('#overlay').show();
                     $.ajax({
-                        url: 'url_ke_script_php_yang_mengolah_form',
+                        url: "{{ route('hotspotusers.deleteByComment') }}",
                         type: 'GET',
                         data: {
                             filter_comment: filterComment
                         },
                         success: function(response) {
+                            $('#overlay').hide();
+                            alert(response.message);
+                            location.reload();
                         },
                         error: function(xhr, status, error) {
+                            $('#overlay').hide();
+                            console.error(xhr.responseText);
+                            alert('Terjadi kesalahan. Silakan coba lagi.');
                         }
                     });
                 }
             });
         });
     </script>
-
 @endpush

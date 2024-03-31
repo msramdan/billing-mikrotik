@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use \RouterOS\Query;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class VoucherController extends Controller
 {
@@ -60,6 +61,13 @@ class VoucherController extends Controller
         }
 
         $commt = $user . "-" . rand(100, 999) . "-" . date("m.d.y") . "-" . $adcomment;
+        // simpan ke table generate voucher
+        $generate_voucher_id = DB::table('generate_voucher')->insertGetId([
+            'company_id' => session('sessionCompany'),
+            'comment' => $commt,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
 
         $a = array("1" => "", "", 1, 2, 2, 3, 3, 4);
         if ($user == "up") {
@@ -102,7 +110,20 @@ class VoucherController extends Controller
                     ->equal('limit-uptime', $timelimit)
                     ->equal('limit-bytes-total', $datalimit)
                     ->equal('comment', $commt);
-                $client->query($query)->read();
+                $exe = $client->query($query)->read();
+                // simpan ke table voucher_hotspot
+                if ($exe) {
+                    DB::table('voucher_hotspot')->insert([
+                        'generate_voucher_id' => $generate_voucher_id,
+                        'name' => $u[$i],
+                        'password' => $p[$i],
+                        'profile' => $profile,
+                        'price' => 100,
+                        'is_aktif' => 'No',
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
             }
         }
         if ($user == "vc") {
@@ -172,7 +193,19 @@ class VoucherController extends Controller
                     ->equal('limit-uptime', $timelimit)
                     ->equal('limit-bytes-total', $datalimit)
                     ->equal('comment', $commt);
-                $client->query($query)->read();
+                $exe = $client->query($query)->read();
+                if ($exe) {
+                    DB::table('voucher_hotspot')->insert([
+                        'generate_voucher_id' => $generate_voucher_id,
+                        'name' => $u[$i],
+                        'password' => $p[$i],
+                        'profile' => $profile,
+                        'price' => 100,
+                        'is_aktif' => 'No',
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
             }
         }
         return redirect()

@@ -7,6 +7,7 @@ use App\Http\Requests\{StoreHotspotuserRequest, UpdateHotspotuserRequest};
 use Yajra\DataTables\Facades\DataTables;
 use \RouterOS\Query;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 
 class HotspotuserController extends Controller
@@ -164,7 +165,6 @@ class HotspotuserController extends Controller
                 $client->query($queryDelete)->read();
             }
             return redirect()->back()->with('success', __('The Hotspot User was deleted successfully.'));
-
         } catch (\Throwable $th) {
             return redirect()->back()
                 ->with('error', __("The Hotspot User can't be deleted because it's related to another table."));
@@ -210,5 +210,43 @@ class HotspotuserController extends Controller
         $client->query($query)->read();
         return redirect()->back()
             ->with('success', __('The Hotspot was reset counter successfully.'));
+    }
+
+    public function deleteByComment()
+    {
+        $comment = request()->query('filter_comment');
+        $client = setRoute();
+
+        // Hapus data dari tabel generate_voucher
+        $deletedVoucherCount = DB::table('generate_voucher')
+            ->where('comment', $comment)
+            ->delete();
+
+        // Jika ada data yang dihapus, lanjutkan dengan menghapus pengguna hotspot
+        if ($deletedVoucherCount > 0) {
+            $query = (new Query('/ip/hotspot/user/print'))
+                ->where('comment', $comment)
+                ->where('uptime', "00:00:00");
+            $getList = $client->query($query)->read();
+            $deletedUsersCount = 0;
+
+            // Hapus pengguna hotspot
+            for ($i = 0; $i < count($getList); $i++) {
+                $userdetails = $getList[$i];
+                $uid = $userdetails['.id'];
+                $query = (new Query('/ip/hotspot/user/remove'))
+                    ->equal('.id', $uid);
+                $client->query($query)->read();
+                $deletedUsersCount++;
+            }
+
+            return response()->json([
+                'message' => 'Deleted ' . $deletedVoucherCount . ' vouchers and ' . $deletedUsersCount . ' users successfully.'
+            ]);
+        }
+        // Jika tidak ada data yang dihapus dari tabel generate_voucher
+        return response()->json([
+            'message' => 'No vouchers deleted for the given comment.'
+        ]);
     }
 }

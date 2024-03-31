@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('generate_voucher', function (Blueprint $table) {
             $table->id();
             $table->foreignId('company_id')->constrained('companies')->restrictOnUpdate()->cascadeOnDelete();
+            $table->text('comment');
             $table->timestamps();
         });
     }

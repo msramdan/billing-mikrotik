@@ -2,7 +2,7 @@
     <tr>
         <td class="align-middle">QTY</td>
         <td>
-            <div><input class="form-control " type="number" name="qty" min="1" max="500" value="1"
+            <div><input class="form-control " type="number" name="qty" min="1" max="200" placeholder="Maks (200)" value="1"
                     required></div>
         </td>
     </tr>

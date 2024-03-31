@@ -90,7 +90,7 @@ Route::middleware(['auth', 'web', 'cek-expired'])->group(function () {
         Route::put('disableHotspot/{id}/{user}', 'disable')->name('hotspotusers.disable')->middleware('no_mikrotik');
         Route::put('resetHotspot/{id}', 'reset')->name('hotspotusers.reset')->middleware('no_mikrotik');
         Route::delete('deleteHotspot/{id}/{user}', 'deleteHotspot')->name('hotspotusers.delete')->middleware('no_mikrotik');
-        Route::get('mikhmon', 'mikhmon')->name('mikhmons.index')->middleware('no_mikrotik');
+        Route::get('deleteByComment', 'deleteByComment')->name('hotspotusers.deleteByComment')->middleware('no_mikrotik');
     });
     Route::resource('odcs', App\Http\Controllers\OdcController::class);
     Route::resource('odps', App\Http\Controllers\OdpController::class);
