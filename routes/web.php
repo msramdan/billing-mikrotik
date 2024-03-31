@@ -91,6 +91,7 @@ Route::middleware(['auth', 'web', 'cek-expired'])->group(function () {
         Route::put('resetHotspot/{id}', 'reset')->name('hotspotusers.reset')->middleware('no_mikrotik');
         Route::delete('deleteHotspot/{id}/{user}', 'deleteHotspot')->name('hotspotusers.delete')->middleware('no_mikrotik');
         Route::get('deleteByComment', 'deleteByComment')->name('hotspotusers.deleteByComment')->middleware('no_mikrotik');
+        Route::get('cetakVoucher', 'cetakVoucher')->name('hotspotusers.cetakVoucher')->middleware('no_mikrotik');
     });
     Route::resource('odcs', App\Http\Controllers\OdcController::class);
     Route::resource('odps', App\Http\Controllers\OdpController::class);

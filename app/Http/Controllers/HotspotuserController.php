@@ -212,6 +212,11 @@ class HotspotuserController extends Controller
             ->with('success', __('The Hotspot was reset counter successfully.'));
     }
 
+    public function cetakVoucher()
+    {
+        return view('vouchers.print');
+    }
+
     public function deleteByComment()
     {
         $comment = request()->query('filter_comment');
