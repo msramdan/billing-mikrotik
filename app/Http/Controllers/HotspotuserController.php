@@ -6,6 +6,7 @@ use App\Models\Hotspotuser;
 use App\Http\Requests\{StoreHotspotuserRequest, UpdateHotspotuserRequest};
 use Yajra\DataTables\Facades\DataTables;
 use \RouterOS\Query;
+use Illuminate\Http\Request;
 
 
 class HotspotuserController extends Controller
@@ -23,33 +24,28 @@ class HotspotuserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        if (request()->ajax()) {
-            $client = setRoute();
+        $filter_profile = request()->query('filter_profile');
+        $filter_comment = request()->query('filter_comment');
+        $client = setRoute();
+        if (isset($filter_profile) && !empty($filter_profile)) {
+            $query = (new Query('/ip/hotspot/user/print'))
+                ->where('profile', $filter_profile);
+        } else if (isset($filter_comment) && !empty($filter_comment)) {
+            $query = (new Query('/ip/hotspot/user/print'))
+                ->where('comment', $filter_comment);
+        } else {
             $query = new Query('/ip/hotspot/user/print');
-            $hotspotusers = $client->query($query)->read();
-            return DataTables::of($hotspotusers)
-                ->addColumn('bytes_out', function ($row) {
-                    return formatBytes($row['bytes-out'], 2);
-                })
-                ->addColumn('bytes_in', function ($row) {
-                    return formatBytes($row['bytes-in'], 2);
-                })
-                ->addColumn('comment', function ($row) {
-                    return isset($row['comment']) ? $row['comment'] : null;
-                })
-                ->addColumn('action', 'hotspotusers.include.action')
-                ->toJson();
         }
+        $hotspotusers = $client->query($query)->read();
         $client = setRoute();
         $query = new Query('/ip/hotspot/user/profile/print');
         $getprofile = $client->query($query)->read();
-
         $query = new Query('/ip/hotspot/user/print');
         $getuser = $client->query($query)->read();
-
-        return view('hotspotusers.index',[
+        return view('hotspotusers.index', [
+            'hotspotusers' => $hotspotusers,
             'getprofile' => $getprofile,
             'getuser' => $getuser
         ]);

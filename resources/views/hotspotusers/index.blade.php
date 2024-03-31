@@ -43,39 +43,52 @@
                                 <div class="row">
                                     <div class="row g-3">
                                         <div class="col-md-3">
-                                            <select id="profile" name="profile" class="form-control">
-                                                <option value="All">All Profile
+                                            <select id="filter_profile" name="filter_profile" class="form-control">
+                                                <option value="">All Profile
                                                 </option>
                                                 <?php
                                                 $TotalReg = count($getprofile);
-                                                for ($i = 0; $i < $TotalReg; $i++) {
-                                                    echo '<option>' . $getprofile[$i]['name'] . '</option>';
-                                                }
                                                 ?>
+                                                @for ($i = 0; $i < $TotalReg; $i++)
+                                                    <option value="{{ $getprofile[$i]['name'] }}"
+                                                        @if (request()->input('filter_profile') == $getprofile[$i]['name']) selected @endif>
+                                                        {{ $getprofile[$i]['name'] }}
+                                                    </option>
+                                                @endfor
+
                                             </select>
                                         </div>
-                                        <div class="col-md-3">
-                                            <select id="comment" name="comment" class="form-control">
-                                                <option value="All">All Comment
-                                                </option>
-                                                <?php
-                                                $TotalReg = count($getuser);
-                                                $acomment = '';
-                                                for ($i = 0; $i < $TotalReg; $i++) {
-                                                    $ucomment = isset($getuser[$i]['comment']) ? $getuser[$i]['comment'] : "Nan Comment";
-                                                    $uprofile =  isset($getuser[$i]['profile']) ? $getuser[$i]['profile'] : "Nan Profile";
-                                                    $acomment .= ',' . $ucomment . '#' . $uprofile;
-                                                }
-                                                $ocomment = explode(',', $acomment);
-                                                $comments = array_count_values($ocomment);
-                                                foreach ($comments as $tcomment => $value) {
-                                                    if (is_numeric(substr($tcomment, 3, 3))) {
-                                                        echo "<option value='" . explode('#', $tcomment)[0] . "' >" . explode('#', $tcomment)[0] . ' ' . explode('#', $tcomment)[1] . ' [' . $value . ']</option>';
+                                        <div class="col-md-4">
+                                            <div class="input-group">
+                                                <select id="filter_comment" name="filter_comment" class="form-control">
+                                                    <option value="">All Comment</option>
+                                                    <?php
+                                                    $TotalReg = count($getuser);
+                                                    $acomment = '';
+                                                    for ($i = 0; $i < $TotalReg; $i++) {
+                                                        $ucomment = isset($getuser[$i]['comment']) ? $getuser[$i]['comment'] : 'Nan Comment';
+                                                        $uprofile = isset($getuser[$i]['profile']) ? $getuser[$i]['profile'] : 'Nan Profile';
+                                                        $acomment .= ',' . $ucomment . '#' . $uprofile;
                                                     }
-                                                }
-                                            ?>
-                                            </select>
+                                                    $ocomment = explode(',', $acomment);
+                                                    $comments = array_count_values($ocomment);
+                                                    foreach ($comments as $tcomment => $value) {
+                                                        if (is_numeric(substr($tcomment, 3, 3))) {
+                                                            $selected = request()->input('filter_comment') == explode('#', $tcomment)[0] ? 'selected' : '';
+                                                            echo "<option value='" . explode('#', $tcomment)[0] . "' $selected>" . explode('#', $tcomment)[0] . ' ' . explode('#', $tcomment)[1] . ' [' . $value . ']</option>';
+                                                        }
+                                                    }
+                                                    ?>
+                                                </select>
+                                                <?php if (request()->input('filter_comment')): ?>
+                                                <div class="input-group-append">
+                                                    <button id="confirmButton" class="btn btn-danger" type="button"><i class="fa fa-trash"
+                                                            aria-hidden="true"></i> By Comment</button>
+                                                </div>
+                                                <?php endif; ?>
+                                            </div>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -92,10 +105,88 @@
                                             <th>{{ __('Download') }}</th>
                                             <th>{{ __('Upload') }}</th>
                                             <th>{{ __('Disable') }}</th>
-                                            <th>Comment</th>
+                                            <th>{{ __('Comment') }}</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
+                                    <tbody>
+                                        @foreach ($hotspotusers as $row)
+                                            <tr>
+                                                <td>{{ $row['name'] }}</td>
+                                                @if (isset($row['password']) && $row['password'] !== 'undefined')
+                                                    <td>{{ $row['password'] }}</td>
+                                                @else
+                                                    <td>-</td>
+                                                @endif
+                                                <td>{{ isset($row['profile']) ? $row['profile'] : null }}</td>
+                                                <td>{{ $row['uptime'] }}</td>
+                                                <td>{{ formatBytes($row['bytes-out'], 2) }}</td>
+                                                <td>{{ formatBytes($row['bytes-in'], 2) }}</td>
+                                                @if ($row['disabled'] == 'true')
+                                                    <td><button type="button" class="btn btn-danger btn-sm">Ya</button>
+                                                    </td>
+                                                @else
+                                                    <td><button type="button" class="btn btn-success btn-sm">Tidak</button>
+                                                    </td>
+                                                @endif
+                                                <td>{{ isset($row['comment']) ? $row['comment'] : null }}</td>
+                                                <td>
+                                                    @can('hotspotuser enable')
+                                                        <form action="{{ route('hotspotusers.enable', $row['.id']) }}"
+                                                            method="post" class="d-inline"
+                                                            onsubmit="return confirm('Are you sure to enable this hotspot ?')">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <button class="btn btn-outline-success btn-sm" title="Enable">
+                                                                <i class="ace-icon fa fa-check"></i>
+                                                            </button>
+                                                        </form>
+                                                    @endcan
+                                                    <?php
+                                                    $dataUser = $row['name'] ? $row['name'] : ' ';
+                                                    ?>
+                                                    @can('hotspotuser disable')
+                                                        <form
+                                                            action="{{ route('hotspotusers.disable', ['id' => $row['.id'], 'user' => $dataUser]) }}"
+                                                            method="post" class="d-inline"
+                                                            onsubmit="return confirm('Are you sure to disable this hotspot ?')">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <button class="btn btn-outline-warning btn-sm" title="Disable">
+                                                                <i class="ace-icon fa fa-times"></i>
+                                                            </button>
+                                                        </form>
+                                                    @endcan
+                                                    @can('hotspotuser reset')
+                                                        <form action="{{ route('hotspotusers.reset', $row['.id']) }}"
+                                                            method="post" class="d-inline"
+                                                            onsubmit="return confirm('Are you sure to reset counter this hotspot ?')">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <button class="btn btn-outline-secondary btn-sm" title="Reset">
+                                                                <i class="ace-icon fa fa-refresh"></i>
+                                                            </button>
+                                                        </form>
+                                                    @endcan
+                                                    @can('hotspotuser delete')
+                                                        <form
+                                                            action="{{ route('hotspotusers.delete', ['id' => $row['.id'], 'user' => $dataUser]) }}"
+                                                            method="post" class="d-inline"
+                                                            onsubmit="return confirm('Are you sure to delete this record?')">
+                                                            @csrf
+                                                            @method('delete')
+
+                                                            <button class="btn btn-outline-danger btn-sm">
+                                                                <i class="ace-icon fa fa-trash-alt"></i>
+                                                            </button>
+                                                        </form>
+                                                    @endcan
+                                                </td>
+
+
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
@@ -116,65 +207,61 @@
 @push('js')
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.12.0/datatables.min.js"></script>
     <script>
-        $('#data-table').DataTable({
-            processing: true,
-            serverSide: true,
+        new DataTable('#data-table', {
             // info: false,
-            searching: false,
-            ajax: "{{ route('hotspotusers.index') }}",
-            columns: [{
-                    data: 'name',
-                    name: 'name',
-                },
-                {
-                    data: 'password',
-                    name: 'password',
-                    render: function(data, type, full, meta) {
-                        if (typeof data !== 'undefined') {
-                            return `${data}`;
-                        } else {
-                            return '-';
-                        }
-                    }
-                },
-                {
-                    data: 'profile',
-                    name: 'profile',
-                },
-                {
-                    data: 'uptime',
-                    name: 'uptime',
-                },
-                {
-                    data: 'bytes_out',
-                    name: 'bytes_out',
-                },
-                {
-                    data: 'bytes_in',
-                    name: 'bytes_in',
-                },
-                {
-                    data: 'disabled',
-                    name: 'disabled',
-                    render: function(data, type, full, meta) {
-                        if (data == 'true') {
-                            return '<button type="button" class="btn btn-danger btn-sm">Ya</button>';
-                        } else {
-                            return '<button type="button" class="btn btn-success btn-sm">Tidak</button>';
-                        }
-                    }
-                },
-                {
-                    data: 'comment',
-                    name: 'comment',
-                },
-                {
-                    data: 'action',
-                    name: 'action',
-                    orderable: false,
-                    searchable: false
-                }
-            ],
+            // ordering: false,
+            // paging: false
         });
     </script>
+    <script>
+        $(document).ready(function() {
+            $('#filter_profile').change(function() {
+                var filterProfile = $(this).val(); // Mendapatkan nilai terpilih dari select
+                // Membangun URL dengan parameter
+                var url = 'hotspotusers';
+                if (filterProfile) {
+                    url += '?filter_profile=' + encodeURIComponent(filterProfile);
+                }
+                window.location.href = url;
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('#filter_comment').change(function() {
+                var filter_comment = $(this).val(); // Mendapatkan nilai terpilih dari select
+                // Membangun URL dengan parameter
+                var url = 'hotspotusers';
+                if (filter_comment) {
+                    url += '?filter_comment=' + encodeURIComponent(filter_comment);
+                }
+                window.location.href = url;
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('#confirmButton').click(function() {
+                var filterComment = $('#filter_comment').val();
+                console.log(filterComment);
+                var confirmation = confirm("Apakah Anda yakin ingin melanjutkan?");
+                if (confirmation) {
+                    $.ajax({
+                        url: 'url_ke_script_php_yang_mengolah_form',
+                        type: 'GET',
+                        data: {
+                            filter_comment: filterComment
+                        },
+                        success: function(response) {
+                        },
+                        error: function(xhr, status, error) {
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+
 @endpush
