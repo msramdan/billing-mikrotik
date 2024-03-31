@@ -1,126 +1,159 @@
-<form action="" method="POST">
-    <div class="row pt-3">
-        <div class="col-md-3">
-            <div class="form-group">
-                <label for="nominal">Jumlah <small><i>*Max 500 Voucher</i></small></label>
-                <input type="number" id="jumlah" name="jumlah" class="form-control">
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="form-group">
-                <label for="nominal">Server Hotspot</label>
-                <select id="server" name="server" class="form-control">
-                    <option value="all">Semua Server</option>
-                    <?php foreach ($srvlist as $mydata) { ?>
-                        <option value="<?= $mydata['name'] ?>"><?= $mydata['name'] ?></option>
-                    <?php } ?>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="form-group">
-                <label for="nominal">Profile Hotspot</label>
-                <select id="profile" name="profile" class="form-control">
-                    <?php foreach ($getprofile as $datagua) { ?>
-                        <option value="<?= $datagua['name'] ?>"><?= $datagua['name'] ?></option>
-                    <?php } ?>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="form-group">
-                <label for="nominal">Panjang Karakter</label>
-                <select id="panjang" name="panjang" class="form-control">
-                    <option value="5">5</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                </select>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <div class="form-group">
-                <label for="nominal">Mode Voucher</label>
-                <select id="voucher" name="voucher" class="form-control">
-                    <option value="beda">Username & Password</option>
-                    <option value="sama">Username = Password</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="form-group">
-                <label for="nominal">Prefix Username</label>
-                <input type="text" id="prefix" name="prefix" class="form-control">
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="form-group">
-                <label for="nominal">Batas Waktu Voucher</label>
-                <div class="row">
-                    <div class="col-md-6">
-                        <input type="number" id="waktu" name="waktu" class="form-control">
-                    </div>
-                    <div class="col-md-6">
-                        <select id="waktu1" name="waktu1" class="form-control">
-                            <option value="s">Detik</option>
-                            <option value="m">Menit</option>
-                            <option value="h">Jam</option>
-                            <option value="d">Hari</option>
-                            <option value="w">Minggu</option>
-                        </select>
-                    </div>
+<table class="table">
+    <tr>
+        <td class="align-middle">QTY</td>
+        <td>
+            <div><input class="form-control " type="number" name="qty" min="1" max="500" value="1"
+                    required="1"></div>
+        </td>
+    </tr>
+    <tr>
+        <td class="align-middle">Server</td>
+        <td>
+            <select class="form-control " name="server" required="1">
+                <option>all</option>
+                <?php $TotalReg = count($srvlist);
+                for ($i = 0; $i < $TotalReg; $i++) {
+                    echo '<option>' . $srvlist[$i]['name'] . '</option>';
+                }
+                ?>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td class="align-middle">User mode</td>
+        <td>
+            <select class="form-control " onchange="defUserl();" id="user" name="user" required="1">
+                <option value="up">Username & Password</option>
+                <option value="vc">Username = Password</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td class="align-middle">User length</td>
+        <td>
+            <select class="form-control " id="userl" name="userl" required="1">
+                <option>4</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                <option>6</option>
+                <option>7</option>
+                <option>8</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td class="align-middle">Prefix</td>
+        <td><input class="form-control " type="text" size="6" maxlength="6" autocomplete="off" name="prefix"
+                value=""></td>
+    </tr>
+    <tr>
+        <td class="align-middle">Character</td>
+        <td>
+            <select class="form-control " name="char" required="1">
+                <option id="lower" style="display:block;" value="lower">Random abcd</option>
+                <option id="upper" style="display:block;" value="upper">Random ABCD</option>
+                <option id="upplow" style="display:block;" value="upplow">Random aBcD</option>
+                <option id="lower1" style="display:none;" value="lower">Random abcd2345</option>
+                <option id="upper1" style="display:none;" value="upper">Random ABCD2345</option>
+                <option id="upplow1" style="display:none;" value="upplow">Random aBcD2345</option>
+                <option id="mix" style="display:block;" value="mix">Random 5ab2c34d</option>
+                <option id="mix1" style="display:block;" value="mix1">Random 5AB2C34D</option>
+                <option id="mix2" style="display:block;" value="mix2">Random 5aB2c34D</option>
+                <option id="num" style="display:none;" value="num">Random 1234</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td class="align-middle">Profile</td>
+        <td>
+            <select class="form-control " id="uprof" name="profile" required="1">
+                <?php
+                $TotalReg = count($getprofile);
+                for ($i = 0; $i < $TotalReg; $i++) {
+                    echo '<option>' . $getprofile[$i]['name'] . '</option>';
+                }
+                ?>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td class="align-middle">Time Limit</td>
+        <td><input class="form-control " type="text" size="4" autocomplete="off" name="timelimit"
+                value=""></td>
+    </tr>
+    <tr>
+        <td class="align-middle">Data Limit</td>
+        <td>
+            <div class="input-group">
+                <div class="input-group-10 col-box-9">
+                    <input class="group-item group-item-l form-control" type="number" min="0" max="9999"
+                        name="datalimit" value="">
+                </div>
+                <div class="input-group-2 col-box-3">
+                    <select style="padding:4.2px;" class="group-item group-item-r form-control" name="mbgb"
+                        required="1">
+                        <option value=1048576>MB</option>
+                        <option value=1073741824>GB</option>
+                    </select>
                 </div>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="form-group">
-                <label for="nominal">Batas Kuota Voucher</label>
-                <div class="row">
-                    <div class="col-md-6">
-                        <input type="number" id="kuota" name="kuota" class="form-control">
-                    </div>
-                    <div class="col-md-6">
-                        <select id="kuota1" name="kuota1" class="form-control">
-                            <option value="k">KB</option>
-                            <option value="M">MB</option>
-                            <option value="G">GB</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <div class="form-group">
-                <label for="nominal">Karakter Username</label>
-                <select id="karakter" name="karakter" class="form-control">
-                    <option value="1">Random abcd</option>
-                    <option value="2">Random 1ab2c34d</option>
-                    <option value="3">Random ABCD</option>
-                    <option value="4">Random 1AB2C34D</option>
-                    <option value="5">Random aBcD</option>
-                    <option value="6">Random 1aB2c34D</option>
-                    <option value="7">Random 1234</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="form-group">
-                <label for="remark">Komentar Voucher</label>
-                <input type="text" name="comment" id="comment" value="vc-7<?= date('s'); ?>-<?= date('d.m.y'); ?>" class="form-control" readonly>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="form-group">
-                <label for="remark">Dibuat Pada</label>
-                <input type="text" name="dibuat" id="dibuat" value="<?= date('d-m-Y H:i:s'); ?> WIB" class="form-control" readonly>
-            </div>
-        </div>
-    </div>
-</form>
+        </td>
+    </tr>
+    <tr>
+        <td class="align-middle">Comment</td>
+        <td><input class="form-control " type="text" title="No special characters" id="comment" autocomplete="off"
+                name="adcomment" value=""></td>
+    </tr>
+    <tr>
+        <td colspan="4" class="align-middle w-12" id="GetValidPrice">
+        </td>
+    </tr>
+</table>
+
+
+@push('js')
+    <script>
+        function defUserl() {
+            var e = document.getElementById("user").value,
+                t = document.getElementById("num").style,
+                n = document.getElementById("lower").style,
+                l = document.getElementById("upper").style,
+                o = document.getElementById("upplow").style,
+                i = document.getElementById("lower1").style,
+                d = document.getElementById("upper1").style,
+                a = document.getElementById("upplow1").style,
+                c = document.getElementById("mix").style,
+                m = document.getElementById("mix1").style,
+                s = document.getElementById("mix2").style;
+
+            if ("up" === e) {
+                $("select[name=userl] option:first").html("4");
+                $("select[name=char] option:first").html("Random abcd");
+                n.display = "block";
+                l.display = "block";
+                o.display = "block";
+                i.display = "none";
+                d.display = "none";
+                a.display = "none";
+                t.display = "none";
+                c.display = "block";
+                m.display = "block";
+                s.display = "block";
+            } else if ("vc" === e) {
+                $("select[name=userl] option:first").html("8");
+                $("select[name=char] option:first").html("Random abcd2345");
+                n.display = "none";
+                l.display = "none";
+                o.display = "none";
+                i.display = "block";
+                d.display = "block";
+                a.display = "block";
+                t.display = "block";
+                c.display = "block";
+                m.display = "block";
+                s.display = "block";
+            }
+        }
+    </script>
+@endpush
