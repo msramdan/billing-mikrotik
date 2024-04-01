@@ -227,7 +227,7 @@ class HotspotuserController extends Controller
         $getProfile = (new Query('/ip/hotspot/user/profile/print'))
             ->where('name', $getuprofile);
         $getProfile = $client->query($getProfile)->read();
-        $ponlogin = $getProfile[0]['on-login'];
+        $ponlogin = isset($getProfile[0]['on-login']) ? $getProfile[0]['on-login'] : '';
         $getexpmode = explode(",", $ponlogin);
         if (isset($getexpmode[4])) {
             if ($getexpmode[4] == '' || $getexpmode[4] == '0') {
@@ -238,6 +238,7 @@ class HotspotuserController extends Controller
         } else {
             $seller_price = 0;
         }
+
         $validity = isset($getexpmode[3]) ? $getexpmode[3] : '';
         return view('vouchers.print', [
             'company' => getCompany(),

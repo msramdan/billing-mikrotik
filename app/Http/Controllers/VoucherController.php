@@ -49,7 +49,7 @@ class VoucherController extends Controller
             ->where('name', $profile);
         $getProfile = $client->query($getProfile)->read();
         // get harga/nilai dari profile
-        $ponlogin = $getProfile[0]['on-login'];
+        $ponlogin = isset($getProfile[0]['on-login']) ? $getProfile[0]['on-login'] : '';
         $getexpmode = explode(",", $ponlogin);
         if (isset($getexpmode[2])) {
             if ($getexpmode[2] == '' || $getexpmode[2] == '0') {
