@@ -78,6 +78,19 @@ class LaporanController extends Controller
             ->whereBetween('tanggal', [$start, $end])
             ->sum('pemasukans.nominal');
 
+        $nominalpemasukanVoucher = DB::table('voucher_hotspot')
+            ->join('generate_voucher', 'voucher_hotspot.generate_voucher_id', '=', 'generate_voucher.id')
+            ->where('generate_voucher.company_id', '=', session('sessionCompany'))
+            ->where('voucher_hotspot.is_aktif', '=', "Yes")
+            ->whereBetween('voucher_hotspot.tanggal_aktif', [$start, $end])
+            ->sum('voucher_hotspot.price');
+        $countPemasukanVoucher = DB::table('voucher_hotspot')
+            ->join('generate_voucher', 'voucher_hotspot.generate_voucher_id', '=', 'generate_voucher.id')
+            ->where('generate_voucher.company_id', '=', session('sessionCompany'))
+            ->where('voucher_hotspot.is_aktif', '=', 'Yes')
+            ->whereBetween('voucher_hotspot.tanggal_aktif', [$start, $end])
+            ->count();
+
         $totalpengeluaran = DB::table('pengeluarans')
             ->where('company_id', '=', session('sessionCompany'))
             ->whereBetween('tanggal', [$start, $end])
@@ -98,6 +111,8 @@ class LaporanController extends Controller
             'nominalTtagiahnBayar' => $nominalTtagiahnBayar,
             'totalpemasukan' => $totalpemasukan,
             'nominalpemasukan' => $nominalpemasukan,
+            'nominalpemasukanVoucher' => $nominalpemasukanVoucher,
+            'countPemasukanVoucher' => $countPemasukanVoucher,
             'totalpengeluaran' => $totalpengeluaran,
             'nominalpengeluaran' => $nominalpengeluaran,
         ]);

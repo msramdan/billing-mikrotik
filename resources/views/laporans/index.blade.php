@@ -152,10 +152,18 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="alert alert-dark" role="alert">
-                                        <b>Pemasukan</b>
+                                        <b>Pemasukan Internet</b>
                                         <hr>
                                         Total : {{ $totalpemasukan }} Transaksi<br>
                                         Nominal : {{ rupiah($nominalpemasukan) }}
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="alert alert-dark" role="alert">
+                                        <b>Pemasukan Voucher</b>
+                                        <hr>
+                                        Total : {{ $countPemasukanVoucher }} Voucher<br>
+                                        Nominal : {{ rupiah($nominalpemasukanVoucher) }}
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
@@ -170,7 +178,7 @@
                                     <div class="alert alert-dark" role="alert">
                                         <b>Sisa Hasil Pendapatan</b>
                                         <hr>
-                                        Nominal : {{ rupiah($nominalpemasukan - $nominalpengeluaran) }}
+                                        Nominal : {{ rupiah(($nominalpemasukan + $nominalpemasukanVoucher) - $nominalpengeluaran) }}
                                     </div>
                                 </div>
                             </div>

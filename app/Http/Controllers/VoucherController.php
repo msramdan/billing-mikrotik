@@ -148,23 +148,41 @@ class VoucherController extends Controller
             for ($i = 1; $i <= $qty; $i++) {
                 if ($char == "lower") {
                     $u[$i] = randLC($shuf);
+                    if ($userl == 3) {
+                        $p[$i] = randN(1);
+                    } elseif ($userl == 4 || $userl == 5) {
+                        $p[$i] = randN(2);
+                    } elseif ($userl == 6 || $userl == 7) {
+                        $p[$i] = randN(3);
+                    } elseif ($userl == 8) {
+                        $p[$i] = randN(4);
+                    }
+                    $u[$i] = "$prefix$u[$i]$p[$i]";
                 } elseif ($char == "upper") {
                     $u[$i] = randUC($shuf);
+                    if ($userl == 3) {
+                        $p[$i] = randN(1);
+                    } elseif ($userl == 4 || $userl == 5) {
+                        $p[$i] = randN(2);
+                    } elseif ($userl == 6 || $userl == 7) {
+                        $p[$i] = randN(3);
+                    } elseif ($userl == 8) {
+                        $p[$i] = randN(4);
+                    }
+                    $u[$i] = "$prefix$u[$i]$p[$i]";
                 } elseif ($char == "upplow") {
                     $u[$i] = randULC($shuf);
-                }
-                if ($userl == 3) {
-                    $p[$i] = randN(1);
-                } elseif ($userl == 4 || $userl == 5) {
-                    $p[$i] = randN(2);
-                } elseif ($userl == 6 || $userl == 7) {
-                    $p[$i] = randN(3);
-                } elseif ($userl == 8) {
-                    $p[$i] = randN(4);
-                }
-
-                $u[$i] = "$prefix$u[$i]$p[$i]";
-                if ($char == "num") {
+                    if ($userl == 3) {
+                        $p[$i] = randN(1);
+                    } elseif ($userl == 4 || $userl == 5) {
+                        $p[$i] = randN(2);
+                    } elseif ($userl == 6 || $userl == 7) {
+                        $p[$i] = randN(3);
+                    } elseif ($userl == 8) {
+                        $p[$i] = randN(4);
+                    }
+                    $u[$i] = "$prefix$u[$i]$p[$i]";
+                } elseif ($char == "num") {
                     if ($userl == 3) {
                         $p[$i] = randN(3);
                     } elseif ($userl == 4) {
@@ -178,25 +196,15 @@ class VoucherController extends Controller
                     } elseif ($userl == 8) {
                         $p[$i] = randN(8);
                     }
-
                     $u[$i] = "$prefix$p[$i]";
-                }
-                if ($char == "mix") {
+                } elseif ($char == "mix") {
                     $p[$i] = randNLC($userl);
-
-
                     $u[$i] = "$prefix$p[$i]";
-                }
-                if ($char == "mix1") {
+                } elseif ($char == "mix1") {
                     $p[$i] = randNUC($userl);
-
-
                     $u[$i] = "$prefix$p[$i]";
-                }
-                if ($char == "mix2") {
+                } elseif ($char == "mix2") {
                     $p[$i] = randNULC($userl);
-
-
                     $u[$i] = "$prefix$p[$i]";
                 }
             }

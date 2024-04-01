@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('profile');
             $table->integer('price');
             $table->enum('is_aktif', ['Yes', 'No']);
+            $table->dateTime('tanggal_aktif')->nullable();
             $table->timestamps();
         });
     }
