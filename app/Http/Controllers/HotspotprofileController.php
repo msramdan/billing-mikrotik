@@ -26,7 +26,7 @@ class HotspotprofileController extends Controller
             $hotspotprofiles = $client->query($query)->read();
             return DataTables::of($hotspotprofiles)
                 ->addColumn('expmode', function ($row) {
-                    $ponlogin = $row['on-login'];
+                    $ponlogin = isset($row['on-login']) ? $row['on-login'] : '';
                     $getexpmode = explode(",", $ponlogin);
                     $expmode = isset($getexpmode[1]) ? $getexpmode[1] : '';
                     if ($expmode == "rem") {
@@ -42,18 +42,18 @@ class HotspotprofileController extends Controller
                     }
                 })
                 ->addColumn('validity', function ($row) {
-                    $ponlogin = $row['on-login'];
+                    $ponlogin = isset($row['on-login']) ? $row['on-login'] : '';
                     $getexpmode = explode(",", $ponlogin);
                     return isset($getexpmode[3]) ? $getexpmode[3] : '';
                 })
                 ->addColumn('lock', function ($row) {
-                    $ponlogin = $row['on-login'];
+                    $ponlogin = isset($row['on-login']) ? $row['on-login'] : '';
                     $getexpmode = explode(",", $ponlogin);
                     return isset($getexpmode[6]) ? $getexpmode[6] : '';
                 })
 
                 ->addColumn('price', function ($row) {
-                    $ponlogin = $row['on-login'];
+                    $ponlogin = isset($row['on-login']) ? $row['on-login'] : '';
                     $getexpmode = explode(",", $ponlogin);
                     if (isset($getexpmode[2])) {
                         if ($getexpmode[2] == '' || $getexpmode[2] == '0') {
@@ -68,7 +68,7 @@ class HotspotprofileController extends Controller
                 })
 
                 ->addColumn('selling', function ($row) {
-                    $ponlogin = $row['on-login'];
+                    $ponlogin = isset($row['on-login']) ? $row['on-login'] : '';
                     $getexpmode = explode(",", $ponlogin);
                     if (isset($getexpmode[4])) {
                         if ($getexpmode[4] == '' || $getexpmode[4] == '0') {
@@ -209,7 +209,6 @@ class HotspotprofileController extends Controller
             ->equal('disabled', "no");
         $client->query($queryAdd)->read();
         return redirect()->back()->with('success', __('Enabled hotspot profile was successfully.'));
-
     }
 
     public function disable($id)
