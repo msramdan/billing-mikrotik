@@ -21,9 +21,6 @@ class VoucherController extends Controller
         $hotspotprofile = $client->query($hotspotprofile)->read();
         $srvlist = new Query('/ip/hotspot/print');
         $srvlist = $client->query($srvlist)->read();
-
-        $hotspotprofile = new Query('/ip/hotspot/user/profile/print');
-        $hotspotprofile = $client->query($hotspotprofile)->read();
         return view('vouchers.create', [
             'srvlist' => $srvlist,
             'getprofile' => $hotspotprofile
