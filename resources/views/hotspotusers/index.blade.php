@@ -93,11 +93,11 @@
                                                 <select id="filter_comment" name="filter_comment" class="form-control">
                                                     <option value="">All Comment</option>
                                                     <?php
-                                                    $TotalReg = count($getuser);
+                                                    $TotalReg = count($hotspotusers);
                                                     $acomment = '';
                                                     for ($i = 0; $i < $TotalReg; $i++) {
-                                                        $ucomment = isset($getuser[$i]['comment']) ? $getuser[$i]['comment'] : 'Nan Comment';
-                                                        $uprofile = isset($getuser[$i]['profile']) ? $getuser[$i]['profile'] : 'Nan Profile';
+                                                        $ucomment = isset($hotspotusers[$i]['comment']) ? $hotspotusers[$i]['comment'] : 'Nan Comment';
+                                                        $uprofile = isset($hotspotusers[$i]['profile']) ? $hotspotusers[$i]['profile'] : 'Nan Profile';
                                                         $acomment .= ',' . $ucomment . '#' . $uprofile;
                                                     }
                                                     $ocomment = explode(',', $acomment);

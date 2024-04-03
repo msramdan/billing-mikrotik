@@ -43,12 +43,9 @@ class HotspotuserController extends Controller
         $client = setRoute();
         $query = new Query('/ip/hotspot/user/profile/print');
         $getprofile = $client->query($query)->read();
-        $query = new Query('/ip/hotspot/user/print');
-        $getuser = $client->query($query)->read();
         return view('hotspotusers.index', [
             'hotspotusers' => $hotspotusers,
             'getprofile' => $getprofile,
-            'getuser' => $getuser
         ]);
     }
 
