@@ -446,7 +446,7 @@
                                     <label for="modal_index" class="form-label mb-1">Index Available<span
                                             style="color: red">*</span></label>
                                     <input required type="text" class="form-control" id="modal_index" name="modal_index"
-                                        readonly>
+                                        >
                                 </div>
                             </div>
 
