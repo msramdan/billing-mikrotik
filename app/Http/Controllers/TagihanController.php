@@ -372,31 +372,35 @@ class TagihanController extends Controller
                     'pelanggans.mode_user',
                     'pelanggans.user_pppoe',
                     'pelanggans.user_static',
+                    'pelanggans.status_berlangganan',
                 )->where('pelanggans.id', $request->pelanggan_id)->first();
             if ($pelanggan->mode_user == 'PPOE') {
-                // buka isolir
-                $client = setRoute();
-                $queryGet = (new Query('/ppp/secret/print'))
-                    ->where('name', $pelanggan->user_pppoe);
-                $data = $client->query($queryGet)->read();
-                $idSecret = $data[0]['.id'];
-                // balikan paket
-                $comment = 'Isolir terbuka automatis : ' . date('Y-m-d H:i:s');
-                $queryComment = (new Query('/ppp/secret/set'))
-                    ->equal('.id', $idSecret)
-                    ->equal('profile', $pelanggan->profile)
-                    ->equal('comment', $comment);
-                $client->query($queryComment)->read();
-                // get name
-                $queryGet = (new Query('/ppp/active/print'))
-                    ->where('name', $pelanggan->user_pppoe);
-                $data = $client->query($queryGet)->read();
-                if ($data) {
-                    // remove session
-                    $idActive = $data[0]['.id'];
-                    $queryDelete = (new Query('/ppp/active/remove'))
-                        ->equal('.id', $idActive);
-                    $client->query($queryDelete)->read();
+                // cek ter isolir dulu
+                if ($pelanggan->status_berlangganan == 'Non Aktif') {
+                    // buka isolir
+                    $client = setRoute();
+                    $queryGet = (new Query('/ppp/secret/print'))
+                        ->where('name', $pelanggan->user_pppoe);
+                    $data = $client->query($queryGet)->read();
+                    $idSecret = $data[0]['.id'];
+                    // balikan paket
+                    $comment = 'Isolir terbuka automatis : ' . date('Y-m-d H:i:s');
+                    $queryComment = (new Query('/ppp/secret/set'))
+                        ->equal('.id', $idSecret)
+                        ->equal('profile', $pelanggan->profile)
+                        ->equal('comment', $comment);
+                    $client->query($queryComment)->read();
+                    // get name
+                    $queryGet = (new Query('/ppp/active/print'))
+                        ->where('name', $pelanggan->user_pppoe);
+                    $data = $client->query($queryGet)->read();
+                    if ($data) {
+                        // remove session
+                        $idActive = $data[0]['.id'];
+                        $queryDelete = (new Query('/ppp/active/remove'))
+                            ->equal('.id', $idActive);
+                        $client->query($queryDelete)->read();
+                    }
                 }
             } else {
                 $client = setRoute();
