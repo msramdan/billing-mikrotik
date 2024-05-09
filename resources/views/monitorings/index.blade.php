@@ -445,15 +445,25 @@
                                 <div class="form-group">
                                     <label for="modal_index" class="form-label mb-1">Index Available<span
                                             style="color: red">*</span></label>
-                                    <input required type="text" class="form-control" id="modal_index" name="modal_index"
-                                        >
+                                    <input required type="text" class="form-control" id="modal_index" name="modal_index">
                                 </div>
                             </div>
 
 
                         </div>
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="mode_dhcp" class="form-label mb-1">Mode DHCP IP<span
+                                            style="color: red">*</span></label>
+                                    <select required class="form-control" id="mode_dhcp" name="mode_dhcp">
+                                        <option value="">-- Select --</option>
+                                        <option value="ppoe">PPOE</option>
+                                        <option value="dhcp">DHCP</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="modal_onu_name" class="form-label mb-1">ONU Name<span
                                             style="color: red">*</span></label>
@@ -486,7 +496,8 @@
                                 <div class="form-group">
                                     <label for="modal_profile_vlan" class="form-label mb-1">Profile Vlan<span
                                             style="color: red">*</span></label>
-                                    <select id="modal_profile_vlan" name="modal_profile_vlan" class="form-select" required>
+                                    <select id="modal_profile_vlan" name="modal_profile_vlan" class="form-select"
+                                        required>
                                         <option value="" selected disabled>-- Select --</option>
                                     </select>
                                 </div>
@@ -518,7 +529,6 @@
                             </div>
                         </div>
                         <div class="row">
-
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="modal_port_eht1" class="form-label mb-1">Vlan Port eth 1</label>
@@ -654,7 +664,7 @@
 
 
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">List Uncf</h5>
@@ -1436,6 +1446,34 @@
                 // Example: Disable submit button
                 const submitButton = form.querySelector('[type="submit"]');
                 submitButton.disabled = true;
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            // Ketika nilai mode_dhcp berubah
+            $('#mode_dhcp').change(function() {
+                // Ambil nilai yang dipilih
+                var selectedMode = $(this).val();
+
+                // Jika mode_dhcp adalah 'dhcp'
+                if (selectedMode === 'dhcp') {
+                    // Sembunyikan form untuk PPPoE
+                    $('#modal_router, #modal_profile_router, #modal_username, #modal_password').closest(
+                        '.col-md-3').hide();
+                    // Hilangkan atribut required dari input dan select
+                    $('#modal_router, #modal_profile_router, #modal_username, #modal_password').removeAttr(
+                        'required');
+                } else if (selectedMode === 'ppoe') {
+                    // Jika mode_dhcp adalah 'ppoe'
+                    // Tampilkan form untuk PPPoE
+                    $('#modal_router, #modal_profile_router, #modal_username, #modal_password').closest(
+                        '.col-md-3').show();
+                    // Tambahkan atribut required pada input dan select
+                    $('#modal_router, #modal_profile_router, #modal_username, #modal_password').attr(
+                        'required', 'required');
+                }
             });
         });
     </script>

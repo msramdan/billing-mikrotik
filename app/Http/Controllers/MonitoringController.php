@@ -418,16 +418,7 @@ class MonitoringController extends Controller
 
     public function registerOnu(Request $request)
     {
-        $client = setRoute();
-        $queryAdd = (new Query('/ppp/secret/add'))
-            ->equal('name', $request->modal_username)
-            ->equal('password', $request->modal_password)
-            ->equal('service', 'pppoe')
-            ->equal('profile', $request->modal_profile_router)
-            ->equal('comment',  '');
-        $status = $client->query($queryAdd)->read();
-        $cek  =  $status['after'];
-        if (array_key_exists("ret", $cek)) {
+        if ($request->mode_dhcp == "dhcp") {
             $oltSettings = Olt::findOrFail(session('sessionOlt'));
             $result = str_replace("gpon-onu_", "", $request->modal_interface);
             $requestData = [
@@ -443,8 +434,6 @@ class MonitoringController extends Controller
                 "onu_name" => $request->modal_onu_name,
                 "cvlan" => $request->modal_cvlan,
                 "service_port2" => $request->modal_service_port2,
-                "pppoe_username" => $request->modal_username,
-                "pppoe_password" => $request->modal_password,
                 "profile_vlan" => $request->modal_profile_vlan,
                 "wifi_port" => $request->modal_port_wifi,
                 "eth1" => $request->modal_port_eht1,
@@ -453,7 +442,7 @@ class MonitoringController extends Controller
 
             $client = new \GuzzleHttp\Client();
             $zteServer11 = env('ZTE_SERVER_11');
-            $response = $client->post($zteServer11 . '/register', [
+            $response = $client->post($zteServer11 . '/register-dhcp', [
                 'json' => $requestData,
             ]);
             $responseData = json_decode($response->getBody(), true);
@@ -467,9 +456,59 @@ class MonitoringController extends Controller
                     ->with('error', __('Ada error register.'));
             }
         } else {
-            return redirect()
-                ->route('monitorings.index')
-                ->with('error', __($status['after']['message']));
+            $client = setRoute();
+            $queryAdd = (new Query('/ppp/secret/add'))
+                ->equal('name', $request->modal_username)
+                ->equal('password', $request->modal_password)
+                ->equal('service', 'pppoe')
+                ->equal('profile', $request->modal_profile_router)
+                ->equal('comment',  '');
+            $status = $client->query($queryAdd)->read();
+            $cek  =  $status['after'];
+            if (array_key_exists("ret", $cek)) {
+                $oltSettings = Olt::findOrFail(session('sessionOlt'));
+                $result = str_replace("gpon-onu_", "", $request->modal_interface);
+                $requestData = [
+                    'host' => $oltSettings->host,
+                    'port' => (int) $oltSettings->telnet_port,
+                    'username' => $oltSettings->telnet_username,
+                    'password' => $oltSettings->telnet_password,
+                    "interface" => $result,
+                    "index" => $request->modal_index,
+                    "onu_type" => $request->modal_onu_type,
+                    "sn" => $request->modal_sn,
+                    "tcon_profile" => $request->modal_tcon,
+                    "onu_name" => $request->modal_onu_name,
+                    "cvlan" => $request->modal_cvlan,
+                    "service_port2" => $request->modal_service_port2,
+                    "pppoe_username" => $request->modal_username,
+                    "pppoe_password" => $request->modal_password,
+                    "profile_vlan" => $request->modal_profile_vlan,
+                    "wifi_port" => $request->modal_port_wifi,
+                    "eth1" => $request->modal_port_eht1,
+                    "eth2" => $request->modal_port_eht2
+                ];
+
+                $client = new \GuzzleHttp\Client();
+                $zteServer12 = env('ZTE_SERVER_12');
+                $response = $client->post($zteServer12 . '/register-ppoe', [
+                    'json' => $requestData,
+                ]);
+                $responseData = json_decode($response->getBody(), true);
+                if ($responseData['status']) {
+                    return redirect()
+                        ->route('monitorings.index')
+                        ->with('success', __('Submit ONU successfully.'));
+                } else {
+                    return redirect()
+                        ->route('monitorings.index')
+                        ->with('error', __('Ada error register.'));
+                }
+            } else {
+                return redirect()
+                    ->route('monitorings.index')
+                    ->with('error', __($status['after']['message']));
+            }
         }
     }
 }
