@@ -274,11 +274,6 @@ return [
                     'hotspotprofile view'
                 ],
                 'submenus' => [
-                    // [
-                    //     'title' => 'Generate Vouchers',
-                    //     'route' => '/vouchers',
-                    //     'permission' => 'voucher view'
-                    // ],
                     [
                         'title' => 'Users Hotspot',
                         'route' => '/hotspotusers',
@@ -305,7 +300,9 @@ return [
             'active ppp view',
             'non active ppp view',
             'secret ppp view',
-            'static view'
+            'static view',
+            'active static view',
+            'non active static view'
         ],
         'menus' => [
             [
@@ -318,7 +315,9 @@ return [
                     'active ppp view',
                     'non active ppp view',
                     'secret ppp view',
-                    'static view'
+                    'static view',
+                    'active static view',
+                    'non active static view'
                 ],
                 'submenus' => [
                     [
@@ -345,6 +344,16 @@ return [
                         'title' => 'User Static',
                         'route' => '/statics',
                         'permission' => 'static view'
+                    ],
+                    [
+                        'title' => 'Active Static',
+                        'route' => '/active-statics',
+                        'permission' => 'active static view'
+                    ],
+                    [
+                        'title' => 'Non Active Static',
+                        'route' => '/non-active-statics',
+                        'permission' => 'non active static view'
                     ]
                 ]
             ]

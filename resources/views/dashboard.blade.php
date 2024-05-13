@@ -378,7 +378,7 @@
                         <div class="d-flex align-items-center">
                             <div>
                                 <p class="mb-0 text-secondary">Static aktif</p>
-                                <h4 class="my-1 text-primary"><a href="/non-active-ppps" class="">
+                                <h4 class="my-1 text-primary"><a href="/active-statics" class="">
                                         {{ $staticAktif }} Data </a>
                                 </h4>
 
@@ -397,7 +397,7 @@
                         <div class="d-flex align-items-center">
                             <div>
                                 <p class="mb-0 text-secondary">Static tidak aktif</p>
-                                <h4 class="my-1 text-primary"><a href="/non-active-ppps" class="">
+                                <h4 class="my-1 text-primary"><a href="/non-active-statics" class="">
                                         {{ $staticNonAktif }} Data </a>
                                 </h4>
 

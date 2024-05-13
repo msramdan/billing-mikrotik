@@ -127,6 +127,8 @@ Route::middleware(['auth', 'web', 'cek-expired'])->group(function () {
     Route::controller(App\Http\Controllers\SendnotifController::class)->group(function () {
         Route::post('/kirim_pesan', 'kirim_pesan')->name('kirim_pesan');
     });
+    Route::resource('active-statics', App\Http\Controllers\ActiveStaticController::class)->middleware('auth');
+    Route::resource('non-active-statics', App\Http\Controllers\NonActiveStaticController::class)->middleware('auth');
 });
 
 Route::middleware(['auth', 'web'])->group(function () {

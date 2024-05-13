@@ -38,6 +38,7 @@ class DashboardController extends Controller
         $staticAktif = (new Query('/tool/netwatch/print'))
             ->where('status', 'up');
         $staticAktif = $client->query($staticAktif)->read();
+
         $staticNonAktif = (new Query('/tool/netwatch/print'))
             ->where('status', 'down');
         $staticNonAktif = $client->query($staticNonAktif)->read();
