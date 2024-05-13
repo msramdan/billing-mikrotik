@@ -57,9 +57,9 @@ class TagihanController extends Controller
             }
 
             if (isset($tanggal) && !empty($tanggal)) {
-                if ($tanggal != 'All') {
-                    $tagihans = $tagihans->where('tagihans.periode', $tanggal);
-                }
+                $tagihans = $tagihans->where('tagihans.periode', $tanggal);
+            } else {
+                $tagihans = $tagihans->where('tagihans.periode', date('Y-m'));
             }
 
             $tagihans = $tagihans->orderBy('tagihans.id', 'DESC')->get();
@@ -89,10 +89,11 @@ class TagihanController extends Controller
                 })->addColumn('action', 'tagihans.include.action')
                 ->toJson();
         }
-
+        $thisMonth = date('Y-m');
         $pelanggans = DB::table('pelanggans')->where('company_id', '=', session('sessionCompany'))->get();
         return view('tagihans.index', [
-            'pelanggans' => $pelanggans
+            'pelanggans' => $pelanggans,
+            'thisMonth' => $thisMonth
         ]);
     }
 

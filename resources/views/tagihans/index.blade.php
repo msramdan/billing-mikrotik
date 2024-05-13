@@ -47,7 +47,8 @@
                                 <div class="row">
                                     <div class="row g-3">
                                         <div class="col-md-3">
-                                            <input type="month" name="tanggal" id="tanggal" class="form-control" />
+                                            <input type="month" value="{{ $thisMonth }}" name="tanggal" id="tanggal"
+                                                class="form-control" />
                                         </div>
                                         <div class="col-md-3">
                                             <select name="pelanggans" id="pelanggans"
