@@ -214,5 +214,7 @@ return [
         ['group' => 'monitorings', 'access' => ['monitoring view']],
         ['group' => 'vouchers', 'access' => ['voucher view', 'voucher create']],
         ['group' => 'hotspotprofiles', 'access' => ['hotspotprofile view', 'hotspotprofile create', 'hotspotprofile delete']],
-  ['group' => 'active statics', 'access' => ['active static view', 'active static create', 'active static edit', 'active static delete']],['group' => 'non active statics', 'access' => ['non active static view', 'non active static create', 'non active static edit', 'non active static delete']], 
-		],];
+        ['group' => 'active statics', 'access' => ['active static view']],
+        ['group' => 'non active statics', 'access' => ['non active static view']],
+    ],
+];
