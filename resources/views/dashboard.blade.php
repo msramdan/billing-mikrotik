@@ -318,7 +318,7 @@
 @section('content')
     <div class="page-content">
         <section class="row">
-            <div class="col-xl-3 col-sm-6 box-col-3">
+            <div class="col-xl-4 col-sm-6 box-col-3">
                 <div class="card radius-10 border-start border-0 border-3 border-primary">
                     <div class="card-body">
                         <div class="d-flex align-items-center">
@@ -336,12 +336,12 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-sm-6 box-col-3">
+            <div class="col-xl-4 col-sm-6 box-col-3">
                 <div class="card radius-10 border-start border-0 border-3 border-primary">
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div>
-                                <p class="mb-0 text-secondary">Ppp aktif</p>
+                                <p class="mb-0 text-secondary">PPP aktif</p>
                                 <h4 class="my-1 text-primary"><a href="/active-ppps" class="">
                                         {{ $activePpps }} Data </a>
                                 </h4>
@@ -354,12 +354,12 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-sm-6 box-col-3">
+            <div class="col-xl-4 col-sm-6 box-col-3">
                 <div class="card radius-10 border-start border-0 border-3 border-primary">
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div>
-                                <p class="mb-0 text-secondary">Ppp tidak aktif</p>
+                                <p class="mb-0 text-secondary">PPP tidak aktif</p>
                                 <h4 class="my-1 text-primary"><a href="/non-active-ppps" class="">
                                         {{ $nonactivePpps }} Data </a>
                                 </h4>
@@ -372,9 +372,46 @@
                     </div>
                 </div>
             </div>
+            <div class="col-xl-4 col-sm-6 box-col-3">
+                <div class="card radius-10 border-start border-0 border-3 border-primary">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">Static aktif</p>
+                                <h4 class="my-1 text-primary"><a href="/non-active-ppps" class="">
+                                        {{ $staticAktif }} Data </a>
+                                </h4>
+
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto"><i
+                                    class="fa fa-check"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-sm-6 box-col-3">
+                <div class="card radius-10 border-start border-0 border-3 border-primary">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <p class="mb-0 text-secondary">Static tidak aktif</p>
+                                <h4 class="my-1 text-primary"><a href="/non-active-ppps" class="">
+                                        {{ $staticNonAktif }} Data </a>
+                                </h4>
+
+                            </div>
+                            <div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto"><i
+                                    class="fa fa-times"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             @can('pelanggan view')
-                <div class="col-xl-3 col-sm-6 box-col-3">
+                <div class="col-xl-4 col-sm-6 box-col-3">
                     <div class="card radius-10 border-start border-0 border-3 border-primary">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
@@ -392,7 +429,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3 col-sm-6 box-col-3">
+                <div class="col-xl-4 col-sm-6 box-col-3">
                     <div class="card radius-10 border-start border-0 border-3 border-primary">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
@@ -410,7 +447,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3 col-sm-6 box-col-3">
+                <div class="col-xl-4 col-sm-6 box-col-3">
                     <div class="card radius-10 border-start border-0 border-3 border-primary">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
@@ -427,25 +464,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3 col-sm-6 box-col-3">
-                    <div class="card radius-10 border-start border-0 border-3 border-primary">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <div>
-                                    <p class="mb-0 text-secondary">P.Menunggu</p>
-                                    <h4 class="my-1 text-primary"><a href="/pelanggans" class="">
-                                            {{ $countPelangganMenunggu }} Data </a>
-                                    </h4>
-
-                                </div>
-                                <div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto"><i
-                                        class="fa fa-spinner"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-sm-6 box-col-3">
+                <div class="col-xl-4 col-sm-6 box-col-3">
                     <div class="card radius-10 border-start border-0 border-3 border-primary">
                         <div class="card-body">
                             <div class="d-flex align-items-center">

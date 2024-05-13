@@ -25,8 +25,6 @@ class DashboardController extends Controller
             ->where('status_berlangganan', 'Aktif')->count();
         $countPelangganNon = Pelanggan::where('company_id', '=', session('sessionCompany'))
             ->where('status_berlangganan', 'Non Aktif')->count();
-        $countPelangganMenunggu = Pelanggan::where('company_id', '=', session('sessionCompany'))
-            ->where('status_berlangganan', 'Menunggu')->count();
         $client = setRoute();
         $query = new Query('/ip/hotspot/active/print');
         $hotspotactives = $client->query($query)->read();
@@ -36,6 +34,13 @@ class DashboardController extends Controller
 
         $querysecretPpps = new Query('/ppp/secret/print');
         $nonactivePpps = $client->query($querysecretPpps)->read();
+        // static
+        $staticAktif = (new Query('/tool/netwatch/print'))
+            ->where('status', 'up');
+        $staticAktif = $client->query($staticAktif)->read();
+        $staticNonAktif = (new Query('/tool/netwatch/print'))
+            ->where('status', 'down');
+        $staticNonAktif = $client->query($staticNonAktif)->read();
 
         $pemasukans = Pemasukan::where('company_id', '=', session('sessionCompany'))
             ->orderBy('id', 'desc')->limit(10)->get();
@@ -47,10 +52,11 @@ class DashboardController extends Controller
             'countRouter' => $countRouter,
             'countPelangganAktif' => $countPelangganAktif,
             'countPelangganNon' => $countPelangganNon,
-            'countPelangganMenunggu' => $countPelangganMenunggu,
             'hotspotactives' => count($hotspotactives),
             'activePpps' => count($activePpps),
             'nonactivePpps' => count($nonactivePpps) - count($activePpps),
+            'staticAktif' => count($staticAktif),
+            'staticNonAktif' => count($staticNonAktif),
             'pemasukans' => $pemasukans,
             'newPelanggan' => $newPelanggan,
         ]);
