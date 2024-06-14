@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Pengeluaran;
 use App\Http\Requests\{StorePengeluaranRequest, UpdatePengeluaranRequest};
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Http\Request;
+
 
 class PengeluaranController extends Controller
 {
@@ -21,12 +23,31 @@ class PengeluaranController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         if (request()->ajax()) {
-            $pengeluarans = Pengeluaran::where('pengeluarans.company_id', '=', session('sessionCompany'))->get();
+            $pengeluarans = Pengeluaran::where('pengeluarans.company_id', '=', session('sessionCompany'));
+            $start_date = intval($request->query('start_date'));
+            $end_date = intval($request->query('end_date'));
 
+            if (isset($start_date) && !empty($start_date)) {
+                $from = date("Y-m-d H:i:s", substr($request->query('start_date'), 0, 10));
+                $pengeluarans = $pengeluarans->where('tanggal', '>=', $from);
+            } else {
+                $from = date('Y-m-d') . " 00:00:00";
+                $pengeluarans = $pengeluarans->where('tanggal', '>=', $from);
+            }
+            if (isset($end_date) && !empty($end_date)) {
+                $to = date("Y-m-d H:i:s", substr($request->query('end_date'), 0, 10));
+                $pengeluarans = $pengeluarans->where('tanggal', '<=', $to);
+            } else {
+                $to = date('Y-m-d') . " 23:59:59";
+                $pengeluarans = $pengeluarans->where('tanggal', '<=', $to);
+            }
+
+            $pengeluarans = $pengeluarans->orderBy('pengeluarans.id', 'DESC');
             return DataTables::of($pengeluarans)
+                ->addIndexColumn()
                 ->addColumn('nominal', function ($row) {
                     return rupiah($row->nominal);
                 })
@@ -36,8 +57,16 @@ class PengeluaranController extends Controller
                 ->addColumn('action', 'pengeluarans.include.action')
                 ->toJson();
         }
-
-        return view('pengeluarans.index');
+        $from = date('Y-m-d') . " 00:00:00";
+        $to = date('Y-m-d') . " 23:59:59";
+        $microFrom = strtotime($from) * 1000;
+        $microTo = strtotime($to) * 1000;
+        $start_date = $request->query('start_date') !== null ? intval($request->query('start_date')) : $microFrom;
+        $end_date = $request->query('end_date') !== null ? intval($request->query('end_date')) : $microTo;
+        return view('pengeluarans.index', [
+            'microFrom' => $start_date,
+            'microTo' => $end_date,
+        ]);
     }
 
     /**
