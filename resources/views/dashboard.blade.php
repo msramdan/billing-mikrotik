@@ -514,7 +514,7 @@
                     <div class="card" style="height: 370px">
                         <div class="card-header align-items-center d-flex">
                             <h4 class="card-title mb-0 flex-grow-1">
-                                10 Pemasukan Terbaru
+                                Pemasukan hari ini
                             </h4>
                         </div>
                         <div class="card-body">

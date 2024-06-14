@@ -43,8 +43,12 @@ class DashboardController extends Controller
             ->where('status', 'down');
         $staticNonAktif = $client->query($staticNonAktif)->read();
 
+        $tanggalHariIniMulai = Carbon::today()->startOfDay();
+        $tanggalHariIniAkhir = Carbon::today()->endOfDay();
+
         $pemasukans = Pemasukan::where('company_id', '=', session('sessionCompany'))
-            ->orderBy('id', 'desc')->limit(10)->get();
+            ->whereBetween('tanggal', [$tanggalHariIniMulai, $tanggalHariIniAkhir])
+            ->get();
 
         return view('dashboard', [
             'pelanggan' => $pelanggan,
