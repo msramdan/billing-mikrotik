@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Pemasukan;
 use App\Http\Requests\{StorePemasukanRequest, UpdatePemasukanRequest};
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Http\Request;
 
 class PemasukanController extends Controller
 {
@@ -21,23 +22,51 @@ class PemasukanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         if (request()->ajax()) {
-            $pemasukans = Pemasukan::where('pemasukans.company_id', '=', session('sessionCompany'))->get();
+            $pemasukans = Pemasukan::where('pemasukans.company_id', '=', session('sessionCompany'));
+            $start_date = intval($request->query('start_date'));
+            $end_date = intval($request->query('end_date'));
+
+            if (isset($start_date) && !empty($start_date)) {
+                $from = date("Y-m-d H:i:s", substr($request->query('start_date'), 0, 10));
+                $pemasukans = $pemasukans->where('tanggal', '>=', $from);
+            } else {
+                $from = date('Y-m-d') . " 00:00:00";
+                $pemasukans = $pemasukans->where('tanggal', '>=', $from);
+            }
+            if (isset($end_date) && !empty($end_date)) {
+                $to = date("Y-m-d H:i:s", substr($request->query('end_date'), 0, 10));
+                $pemasukans = $pemasukans->where('tanggal', '<=', $to);
+            } else {
+                $to = date('Y-m-d') . " 23:59:59";
+                $pemasukans = $pemasukans->where('tanggal', '<=', $to);
+            }
+            $pemasukans = $pemasukans->orderBy('pemasukans.id', 'DESC');
 
             return DataTables::of($pemasukans)
-                ->addColumn('nominal', function($row){
+                ->addIndexColumn()
+                ->addColumn('nominal', function ($row) {
                     return rupiah($row->nominal);
                 })
-                ->addColumn('keterangan', function($row){
+                ->addColumn('keterangan', function ($row) {
                     return str($row->keterangan)->limit(100);
                 })
-				->addColumn('action', 'pemasukans.include.action')
+                ->addColumn('action', 'pemasukans.include.action')
                 ->toJson();
         }
 
-        return view('pemasukans.index');
+        $from = date('Y-m-d') . " 00:00:00";
+        $to = date('Y-m-d') . " 23:59:59";
+        $microFrom = strtotime($from) * 1000;
+        $microTo = strtotime($to) * 1000;
+        $start_date = $request->query('start_date') !== null ? intval($request->query('start_date')) : $microFrom;
+        $end_date = $request->query('end_date') !== null ? intval($request->query('end_date')) : $microTo;
+        return view('pemasukans.index', [
+            'microFrom' => $start_date,
+            'microTo' => $end_date,
+        ]);
     }
 
     /**
