@@ -166,3 +166,6 @@ Route::middleware(['auth', 'web'])->group(function () {
     Route::resource('olts', App\Http\Controllers\OltController::class);
     Route::resource('vouchers', App\Http\Controllers\VoucherController::class);
 });
+
+Route::resource('category-pemasukans', App\Http\Controllers\CategoryPemasukanController::class)->middleware('auth');
+Route::resource('category-pengeluarans', App\Http\Controllers\CategoryPengeluaranController::class)->middleware('auth');

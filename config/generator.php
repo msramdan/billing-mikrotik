@@ -146,7 +146,9 @@ return [
             'pemasukan view',
             'pengeluaran view',
             'tagihan view',
-            'laporan view'
+            'laporan view',
+            'category pemasukan view',
+            'category pengeluaran view'
         ],
         'menus' => [
             [
@@ -158,7 +160,9 @@ return [
                     'pemasukan view',
                     'pengeluaran view',
                     'tagihan view',
-                    'laporan view'
+                    'laporan view',
+                    'category pemasukan view',
+                    'category pengeluaran view'
                 ],
                 'submenus' => [
                     [
@@ -180,6 +184,16 @@ return [
                         'title' => 'Laporan',
                         'route' => '/laporans',
                         'permission' => 'laporan view'
+                    ],
+                    [
+                        'title' => 'Category Pemasukan',
+                        'route' => '/category-pemasukans',
+                        'permission' => 'category pemasukan view'
+                    ],
+                    [
+                        'title' => 'Category Pengeluaran',
+                        'route' => '/category-pengeluarans',
+                        'permission' => 'category pengeluaran view'
                     ]
                 ]
             ]

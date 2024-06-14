@@ -216,5 +216,6 @@ return [
         ['group' => 'hotspotprofiles', 'access' => ['hotspotprofile view', 'hotspotprofile create', 'hotspotprofile delete']],
         ['group' => 'active statics', 'access' => ['active static view']],
         ['group' => 'non active statics', 'access' => ['non active static view']],
-    ],
-];
+        ['group' => 'category pemasukans', 'access' => ['category pemasukan view', 'category pemasukan create', 'category pemasukan edit', 'category pemasukan delete']],
+  ['group' => 'Category Pengeluaran', 'access' => ['category pengeluaran view', 'category pengeluaran create', 'category pengeluaran edit', 'category pengeluaran delete']],
+		],];
