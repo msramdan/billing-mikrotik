@@ -78,18 +78,18 @@ class LaporanController extends Controller
             ->whereBetween('tanggal', [$start, $end])
             ->sum('pemasukans.nominal');
 
-        $nominalpemasukanVoucher = DB::table('voucher_hotspot')
-            ->join('generate_voucher', 'voucher_hotspot.generate_voucher_id', '=', 'generate_voucher.id')
-            ->where('generate_voucher.company_id', '=', session('sessionCompany'))
-            ->where('voucher_hotspot.is_aktif', '=', "Yes")
-            ->whereBetween('voucher_hotspot.tanggal_aktif', [$start, $end])
-            ->sum('voucher_hotspot.price');
-        $countPemasukanVoucher = DB::table('voucher_hotspot')
-            ->join('generate_voucher', 'voucher_hotspot.generate_voucher_id', '=', 'generate_voucher.id')
-            ->where('generate_voucher.company_id', '=', session('sessionCompany'))
-            ->where('voucher_hotspot.is_aktif', '=', 'Yes')
-            ->whereBetween('voucher_hotspot.tanggal_aktif', [$start, $end])
-            ->count();
+        // $nominalpemasukanVoucher = DB::table('voucher_hotspot')
+        //     ->join('generate_voucher', 'voucher_hotspot.generate_voucher_id', '=', 'generate_voucher.id')
+        //     ->where('generate_voucher.company_id', '=', session('sessionCompany'))
+        //     ->where('voucher_hotspot.is_aktif', '=', "Yes")
+        //     ->whereBetween('voucher_hotspot.tanggal_aktif', [$start, $end])
+        //     ->sum('voucher_hotspot.price');
+        // $countPemasukanVoucher = DB::table('voucher_hotspot')
+        //     ->join('generate_voucher', 'voucher_hotspot.generate_voucher_id', '=', 'generate_voucher.id')
+        //     ->where('generate_voucher.company_id', '=', session('sessionCompany'))
+        //     ->where('voucher_hotspot.is_aktif', '=', 'Yes')
+        //     ->whereBetween('voucher_hotspot.tanggal_aktif', [$start, $end])
+        //     ->count();
 
         $totalpengeluaran = DB::table('pengeluarans')
             ->where('company_id', '=', session('sessionCompany'))
@@ -99,6 +99,30 @@ class LaporanController extends Controller
             ->where('company_id', '=', session('sessionCompany'))
             ->whereBetween('tanggal', [$start, $end])
             ->sum('pengeluarans.nominal');
+
+
+        $pemasukans = DB::table('pemasukans')
+            ->leftJoin('category_pemasukans', 'pemasukans.category_pemasukan_id', '=', 'category_pemasukans.id')
+            ->select(
+                'pemasukans.category_pemasukan_id',
+                'category_pemasukans.nama_kategori_pemasukan',
+                DB::raw('COUNT(pemasukans.id) as total_transaksi'),
+                DB::raw('SUM(pemasukans.nominal) as total_nominal')
+            )
+            ->groupBy('pemasukans.category_pemasukan_id', 'category_pemasukans.nama_kategori_pemasukan')
+            ->get();
+
+        $pengeluarans = DB::table('pengeluarans')
+            ->leftJoin('category_pengeluarans', 'pengeluarans.category_pengeluaran_id', '=', 'category_pengeluarans.id')
+            ->select(
+                'pengeluarans.category_pengeluaran_id',
+                'category_pengeluarans.nama_kategori_pengeluaran',
+                DB::raw('COUNT(pengeluarans.id) as total_transaksi'),
+                DB::raw('SUM(pengeluarans.nominal) as total_nominal')
+            )
+            ->groupBy('pengeluarans.category_pengeluaran_id', 'category_pengeluarans.nama_kategori_pengeluaran')
+            ->get();
+
 
         return view('laporans.index', [
             'month' => $month,
@@ -111,8 +135,8 @@ class LaporanController extends Controller
             'nominalTtagiahnBayar' => $nominalTtagiahnBayar,
             'totalpemasukan' => $totalpemasukan,
             'nominalpemasukan' => $nominalpemasukan,
-            'nominalpemasukanVoucher' => $nominalpemasukanVoucher,
-            'countPemasukanVoucher' => $countPemasukanVoucher,
+            'pemasukans' => $pemasukans,
+            'pengeluarans' => $pengeluarans,
             'totalpengeluaran' => $totalpengeluaran,
             'nominalpengeluaran' => $nominalpengeluaran,
         ]);

@@ -106,27 +106,25 @@
                                                                         ->get();
                                                                 @endphp
                                                                 @foreach ($bankAccounts as $bankAccount)
-                                                                        <li>{{ $bankAccount->nama_bank }} - {{ $bankAccount->nomor_rekening }} :
-                                                                            @php
-                                                                                $nominal = DB::table('tagihans')
-                                                                                    ->where('periode', $month)
-                                                                                    ->where(
-                                                                                        'status_bayar',
-                                                                                        'Sudah Bayar',
-                                                                                    )
-                                                                                    ->where(
-                                                                                        'tagihans.bank_account_id',
-                                                                                        $bankAccount->id,
-                                                                                    )
-                                                                                    ->where(
-                                                                                        'company_id',
-                                                                                        '=',
-                                                                                        session('sessionCompany'),
-                                                                                    )
-                                                                                    ->sum('tagihans.total_bayar');
-                                                                            @endphp
-                                                                            {{ rupiah($nominal) }}
-                                                                        </li>
+                                                                    <li>{{ $bankAccount->nama_bank }} -
+                                                                        {{ $bankAccount->nomor_rekening }} :
+                                                                        @php
+                                                                            $nominal = DB::table('tagihans')
+                                                                                ->where('periode', $month)
+                                                                                ->where('status_bayar', 'Sudah Bayar')
+                                                                                ->where(
+                                                                                    'tagihans.bank_account_id',
+                                                                                    $bankAccount->id,
+                                                                                )
+                                                                                ->where(
+                                                                                    'company_id',
+                                                                                    '=',
+                                                                                    session('sessionCompany'),
+                                                                                )
+                                                                                ->sum('tagihans.total_bayar');
+                                                                        @endphp
+                                                                        {{ rupiah($nominal) }}
+                                                                    </li>
                                                                 @endforeach
                                                             </td>
                                                         </tr>
@@ -150,15 +148,79 @@
                                         Nominal : {{ rupiah($nominalTtagiahnBayar) }}
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <div class="alert alert-dark" role="alert">
-                                        <b>Pemasukan Internet</b>
-                                        <hr>
-                                        Total : {{ $totalpemasukan }} Transaksi<br>
-                                        Nominal : {{ rupiah($nominalpemasukan) }}
+
+
+                                <div class="accordion" id="accordionExample">
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="headingOne">
+                                            <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                                                aria-expanded="false" aria-controls="collapseOne">
+                                                <b> Pemasukan : {{ rupiah($nominalpemasukan) }} || Total transaksi :
+                                                    {{ $totalpemasukan }}</b>
+                                            </button>
+                                        </h2>
+                                        <div id="collapseOne" class="accordion-collapse collapse"
+                                            aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                            <div class="accordion-body">
+                                                <div class="row">
+                                                    @foreach ($pemasukans as $pemasukan)
+                                                        <div class="col-sm-6">
+                                                            <div class="alert alert-success" role="alert">
+                                                                <b>{{ $pemasukan->nama_kategori_pemasukan }}</b>
+                                                                <hr>
+                                                                Total : {{ $pemasukan->total_transaksi }} Transaksi<br>
+                                                                Nominal : {{ rupiah($pemasukan->total_nominal) }}
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="headingTwo">
+                                            <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                                                aria-expanded="false" aria-controls="collapseTwo">
+                                                <b>Pengeluaran : {{ rupiah($nominalpengeluaran) }} || Total transaksi :
+                                                    {{ $totalpengeluaran }}</b>
+                                            </button>
+                                        </h2>
+                                        <div id="collapseTwo" class="accordion-collapse collapse"
+                                            aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                            <div class="accordion-body">
+                                                <div class="row">
+                                                    @foreach($pengeluarans as $pengeluaran)
+                                                    <div class="col-sm-6">
+                                                        <div class="alert alert-danger" role="alert">
+                                                            <b>{{ $pengeluaran->nama_kategori_pengeluaran }}</b>
+                                                            <hr>
+                                                            Total : {{ $pengeluaran->total_transaksi }} Transaksi<br>
+                                                            Nominal : {{ rupiah($pengeluaran->total_nominal) }}
+                                                        </div>
+                                                    </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="headingThree">
+                                            <button class="accordion-button collapsed" type="button">
+                                                <b>Sisa Hasil Pendapatan :
+                                                    {{ rupiah($nominalpemasukan - $nominalpengeluaran) }}</b>
+                                            </button>
+                                        </h2>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
+
+
+
+
+
+
+                                {{-- <div class="col-sm-6">
                                     <div class="alert alert-dark" role="alert">
                                         <b>Pemasukan Voucher</b>
                                         <hr>
@@ -166,6 +228,9 @@
                                         Nominal : {{ rupiah($nominalpemasukanVoucher) }}
                                     </div>
                                 </div>
+
+
+
                                 <div class="col-sm-6">
                                     <div class="alert alert-dark" role="alert">
                                         <b>Pengeluaran</b>
@@ -180,7 +245,7 @@
                                         <hr>
                                         Nominal : {{ rupiah(($nominalpemasukan + $nominalpemasukanVoucher) - $nominalpengeluaran) }}
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>
