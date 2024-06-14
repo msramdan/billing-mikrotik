@@ -109,10 +109,11 @@ class LaporanController extends Controller
                 DB::raw('COUNT(pemasukans.id) as total_transaksi'),
                 DB::raw('SUM(pemasukans.nominal) as total_nominal')
             )
+            ->whereBetween('pengeluarans.tanggal', [$start, $end])
             ->groupBy('pemasukans.category_pemasukan_id', 'category_pemasukans.nama_kategori_pemasukan')
             ->get();
 
-        $pengeluarans = DB::table('pengeluarans')
+            $pengeluarans = DB::table('pengeluarans')
             ->leftJoin('category_pengeluarans', 'pengeluarans.category_pengeluaran_id', '=', 'category_pengeluarans.id')
             ->select(
                 'pengeluarans.category_pengeluaran_id',
@@ -120,8 +121,10 @@ class LaporanController extends Controller
                 DB::raw('COUNT(pengeluarans.id) as total_transaksi'),
                 DB::raw('SUM(pengeluarans.nominal) as total_nominal')
             )
+            ->whereBetween('pengeluarans.tanggal', [$start, $end])
             ->groupBy('pengeluarans.category_pengeluaran_id', 'category_pengeluarans.nama_kategori_pengeluaran')
             ->get();
+
 
 
         return view('laporans.index', [
