@@ -6,6 +6,7 @@ use App\Models\Pengeluaran;
 use App\Http\Requests\{StorePengeluaranRequest, UpdatePengeluaranRequest};
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 
 class PengeluaranController extends Controller
@@ -27,22 +28,34 @@ class PengeluaranController extends Controller
     {
         if (request()->ajax()) {
             $pengeluarans = Pengeluaran::where('pengeluarans.company_id', '=', session('sessionCompany'));
+
+            $pengeluarans = DB::table('pengeluarans')
+                ->leftJoin('category_pengeluarans', 'pengeluarans.category_pengeluaran_id', '=', 'category_pengeluarans.id')
+                ->where('pengeluarans.company_id', '=', session('sessionCompany'))
+                ->select('pengeluarans.*', 'category_pengeluarans.nama_kategori_pengeluaran');
             $start_date = intval($request->query('start_date'));
             $end_date = intval($request->query('end_date'));
+            $kategori_pengeluaran = intval($request->query('kategori_pengeluaran'));
 
             if (isset($start_date) && !empty($start_date)) {
                 $from = date("Y-m-d H:i:s", substr($request->query('start_date'), 0, 10));
-                $pengeluarans = $pengeluarans->where('tanggal', '>=', $from);
+                $pengeluarans = $pengeluarans->where('pengeluarans.tanggal', '>=', $from);
             } else {
                 $from = date('Y-m-d') . " 00:00:00";
-                $pengeluarans = $pengeluarans->where('tanggal', '>=', $from);
+                $pengeluarans = $pengeluarans->where('pengeluarans.tanggal', '>=', $from);
             }
             if (isset($end_date) && !empty($end_date)) {
                 $to = date("Y-m-d H:i:s", substr($request->query('end_date'), 0, 10));
-                $pengeluarans = $pengeluarans->where('tanggal', '<=', $to);
+                $pengeluarans = $pengeluarans->where('pengeluarans.tanggal', '<=', $to);
             } else {
                 $to = date('Y-m-d') . " 23:59:59";
-                $pengeluarans = $pengeluarans->where('tanggal', '<=', $to);
+                $pengeluarans = $pengeluarans->where('pengeluarans.tanggal', '<=', $to);
+            }
+
+            if (isset($kategori_pengeluaran) && !empty($kategori_pengeluaran)) {
+                if ($kategori_pengeluaran != 'All') {
+                    $pengeluarans = $pengeluarans->where('pengeluarans.category_pengeluaran_id', $kategori_pengeluaran);
+                }
             }
 
             $pengeluarans = $pengeluarans->orderBy('pengeluarans.id', 'DESC');
@@ -50,6 +63,9 @@ class PengeluaranController extends Controller
                 ->addIndexColumn()
                 ->addColumn('nominal', function ($row) {
                     return rupiah($row->nominal);
+                })
+                ->addColumn('nama_kategori_pengeluaran', function ($row) {
+                    return isset($row->nama_kategori_pengeluaran) ? $row->nama_kategori_pengeluaran : '-';
                 })
                 ->addColumn('keterangan', function ($row) {
                     return str($row->keterangan)->limit(100);
@@ -63,21 +79,22 @@ class PengeluaranController extends Controller
         $microTo = strtotime($to) * 1000;
         $start_date = $request->query('start_date') !== null ? intval($request->query('start_date')) : $microFrom;
         $end_date = $request->query('end_date') !== null ? intval($request->query('end_date')) : $microTo;
+        $kategori_pengeluaran = $request->query('kategori_pengeluaran') !== null ? intval($request->query('kategori_pengeluaran')) : null;
+        $categoryPengeluarans = DB::table('category_pengeluarans')->get();
         return view('pengeluarans.index', [
             'microFrom' => $start_date,
             'microTo' => $end_date,
+            'kategori_pengeluaran' => $kategori_pengeluaran,
+            'categoryPengeluarans' => $categoryPengeluarans,
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        return view('pengeluarans.create');
+        $categoryPengeluarans = DB::table('category_pengeluarans')->get();
+        return view('pengeluarans.create', compact('categoryPengeluarans'));
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -115,7 +132,8 @@ class PengeluaranController extends Controller
      */
     public function edit(Pengeluaran $pengeluaran)
     {
-        return view('pengeluarans.edit', compact('pengeluaran'));
+        $categoryPengeluarans = DB::table('category_pengeluarans')->get();
+        return view('pengeluarans.edit', compact('pengeluaran','categoryPengeluarans'));
     }
 
     /**

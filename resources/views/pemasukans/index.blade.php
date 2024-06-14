@@ -47,6 +47,19 @@
                                         <input type="hidden" name="end_date" id="end_date" value="{{ $microTo ?? '' }}">
                                     </div>
                                 </div>
+                                <div class="col-md-2">
+                                    <div class="input-group mb-4">
+                                        <select name="kategori_pemasukan" id="kategori_pemasukan" class="form-control select2-form">
+                                            <option value="All">-- All kategori pemasukan --</option>
+                                            @foreach ($categoryPemasukans as $row)
+                                                <option value="{{ $row->id }}"
+                                                    {{ $kategori_pemasukan == $row->id ? 'selected' : '' }}>
+                                                    {{ $row->nama_kategori_pemasukan }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                             <div class="table-responsive p-1">
                                 <table class="table table-striped" id="data-table" width="100%">
@@ -55,6 +68,7 @@
                                             <th>#</th>
                                             <th>{{ __('Nominal') }}</th>
                                             <th>{{ __('Tanggal') }}</th>
+                                            <th>{{ __('Kategori pemasukan') }}</th>
                                             <th>{{ __('Keterangan') }}</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
@@ -97,6 +111,10 @@
                 name: 'tanggal',
             },
             {
+                data: 'nama_kategori_pemasukan',
+                name: 'nama_kategori_pemasukan',
+            },
+            {
                 data: 'keterangan',
                 name: 'keterangan',
             },
@@ -115,6 +133,7 @@
                 data: function(s) {
                     s.start_date = $("#start_date").val();
                     s.end_date = $("#end_date").val();
+                    s.kategori_pemasukan = $('select[name=kategori_pemasukan] option').filter(':selected').val()
                 }
             },
             columns: columns
@@ -124,8 +143,10 @@
             var params = new URLSearchParams();
             var startDate = $("#start_date").val();
             var endDate = $("#end_date").val();
+            var kategoriPemasukan = $('select[name=kategori_pemasukan]').val();
             if (startDate) params.set('start_date', startDate);
             if (endDate) params.set('end_date', endDate);
+            if (kategoriPemasukan) params.set('kategori_pemasukan', kategoriPemasukan);
             var newURL = "{{ route('pemasukans.index') }}" + '?' + params.toString();
             history.replaceState(null, null, newURL);
         }
@@ -134,6 +155,12 @@
             table.draw();
             replaceURLParams()
         })
+
+        $('#kategori_pemasukan').change(function() {
+            table.draw();
+            replaceURLParams()
+        })
+
     </script>
     <script>
         var start = {{ $microFrom }}

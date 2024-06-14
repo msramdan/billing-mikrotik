@@ -23,6 +23,28 @@
     </div>
     <div class="col-md-6">
         <div class="form-group">
+            <label for="wilayah-odcp">{{ __('Kategori pengeluaran') }}</label>
+            <select class="form-select @error('category_pengeluaran_id') is-invalid @enderror" name="category_pengeluaran_id" id="wilayah-odcp"
+                class="form-control" required>
+                <option value="" selected disabled>-- {{ __('Select') }} --</option>
+
+                @foreach ($categoryPengeluarans as $row)
+                    <option value="{{ $row->id }}"
+                        {{ isset($pengeluaran) && $pengeluaran->category_pengeluaran_id == $row->id ? 'selected' : (old('category_pengeluaran_id') == $row->id ? 'selected' : '') }}>
+                        {{ $row->nama_kategori_pengeluaran }}
+                    </option>
+                @endforeach
+            </select>
+            @error('category_pengeluaran_id')
+                <span class="text-danger">
+                    {{ $message }}
+                </span>
+            @enderror
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
             <label for="keterangan">{{ __('Keterangan') }}</label>
             <textarea name="keterangan" id="keterangan" class="form-control @error('keterangan') is-invalid @enderror" placeholder="{{ __('Keterangan') }}" required>{{ isset($pengeluaran) ? $pengeluaran->keterangan : old('keterangan') }}</textarea>
             @error('keterangan')

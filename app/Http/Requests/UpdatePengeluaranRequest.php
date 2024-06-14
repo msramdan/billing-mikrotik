@@ -27,6 +27,7 @@ class UpdatePengeluaranRequest extends FormRequest
             'nominal' => 'required|numeric',
 			'tanggal' => 'required',
 			'keterangan' => 'required|string',
+            'category_pengeluaran_id' => 'required',
         ];
     }
 }

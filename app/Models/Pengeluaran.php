@@ -21,7 +21,7 @@ class Pengeluaran extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['nominal','company_id', 'tanggal', 'keterangan'];
+    protected $fillable = ['nominal','company_id', 'tanggal', 'keterangan','category_pengeluaran_id'];
 
     /**
      * The attributes that should be cast.

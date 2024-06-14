@@ -17,8 +17,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('company_id')->constrained('companies')->restrictOnUpdate()->cascadeOnDelete();
             $table->integer('nominal');
-			$table->dateTime('tanggal');
-			$table->text('keterangan');
+            $table->dateTime('tanggal');
+            $table->text('keterangan');
+            $table->foreignId('category_pengeluaran_id')->nullable()->constrained('category_pengeluarans')->restrictOnUpdate()->nullOnDelete();
             $table->timestamps();
         });
     }

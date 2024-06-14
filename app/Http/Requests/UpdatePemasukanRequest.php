@@ -27,6 +27,7 @@ class UpdatePemasukanRequest extends FormRequest
             'nominal' => 'required|numeric',
 			'tanggal' => 'required',
 			'keterangan' => 'required|string',
+            'category_pemasukan_id' => 'required',
         ];
     }
 }

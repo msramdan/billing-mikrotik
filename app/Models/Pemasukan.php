@@ -21,7 +21,7 @@ class Pemasukan extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['nominal', 'tanggal','company_id', 'keterangan'];
+    protected $fillable = ['nominal', 'tanggal','company_id', 'keterangan','category_pemasukan_id'];
 
     /**
      * The attributes that should be cast.

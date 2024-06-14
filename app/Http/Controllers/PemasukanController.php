@@ -6,6 +6,7 @@ use App\Models\Pemasukan;
 use App\Http\Requests\{StorePemasukanRequest, UpdatePemasukanRequest};
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PemasukanController extends Controller
 {
@@ -25,23 +26,32 @@ class PemasukanController extends Controller
     public function index(Request $request)
     {
         if (request()->ajax()) {
-            $pemasukans = Pemasukan::where('pemasukans.company_id', '=', session('sessionCompany'));
+            $pemasukans = DB::table('pemasukans')
+                ->leftJoin('category_pemasukans', 'pemasukans.category_pemasukan_id', '=', 'category_pemasukans.id')
+                ->where('pemasukans.company_id', '=', session('sessionCompany'))
+                ->select('pemasukans.*', 'category_pemasukans.nama_kategori_pemasukan');
             $start_date = intval($request->query('start_date'));
             $end_date = intval($request->query('end_date'));
+            $kategori_pemasukan = intval($request->query('kategori_pemasukan'));
 
             if (isset($start_date) && !empty($start_date)) {
                 $from = date("Y-m-d H:i:s", substr($request->query('start_date'), 0, 10));
-                $pemasukans = $pemasukans->where('tanggal', '>=', $from);
+                $pemasukans = $pemasukans->where('pemasukans.tanggal', '>=', $from);
             } else {
                 $from = date('Y-m-d') . " 00:00:00";
-                $pemasukans = $pemasukans->where('tanggal', '>=', $from);
+                $pemasukans = $pemasukans->where('pemasukans.tanggal', '>=', $from);
             }
             if (isset($end_date) && !empty($end_date)) {
                 $to = date("Y-m-d H:i:s", substr($request->query('end_date'), 0, 10));
-                $pemasukans = $pemasukans->where('tanggal', '<=', $to);
+                $pemasukans = $pemasukans->where('pemasukans.tanggal', '<=', $to);
             } else {
                 $to = date('Y-m-d') . " 23:59:59";
-                $pemasukans = $pemasukans->where('tanggal', '<=', $to);
+                $pemasukans = $pemasukans->where('pemasukans.tanggal', '<=', $to);
+            }
+            if (isset($kategori_pemasukan) && !empty($kategori_pemasukan)) {
+                if ($kategori_pemasukan != 'All') {
+                    $pemasukans = $pemasukans->where('pemasukans.category_pemasukan_id', $kategori_pemasukan);
+                }
             }
             $pemasukans = $pemasukans->orderBy('pemasukans.id', 'DESC');
 
@@ -49,6 +59,9 @@ class PemasukanController extends Controller
                 ->addIndexColumn()
                 ->addColumn('nominal', function ($row) {
                     return rupiah($row->nominal);
+                })
+                ->addColumn('nama_kategori_pemasukan', function ($row) {
+                    return isset($row->nama_kategori_pemasukan) ? $row->nama_kategori_pemasukan : '-';
                 })
                 ->addColumn('keterangan', function ($row) {
                     return str($row->keterangan)->limit(100);
@@ -63,9 +76,14 @@ class PemasukanController extends Controller
         $microTo = strtotime($to) * 1000;
         $start_date = $request->query('start_date') !== null ? intval($request->query('start_date')) : $microFrom;
         $end_date = $request->query('end_date') !== null ? intval($request->query('end_date')) : $microTo;
+        $kategori_pemasukan = $request->query('kategori_pemasukan') !== null ? intval($request->query('kategori_pemasukan')) : null;
+
+        $categoryPemasukans = DB::table('category_pemasukans')->get();
         return view('pemasukans.index', [
             'microFrom' => $start_date,
             'microTo' => $end_date,
+            'kategori_pemasukan' => $kategori_pemasukan,
+            'categoryPemasukans' => $categoryPemasukans,
         ]);
     }
 
@@ -76,7 +94,8 @@ class PemasukanController extends Controller
      */
     public function create()
     {
-        return view('pemasukans.create');
+        $categoryPemasukans = DB::table('category_pemasukans')->get();
+        return view('pemasukans.create', compact('categoryPemasukans'));
     }
 
     /**
@@ -115,7 +134,8 @@ class PemasukanController extends Controller
      */
     public function edit(Pemasukan $pemasukan)
     {
-        return view('pemasukans.edit', compact('pemasukan'));
+        $categoryPemasukans = DB::table('category_pemasukans')->get();
+        return view('pemasukans.edit', compact('pemasukan', 'categoryPemasukans'));
     }
 
     /**

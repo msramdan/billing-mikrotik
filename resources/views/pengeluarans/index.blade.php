@@ -47,6 +47,20 @@
                                         <input type="hidden" name="end_date" id="end_date" value="{{ $microTo ?? '' }}">
                                     </div>
                                 </div>
+                                <div class="col-md-2">
+                                    <div class="input-group mb-4">
+                                        <select name="kategori_pengeluaran" id="kategori_pengeluaran" class="form-control select2-form">
+                                            <option value="All">-- All kategori pengeluaran --</option>
+                                            @foreach ($categoryPengeluarans as $row)
+                                                <option value="{{ $row->id }}"
+                                                    {{ $kategori_pengeluaran == $row->id ? 'selected' : '' }}>
+                                                    {{ $row->nama_kategori_pengeluaran }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
                             </div>
                             <div class="table-responsive p-1">
                                 <table class="table table-striped" id="data-table" width="100%">
@@ -55,6 +69,7 @@
                                             <th>#</th>
                                             <th>{{ __('Nominal') }}</th>
                                             <th>{{ __('Tanggal') }}</th>
+                                            <th>{{ __('Kategori pengeluaran') }}</th>
                                             <th>{{ __('Keterangan') }}</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
@@ -97,6 +112,10 @@
                 name: 'tanggal',
             },
             {
+                data: 'nama_kategori_pengeluaran',
+                name: 'nama_kategori_pengeluaran',
+            },
+            {
                 data: 'keterangan',
                 name: 'keterangan',
             },
@@ -116,6 +135,7 @@
                 data: function(s) {
                     s.start_date = $("#start_date").val();
                     s.end_date = $("#end_date").val();
+                    s.kategori_pengeluaran = $('select[name=kategori_pengeluaran] option').filter(':selected').val()
                 }
             },
             columns: columns
@@ -125,13 +145,20 @@
             var params = new URLSearchParams();
             var startDate = $("#start_date").val();
             var endDate = $("#end_date").val();
+            var kategoriPengeluaran = $('select[name=kategori_pengeluaran]').val();
             if (startDate) params.set('start_date', startDate);
             if (endDate) params.set('end_date', endDate);
-            var newURL = "{{ route('pemasukans.index') }}" + '?' + params.toString();
+            if (kategoriPengeluaran) params.set('kategori_pengeluaran', kategoriPengeluaran);
+            var newURL = "{{ route('pengeluarans.index') }}" + '?' + params.toString();
             history.replaceState(null, null, newURL);
         }
 
         $('#daterange-btn').change(function() {
+            table.draw();
+            replaceURLParams()
+        })
+
+        $('#kategori_pengeluaran').change(function() {
             table.draw();
             replaceURLParams()
         })
@@ -163,6 +190,7 @@
                     $('#daterange-btn span').html(start.format('DD MMM YYYY') + ' - ' + end.format('DD MMM YYYY'));
                 }
             });
+
 
         function isDate(val) {
             var d = Date.parse(val);
