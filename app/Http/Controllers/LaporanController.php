@@ -109,7 +109,7 @@ class LaporanController extends Controller
                 DB::raw('COUNT(pemasukans.id) as total_transaksi'),
                 DB::raw('SUM(pemasukans.nominal) as total_nominal')
             )
-            ->whereBetween('pengeluarans.tanggal', [$start, $end])
+            ->whereBetween('pemasukans.tanggal', [$start, $end])
             ->groupBy('pemasukans.category_pemasukan_id', 'category_pemasukans.nama_kategori_pemasukan')
             ->get();
 
