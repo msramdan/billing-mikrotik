@@ -148,6 +148,20 @@
                             <center><b>Silahkan isi form Terlebih dahulu untuk melihat tagihan</b></center>
                         @else
                             @if ($tagihan != null)
+
+                                @if ($tagihanCount > 0)
+                                    <div class="alert alert-danger" role="alert">
+                                       <b>Anda mempunya tunggakan {{$tagihanCount}} bulan pembayaran. Harap segera bayarkan !!!</b>
+                                    </div>
+                                @else
+                                    <div class="alert alert-success" role="alert">
+                                       <b>Terimakasih, tagihan internet anda sudah terbayar semua !!!</b>
+                                    </div>
+                                @endif
+
+
+
+
                                 <table class="table table-hover table-striped">
                                     <tr>
                                         <td class="fw-bold">{{ __('ID Pelanggan') }}</td>

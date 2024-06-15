@@ -26,33 +26,22 @@ class WebController extends Controller
             $no_tagihan = '';
         }
         $metodeBayar = [];
+
         $tagihan = DB::table('tagihans')
             ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
             ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.no_layanan', 'pelanggans.company_id')
-            ->where('tagihans.no_tagihan', '=', $no_tagihan)
+            ->where('pelanggans.no_layanan', '=', $no_tagihan)
+            ->where('tagihans.status_bayar', '=', 'Belum Bayar')
+            ->orderBy('tagihans.id', 'asc')
             ->first();
 
-        if (!$tagihan) {
-            $tagihan = DB::table('tagihans')
+        if ($tagihan) {
+            $tagihanCount = DB::table('tagihans')
                 ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
-                ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.no_layanan', 'pelanggans.company_id')
                 ->where('pelanggans.no_layanan', '=', $no_tagihan)
                 ->where('tagihans.status_bayar', '=', 'Belum Bayar')
-                ->orderBy('tagihans.id', 'asc')
-                ->first();
-        }
+                ->count();
 
-        if (!$tagihan) {
-            $tagihan = DB::table('tagihans')
-                ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
-                ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.no_layanan', 'pelanggans.company_id')
-                ->where('pelanggans.no_layanan', '=', $no_tagihan)
-                ->orderBy('tagihans.id', 'desc')
-                ->first();
-        }
-
-
-        if ($tagihan) {
             // remove session company
             $request->session()->forget('sessionCompanyUser');
             // set session company
@@ -72,10 +61,19 @@ class WebController extends Controller
                     die();
                 }
             }
+        } else {
+            $tagihan = DB::table('tagihans')
+                ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
+                ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.no_layanan', 'pelanggans.company_id')
+                ->where('pelanggans.no_layanan', '=', $no_tagihan)
+                ->orderBy('tagihans.id', 'desc')
+                ->first();
+            $tagihanCount = 0;
         }
         return view('frontend.index', [
             'no_tagihan' => $no_tagihan,
             'tagihan' => $tagihan,
+            'tagihanCount' => $tagihanCount,
             'metodeBayar' => $metodeBayar,
         ]);
     }
