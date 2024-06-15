@@ -109,7 +109,7 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="card text-white bg-primary mb-3">
-                    <div class="card-header"> <b>Masukan ID Pelanggan/No Tagihan</b></div>
+                    <div class="card-header"> <b>Masukan ID Pelanggan</b></div>
                     <form action="">
                         <div class="card-body special-card">
                             @if ($no_tagihan != '')

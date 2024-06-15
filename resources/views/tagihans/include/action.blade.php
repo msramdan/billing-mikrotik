@@ -31,6 +31,16 @@
                                 <input type="hidden" name="pelanggan_id" value="{{ $model->pelanggan_id }}">
                                 <div class="col-md-12">
                                     <div class="form-group">
+                                        <label for="no-tagihan">{{ __('ID Pelanggan') }}</label>
+                                        <div class="input-group mb-3">
+                                            <input type="text" name="no_layanan" required class="form-control" readonly
+                                                value="{{ $model->no_layanan }}" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="form-group">
                                         <label for="no-tagihan">{{ __('No Tagihan') }}</label>
                                         <div class="input-group mb-3">
                                             <input type="text" name="no_tagihan" required class="form-control" readonly
@@ -182,7 +192,7 @@
     $(document).ready(function(){
         // Semula sembunyikan input Bank Account
         $('.bank-account-field').hide();
-        
+
         // Ketika dropdown Metode Bayar berubah
         $('select[name="metode_bayar"]').change(function(){
             // Periksa apakah nilai yang dipilih adalah "Transfer Bank"

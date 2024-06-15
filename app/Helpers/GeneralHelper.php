@@ -172,6 +172,7 @@ function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima, $footer
     if ($typePesan == 'bayar') {
         $message = 'Yth. ' . $request->nama_pelanggan . "\n\n";
         $message .= "Berikut ini adalah data pembayaran yang telah kami terima : \n\n";
+        $message .= "*ID Pelanggan :* " . $request->no_layanan . "\n";
         $message .= "*No Tagihan :* " . $request->no_tagihan . "\n";
         $message .= '*Nama Pelanggan :* ' . $request->nama_pelanggan . "\n";
         $message .= '*Nominal :* ' . rupiah($request->nominal) . "\n";
@@ -183,7 +184,7 @@ function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima, $footer
         $message .= 'Yth. *' . $request->nama . '*' . "\n\n";
 
         $message .= 'Kami sampaikan tagihan layanan internet bulan *' . tanggal_indonesia($request->periode)  . '*' . "\n";
-        $message .= 'Dengan no tagihan *' . $request->no_tagihan . '*' . "\n\n";
+        $message .= 'Dengan ID Pelanggan *' . $request->no_layanan . '*' . "\n\n";
         $message .= 'Sebesar *' . rupiah($request->total_bayar) . '*' . "\n\n";
         $message .= 'Pembayaran paling lambat di tanggal *' . addHari($request->tanggal_create_tagihan, $request->jatuh_tempo) . '* Untuk Menghindari Isolir *(kecepatan menurun otomatis)* di jaringan anda.' . " \n\n";
         $message .= $footer;

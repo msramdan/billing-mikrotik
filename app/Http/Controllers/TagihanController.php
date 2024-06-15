@@ -266,7 +266,7 @@ class TagihanController extends Controller
         $waGateway = getCompany();
         $tagihans = DB::table('tagihans')
             ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
-            ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.no_wa', 'pelanggans.jatuh_tempo')
+            ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.no_wa', 'pelanggans.no_layanan', 'pelanggans.jatuh_tempo')
             ->where('tagihans.id', '=', $tagihan_id)->first();
         if ($waGateway->is_active == 'Yes') {
             try {
@@ -313,7 +313,7 @@ class TagihanController extends Controller
                 if ($waGateway->is_active == 'Yes') {
                     $req = DB::table('tagihans')
                         ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
-                        ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.no_wa', 'pelanggans.jatuh_tempo')
+                        ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.no_wa', 'pelanggans.no_layanan', 'pelanggans.jatuh_tempo')
                         ->where('tagihans.id', '=', $row->id)->first();
                     sendNotifWa($waGateway->url_wa_gateway, $waGateway->api_key_wa_gateway, $req, 'tagihan', $req->no_wa, $waGateway->footer_pesan_wa_tagihan);
                 }
