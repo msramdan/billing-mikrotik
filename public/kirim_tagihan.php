@@ -9,7 +9,7 @@ $queryCekNotifWa = mysqli_query($koneksi, $cekNotifWa);
 $datanya = mysqli_fetch_array($queryCekNotifWa);
 
 if ($datanya['is_active'] == 'Yes') {
-    $sql = "SELECT tagihans.*,tagihans.id as id_tagihan,companies.*,pelanggans.nama,pelanggans.no_wa, pelanggans.kirim_tagihan_wa,pelanggans.jatuh_tempo FROM tagihans
+    $sql = "SELECT tagihans.*,tagihans.id as id_tagihan,companies.*,pelanggans.nama,pelanggans.no_wa,pelanggans.no_layanan, pelanggans.kirim_tagihan_wa,pelanggans.jatuh_tempo FROM tagihans
     join companies on companies.id = tagihans.company_id
     join pelanggans on pelanggans.id = tagihans.pelanggan_id
     where tagihans.status_bayar='Belum Bayar' and is_send='No' limit 10";
@@ -19,7 +19,7 @@ if ($datanya['is_active'] == 'Yes') {
             $url = $datanya['url'] . 'send-message';
             $message = 'Pelanggan SawitSkyLink Yth. ' . $data['nama'] . "\n\n";
             $message .= 'Kami sampaikan tagihan layanan internet bulan *' . tanggal_indonesia($data['periode'])  . '*' . "\n";
-            $message .= 'Dengan ID Pelanggan *' . $data['no_tagihan'] . '* sebesar *' . rupiah($data['total_bayar']) . '*' . "\n";
+            $message .= 'Dengan ID Pelanggan *' . $data['no_layanan'] . '* sebesar *' . rupiah($data['total_bayar']) . '*' . "\n";
             $message .= 'Pembayaran paling lambat di tanggal *' . addHari($data['tanggal_create_tagihan'], $data['jatuh_tempo']) . '* Untuk Menghindari Isolir off wifi otomatis di tempat anda.' . " \n\n";
             $message .= "*Note : Abaikan pesan ini jika sudah berbayar* \n\n";
             $message .= "Anda dapat melakukan pembayaran tagihan dengan cara : \n";
