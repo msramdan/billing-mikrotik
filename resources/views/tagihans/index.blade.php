@@ -96,6 +96,7 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
+                                            <th>{{ __('No HP/Wa') }}</th>
                                             <th>{{ __('No Tagihan') }}</th>
                                             <th>{{ __('Pelanggan') }}</th>
                                             <th>{{ __('Total Bayar') }}</th>
@@ -181,6 +182,10 @@
                 "orderable": false,
                 "data": null,
                 "defaultContent": ''
+            },
+            {
+                data: 'no_wa',
+                name: 'no_wa',
             },
             {
                 data: 'no_tagihan',

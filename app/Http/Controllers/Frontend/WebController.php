@@ -28,9 +28,28 @@ class WebController extends Controller
         $metodeBayar = [];
         $tagihan = DB::table('tagihans')
             ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
-            ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.company_id')
+            ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.no_wa', 'pelanggans.company_id')
             ->where('tagihans.no_tagihan', '=', $no_tagihan)
             ->first();
+
+        if (!$tagihan) {
+            $tagihan = DB::table('tagihans')
+                ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
+                ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.no_wa', 'pelanggans.company_id')
+                ->where('pelanggans.no_wa', '=', $no_tagihan)
+                ->where('tagihans.status_bayar', '=', 'Belum Bayar')
+                ->orderBy('tagihans.id', 'asc')
+                ->first();
+        }
+
+        if (!$tagihan) {
+            $tagihan = DB::table('tagihans')
+                ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
+                ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.no_wa', 'pelanggans.company_id')
+                ->where('pelanggans.no_wa', '=', $no_tagihan)
+                ->orderBy('tagihans.id', 'desc')
+                ->first();
+        }
 
 
         if ($tagihan) {

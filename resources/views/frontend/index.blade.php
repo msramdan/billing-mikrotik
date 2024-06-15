@@ -109,7 +109,7 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="card text-white bg-primary mb-3">
-                    <div class="card-header"> <b>Masukan No Tagihan</b></div>
+                    <div class="card-header"> <b>Masukan No Wa/No Tagihan</b></div>
                     <form action="">
                         <div class="card-body special-card">
                             @if ($no_tagihan != '')
@@ -149,6 +149,10 @@
                         @else
                             @if ($tagihan != null)
                                 <table class="table table-hover table-striped">
+                                    <tr>
+                                        <td class="fw-bold">{{ __('No Wa') }}</td>
+                                        <td>{{ $tagihan->no_wa }}</td>
+                                    </tr>
                                     <tr>
                                         <td class="fw-bold">{{ __('No Tagihan') }}</td>
                                         <td>{{ $tagihan->no_tagihan }}</td>
