@@ -688,7 +688,7 @@
         function generateNoLayanan() {
             let password = "";
             const allChars = "0123456789";
-            passwordLength = 12;
+            passwordLength = 6;
             for (let i = 0; i < passwordLength; i++) {
                 const randomNumber = Math.floor(Math.random() * allChars.length);
                 password += allChars.substring(randomNumber, randomNumber + 1);
