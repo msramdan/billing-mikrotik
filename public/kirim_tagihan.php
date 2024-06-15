@@ -19,7 +19,7 @@ if ($datanya['is_active'] == 'Yes') {
             $url = $datanya['url'] . 'send-message';
             $message = 'Pelanggan SawitSkyLink Yth. ' . $data['nama'] . "\n\n";
             $message .= 'Kami sampaikan tagihan layanan internet bulan *' . tanggal_indonesia($data['periode'])  . '*' . "\n";
-            $message .= 'Dengan no tagihan *' . $data['no_tagihan'] . '* sebesar *' . rupiah($data['total_bayar']) . '*' . "\n";
+            $message .= 'Dengan ID Pelanggan *' . $data['no_tagihan'] . '* sebesar *' . rupiah($data['total_bayar']) . '*' . "\n";
             $message .= 'Pembayaran paling lambat di tanggal *' . addHari($data['tanggal_create_tagihan'], $data['jatuh_tempo']) . '* Untuk Menghindari Isolir off wifi otomatis di tempat anda.' . " \n\n";
             $message .= "*Note : Abaikan pesan ini jika sudah berbayar* \n\n";
             $message .= "Anda dapat melakukan pembayaran tagihan dengan cara : \n";
