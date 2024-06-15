@@ -9,7 +9,7 @@ $pesan = "✅✅ [CRON SEND TAGIHAN] ✅✅\n";
 $pesan .= "Mulai Cron :  " . date('Y-m-d H:i:s') . "\n";
 sendTelegramNotification($pesan);
 
-$sql = "SELECT tagihans.*,tagihans.id as id_tagihan,companies.*,pelanggans.nama,pelanggans.no_wa, pelanggans.kirim_tagihan_wa,pelanggans.jatuh_tempo FROM tagihans
+$sql = "SELECT tagihans.*,tagihans.id as id_tagihan,companies.*,pelanggans.nama,pelanggans.no_wa,pelanggans.no_layanan, pelanggans.kirim_tagihan_wa,pelanggans.jatuh_tempo FROM tagihans
 join companies on companies.id = tagihans.company_id
 join pelanggans on pelanggans.id = tagihans.pelanggan_id
 where tagihans.status_bayar='Belum Bayar' and is_send='No' limit 10";
@@ -20,7 +20,7 @@ while ($data = mysqli_fetch_array($query)) {
         $message = 'Pelanggan ' . $data['nama_perusahaan'] . "\n\n";
         $message .= 'Yth. *' . $data['nama'] . '*' . "\n\n";
         $message .= 'Kami sampaikan tagihan layanan internet bulan *' . tanggal_indonesia($data['periode'])  . '*' . "\n";
-        $message .= 'ID Pelanggan *' . $data['no_tagihan'] . '*' . "\n\n";
+        $message .= 'ID Pelanggan *' . $data['no_layanan'] . '*' . "\n\n";
         $message .= 'sebesar *' . rupiah($data['total_bayar']) . '*' . "\n\n";
         $message .= 'Pembayaran paling lambat di tanggal *' . addHari($data['tanggal_create_tagihan'], $data['jatuh_tempo']) . '*  Untuk Menghindari Isolir *(kecepatan menurun otomatis)* di jaringan anda.' . " \n\n";
         $message .= $data['footer_pesan_wa_tagihan'];
