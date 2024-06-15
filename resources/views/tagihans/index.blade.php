@@ -96,7 +96,7 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>{{ __('No HP/Wa') }}</th>
+                                            <th>{{ __('ID Pelanggan') }}</th>
                                             <th>{{ __('No Tagihan') }}</th>
                                             <th>{{ __('Pelanggan') }}</th>
                                             <th>{{ __('Total Bayar') }}</th>
@@ -184,8 +184,8 @@
                 "defaultContent": ''
             },
             {
-                data: 'no_wa',
-                name: 'no_wa',
+                data: 'no_layanan',
+                name: 'no_layanan',
             },
             {
                 data: 'no_tagihan',

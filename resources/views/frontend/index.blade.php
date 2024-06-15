@@ -150,8 +150,8 @@
                             @if ($tagihan != null)
                                 <table class="table table-hover table-striped">
                                     <tr>
-                                        <td class="fw-bold">{{ __('No Wa') }}</td>
-                                        <td>{{ $tagihan->no_wa }}</td>
+                                        <td class="fw-bold">{{ __('ID Pelanggan') }}</td>
+                                        <td>{{ $tagihan->no_layanan }}</td>
                                     </tr>
                                     <tr>
                                         <td class="fw-bold">{{ __('No Tagihan') }}</td>

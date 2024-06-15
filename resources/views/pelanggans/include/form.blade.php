@@ -64,12 +64,12 @@
     </div>
     <div class="col-md-6">
         <div class="form-group">
-            <label for="no-layanan">{{ __('No Layanan') }}</label>
+            <label for="no-layanan">{{ __('ID Pelanggan') }}</label>
             <div class="input-group mb-3">
                 <input type="text" name="no_layanan" required readonly id="no-layanan"
                     class="form-control @error('no_layanan') is-invalid @enderror"
                     value="{{ isset($pelanggan) ? $pelanggan->no_layanan : old('no_layanan') }}"
-                    placeholder="{{ __('No Layanan') }}" />
+                    placeholder="{{ __('ID Pelanggan') }}" />
                 <div class="input-group-prepend">
                     <button class="btn btn-success" type="button" onclick="generateNoLayanan()">Generate</button>
                 </div>

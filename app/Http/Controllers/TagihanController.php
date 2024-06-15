@@ -36,7 +36,7 @@ class TagihanController extends Controller
                 ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
                 ->leftJoin('users', 'tagihans.user_id', '=', 'users.id')
                 ->where('tagihans.company_id', '=', session('sessionCompany'))
-                ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.no_wa', 'pelanggans.id as pelanggan_id', 'users.name as nama_user');
+                ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.no_layanan', 'pelanggans.id as pelanggan_id', 'users.name as nama_user');
 
             if (isset($pelanggans) && !empty($pelanggans)) {
                 if ($pelanggans != 'All') {
