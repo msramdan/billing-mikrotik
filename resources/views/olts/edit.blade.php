@@ -42,6 +42,7 @@
 
                                 <button type="submit" class="btn btn-primary">{{ __('Update') }}</button>
                             </form>
+                            <p style="color: red; float:left">Note : (*) Wajib diisi</p>
                         </div>
                     </div>
                 </div>

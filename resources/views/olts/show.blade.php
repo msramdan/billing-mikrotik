@@ -47,24 +47,36 @@
                                         <td>{{ $olt->host }}</td>
                                     </tr>
                                     <tr>
-                                        <td class="fw-bold">{{ __('Port') }}</td>
-                                        <td>{{ $olt->port }}</td>
+                                        <td class="fw-bold">{{ __('Telnet Port') }}</td>
+                                        <td>{{ $olt->telnet_port }}</td>
                                     </tr>
                                     <tr>
-                                        <td class="fw-bold">{{ __('Username') }}</td>
-                                        <td>{{ $olt->username }}</td>
+                                        <td class="fw-bold">{{ __('Telnet Username') }}</td>
+                                        <td>{{ $olt->telnet_username }}</td>
                                     </tr>
                                     <tr>
-                                        <td class="fw-bold">{{ __('Password') }}</td>
-                                        <td>{{ $olt->password }}</td>
+                                        <td class="fw-bold">{{ __('Telnet Password') }}</td>
+                                        <td>{{ $olt->telnet_password }}</td>
                                     </tr>
                                     <tr>
-                                        <td class="fw-bold">{{ __('Created at') }}</td>
-                                        <td>{{ $olt->created_at->format('d/m/Y H:i') }}</td>
+                                        <td class="fw-bold">{{ __('SNMP Port') }}</td>
+                                        <td>{{ $olt->snmp_port }}</td>
                                     </tr>
                                     <tr>
-                                        <td class="fw-bold">{{ __('Updated at') }}</td>
-                                        <td>{{ $olt->updated_at->format('d/m/Y H:i') }}</td>
+                                        <td class="fw-bold">{{ __('Ro Community') }}</td>
+                                        <td>{{ $olt->ro_community }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('IP Acs') }}</td>
+                                        <td>{{ $olt->ip_acs }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Acs Username') }}</td>
+                                        <td>{{ $olt->acs_username }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ __('Acs Password') }}</td>
+                                        <td>{{ $olt->acs_password }}</td>
                                     </tr>
                                 </table>
                             </div>

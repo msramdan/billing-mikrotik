@@ -24,6 +24,9 @@ return new class extends Migration
             $table->string('telnet_password');
             $table->string('snmp_port');
             $table->string('ro_community');
+            $table->string('ip_acs')->nullable();
+            $table->string('acs_username')->nullable();
+            $table->string('acs_password')->nullable();
             $table->timestamps();
         });
     }

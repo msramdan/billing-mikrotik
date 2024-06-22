@@ -47,6 +47,9 @@
 											<th>{{ __('Telnet Password') }}</th>
                                             <th>{{ __('Snmp Port') }}</th>
                                             <th>{{ __('Ro Community') }}</th>
+                                            <th>{{ __('IP Acs') }}</th>
+                                            <th>{{ __('Acs Username') }}</th>
+                                            <th>{{ __('Acs Password') }}</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
@@ -105,6 +108,18 @@
                 {
                     data: 'ro_community',
                     name: 'ro_community',
+                },
+                {
+                    data: 'ip_acs',
+                    name: 'ip_acs',
+                },
+                {
+                    data: 'acs_username',
+                    name: 'acs_username',
+                },
+                {
+                    data: 'acs_password',
+                    name: 'acs_password',
                 },
                 {
                     data: 'action',

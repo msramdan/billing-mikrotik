@@ -32,6 +32,9 @@ class UpdateOltRequest extends FormRequest
             'telnet_password' => 'required|string',
             'snmp_port' => 'required',
             'ro_community' => 'required|string',
+            'ip_acs' => 'nullable',
+            'acs_username' => 'nullable',
+            'acs_password' => 'nullable',
         ];
     }
 }

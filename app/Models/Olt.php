@@ -21,5 +21,5 @@ class Olt extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['name', 'company_id', 'type', 'host', 'telnet_port', 'telnet_username', 'telnet_password', 'snmp_port', 'ro_community'];
+    protected $fillable = ['name', 'company_id', 'type', 'host', 'telnet_port', 'telnet_username', 'telnet_password', 'snmp_port', 'ro_community','ip_acs','acs_username','acs_password'];
 }

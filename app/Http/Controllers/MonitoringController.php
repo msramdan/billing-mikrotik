@@ -49,7 +49,8 @@ class MonitoringController extends Controller
             'uncf' =>  count($list_uncf),
             'groupedCounts' => $hasil['groupedCounts'],
             'missing_values' => $result["missing_values"],
-            'max_values' => $result["max_values"]
+            'max_values' => $result["max_values"],
+            'oltSettings' => $hasil["oltSettings"]
         ]);
     }
 
@@ -433,11 +434,16 @@ class MonitoringController extends Controller
                 "tcon_profile" => $request->modal_tcon,
                 "onu_name" => $request->modal_onu_name,
                 "cvlan" => $request->modal_cvlan,
-                "service_port2" => $request->modal_service_port2,
+                "service_port2" => $request->modal_service_port2 ?? '',
                 "profile_vlan" => $request->modal_profile_vlan,
-                "wifi_port" => $request->modal_port_wifi,
-                "eth1" => $request->modal_port_eht1,
-                "eth2" => $request->modal_port_eht2
+                "wifi_port" => $request->modal_port_wifi ?? '',
+                "eth1" => $request->modal_port_eht1 ?? '',
+                "eth2" => $request->modal_port_eht2 ?? '',
+                "service_port3" =>  $request->modal_service_port3 ?? '',
+                "tr_mode" => $request->modal_tr_mode ?? 'No',
+                "ipacs" => $request->modal_ipacs ?? '',
+                "user_acs" => $request->modal_user_acs ?? '',
+                "pass_acs" => $request->modal_pass_acs ?? ''
             ];
 
             $client = new \GuzzleHttp\Client();
@@ -480,15 +486,19 @@ class MonitoringController extends Controller
                     "tcon_profile" => $request->modal_tcon,
                     "onu_name" => $request->modal_onu_name,
                     "cvlan" => $request->modal_cvlan,
-                    "service_port2" => $request->modal_service_port2,
+                    "service_port2" => $request->modal_service_port2 ?? '',
                     "pppoe_username" => $request->modal_username,
                     "pppoe_password" => $request->modal_password,
                     "profile_vlan" => $request->modal_profile_vlan,
-                    "wifi_port" => $request->modal_port_wifi,
-                    "eth1" => $request->modal_port_eht1,
-                    "eth2" => $request->modal_port_eht2
+                    "wifi_port" => $request->modal_port_wifi ?? '',
+                    "eth1" => $request->modal_port_eht1 ?? '',
+                    "eth2" => $request->modal_port_eht2 ?? '',
+                    "service_port3" =>  $request->modal_service_port3 ?? '',
+                    "tr_mode" => $request->modal_tr_mode ?? 'No',
+                    "ipacs" => $request->modal_ipacs ?? '',
+                    "user_acs" => $request->modal_user_acs ?? '',
+                    "pass_acs" => $request->modal_pass_acs ?? ''
                 ];
-
                 $client = new \GuzzleHttp\Client();
                 $zteServer12 = env('ZTE_SERVER_12');
                 $response = $client->post($zteServer12 . '/register-ppoe', [

@@ -58,7 +58,7 @@ function oltExec()
             'uncf' => $response2,
             'workingCount' => $workingCount,
             'groupedCounts' => $groupedCounts,
-
+            'oltSettings' => $oltSettings,
         ];
     } catch (\Exception $e) {
         dd($e->getMessage());
