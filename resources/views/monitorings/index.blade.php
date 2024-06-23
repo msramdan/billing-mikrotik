@@ -571,21 +571,21 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="modal_ipacs" class="form-label mb-1">IP Acs</label>
-                                    <input type="text" class="form-control" id="modal_ipacs" name="modal_ipacs" value="{{$oltSettings->ip_acs}}"
+                                    <input type="text" class="form-control" id="modal_ipacs" name="modal_ipacs" value="{{ isset($oltSettings->ip_acs) ? $oltSettings->ip_acs : '' }}"
                                         readonly>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="modal_user_acs" class="form-label mb-1">Username Acs</label>
-                                    <input type="text" class="form-control" id="modal_user_acs" name="modal_user_acs" value="{{$oltSettings->acs_username}}"
+                                    <input type="text" class="form-control" id="modal_user_acs" name="modal_user_acs"  value="{{ isset($oltSettings->acs_username) ? $oltSettings->acs_username : '' }}"
                                         readonly>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="modal_pass_acs" class="form-label mb-1">Password Acs</label>
-                                    <input type="text" class="form-control" id="modal_pass_acs" name="modal_pass_acs" value="{{$oltSettings->acs_password}}"
+                                    <input type="text" class="form-control" id="modal_pass_acs" name="modal_pass_acs" value="{{ isset($oltSettings->acs_password) ? $oltSettings->acs_password : '' }}"
                                         readonly>
                                 </div>
                             </div>

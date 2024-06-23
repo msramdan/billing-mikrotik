@@ -33,6 +33,7 @@ class MonitoringController extends Controller
                 'groupedCounts' =>  [],
                 'missing_values' => [],
                 'max_values' => [],
+                'oltSettings' => []
             ]);
         }
         $hasil = oltExec();
