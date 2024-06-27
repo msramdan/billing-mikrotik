@@ -17,8 +17,6 @@ use Illuminate\Support\Facades\Redis;
 
 function oltExec()
 {
-
-
     try {
         $oltSettings = Olt::findOrFail(session('sessionOlt'));
         $postData = [
@@ -42,33 +40,47 @@ function oltExec()
         $zteServer3 = env('ZTE_SERVER_3');
         $promiseApi1 = $client->postAsync($zteServer2 . '/status', ['json' => $postData]);
         $promiseApi2 = $client->postAsync($zteServer3 . '/uncf', ['json' => $postData]);
-        $responses = Promise\Utils::all([$promiseApi1, $promiseApi2])->wait();
-        $response1 = json_decode($responses[0]->getBody()->getContents());
-        $response2 = json_decode($responses[1]->getBody()->getContents());
-        $list_olt = [];
-        $workingCount = 0;
-        $groupedCounts = array();
-        foreach ($onuName as $key => $value) {
-            $list_olt[$key]["index"] = $response1->data[$key]->onu_index;
-            $list_olt[$key]["name"] = trim(str_replace(["STRING:", '"'], ["", ""], $value));
-            $list_olt[$key]["phase"] = $response1->data[$key]->phase;
-            if ($response1->data[$key]->phase === 'working') {
-                $workingCount++;
+
+        try {
+            $responses = Promise\Utils::all([$promiseApi1, $promiseApi2])->wait();
+            $response1 = json_decode($responses[0]->getBody()->getContents());
+            $response2 = json_decode($responses[1]->getBody()->getContents());
+
+            if (!$response1->status) {
+                throw new \Exception('API response 1 status is false');
             }
-            $phase = $response1->data[$key]->phase;
-            if (!isset($groupedCounts[$phase])) {
-                $groupedCounts[$phase] = 0;
+
+            if (!$response2->status) {
+                throw new \Exception('API response 2 status is false');
             }
-            $groupedCounts[$phase]++;
+
+            $list_olt = [];
+            $workingCount = 0;
+            $groupedCounts = array();
+            foreach ($onuName as $key => $value) {
+                $list_olt[$key]["index"] = $response1->data[$key]->onu_index;
+                $list_olt[$key]["name"] = trim(str_replace(["STRING:", '"'], ["", ""], $value));
+                $list_olt[$key]["phase"] = $response1->data[$key]->phase;
+                if ($response1->data[$key]->phase === 'working') {
+                    $workingCount++;
+                }
+                $phase = $response1->data[$key]->phase;
+                if (!isset($groupedCounts[$phase])) {
+                    $groupedCounts[$phase] = 0;
+                }
+                $groupedCounts[$phase]++;
+            }
+            return [
+                'list_olt' => $list_olt,
+                'status' => $response1,
+                'uncf' => $response2,
+                'workingCount' => $workingCount,
+                'groupedCounts' => $groupedCounts,
+                'oltSettings' => $oltSettings,
+            ];
+        } catch (\Exception $e) {
+            dd($e->getMessage());
         }
-        return [
-            'list_olt' => $list_olt,
-            'status' => $response1,
-            'uncf' => $response2,
-            'workingCount' => $workingCount,
-            'groupedCounts' => $groupedCounts,
-            'oltSettings' => $oltSettings,
-        ];
     } catch (\Exception $e) {
         dd($e->getMessage());
     }
