@@ -973,12 +973,12 @@
 @endsection
 
 @push('css')
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.12.0/datatables.min.css" />
+    <link rel="stylesheet" href="{{asset('css/datatables.min.css')}}">
 @endpush
 
 @push('js')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.12.0/datatables.min.js"></script>
+    <script src="{{asset('js/datatables.min.js')}}"></script>
     <script>
         $('#rebootButton').on('click', function() {
             var onuId = $('#modalOnuId').text();
