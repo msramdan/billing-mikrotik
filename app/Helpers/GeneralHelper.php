@@ -12,10 +12,13 @@ use GuzzleHttp\Promise;
 use GuzzleHttp\Client as Client;
 use \RouterOS\Client as RouterOSClient;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redis;
 
 
 function oltExec()
 {
+
+
     try {
         $oltSettings = Olt::findOrFail(session('sessionOlt'));
         $postData = [
@@ -25,8 +28,16 @@ function oltExec()
             'password' => $oltSettings->telnet_password,
         ];
 
+        $key = 'olt_host_' . $oltSettings->host;
+        $cached = Redis::get($key);
+        if (isset($cached)) {
+            $onuName = json_decode($cached);
+        } else {
+            $hostSnmp =  $oltSettings->host . ':' . $oltSettings->snmp_port;
+            $onuName = snmpwalk($hostSnmp, $oltSettings->ro_community, '.1.3.6.1.4.1.3902.1012.3.28.1.1.2');
+            Redis::set($key, json_encode($onuName), 'EX',  env('REDIS_TIME'));
+        }
         $client = new Client();
-        // $zteServer1 = env('ZTE_SERVER_1');
         $zteServer2 = env('ZTE_SERVER_2');
         $zteServer3 = env('ZTE_SERVER_3');
         $promiseApi1 = $client->postAsync($zteServer2 . '/status', ['json' => $postData]);
@@ -34,8 +45,6 @@ function oltExec()
         $responses = Promise\Utils::all([$promiseApi1, $promiseApi2])->wait();
         $response1 = json_decode($responses[0]->getBody()->getContents());
         $response2 = json_decode($responses[1]->getBody()->getContents());
-        $hostSnmp =  $oltSettings->host . ':' . $oltSettings->snmp_port;
-        $onuName = snmpwalk($hostSnmp, $oltSettings->ro_community, '.1.3.6.1.4.1.3902.1012.3.28.1.1.2');
         $list_olt = [];
         $workingCount = 0;
         $groupedCounts = array();

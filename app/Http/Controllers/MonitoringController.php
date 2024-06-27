@@ -261,6 +261,9 @@ class MonitoringController extends Controller
             // Check the response from the Telnet server and return a corresponding JSON response
             $responseData = json_decode($response->getBody(), true);
             if ($responseData['status']) {
+                // delete redis
+                $key = 'olt_host_' . $oltSettings->host;
+                Redis::del($key);
                 return response()->json([
                     'success' => true,
                     'message' => $responseData['message'],
@@ -454,6 +457,9 @@ class MonitoringController extends Controller
             ]);
             $responseData = json_decode($response->getBody(), true);
             if ($responseData['status']) {
+                // delete redis
+                $key = 'olt_host_' . $oltSettings->host;
+                Redis::del($key);
                 return redirect()
                     ->route('monitorings.index')
                     ->with('success', __('Submit ONU successfully.'));
@@ -507,6 +513,9 @@ class MonitoringController extends Controller
                 ]);
                 $responseData = json_decode($response->getBody(), true);
                 if ($responseData['status']) {
+                    // delete redis
+                    $key = 'olt_host_' . $oltSettings->host;
+                    Redis::del($key);
                     return redirect()
                         ->route('monitorings.index')
                         ->with('success', __('Submit ONU successfully.'));
