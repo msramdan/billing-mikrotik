@@ -47,12 +47,18 @@ function oltExec()
             $response2 = json_decode($responses[1]->getBody()->getContents());
 
             if (!$response1->status) {
-                dd($response1);
+                echo "<pre>";
+                var_dump('response1');
+                var_dump($response1);
+                die();
                 throw new \Exception('API response 1 status is false');
             }
 
             if (!$response2->status) {
-                dd($response2);
+                echo "<pre>";
+                var_dump('response2');
+                var_dump($response2);
+                die();
                 throw new \Exception('API response 2 status is false');
             }
 
