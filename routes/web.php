@@ -120,7 +120,7 @@ Route::middleware(['auth', 'web', 'cek-expired'])->group(function () {
         Route::get('invoice/{id}', 'invoice')->name('invoice.pdf');
         Route::post('/bayarTagihan', 'bayarTagihan')->name('bayarTagihan');
         Route::post('/sendTagihanWa/{id}', 'sendTagihanWa')->name('sendTagihanWa');
-        Route::post('/sendAll', 'sendAll')->name('sendAll');
+        Route::post('/tagihans/sendWa', 'sendWa')->name('tagihans.sendWa');
     });
     Route::resource('laporans', App\Http\Controllers\LaporanController::class);
     Route::resource('sendnotifs', App\Http\Controllers\SendnotifController::class);

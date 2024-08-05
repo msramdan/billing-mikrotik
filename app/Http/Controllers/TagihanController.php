@@ -319,30 +319,70 @@ class TagihanController extends Controller
         }
     }
 
-    public function sendAll()
+    public function sendWa(Request $request)
     {
-        // get semua tagihan belum bayar
-        $tagihans = DB::table('tagihans')
-            ->select('tagihans.*')
-            ->where('tagihans.status_bayar', '=', 'Belum Bayar')->get();
+        $ids = $request->input('ids', []);
         $waGateway = getCompany();
-        foreach ($tagihans as $row) {
+
+        // Check if the WhatsApp gateway is active
+        if ($waGateway->is_active !== 'Yes') {
+            return response()->json(['message' => 'Gateway WA tidak aktif.'], 400);
+        }
+
+        $responses = [];
+        $errors = [];
+
+        foreach ($ids as $id) {
             try {
-                if ($waGateway->is_active == 'Yes') {
-                    $req = DB::table('tagihans')
-                        ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
-                        ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.no_wa', 'pelanggans.no_layanan', 'pelanggans.jatuh_tempo')
-                        ->where('tagihans.id', '=', $row->id)->first();
-                    sendNotifWa($waGateway->url_wa_gateway, $waGateway->api_key_wa_gateway, $req, 'tagihan', $req->no_wa, $waGateway->footer_pesan_wa_tagihan);
+                // Fetch the tagihan and related pelanggan
+                $tagihan = DB::table('tagihans')
+                    ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
+                    ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.no_wa', 'pelanggans.no_layanan', 'pelanggans.jatuh_tempo')
+                    ->where('tagihans.id', $id)
+                    ->first();
+
+                if ($tagihan) {
+                    // Send notification
+                    $response = sendNotifWa(
+                        $waGateway->url_wa_gateway,
+                        $waGateway->api_key_wa_gateway,
+                        $tagihan,
+                        'tagihan',
+                        $tagihan->no_wa,
+                        $waGateway->footer_pesan_wa_tagihan
+                    );
+
+                    // Check the response and update status
+                    if (isset($response->status) && ($response->status === true || $response->status === 'true')) {
+                        // Update tagihan status to 'Yes'
+                        DB::table('tagihans')
+                            ->where('id', $id)
+                            ->update(['is_send' => 'Yes']);
+                    } else {
+                        // Increment retry count for failures
+                        DB::table('tagihans')
+                            ->where('id', $id)
+                            ->increment('retry');
+                        $errors[] = $id; // Collect failed IDs
+                    }
+                    $responses[] = $id; // Collect processed IDs
                 }
             } catch (\Exception $e) {
+                // Optionally log the exception
+                $errors[] = $id;
                 continue;
             }
         }
-        return redirect()
-            ->route('tagihans.index')
-            ->with('success', __('Kirim notifikasi ke semua pelanggan berhasil'));
+
+        // Prepare the response message
+        $message = 'Tagihan WA berhasil dikirim!';
+        if (!empty($errors)) {
+            $message = 'Tagihan WA berhasil dikirim untuk ID: ' . implode(', ', $responses) . '. Namun, terjadi kesalahan pada ID: ' . implode(', ', $errors);
+        }
+
+        return response()->json(['message' => $message]);
     }
+
 
     public function bayarTagihan(Request $request)
     {

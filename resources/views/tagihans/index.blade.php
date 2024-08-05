@@ -24,14 +24,9 @@
 
             @can('tagihan create')
                 <div class="d-flex justify-content-end">
-                    {{-- <form action="{{route('sendAll')}}" method="POST" class="d-inline"
-                        onsubmit="return confirm('yakin kirim notifikasi ke semua pelanggan ?')">
-                        @csrf
-                        @method('POST')
-                        <button class="btn btn-success mb-3" title="kirim notifikasi">
-                            <i class="ace-icon bi bi-whatsapp"></i> Kirim Notif Wa
-                        </button>
-                    </form>&nbsp; --}}
+                    <button class="btn btn-success mb-3" id="sendWaBtn" disabled>
+                        <i class="ace-icon bi bi-whatsapp"></i> Kirim Notif Wa
+                    </button>&nbsp;
                     <a href="{{ route('tagihans.create') }}" class="btn btn-primary mb-3">
                         <i class="fas fa-plus"></i>
                         {{ __('Create a new tagihan') }}
@@ -60,7 +55,6 @@
                                                         {{ $row->nama }}
                                                     </option>
                                                 @endforeach
-
                                             </select>
                                         </div>
 
@@ -103,18 +97,16 @@
                                                     Belum Kirim</option>
                                             </select>
                                         </div>
-
-
                                     </div>
                                 </div>
                             </div>
                             <hr>
 
-
                             <div class="table-responsive p-1">
                                 <table class="table table-striped" id="data-table" width="100%">
                                     <thead>
                                         <tr>
+                                            <th><input type="checkbox" id="checkAll"></th>
                                             <th>#</th>
                                             <th>{{ __('ID Pelanggan') }}</th>
                                             <th>{{ __('No Tagihan') }}</th>
@@ -195,9 +187,19 @@
             row.child(format(row.data())).show();
         })
 
-
-
         let columns = [{
+                data: 'id',
+                orderable: false,
+                searchable: false,
+                render: function(data, type, row) {
+                    if (row.status_bayar === 'Belum Bayar') {
+                        return '<input type="checkbox" class="checkbox" value="' + data + '">';
+                    } else {
+                        return '';
+                    }
+                }
+            },
+            {
                 "className": 'dt-control',
                 "orderable": false,
                 "data": null,
@@ -221,43 +223,40 @@
             {
                 data: 'status_bayar',
                 name: 'status_bayar',
-                render: function(data, type, full, meta) {
-                    if (data == 'Belum Bayar') {
-                        return '<button type="button" class="btn btn-danger btn-sm">Belum Bayar</button>';
-                    } else {
-                        return '<button type="button" class="btn btn-success btn-sm">Sudah Bayar</button>';
-                    }
-                }
+                orderable: false
             },
             {
                 data: 'is_send',
                 name: 'is_send',
+                orderable: false
             },
             {
                 data: 'action',
                 name: 'action',
                 orderable: false,
                 searchable: false
-            }
-
+            },
         ];
 
-        var table = $('#data-table').DataTable({
+        let table = $('#data-table').DataTable({
             processing: true,
             serverSide: true,
             ajax: {
-                url: "{{ route('tagihans.index') }}",
-                data: function(s) {
-                    s.tanggal = $("#tanggal").val();
-                    s.pelanggans = $('select[name=pelanggans] option').filter(':selected').val()
-                    s.metode_bayar = $('select[name=metode_bayar] option').filter(':selected').val()
-                    s.status_bayar = $('select[name=status_bayar] option').filter(':selected').val()
-                    s.kirim_tagihan = $('select[name=kirim_tagihan] option').filter(':selected').val()
+                url: '{{ route('tagihans.index') }}',
+                data: function(d) {
+                    d.tanggal = $('#tanggal').val();
+                    d.pelanggan = $('#pelanggans').val();
+                    d.metode_bayar = $('#metode_bayar').val();
+                    d.status_bayar = $('#status_bayar').val();
+                    d.kirim_tagihan = $('#kirim_tagihan').val();
                 }
             },
             columns: columns
         });
 
+        $('.js-example-basic-single').select2({
+            theme: "bootstrap-5"
+        });
 
         function replaceURLParams() {
             var params = new URLSearchParams();
@@ -299,5 +298,59 @@
             table.draw();
             replaceURLParams()
         })
+
+
+        $('#checkAll').change(function() {
+            var checkboxes = $('.checkbox');
+            checkboxes.prop('checked', $(this).prop('checked'));
+            updateSendWaButtonState();
+        });
+
+        $('#data-table tbody').on('change', '.checkbox', function() {
+            var checkAll = $('#checkAll');
+            var checkboxes = $('.checkbox');
+            checkAll.prop('checked', checkboxes.length === checkboxes.filter(':checked').length);
+            updateSendWaButtonState();
+        });
+
+        function updateSendWaButtonState() {
+            var sendWaBtn = $('#sendWaBtn');
+            var checkedCheckboxes = $('.checkbox:checked');
+            sendWaBtn.prop('disabled', checkedCheckboxes.length === 0);
+        }
+
+        $('#sendWaBtn').click(function() {
+            var checkedIds = $('.checkbox:checked').map(function() {
+                return $(this).val();
+            }).get();
+
+            if (checkedIds.length === 0) {
+                return;
+            }
+
+            if (!confirm('Apakah Anda yakin ingin mengirim tagihan WA untuk pelanggan yang dipilih?')) {
+                return;
+            }
+
+            $.ajax({
+                url: '{{ route('tagihans.sendWa') }}',
+                method: 'POST',
+                data: {
+                    ids: checkedIds,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    alert('Tagihan WA berhasil dikirim!');
+                    table.draw();
+                },
+                error: function(xhr) {
+                    if (xhr.status === 400 && xhr.responseJSON.message === 'Gateway WA tidak aktif.') {
+                        alert('Gateway WA tidak aktif.');
+                    } else {
+                        alert('Terjadi kesalahan. Mohon coba lagi.');
+                    }
+                }
+            });
+        });
     </script>
 @endpush
