@@ -31,12 +31,19 @@ class TagihanController extends Controller
             $metode_bayar = $request->query('metode_bayar');
             $status_bayar = $request->query('status_bayar');
             $tanggal = $request->query('tanggal'); //2023-10
+            $kirim_tagihan = $request->query('kirim_tagihan');
 
             $tagihans = DB::table('tagihans')
                 ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
                 ->leftJoin('users', 'tagihans.user_id', '=', 'users.id')
                 ->where('tagihans.company_id', '=', session('sessionCompany'))
                 ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.no_layanan', 'pelanggans.id as pelanggan_id', 'users.name as nama_user');
+
+            if (isset($tanggal) && !empty($tanggal)) {
+                $tagihans = $tagihans->where('tagihans.periode', $tanggal);
+            } else {
+                $tagihans = $tagihans->where('tagihans.periode', date('Y-m'));
+            }
 
             if (isset($pelanggans) && !empty($pelanggans)) {
                 if ($pelanggans != 'All') {
@@ -56,10 +63,10 @@ class TagihanController extends Controller
                 }
             }
 
-            if (isset($tanggal) && !empty($tanggal)) {
-                $tagihans = $tagihans->where('tagihans.periode', $tanggal);
-            } else {
-                $tagihans = $tagihans->where('tagihans.periode', date('Y-m'));
+            if (isset($kirim_tagihan) && !empty($kirim_tagihan)) {
+                if ($kirim_tagihan != 'All') {
+                    $tagihans = $tagihans->where('tagihans.is_send', $kirim_tagihan);
+                }
             }
 
             $tagihans = $tagihans->orderBy('tagihans.id', 'DESC')->get();
@@ -91,9 +98,20 @@ class TagihanController extends Controller
         }
         $thisMonth = date('Y-m');
         $pelanggans = DB::table('pelanggans')->where('company_id', '=', session('sessionCompany'))->get();
+
+        $tanggal = $request->query('tanggal') ?? $thisMonth;
+        $selectedPelanggan = $request->query('pelanggans') !== null ? intval($request->query('pelanggans')) : null;
+        $selectedMetodeBayar = $request->query('metode_bayar') ?? null;
+        $selectedStatusBayar = $request->query('status_bayar') ?? null;
+        $isSend = $request->query('kirim_tagihan') ?? null;
         return view('tagihans.index', [
             'pelanggans' => $pelanggans,
-            'thisMonth' => $thisMonth
+            'tanggal' => $tanggal,
+            'selectedPelanggan' => $selectedPelanggan,
+            'selectedMetodeBayar' => $selectedMetodeBayar,
+            'selectedStatusBayar' => $selectedStatusBayar,
+            'isSend' => $isSend,
+            'thisMonth' => $tanggal
         ]);
     }
 

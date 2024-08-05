@@ -46,16 +46,17 @@
                             <div class="col-md-12">
                                 <div class="row">
                                     <div class="row g-3">
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <input type="month" value="{{ $thisMonth }}" name="tanggal" id="tanggal"
                                                 class="form-control" />
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <select name="pelanggans" id="pelanggans"
                                                 class="form-control  js-example-basic-single">
                                                 <option value="All">All Pelanggan</option>
                                                 @foreach ($pelanggans as $row)
-                                                    <option value="{{ $row->id }}">
+                                                    <option value="{{ $row->id }}"
+                                                        {{ $selectedPelanggan == $row->id ? 'selected' : '' }}>
                                                         {{ $row->nama }}
                                                     </option>
                                                 @endforeach
@@ -63,24 +64,43 @@
                                             </select>
                                         </div>
 
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <select name="metode_bayar" id="metode_bayar"
                                                 class="form-control  js-example-basic-single">
                                                 <option value="All">All Metode Bayar</option>
-                                                <option value="Cash">Cash</option>
-                                                <option value="Transfer Bank">Transfer Bank</option>
-                                                <option value="Payment Tripay">Payment Tripay</option>
+                                                <option value="Cash"
+                                                    {{ $selectedMetodeBayar == 'Cash' ? 'selected' : '' }}>Cash</option>
+                                                <option value="Transfer Bank"
+                                                    {{ $selectedMetodeBayar == 'Transfer Bank' ? 'selected' : '' }}>
+                                                    Transfer Bank</option>
+                                                <option value="Payment Tripay"
+                                                    {{ $selectedMetodeBayar == 'Payment Tripay' ? 'selected' : '' }}>
+                                                    Payment Tripay</option>
                                             </select>
                                         </div>
 
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <select name="status_bayar" id="status_bayar"
                                                 class="form-control  js-example-basic-single">
                                                 <option value="All">All Status Bayar
                                                 </option>
-                                                <option value="Sudah Bayar">Sudah Bayar</option>
-                                                <option value="Belum Bayar">Belum Bayar</option>
-
+                                                <option value="Sudah Bayar"
+                                                    {{ $selectedStatusBayar == 'Sudah Bayar' ? 'selected' : '' }}>Sudah
+                                                    Bayar</option>
+                                                <option value="Belum Bayar"
+                                                    {{ $selectedStatusBayar == 'Belum Bayar' ? 'selected' : '' }}>Belum
+                                                    Bayar</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <select name="kirim_tagihan" id="kirim_tagihan"
+                                                class="form-control  js-example-basic-single">
+                                                <option value="All">All Kirim Tagihan
+                                                </option>
+                                                <option value="Yes" {{ $isSend == 'Yes' ? 'selected' : '' }}>
+                                                    Sudah Kirim</option>
+                                                <option value="No" {{ $isSend == 'No' ? 'selected' : '' }}>
+                                                    Belum Kirim</option>
                                             </select>
                                         </div>
 
@@ -228,26 +248,56 @@
             ajax: {
                 url: "{{ route('tagihans.index') }}",
                 data: function(s) {
+                    s.tanggal = $("#tanggal").val();
                     s.pelanggans = $('select[name=pelanggans] option').filter(':selected').val()
                     s.metode_bayar = $('select[name=metode_bayar] option').filter(':selected').val()
                     s.status_bayar = $('select[name=status_bayar] option').filter(':selected').val()
-                    s.tanggal = $("#tanggal").val();
+                    s.kirim_tagihan = $('select[name=kirim_tagihan] option').filter(':selected').val()
                 }
             },
             columns: columns
         });
 
+
+        function replaceURLParams() {
+            var params = new URLSearchParams();
+
+            var tanggal = $("#tanggal").val();
+            var pelanggans = $('select[name=pelanggans]').val();
+            var metode_bayar = $('select[name=metode_bayar]').val();
+            var status_bayar = $('select[name=status_bayar]').val();
+            var kirim_tagihan = $('select[name=kirim_tagihan]').val();
+
+            if (tanggal) params.set('tanggal', tanggal);
+            if (pelanggans) params.set('pelanggans', pelanggans);
+            if (metode_bayar) params.set('metode_bayar', metode_bayar);
+            if (status_bayar) params.set('status_bayar', status_bayar);
+            if (kirim_tagihan) params.set('kirim_tagihan', kirim_tagihan);
+
+            var newURL = "{{ route('tagihans.index') }}" + '?' + params.toString();
+            history.replaceState(null, null, newURL);
+        }
+
+        $('#tanggal').change(function() {
+            table.draw();
+            replaceURLParams()
+        })
+
         $('#pelanggans').change(function() {
             table.draw();
+            replaceURLParams()
         })
         $('#metode_bayar').change(function() {
             table.draw();
+            replaceURLParams()
         })
         $('#status_bayar').change(function() {
             table.draw();
+            replaceURLParams()
         })
-        $('#tanggal').change(function() {
+        $('#kirim_tagihan').change(function() {
             table.draw();
+            replaceURLParams()
         })
     </script>
 @endpush
