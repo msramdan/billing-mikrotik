@@ -340,7 +340,7 @@
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(response) {
-                    alert('Tagihan WA berhasil dikirim!');
+                    alert(response.message);
                     table.draw();
                 },
                 error: function(xhr) {

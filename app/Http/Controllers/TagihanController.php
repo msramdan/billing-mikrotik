@@ -331,6 +331,7 @@ class TagihanController extends Controller
 
         $responses = [];
         $errors = [];
+        $errorMessages = [];
 
         foreach ($ids as $id) {
             try {
@@ -358,30 +359,43 @@ class TagihanController extends Controller
                         DB::table('tagihans')
                             ->where('id', $id)
                             ->update(['is_send' => 'Yes']);
+                        $responses[] = $id; // Collect processed IDs
                     } else {
-                        // Increment retry count for failures
+                        // Collect failed IDs and error messages
                         DB::table('tagihans')
                             ->where('id', $id)
                             ->increment('retry');
-                        $errors[] = $id; // Collect failed IDs
+
+                        $errors[] = $id;
+                        $errorMessages[$id] = $response->message ?? 'Unknown error'; // Collect error message
                     }
-                    $responses[] = $id; // Collect processed IDs
+                } else {
+                    // Handle case where tagihan is not found
+                    $errors[] = $id;
+                    $errorMessages[$id] = 'Tagihan not found';
                 }
             } catch (\Exception $e) {
-                // Optionally log the exception
+                // Collect exception messages
                 $errors[] = $id;
-                continue;
+                $errorMessages[$id] = $e->getMessage();
             }
         }
 
-        // Prepare the response message
-        $message = 'Tagihan WA berhasil dikirim!';
-        if (!empty($errors)) {
-            $message = 'Tagihan WA berhasil dikirim untuk ID: ' . implode(', ', $responses) . '. Namun, terjadi kesalahan pada ID: ' . implode(', ', $errors);
-        }
 
+
+        // Prepare the response message
+        if (!empty($errors)) {
+            $errorDetail = [];
+            foreach ($errors as $id) {
+                $errorDetail[] = "ID $id: " . ($errorMessages[$id] ?? 'Unknown error');
+            }
+            $message = 'Tagihan WA berhasil dikirim untuk ID: ' . implode(', ', $responses) . '. Namun, terjadi kesalahan pada ID: ' . implode(', ', $errors) . '. Rincian: ' . implode('; ', $errorDetail);
+        } else {
+            $message = 'Tagihan WA berhasil dikirim!';
+        }
         return response()->json(['message' => $message]);
     }
+
 
 
     public function bayarTagihan(Request $request)
