@@ -9,10 +9,15 @@ $pesan = "✅✅ [CRON SEND TAGIHAN] ✅✅\n";
 $pesan .= "Mulai Cron :  " . date('Y-m-d H:i:s') . "\n";
 sendTelegramNotification($pesan);
 
-$sql = "SELECT tagihans.*,tagihans.id as id_tagihan,companies.*,pelanggans.nama,pelanggans.no_wa,pelanggans.no_layanan, pelanggans.kirim_tagihan_wa,pelanggans.jatuh_tempo FROM tagihans
-join companies on companies.id = tagihans.company_id
-join pelanggans on pelanggans.id = tagihans.pelanggan_id
-where tagihans.status_bayar='Belum Bayar' and is_send='No' limit 10";
+$sql = "SELECT tagihans.*, tagihans.id as id_tagihan, companies.*, pelanggans.nama, pelanggans.no_wa, pelanggans.no_layanan, pelanggans.kirim_tagihan_wa, pelanggans.jatuh_tempo
+FROM tagihans
+JOIN companies ON companies.id = tagihans.company_id
+JOIN pelanggans ON pelanggans.id = tagihans.pelanggan_id
+WHERE tagihans.status_bayar = 'Belum Bayar'
+  AND is_send = 'No'
+  AND retry <= 5
+ORDER BY retry ASC
+LIMIT 10";
 $query = mysqli_query($koneksi, $sql);
 while ($data = mysqli_fetch_array($query)) {
     try {
@@ -53,7 +58,11 @@ while ($data = mysqli_fetch_array($query)) {
                 $pesan .= "Periode: " . tanggal_indonesia($data['periode']) . "\n";
                 $pesan .= "No Tagihan:  " . $data['no_tagihan'] . "\n";
                 sendTelegramNotification($pesan);
-            }else{
+            } else {
+                $tagihan_id = $data['id_tagihan'];
+                $sqlUpdateRetry = "UPDATE tagihans SET retry = retry + 1 WHERE id='$tagihan_id'";
+                mysqli_query($koneksi, $sqlUpdateRetry);
+
                 $pesan = "❌🚫 [CRON SEND TAGIHAN] ❌🚫\n";
                 $pesan .= "Send Tagihan Gagal!\n";
                 $pesan .= "No WhatApp:  " . $data['no_wa'] . "\n";
