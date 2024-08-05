@@ -359,42 +359,43 @@ class TagihanController extends Controller
                         DB::table('tagihans')
                             ->where('id', $id)
                             ->update(['is_send' => 'Yes']);
-                        $responses[] = $id; // Collect processed IDs
+                        $responses[] = $tagihan->no_wa; // Collect processed WhatsApp numbers
                     } else {
                         // Collect failed IDs and error messages
                         DB::table('tagihans')
                             ->where('id', $id)
                             ->increment('retry');
 
-                        $errors[] = $id;
-                        $errorMessages[$id] = $response->message ?? 'Unknown error'; // Collect error message
+                        $errors[] = $tagihan->no_wa; // Collect WhatsApp numbers for errors
+                        $errorMessages[$tagihan->no_wa] = $response->message ?? 'Unknown error'; // Collect error message
                     }
                 } else {
                     // Handle case where tagihan is not found
-                    $errors[] = $id;
-                    $errorMessages[$id] = 'Tagihan not found';
+                    $errors[] = 'No WA not found'; // Use a default error message
+                    $errorMessages['No WA not found'] = 'Tagihan not found';
                 }
             } catch (\Exception $e) {
                 // Collect exception messages
-                $errors[] = $id;
-                $errorMessages[$id] = $e->getMessage();
+                $errors[] = 'Exception'; // Use a default error message
+                $errorMessages['Exception'] = $e->getMessage();
             }
         }
-
-
 
         // Prepare the response message
         if (!empty($errors)) {
             $errorDetail = [];
-            foreach ($errors as $id) {
-                $errorDetail[] = "ID $id: " . ($errorMessages[$id] ?? 'Unknown error');
+            foreach ($errors as $no_wa) {
+                $errorDetail[] = "No WA $no_wa: " . ($errorMessages[$no_wa] ?? 'Unknown error');
             }
-            $message = 'Tagihan WA berhasil dikirim untuk ID: ' . implode(', ', $responses) . '. Namun, terjadi kesalahan pada ID: ' . implode(', ', $errors) . '. Rincian: ' . implode('; ', $errorDetail);
+            $message = 'Tagihan WA berhasil dikirim. Namun, terjadi kesalahan pada beberapa No WA. Rincian: ' . implode('; ', $errorDetail);
         } else {
             $message = 'Tagihan WA berhasil dikirim!';
         }
+
         return response()->json(['message' => $message]);
     }
+
+
 
 
 
