@@ -95,7 +95,7 @@
                                 </table>
                             </div>
 
-                            <a href="{{ url()->previous() }}" class="btn btn-secondary">{{ __('Back') }}</a>
+                            <a href="{{route('tagihans.index')}}" class="btn btn-secondary">{{ __('Back') }}</a>
                             @if ($tagihan->status_bayar == 'Sudah Bayar')
                                 <a href="{{ route('sendInvoice', ['id' => $tagihan->id]) }}" class="btn btn-success">
                                     <i class="fas fa-file-invoice"></i> {{ __('Send Invoice') }}

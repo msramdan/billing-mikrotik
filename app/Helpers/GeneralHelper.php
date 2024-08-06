@@ -199,6 +199,8 @@ function konversiTanggal($tanggal)
 function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima, $footer)
 {
     if ($typePesan == 'bayar') {
+        $baseUrl = url('/');
+        $invoiceUrl = $baseUrl . '/invoice/' . $request->id;
         $message = 'Yth. ' . $request->nama_pelanggan . "\n\n";
         $message .= "Berikut ini adalah data pembayaran yang telah kami terima : \n\n";
         $message .= "*ID Pelanggan :* " . $request->no_layanan . "\n";
@@ -207,6 +209,7 @@ function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima, $footer
         $message .= '*Nominal :* ' . rupiah($request->nominal) . "\n";
         $message .= '*Metode Pembayaran :* ' .  $request->metode_bayar . " \n";
         $message .= '*Tanggal :* ' . date('Y-m-d H:i:s') . "\n\n";
+        $message .= '*Link invoice :* ' . $invoiceUrl . "\n\n";
         $message .= $footer;
     } else if ($typePesan == 'tagihan') {
         $message = 'Pelanggan ' . getCompany()->nama_perusahaan .  "\n\n";
@@ -232,6 +235,8 @@ function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima, $footer
         $message .= "Salam hangat,\n";
         $message .= $user->name . '-' . getCompany()->nama_perusahaan;
     } else if ($typePesan == 'invoice') {
+        $baseUrl = url('/');
+        $invoiceUrl = $baseUrl . '/invoice/' . $request->id;
         $message = 'Yth. ' . $request->nama . "\n\n";
         $message .= "Berikut ini adalah data pembayaran yang telah kami terima : \n\n";
         $message .= "*ID Pelanggan :* " . $request->no_layanan . "\n";
@@ -240,6 +245,7 @@ function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima, $footer
         $message .= '*Nominal :* ' . rupiah($request->total_bayar) . "\n";
         $message .= '*Metode Pembayaran :* ' .  $request->metode_bayar . " \n";
         $message .= '*Tanggal :* ' . date('Y-m-d H:i:s') . "\n\n";
+        $message .= '*Link invoice :* ' . $invoiceUrl . "\n\n";
         $message .= $footer;
     }
     $endpoint_wa = $url . 'send-message';

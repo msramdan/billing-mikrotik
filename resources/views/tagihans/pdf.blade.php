@@ -2,7 +2,9 @@
 <html lang="en">
 
 @php
-    $dataCompany = getCompany();
+    $dataCompany = $company = DB::table('companies')
+    ->where('id', $data->company_id)
+    ->first();
 @endphp
 
 <head>

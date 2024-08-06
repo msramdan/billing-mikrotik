@@ -117,7 +117,7 @@ Route::middleware(['auth', 'web', 'cek-expired'])->group(function () {
     Route::resource('pengeluarans', App\Http\Controllers\PengeluaranController::class);
     Route::resource('tagihans', App\Http\Controllers\TagihanController::class);
     Route::controller(App\Http\Controllers\TagihanController::class)->group(function () {
-        Route::get('invoice/{id}', 'invoice')->name('invoice.pdf');
+        // Route::get('invoice/{id}', 'invoice')->name('invoice.pdf');
         Route::post('/bayarTagihan', 'bayarTagihan')->name('bayarTagihan');
         Route::post('/sendTagihanWa/{id}', 'sendTagihanWa')->name('sendTagihanWa');
         Route::post('/tagihans/sendWa', 'sendWa')->name('tagihans.sendWa');
@@ -170,3 +170,6 @@ Route::middleware(['auth', 'web'])->group(function () {
 
 Route::resource('category-pemasukans', App\Http\Controllers\CategoryPemasukanController::class)->middleware('auth');
 Route::resource('category-pengeluarans', App\Http\Controllers\CategoryPengeluaranController::class)->middleware('auth');
+Route::controller(App\Http\Controllers\TagihanController::class)->group(function () {
+    Route::get('invoice/{id}', 'invoice')->name('invoice.pdf');
+});
