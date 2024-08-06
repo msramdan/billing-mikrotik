@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 
+@php
+    $dataCompany = getCompany();
+@endphp
+
 <head>
     <meta charset="utf-8">
-    <title>Invoice Internet {{ getCompany()->nama_perusahaan }}</title>
+    <title>Invoice Internet {{ $dataCompany->nama_perusahaan }}</title>
 </head>
 <style>
     .clearfix:after {
@@ -203,13 +207,13 @@
 <body>
     <header class="clearfix">
         <div id="logo">
-            <img src="../public/storage/uploads/logos/{{ getCompany()->logo }}" style="width: 100%">
+            <img src="../public/storage/uploads/logos/{{ $dataCompany->logo }}" style="width: 100%">
         </div>
         <div id="company">
-            <h2 class="name">{{ getCompany()->nama_perusahaan }}</h2>
-            <div>{{ getCompany()->alamat }}</div>
-            <div>{{ getCompany()->telepon_perusahaan }}</div>
-            <div><a href="mailto:{{ getCompany()->email }}">{{ getCompany()->email }}</a></div>
+            <h2 class="name">{{ $dataCompany->nama_perusahaan }}</h2>
+            <div>{{ $dataCompany->alamat }}</div>
+            <div>{{ $dataCompany->telepon_perusahaan }}</div>
+            <div><a href="mailto:{{ $dataCompany->email }}">{{ $dataCompany->email }}</a></div>
         </div>
         </div>
     </header>
@@ -246,7 +250,7 @@
                 <tr>
                     <td class="no">01</td>
                     <td class="desc">
-                        <h3>Tagihan Internet {{ getCompany()->nama_perusahaan }} </h3>No Layanan
+                        <h3>Tagihan Internet {{ $dataCompany->nama_perusahaan }} </h3>No Layanan
                         {{ $data->no_layanan }} <br> {{ $data->nama_layanan }}
                     </td>
                     <td class="unit">{{ rupiah($data->nominal_bayar - $data->potongan_bayar) }}</td>
@@ -282,8 +286,14 @@
             </tfoot>
         </table>
     </main>
+
     <footer>
         Invoice di generate automatis oleh komputer, dan sah tanpa tanda tangan dan stempel.
+        @if ($dataCompany->id == 1)
+            <center>
+                --- Support by PT. JINOM NETWORK INDONESIA ---
+            </center>
+        @endif
     </footer>
 </body>
 
