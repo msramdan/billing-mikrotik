@@ -254,12 +254,6 @@ class TagihanController extends Controller
             ->with('success', __('The tagihan was updated successfully.'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Tagihan  $tagihan
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Tagihan $tagihan)
     {
         try {
@@ -344,7 +338,7 @@ class TagihanController extends Controller
                     $tagihans,
                     'invoice',
                     $tagihans->no_wa,
-                    $waGateway->footer_pesan_wa_tagihan
+                    $waGateway->footer_pesan_wa_pembayaran
                 );
 
                 if ($res->status == true || $res->status == 'true') {
@@ -391,7 +385,7 @@ class TagihanController extends Controller
                         $tagihan,
                         'tagihan',
                         $tagihan->no_wa,
-                        $waGateway->footer_pesan_wa_pembayaran
+                        $waGateway->footer_pesan_wa_tagihan
                     );
 
                     // Check the response and update status
