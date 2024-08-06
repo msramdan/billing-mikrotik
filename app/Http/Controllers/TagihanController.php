@@ -328,6 +328,38 @@ class TagihanController extends Controller
         }
     }
 
+    public function sendInvoice($tagihan_id)
+    {
+        $waGateway = getCompany();
+        $tagihans = DB::table('tagihans')
+            ->leftJoin('pelanggans', 'tagihans.pelanggan_id', '=', 'pelanggans.id')
+            ->select('tagihans.*', 'pelanggans.nama', 'pelanggans.no_wa', 'pelanggans.no_layanan', 'pelanggans.jatuh_tempo')
+            ->where('tagihans.id', '=', $tagihan_id)->first();
+
+        if ($waGateway->is_active == 'Yes') {
+            try {
+                $res = sendNotifWa(
+                    $waGateway->url_wa_gateway,
+                    $waGateway->api_key_wa_gateway,
+                    $tagihans,
+                    'invoice',
+                    $tagihans->no_wa,
+                    $waGateway->footer_pesan_wa_tagihan
+                );
+
+                if ($res->status == true || $res->status == 'true') {
+                    return back()->with('success', __('Kirim invoice berhasil'));
+                } else {
+                    return back()->with('error', __('Kirim invoice gagal ') . $res->message);
+                }
+            } catch (\Exception $e) {
+                return back()->with('error', __('Caught exception: ') . $e->getMessage());
+            }
+        } else {
+            return back()->with('error', __('Setting is active wa Off'));
+        }
+    }
+
     public function sendWa(Request $request)
     {
         $ids = $request->input('ids', []);

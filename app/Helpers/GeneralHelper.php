@@ -231,6 +231,16 @@ function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima, $footer
         $message .= "Terima kasih atas kepercayaan Anda kepada kami. Selamat menikmati koneksi internet yang stabil dan cepat!\n\n";
         $message .= "Salam hangat,\n";
         $message .= $user->name . '-' . getCompany()->nama_perusahaan;
+    } else if ($typePesan == 'invoice') {
+        $message = 'Yth. ' . $request->nama . "\n\n";
+        $message .= "Berikut ini adalah data pembayaran yang telah kami terima : \n\n";
+        $message .= "*ID Pelanggan :* " . $request->no_layanan . "\n";
+        $message .= "*No Tagihan :* " . $request->no_tagihan . "\n";
+        $message .= '*Nama Pelanggan :* ' . $request->nama . "\n";
+        $message .= '*Nominal :* ' . rupiah($request->total_bayar) . "\n";
+        $message .= '*Metode Pembayaran :* ' .  $request->metode_bayar . " \n";
+        $message .= '*Tanggal :* ' . date('Y-m-d H:i:s') . "\n\n";
+        $message .= $footer;
     }
     $endpoint_wa = $url . 'send-message';
     $response = Http::post($endpoint_wa, [

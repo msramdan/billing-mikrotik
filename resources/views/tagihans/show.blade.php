@@ -28,6 +28,7 @@
         </div>
 
         <section class="section">
+            <x-alert></x-alert>
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
@@ -70,7 +71,9 @@
                                         <td class="fw-bold">{{ __('Total Bayar') }}</td>
                                         <td>
                                             (Nominal Bayar - Potongan Bayar) + PPN <br>
-                                            ({{ rupiah($tagihan->nominal_bayar) }} - {{ rupiah($tagihan->potongan_bayar) }}) + {{ rupiah($tagihan->nominal_ppn) }} <br>
+                                            ({{ rupiah($tagihan->nominal_bayar) }} -
+                                            {{ rupiah($tagihan->potongan_bayar) }}) + {{ rupiah($tagihan->nominal_ppn) }}
+                                            <br>
                                             <b>{{ rupiah($tagihan->total_bayar) }}</b>
                                         </td>
                                     </tr>
@@ -89,18 +92,18 @@
                                         <td>{{ isset($tagihan->tanggal_kirim_notif_wa) ? $tagihan->tanggal_kirim_notif_wa : '' }}
                                         </td>
                                     </tr>
-                                    {{-- <tr>
-                                        <td class="fw-bold">{{ __('Created at') }}</td>
-                                        <td>{{ $tagihan->created_at }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fw-bold">{{ __('Updated at') }}</td>
-                                        <td>{{ $tagihan->updated_at }}</td>
-                                    </tr> --}}
                                 </table>
                             </div>
 
                             <a href="{{ url()->previous() }}" class="btn btn-secondary">{{ __('Back') }}</a>
+                            @if ($tagihan->status_bayar == 'Sudah Bayar')
+                                <a href="{{ route('sendInvoice', ['id' => $tagihan->id]) }}" class="btn btn-success">
+                                    <i class="fas fa-file-invoice"></i> {{ __('Send Invoice') }}
+                                </a>
+                            @else
+                                <button disabled class="btn btn-success"><i class="fas fa-file-invoice"></i>
+                                    {{ __('Send Invoice') }}</button>
+                            @endif
                         </div>
                     </div>
                 </div>
