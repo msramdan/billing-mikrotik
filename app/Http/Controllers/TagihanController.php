@@ -391,7 +391,7 @@ class TagihanController extends Controller
                         $tagihan,
                         'tagihan',
                         $tagihan->no_wa,
-                        $waGateway->footer_pesan_wa_tagihan
+                        $waGateway->footer_pesan_wa_pembayaran
                     );
 
                     // Check the response and update status
