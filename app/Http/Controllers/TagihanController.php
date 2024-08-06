@@ -78,6 +78,14 @@ class TagihanController extends Controller
                 ->addColumn('potongan_bayar', function ($row) {
                     return rupiah($row->potongan_bayar);
                 })
+                ->addColumn('status_bayar_tagihan', function ($row) {
+                    if ($row->status_bayar == 'Sudah Bayar') {
+                        return '<button class="btn btn-success btn-sm"><i class="fa fa-check" aria-hidden="true"></i> Sudah Bayar</button>';
+                    } else {
+                        return '<button class="btn btn-danger btn-sm"><i class="fa fa-times" aria-hidden="true"></i> Belum Bayar</button>';
+                    }
+                })
+
                 ->addColumn('user', function ($row) {
                     if ($row->nama_user) {
                         return $row->nama_user;
@@ -94,6 +102,7 @@ class TagihanController extends Controller
                 ->addColumn('pelanggan', function ($row) {
                     return $row->nama;
                 })->addColumn('action', 'tagihans.include.action')
+                ->rawColumns(['status_bayar_tagihan', 'action'])
                 ->toJson();
         }
         $thisMonth = date('Y-m');

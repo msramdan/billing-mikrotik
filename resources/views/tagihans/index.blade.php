@@ -221,8 +221,8 @@
                 name: 'total_bayar',
             },
             {
-                data: 'status_bayar',
-                name: 'status_bayar',
+                data: 'status_bayar_tagihan',
+                name: 'status_bayar_tagihan',
                 orderable: false
             },
             {
