@@ -200,7 +200,7 @@ function sendNotifWa($url, $api_key, $request, $typePesan, $no_penerima, $footer
 {
     if ($typePesan == 'bayar') {
         $baseUrl = url('/');
-        $invoiceUrl = $baseUrl . '/invoice/' . $request->id;
+        $invoiceUrl = $baseUrl . '/invoice/' . $request->tagihan_id;
         $message = 'Yth. ' . $request->nama_pelanggan . "\n\n";
         $message .= "Berikut ini adalah data pembayaran yang telah kami terima : \n\n";
         $message .= "*ID Pelanggan :* " . $request->no_layanan . "\n";

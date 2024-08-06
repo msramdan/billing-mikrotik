@@ -436,10 +436,6 @@ class TagihanController extends Controller
         return response()->json(['message' => $message]);
     }
 
-
-
-
-
     public function bayarTagihan(Request $request)
     {
         $tgl = date('Y-m-d H:i:s');
