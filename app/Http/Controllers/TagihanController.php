@@ -27,7 +27,7 @@ class TagihanController extends Controller
     public function index(Request $request)
     {
         if (request()->ajax()) {
-            $pelanggans = intval($request->query('pelanggans'));
+            $pelanggan_id = intval($request->query('pelanggan_id'));
             $metode_bayar = $request->query('metode_bayar');
             $status_bayar = $request->query('status_bayar');
             $tanggal = $request->query('tanggal'); //2023-10
@@ -45,9 +45,9 @@ class TagihanController extends Controller
                 $tagihans = $tagihans->where('tagihans.periode', date('Y-m'));
             }
 
-            if (isset($pelanggans) && !empty($pelanggans)) {
-                if ($pelanggans != 'All') {
-                    $tagihans = $tagihans->where('tagihans.pelanggan_id', $pelanggans);
+            if (isset($pelanggan_id) && !empty($pelanggan_id)) {
+                if ($pelanggan_id != 'All') {
+                    $tagihans = $tagihans->where('tagihans.pelanggan_id', $pelanggan_id);
                 }
             }
 
@@ -109,7 +109,7 @@ class TagihanController extends Controller
         $pelanggans = DB::table('pelanggans')->where('company_id', '=', session('sessionCompany'))->get();
 
         $tanggal = $request->query('tanggal') ?? $thisMonth;
-        $selectedPelanggan = $request->query('pelanggans') !== null ? intval($request->query('pelanggans')) : null;
+        $selectedPelanggan = $request->query('pelanggan_id') !== null ? intval($request->query('pelanggan_id')) : null;
         $selectedMetodeBayar = $request->query('metode_bayar') ?? null;
         $selectedStatusBayar = $request->query('status_bayar') ?? null;
         $isSend = $request->query('kirim_tagihan') ?? null;

@@ -46,7 +46,7 @@
                                                 class="form-control" />
                                         </div>
                                         <div class="col-md-2">
-                                            <select name="pelanggans" id="pelanggans"
+                                            <select name="pelanggan_id" id="pelanggan_id"
                                                 class="form-control  js-example-basic-single">
                                                 <option value="All">All Pelanggan</option>
                                                 @foreach ($pelanggans as $row)
@@ -245,7 +245,7 @@
                 url: '{{ route('tagihans.index') }}',
                 data: function(d) {
                     d.tanggal = $('#tanggal').val();
-                    d.pelanggan = $('#pelanggans').val();
+                    d.pelanggan_id = $('#pelanggan_id').val();
                     d.metode_bayar = $('#metode_bayar').val();
                     d.status_bayar = $('#status_bayar').val();
                     d.kirim_tagihan = $('#kirim_tagihan').val();
@@ -262,13 +262,13 @@
             var params = new URLSearchParams();
 
             var tanggal = $("#tanggal").val();
-            var pelanggans = $('select[name=pelanggans]').val();
+            var pelanggan_id = $('select[name=pelanggan_id]').val();
             var metode_bayar = $('select[name=metode_bayar]').val();
             var status_bayar = $('select[name=status_bayar]').val();
             var kirim_tagihan = $('select[name=kirim_tagihan]').val();
 
             if (tanggal) params.set('tanggal', tanggal);
-            if (pelanggans) params.set('pelanggans', pelanggans);
+            if (pelanggan_id) params.set('pelanggan_id', pelanggan_id);
             if (metode_bayar) params.set('metode_bayar', metode_bayar);
             if (status_bayar) params.set('status_bayar', status_bayar);
             if (kirim_tagihan) params.set('kirim_tagihan', kirim_tagihan);
@@ -282,7 +282,7 @@
             replaceURLParams()
         })
 
-        $('#pelanggans').change(function() {
+        $('#pelanggan_id').change(function() {
             table.draw();
             replaceURLParams()
         })
