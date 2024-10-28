@@ -475,6 +475,7 @@ class TagihanController extends Controller
                 ->leftJoin('packages', 'pelanggans.paket_layanan', '=', 'packages.id')
                 ->select(
                     'packages.profile',
+                    'pelanggans.router',
                     'pelanggans.mode_user',
                     'pelanggans.user_pppoe',
                     'pelanggans.user_static',
@@ -484,7 +485,7 @@ class TagihanController extends Controller
                 // cek ter isolir dulu
                 if ($pelanggan->status_berlangganan == 'Non Aktif') {
                     // buka isolir
-                    $client = setRoute();
+                    $client = setRouteTagihanByPelanggan($pelanggan->router);
                     $queryGet = (new Query('/ppp/secret/print'))
                         ->where('name', $pelanggan->user_pppoe);
                     $data = $client->query($queryGet)->read();
@@ -509,7 +510,7 @@ class TagihanController extends Controller
                     }
                 }
             } else {
-                $client = setRoute();
+                $client = setRouteTagihanByPelanggan($pelanggan->router);
                 // get ip by user static
                 $queryGet = (new Query('/queue/simple/print'))
                     ->where('name', $pelanggan->user_static);

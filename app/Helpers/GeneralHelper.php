@@ -122,6 +122,26 @@ function setRoute()
     }
 }
 
+
+function setRouteTagihanByPelanggan($router_id)
+{
+    $router = DB::table('settingmikrotiks')->where('id', $router_id)->first();
+    if ($router) {
+        try {
+            return new RouterOSClient([
+                'host' => $router->host,
+                'user' => $router->username,
+                'pass' => $router->password,
+                'port' => (int) $router->port,
+            ]);
+        } catch (ConnectException $e) {
+            echo $e->getMessage() . PHP_EOL;
+            die();
+        }
+    }
+}
+
+
 function getCompany()
 {
     $data = DB::table('companies')
