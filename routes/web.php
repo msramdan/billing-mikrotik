@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExpiredController;
 use App\Http\Controllers\PanelCustomer\DashboardController as PanelCustomerDashboardController;
+use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\SettingmikrotikController;
 use Illuminate\Support\Facades\Route;
 
@@ -166,10 +167,11 @@ Route::middleware(['auth', 'web'])->group(function () {
     Route::resource('roles', App\Http\Controllers\RoleAndPermissionController::class);
     Route::resource('olts', App\Http\Controllers\OltController::class);
     Route::resource('vouchers', App\Http\Controllers\VoucherController::class);
-});
-
-Route::resource('category-pemasukans', App\Http\Controllers\CategoryPemasukanController::class)->middleware('auth');
-Route::resource('category-pengeluarans', App\Http\Controllers\CategoryPengeluaranController::class)->middleware('auth');
-Route::controller(App\Http\Controllers\TagihanController::class)->group(function () {
-    Route::get('invoice/{id}', 'invoice')->name('invoice.pdf');
+    Route::post('/pelanggans/update-generate-tagihan', [PelangganController::class, 'updateGenerateTagihan'])
+        ->name('pelanggans.update_generate_tagihan');
+    Route::resource('category-pemasukans', App\Http\Controllers\CategoryPemasukanController::class)->middleware('auth');
+    Route::resource('category-pengeluarans', App\Http\Controllers\CategoryPengeluaranController::class)->middleware('auth');
+    Route::controller(App\Http\Controllers\TagihanController::class)->group(function () {
+        Route::get('invoice/{id}', 'invoice')->name('invoice.pdf');
+    });
 });

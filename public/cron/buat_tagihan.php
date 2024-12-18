@@ -27,47 +27,41 @@ if ($tgl < 27) {
 $dateNow = date('Y-m-d H:i:s');
 $periode = date('Y-m');
 $permitted_chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-echo "Jumlah data pelnggan tanggal " .$tgl . " adalah : " . $dataX->num_rows . "\n";
+echo "Jumlah data pelnggan tanggal " . $tgl . " adalah : " . $dataX->num_rows . "\n";
 if ($dataX->num_rows > 0) {
     while ($row = mysqli_fetch_array($dataX)) {
         try {
-            $pelanggan_id = $row['id'];
-            $company_id = $row['company_id'];
+            $is_generate_tagihan = $row['is_generate_tagihan'];
             $nama_pelanggan = $row['nama'];
-            $harga = $row['harga'];
-            $ppn = $row['ppn'];
-            $tglDaftar = substr($row['tanggal_daftar'], 8, 2);
-            if ($ppn == 'Yes') {
-                $nominalPpn = $harga * 0.11;
-                $totalBayar = $harga + $nominalPpn;
-            } else {
-                $nominalPpn = 0;
-                $totalBayar =  $harga;
-            }
-            // cek udah ada tagihan di bulan ini blm
-            $cekTagihan = mysqli_query($koneksi, "select * from tagihans where pelanggan_id='$pelanggan_id' and periode='$periode'");
-            $jml = mysqli_num_rows($cekTagihan);
-            if ($jml < 1) {
-                //    create tagihan
-                $noTag = generate_string($permitted_chars, 10);
-                mysqli_query($koneksi, "INSERT INTO tagihans
-            (no_tagihan,pelanggan_id,periode,status_bayar,nominal_bayar,potongan_bayar,ppn,nominal_ppn,total_bayar,tanggal_create_tagihan,is_send,company_id)
-            VALUES
-            ('$noTag', '$pelanggan_id','$periode','Belum Bayar','$harga',0,'$ppn','$nominalPpn','$totalBayar','$dateNow','No','$company_id')");
-                // $pesan = "✅✅ [CRON CREATE TAGIHAN] ✅✅\n";
-                // $pesan .= "Tagihan berhasil dibuat!\n";
-                // $pesan .= "Pelanggan:  " . $nama_pelanggan . "\n";
-                // $pesan .= "Periode: " . $periode . "\n";
-                // sendTelegramNotification($pesan);
-                echo "Berhasil Create : " . $nama_pelanggan . "\n";
-            } else {
-                echo "SKIP : " . $nama_pelanggan. "\n";
-                // $pesan = "⚠️⚠️ [CRON CREATE TAGIHAN] ⚠️⚠️\n";
-                // $pesan .= "Skip generate tagihan!\n";
-                // $pesan .= "Pelanggan:  " . $nama_pelanggan . "\n";
-                // $pesan .= "Periode: " . $periode . "\n";
-                // $pesan .= "Karna sudah ada tagihan\n";
-                // sendTelegramNotification($pesan);
+            if ($is_generate_tagihan == 'Yes') {
+                $pelanggan_id = $row['id'];
+                $company_id = $row['company_id'];
+                $harga = $row['harga'];
+                $ppn = $row['ppn'];
+                $tglDaftar = substr($row['tanggal_daftar'], 8, 2);
+                if ($ppn == 'Yes') {
+                    $nominalPpn = $harga * 0.11;
+                    $totalBayar = $harga + $nominalPpn;
+                } else {
+                    $nominalPpn = 0;
+                    $totalBayar =  $harga;
+                }
+                // cek udah ada tagihan di bulan ini blm
+                $cekTagihan = mysqli_query($koneksi, "select * from tagihans where pelanggan_id='$pelanggan_id' and periode='$periode'");
+                $jml = mysqli_num_rows($cekTagihan);
+                if ($jml < 1) {
+                    //    create tagihan
+                    $noTag = generate_string($permitted_chars, 10);
+                    mysqli_query($koneksi, "INSERT INTO tagihans
+                (no_tagihan,pelanggan_id,periode,status_bayar,nominal_bayar,potongan_bayar,ppn,nominal_ppn,total_bayar,tanggal_create_tagihan,is_send,company_id)
+                VALUES
+                ('$noTag', '$pelanggan_id','$periode','Belum Bayar','$harga',0,'$ppn','$nominalPpn','$totalBayar','$dateNow','No','$company_id')");
+                    echo "Berhasil Create : " . $nama_pelanggan . "\n";
+                } else {
+                    echo "SKIP : " . $nama_pelanggan . "\n";
+                }
+            }else{
+                echo "SKIP karna generate off : " . $nama_pelanggan . "\n";
             }
         } catch (Throwable $t) {
             $pesan = "❌🚫 [CRON CREATE TAGIHAN] 🚫❌\n";

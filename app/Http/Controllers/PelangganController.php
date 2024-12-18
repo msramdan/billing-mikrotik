@@ -186,7 +186,7 @@ class PelangganController extends Controller
             $attr['company_id'] =  session('sessionCompany');
             $cek = Pelanggan::create($attr);
 
-            if($cek){
+            if ($cek) {
                 $waGateway = getCompany();
                 sendNotifWa(
                     $waGateway->url_wa_gateway,
@@ -549,5 +549,22 @@ class PelangganController extends Controller
             ->where('odp', $id)->get();
         $message = 'Berhasil mengambil data kota';
         return response()->json(compact('message', 'data'));
+    }
+
+    public function updateGenerateTagihan(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:pelanggans,id',
+            'is_generate_tagihan' => 'required|in:Yes,No',
+        ]);
+
+        $pelanggan = Pelanggan::findOrFail($request->id);
+        $pelanggan->is_generate_tagihan = $request->is_generate_tagihan;
+        $pelanggan->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => __('Tagihan status updated successfully.')
+        ]);
     }
 }

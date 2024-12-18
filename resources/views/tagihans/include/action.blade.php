@@ -23,10 +23,22 @@
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Bayar Tagihan</h5>
                         </div>
+
+                        @php
+                            $tunggakanCount = \App\Models\Tagihan::where('pelanggan_id', $model->pelanggan_id)
+                                ->where('status_bayar', 'Belum Bayar')
+                                ->count();
+                        @endphp
+
+
                         <form action="{{ route('bayarTagihan') }}" method="POST">
                             @csrf
                             @method('POST')
                             <div class="modal-body">
+                                <div class="alert alert-danger" role="alert">
+                                    Anda mempunya tunggakan {{$tunggakanCount}} bulan pembayaran. Harap segera bayarkan !!!
+                                </div>
+
                                 <input type="hidden" name="tagihan_id" value="{{ $model->id }}">
                                 <input type="hidden" name="pelanggan_id" value="{{ $model->pelanggan_id }}">
                                 <div class="col-md-12">
@@ -96,7 +108,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-12 bank-account-field" >
+                                <div class="col-md-12 bank-account-field">
                                     <div class="form-group">
                                         <label for="ppn">{{ __('Bank Account') }}</label>
                                         <select class="form-select" name="bank_account_id" required class="form-control">
@@ -189,14 +201,14 @@
 </td>
 
 <script>
-    $(document).ready(function(){
+    $(document).ready(function() {
         // Semula sembunyikan input Bank Account
         $('.bank-account-field').hide();
 
         // Ketika dropdown Metode Bayar berubah
-        $('select[name="metode_bayar"]').change(function(){
+        $('select[name="metode_bayar"]').change(function() {
             // Periksa apakah nilai yang dipilih adalah "Transfer Bank"
-            if($(this).val() === 'Transfer Bank') {
+            if ($(this).val() === 'Transfer Bank') {
                 // Jika ya, tampilkan input Bank Account
                 $('.bank-account-field').show();
                 // Jadikan input Bank Account wajib diisi

@@ -147,6 +147,7 @@
                                             <th>#</th>
                                             <th>{{ __('No Layanan') }}</th>
                                             <th>{{ __('Nama') }}</th>
+                                            <th>{{ __('Otomatis Generate Tagihan') }}</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
                                     </thead>
@@ -165,11 +166,12 @@
         integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.12.0/datatables.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
 @endpush
 
 @push('js')
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.12.0/datatables.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
         function format(d) {
             return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
@@ -244,6 +246,20 @@
                 name: 'nama',
             },
             {
+                data: 'is_generate_tagihan',
+                name: 'is_generate_tagihan',
+                orderable: false,
+                searchable: false,
+                render: function(data, type, row) {
+                    let checked = data === "Yes" ? "checked" : "";
+                    return `
+                <div class="form-check form-switch">
+                    <input class="form-check-input toggle-generate" type="checkbox" data-id="${row.id}" ${checked}>
+                </div>
+            `;
+                }
+            },
+            {
                 data: 'action',
                 name: 'action',
                 orderable: false,
@@ -287,5 +303,32 @@
         $('#tgl_daftar').change(function() {
             table.draw();
         })
+    </script>
+
+    <script>
+        $(document).on('change', '.toggle-generate', function() {
+            let id = $(this).data('id');
+            let is_generate = $(this).is(':checked') ? "Yes" : "No";
+
+            $.ajax({
+                url: "{{ route('pelanggans.update_generate_tagihan') }}",
+                method: "POST",
+                data: {
+                    id: id,
+                    is_generate_tagihan: is_generate,
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(response) {
+                    if (response.success) {
+                        toastr.success(response.message);
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function() {
+                    toastr.error("Failed to update tagihan status.");
+                }
+            });
+        });
     </script>
 @endpush
