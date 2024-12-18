@@ -81,9 +81,9 @@
                                                         <table class="table table-striped table-bordered">
                                                             <thead>
                                                                 <tr>
-                                                                    <th>Kategori</th>
-                                                                    <th>Total Transaksi</th>
-                                                                    <th>Nominal</th>
+                                                                    <th style="width: 33%;">Kategori</th>
+                                                                    <th style="width: 33%;">Total Transaksi</th>
+                                                                    <th style="width: 34%;">Nominal</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -97,8 +97,7 @@
                                                                         $totalNominal += $pemasukan->total_nominal;
                                                                     @endphp
                                                                     <tr>
-                                                                        <td><b>{{ $pemasukan->nama_kategori_pemasukan }}</b>
-                                                                        </td>
+                                                                        <td><b>{{ $pemasukan->nama_kategori_pemasukan }}</b></td>
                                                                         <td>{{ $pemasukan->total_transaksi }}</td>
                                                                         <td>{{ rupiah($pemasukan->total_nominal) }}</td>
                                                                     </tr>
@@ -112,6 +111,41 @@
                                                                 </tr>
                                                             </tfoot>
                                                         </table>
+
+                                                        <table class="table table-striped table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th style="width: 33%;">Metode Bayar</th>
+                                                                    <th style="width: 33%;">Total Transaksi</th>
+                                                                    <th style="width: 34%;">Nominal</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @php
+                                                                    $totalTransaksiSumber = 0;
+                                                                    $totalNominalSumber = 0;
+                                                                @endphp
+                                                                @foreach ($pemasukansBySumber as $row)
+                                                                    @php
+                                                                        $totalTransaksiSumber += $row->total_transaksi;
+                                                                        $totalNominalSumber += $row->total_nominal;
+                                                                    @endphp
+                                                                    <tr>
+                                                                        <td><b>{{ $row->metode_bayar }}</b></td>
+                                                                        <td>{{ $row->total_transaksi }}</td>
+                                                                        <td>{{ rupiah($row->total_nominal) }}</td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <th>Total</th>
+                                                                    <th>{{ $totalTransaksiSumber }}</th>
+                                                                    <th>{{ rupiah($totalNominalSumber) }}</th>
+                                                                </tr>
+                                                            </tfoot>
+                                                        </table>
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -131,9 +165,9 @@
                                                         <table class="table table-striped table-bordered">
                                                             <thead>
                                                                 <tr>
-                                                                    <th>Kategori</th>
-                                                                    <th>Total Transaksi</th>
-                                                                    <th>Nominal</th>
+                                                                    <th style="width: 33%;">Kategori</th>
+                                                                    <th style="width: 33%;">Total Transaksi</th>
+                                                                    <th style="width: 33%;">Nominal</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>

@@ -64,6 +64,19 @@ class LaporanController extends Controller
             ])
             ->groupBy('pemasukans.category_pemasukan_id', 'category_pemasukans.nama_kategori_pemasukan')
             ->get();
+        $pemasukansBySumber = DB::table('pemasukans')
+            ->select(
+                'pemasukans.metode_bayar',
+                DB::raw('COUNT(pemasukans.id) as total_transaksi'),
+                DB::raw('SUM(pemasukans.nominal) as total_nominal')
+            )
+            ->where('company_id', '=', session('sessionCompany'))
+            ->whereBetween('tanggal', [
+                $start . ' 00:00:00',
+                $end . ' 23:59:59'
+            ])
+            ->groupBy('pemasukans.metode_bayar')
+            ->get();
 
         $pengeluarans = DB::table('pengeluarans')
             ->leftJoin('category_pengeluarans', 'pengeluarans.category_pengeluaran_id', '=', 'category_pengeluarans.id')
@@ -86,6 +99,7 @@ class LaporanController extends Controller
             'pemasukans' => $pemasukans,
             'pengeluarans' => $pengeluarans,
             'nominalpengeluaran' => $nominalpengeluaran,
+            'pemasukansBySumber' => $pemasukansBySumber,
         ]);
     }
 
