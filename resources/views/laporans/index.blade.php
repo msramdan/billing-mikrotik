@@ -64,118 +64,6 @@
                                     <b>Laporan Pertumbuhan Pelanggan</b>
                                 </div>
                                 <div class="row">
-                                    <!-- Tombol untuk menampilkan modal -->
-                                    <div class="col-sm-6">
-                                        <div class="alert alert-dark" role="alert">
-                                            <b>Tagihan Sudah Bayar</b>
-                                            <hr>
-                                            Total : {{ $tagiahnBayar }} Tagihan<br>
-                                            Nominal : {{ rupiah($nominalTagiahnBayar) }}
-                                            <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal"
-                                                data-bs-target="#myModal">
-                                                Detail
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="myModal" tabindex="-1"
-                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-lg">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Detail Tagihan Periode :
-                                                    </h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <table class="table">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>Cash</td>
-                                                                <td>{{ rupiah($nominalTagiahnBayarCash) }}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Payment Tripay</td>
-                                                                <td>{{ rupiah($nominalTagiahnBayarPayment) }}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Transfer Bank</td>
-                                                                <td>
-                                                                    {{ rupiah($nominalTagiahnBayarTrf) }}
-                                                                    @php
-                                                                        $bankAccounts = DB::table('bank_accounts')
-                                                                            ->leftJoin(
-                                                                                'banks',
-                                                                                'bank_accounts.bank_id',
-                                                                                '=',
-                                                                                'banks.id',
-                                                                            )
-                                                                            ->where(
-                                                                                'bank_accounts.company_id',
-                                                                                '=',
-                                                                                session('sessionCompany'),
-                                                                            )
-                                                                            ->select(
-                                                                                'bank_accounts.*',
-                                                                                'banks.nama_bank',
-                                                                            )
-                                                                            ->get();
-                                                                    @endphp
-                                                                    @foreach ($bankAccounts as $bankAccount)
-                                                                        <li>{{ $bankAccount->nama_bank }} -
-                                                                            {{ $bankAccount->nomor_rekening }} :
-                                                                            @php
-                                                                                $nominal = DB::table('tagihans')
-                                                                                    ->whereBetween(
-                                                                                        'tanggal_create_tagihan',
-                                                                                        [
-                                                                                            $start . ' 00:00:00',
-                                                                                            $end . ' 23:59:59',
-                                                                                        ],
-                                                                                    )
-                                                                                    ->where(
-                                                                                        'status_bayar',
-                                                                                        'Sudah Bayar',
-                                                                                    )
-                                                                                    ->where(
-                                                                                        'tagihans.bank_account_id',
-                                                                                        $bankAccount->id,
-                                                                                    )
-                                                                                    ->where(
-                                                                                        'company_id',
-                                                                                        '=',
-                                                                                        session('sessionCompany'),
-                                                                                    )
-                                                                                    ->sum('tagihans.total_bayar');
-                                                                            @endphp
-                                                                            {{ rupiah($nominal) }}
-                                                                        </li>
-                                                                    @endforeach
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">Tutup</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-6">
-                                        <div class="alert alert-dark" role="alert">
-                                            <b>Tagihan Belum Bayar</b>
-                                            <hr>
-                                            Total : {{ $tagiahnBelumBayar }} Tagihan <br>
-                                            Nominal : {{ rupiah($nominalTtagiahnBayar) }}
-                                        </div>
-                                    </div>
-
 
                                     <div class="accordion" id="accordionExample">
                                         <div class="accordion-item">
@@ -183,24 +71,47 @@
                                                 <button class="accordion-button collapsed" type="button"
                                                     data-bs-toggle="collapse" data-bs-target="#collapseOne"
                                                     aria-expanded="false" aria-controls="collapseOne">
-                                                    <b> Pemasukan : {{ rupiah($nominalpemasukan) }} || Total transaksi :
-                                                        {{ $totalpemasukan }}</b>
+                                                    <b> Pemasukan : {{ rupiah($nominalpemasukan) }}</b>
                                                 </button>
                                             </h2>
                                             <div id="collapseOne" class="accordion-collapse collapse"
                                                 aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                                 <div class="accordion-body">
                                                     <div class="row">
-                                                        @foreach ($pemasukans as $pemasukan)
-                                                            <div class="col-sm-6">
-                                                                <div class="alert alert-success" role="alert">
-                                                                    <b>{{ $pemasukan->nama_kategori_pemasukan }}</b>
-                                                                    <hr>
-                                                                    Total : {{ $pemasukan->total_transaksi }} Transaksi<br>
-                                                                    Nominal : {{ rupiah($pemasukan->total_nominal) }}
-                                                                </div>
-                                                            </div>
-                                                        @endforeach
+                                                        <table class="table table-striped table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Kategori</th>
+                                                                    <th>Total Transaksi</th>
+                                                                    <th>Nominal</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @php
+                                                                    $totalTransaksi = 0;
+                                                                    $totalNominal = 0;
+                                                                @endphp
+                                                                @foreach ($pemasukans as $pemasukan)
+                                                                    @php
+                                                                        $totalTransaksi += $pemasukan->total_transaksi;
+                                                                        $totalNominal += $pemasukan->total_nominal;
+                                                                    @endphp
+                                                                    <tr>
+                                                                        <td><b>{{ $pemasukan->nama_kategori_pemasukan }}</b>
+                                                                        </td>
+                                                                        <td>{{ $pemasukan->total_transaksi }}</td>
+                                                                        <td>{{ rupiah($pemasukan->total_nominal) }}</td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <th>Total</th>
+                                                                    <th>{{ $totalTransaksi }}</th>
+                                                                    <th>{{ rupiah($totalNominal) }}</th>
+                                                                </tr>
+                                                            </tfoot>
+                                                        </table>
                                                     </div>
                                                 </div>
                                             </div>
@@ -210,35 +121,60 @@
                                                 <button class="accordion-button collapsed" type="button"
                                                     data-bs-toggle="collapse" data-bs-target="#collapseTwo"
                                                     aria-expanded="false" aria-controls="collapseTwo">
-                                                    <b>Pengeluaran : {{ rupiah($nominalpengeluaran) }} || Total transaksi :
-                                                        {{ $totalpengeluaran }}</b>
+                                                    <b>Pengeluaran : {{ rupiah($nominalpengeluaran) }}</b>
                                                 </button>
                                             </h2>
                                             <div id="collapseTwo" class="accordion-collapse collapse"
                                                 aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                                                 <div class="accordion-body">
                                                     <div class="row">
-                                                        @foreach ($pengeluarans as $pengeluaran)
-                                                            <div class="col-sm-6">
-                                                                <div class="alert alert-danger" role="alert">
-                                                                    <b>{{ $pengeluaran->nama_kategori_pengeluaran }}</b>
-                                                                    <hr>
-                                                                    Total : {{ $pengeluaran->total_transaksi }}
-                                                                    Transaksi<br>
-                                                                    Nominal : {{ rupiah($pengeluaran->total_nominal) }}
-                                                                </div>
-                                                            </div>
-                                                        @endforeach
+                                                        <table class="table table-striped table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Kategori</th>
+                                                                    <th>Total Transaksi</th>
+                                                                    <th>Nominal</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @php
+                                                                    $totalTransaksi = 0;
+                                                                    $totalNominal = 0;
+                                                                @endphp
+                                                                @foreach ($pengeluarans as $pengeluaran)
+                                                                    @php
+                                                                        $totalTransaksi +=
+                                                                            $pengeluaran->total_transaksi;
+                                                                        $totalNominal += $pengeluaran->total_nominal;
+                                                                    @endphp
+                                                                    <tr>
+                                                                        <td><b>{{ $pengeluaran->nama_kategori_pengeluaran }}</b>
+                                                                        </td>
+                                                                        <td>{{ $pengeluaran->total_transaksi }}</td>
+                                                                        <td>{{ rupiah($pengeluaran->total_nominal) }}</td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <th>Total</th>
+                                                                    <th>{{ $totalTransaksi }}</th>
+                                                                    <th>{{ rupiah($totalNominal) }}</th>
+                                                                </tr>
+                                                            </tfoot>
+                                                        </table>
                                                     </div>
+
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="accordion-item">
+                                        <div class="accordion-item" style="padding: 5px">
                                             <h2 class="accordion-header" id="headingThree">
-                                                <button class="accordion-button collapsed" type="button">
-                                                    <b>Sisa Hasil Pendapatan :
-                                                        {{ rupiah($nominalpemasukan - $nominalpengeluaran) }}</b>
-                                                </button>
+                                                <b
+                                                    style="color: {{ $nominalpemasukan - $nominalpengeluaran >= 0 ? 'green' : 'red' }};">
+                                                    Sisa Hasil Pendapatan :
+                                                    {{ rupiah($nominalpemasukan - $nominalpengeluaran) }}
+                                                </b>
                                             </h2>
                                         </div>
                                     </div>
