@@ -69,6 +69,7 @@
                                             <th>{{ __('Nominal') }}</th>
                                             <th>{{ __('Tanggal') }}</th>
                                             <th>{{ __('Kategori pemasukan') }}</th>
+                                            <th>Metode Bayar</th>
                                             <th>{{ __('Keterangan') }}</th>
                                             <th>{{ __('Action') }}</th>
                                         </tr>
@@ -113,6 +114,10 @@
             {
                 data: 'nama_kategori_pemasukan',
                 name: 'nama_kategori_pemasukan',
+            },
+            {
+                data: 'metode_bayar',
+                name: 'metode_bayar',
             },
             {
                 data: 'keterangan',

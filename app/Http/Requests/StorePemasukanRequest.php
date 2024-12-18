@@ -28,6 +28,7 @@ class StorePemasukanRequest extends FormRequest
 			'tanggal' => 'required',
 			'keterangan' => 'required|string',
             'category_pemasukan_id' => 'required',
+            'metode_bayar' => 'required',
         ];
     }
 }

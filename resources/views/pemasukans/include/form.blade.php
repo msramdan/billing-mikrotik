@@ -29,8 +29,8 @@
     <div class="col-md-6">
         <div class="form-group">
             <label for="wilayah-odcp">{{ __('Kategori pemasukan') }}</label>
-            <select class="form-select @error('category_pemasukan_id') is-invalid @enderror" name="category_pemasukan_id" id="wilayah-odcp"
-                class="form-control" required>
+            <select class="form-select @error('category_pemasukan_id') is-invalid @enderror"
+                name="category_pemasukan_id" id="wilayah-odcp" class="form-control" required>
                 <option value="" selected disabled>-- {{ __('Select') }} --</option>
 
                 @foreach ($categoryPemasukans as $row)
@@ -41,6 +41,28 @@
                 @endforeach
             </select>
             @error('category_pemasukan_id')
+                <span class="text-danger">
+                    {{ $message }}
+                </span>
+            @enderror
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="metode_bayar">{{ __('Metode Bayar') }}</label>
+            <select class="form-select @error('metode_bayar') is-invalid @enderror" name="metode_bayar"
+                id="metode_bayar" required>
+                <option value="Cash"
+                    {{ isset($pemasukan) && $pemasukan->metode_bayar == 'Cash' ? 'selected' : (old('metode_bayar') == 'Cash' ? 'selected' : '') }}>
+                    Cash
+                </option>
+                <option value="Transfer Bank"
+                    {{ isset($pemasukan) && $pemasukan->metode_bayar == 'Transfer Bank' ? 'selected' : (old('metode_bayar') == 'Transfer Bank' ? 'selected' : '') }}>
+                    Transfer Bank
+                </option>
+            </select>
+            @error('metode_bayar')
                 <span class="text-danger">
                     {{ $message }}
                 </span>

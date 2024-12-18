@@ -462,6 +462,7 @@ class TagihanController extends Controller
             'category_pemasukan_id' => 1,
             'keterangan' => 'Pembayaran Tagihan no Tagihan ' . $request->no_tagihan . ' a/n ' . $request->nama_pelanggan . ' Periode ' . $request->periode_waktu,
             'referense_id' => $request->tagihan_id,
+            'metode_bayar' => $request->metode_bayar,
             'created_at' => $tgl,
             'updated_at' => $tgl,
         ]);
