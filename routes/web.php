@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExpiredController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PanelCustomer\DashboardController as PanelCustomerDashboardController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\SettingmikrotikController;
@@ -175,3 +176,4 @@ Route::middleware(['auth', 'web'])->group(function () {
         Route::get('invoice/{id}', 'invoice')->name('invoice.pdf');
     });
 });
+Route::get('/pelanggan-data', [LaporanController::class, 'getPelangganData']);

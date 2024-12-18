@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', __('Create Laporan'))
+@section('title', __('View Laporan'))
 
 @section('content')
     <div class="page-heading">
@@ -26,231 +26,203 @@
 
         <section class="section">
             <div class="row">
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <form action="{{ route('laporans.index') }}" method="GET">
-                                <div class="row mb-2">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label for="filter-bulan">{{ __('Filter Bulan') }}</label>
-                                            <input type="month" name="filter_bulan" id="filter-bulan" class="form-control"
-                                                value="{{ $month }}" placeholder="{{ __('Filter Bulan') }}"
-                                                required />
-                                        </div>
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn btn-primary">{{ __('Submit') }}</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-8">
+                <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
-                                <!-- Tombol untuk menampilkan modal -->
-                                <div class="col-sm-6">
-                                    <div class="alert alert-dark" role="alert">
-                                        <b>Tagihan Sudah Bayar</b>
-                                        <hr>
-                                        Total : {{ $tagiahnBayar }} Tagihan<br>
-                                        Nominal : {{ rupiah($nominalTagiahnBayar) }}
-                                        <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal"
-                                            data-bs-target="#myModal">
-                                            Detail
-                                        </button>
-                                    </div>
+                                <div class="alert alert-light" role="alert">
+                                    <b>Laporan Keuangan</b>
                                 </div>
-
-                                <!-- Modal -->
-                                <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                                    aria-hidden="true">
-                                    <div class="modal-dialog modal-lg">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Detail Tagihan Periode :
-                                                    {{ konversiTanggal($month) }}</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
+                                <form action="{{ route('laporans.index') }}" method="GET">
+                                    <div class="row mb-2 align-items-center">
+                                        <div class="col-md-12 d-flex justify-content-between">
+                                            <div class="input-group me-2">
+                                                <span class="input-group-text" id="addon-wrapping">
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                                <input type="text" class="form-control" aria-describedby="addon-wrapping"
+                                                    id="daterange-btn" value="">
+                                                <input type="hidden" name="start_date" id="start_date"
+                                                    value="{{ $microFrom ?? '' }}">
+                                                <input type="hidden" name="end_date" id="end_date"
+                                                    value="{{ $microTo ?? '' }}">
                                             </div>
-                                            <div class="modal-body">
-                                                <table class="table">
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>Cash</td>
-                                                            <td>{{ rupiah($nominalTagiahnBayarCash) }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Payment Tripay</td>
-                                                            <td>{{ rupiah($nominalTagiahnBayarPayment) }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Transfer Bank</td>
-                                                            <td>
-                                                                {{ rupiah($nominalTagiahnBayarTrf) }}
-                                                                @php
-                                                                    $bankAccounts = DB::table('bank_accounts')
-                                                                        ->leftJoin(
-                                                                            'banks',
-                                                                            'bank_accounts.bank_id',
-                                                                            '=',
-                                                                            'banks.id',
-                                                                        )
-                                                                        ->where(
-                                                                            'bank_accounts.company_id',
-                                                                            '=',
-                                                                            session('sessionCompany'),
-                                                                        )
-                                                                        ->select('bank_accounts.*', 'banks.nama_bank')
-                                                                        ->get();
-                                                                @endphp
-                                                                @foreach ($bankAccounts as $bankAccount)
-                                                                    <li>{{ $bankAccount->nama_bank }} -
-                                                                        {{ $bankAccount->nomor_rekening }} :
-                                                                        @php
-                                                                            $nominal = DB::table('tagihans')
-                                                                                ->where('periode', $month)
-                                                                                ->where('status_bayar', 'Sudah Bayar')
-                                                                                ->where(
-                                                                                    'tagihans.bank_account_id',
-                                                                                    $bankAccount->id,
-                                                                                )
-                                                                                ->where(
-                                                                                    'company_id',
-                                                                                    '=',
-                                                                                    session('sessionCompany'),
-                                                                                )
-                                                                                ->sum('tagihans.total_bayar');
-                                                                        @endphp
-                                                                        {{ rupiah($nominal) }}
-                                                                    </li>
-                                                                @endforeach
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Tutup</button>
-                                            </div>
+                                            <button type="submit" class="btn btn-success">Filter</button>
                                         </div>
                                     </div>
-                                </div>
-
-                                <div class="col-sm-6">
-                                    <div class="alert alert-dark" role="alert">
-                                        <b>Tagihan Belum Bayar</b>
-                                        <hr>
-                                        Total : {{ $tagiahnBelumBayar }} Tagihan <br>
-                                        Nominal : {{ rupiah($nominalTtagiahnBayar) }}
-                                    </div>
-                                </div>
-
-
-                                <div class="accordion" id="accordionExample">
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header" id="headingOne">
-                                            <button class="accordion-button collapsed" type="button"
-                                                data-bs-toggle="collapse" data-bs-target="#collapseOne"
-                                                aria-expanded="false" aria-controls="collapseOne">
-                                                <b> Pemasukan : {{ rupiah($nominalpemasukan) }} || Total transaksi :
-                                                    {{ $totalpemasukan }}</b>
-                                            </button>
-                                        </h2>
-                                        <div id="collapseOne" class="accordion-collapse collapse"
-                                            aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                                            <div class="accordion-body">
-                                                <div class="row">
-                                                    @foreach ($pemasukans as $pemasukan)
-                                                        <div class="col-sm-6">
-                                                            <div class="alert alert-success" role="alert">
-                                                                <b>{{ $pemasukan->nama_kategori_pemasukan }}</b>
-                                                                <hr>
-                                                                Total : {{ $pemasukan->total_transaksi }} Transaksi<br>
-                                                                Nominal : {{ rupiah($pemasukan->total_nominal) }}
-                                                            </div>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header" id="headingTwo">
-                                            <button class="accordion-button collapsed" type="button"
-                                                data-bs-toggle="collapse" data-bs-target="#collapseTwo"
-                                                aria-expanded="false" aria-controls="collapseTwo">
-                                                <b>Pengeluaran : {{ rupiah($nominalpengeluaran) }} || Total transaksi :
-                                                    {{ $totalpengeluaran }}</b>
-                                            </button>
-                                        </h2>
-                                        <div id="collapseTwo" class="accordion-collapse collapse"
-                                            aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                                            <div class="accordion-body">
-                                                <div class="row">
-                                                    @foreach($pengeluarans as $pengeluaran)
-                                                    <div class="col-sm-6">
-                                                        <div class="alert alert-danger" role="alert">
-                                                            <b>{{ $pengeluaran->nama_kategori_pengeluaran }}</b>
-                                                            <hr>
-                                                            Total : {{ $pengeluaran->total_transaksi }} Transaksi<br>
-                                                            Nominal : {{ rupiah($pengeluaran->total_nominal) }}
-                                                        </div>
-                                                    </div>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header" id="headingThree">
-                                            <button class="accordion-button collapsed" type="button">
-                                                <b>Sisa Hasil Pendapatan :
-                                                    {{ rupiah($nominalpemasukan - $nominalpengeluaran) }}</b>
-                                            </button>
-                                        </h2>
-                                    </div>
-                                </div>
-
-
-
-
-
-
-                                {{-- <div class="col-sm-6">
-                                    <div class="alert alert-dark" role="alert">
-                                        <b>Pemasukan Voucher</b>
-                                        <hr>
-                                        Total : {{ $countPemasukanVoucher }} Voucher<br>
-                                        Nominal : {{ rupiah($nominalpemasukanVoucher) }}
-                                    </div>
-                                </div>
-
-
-
-                                <div class="col-sm-6">
-                                    <div class="alert alert-dark" role="alert">
-                                        <b>Pengeluaran</b>
-                                        <hr>
-                                        Total : {{ $totalpengeluaran }} Transaksi<br>
-                                        Nominal : {{ rupiah($nominalpengeluaran) }}
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="alert alert-dark" role="alert">
-                                        <b>Sisa Hasil Pendapatan</b>
-                                        <hr>
-                                        Nominal : {{ rupiah(($nominalpemasukan + $nominalpemasukanVoucher) - $nominalpengeluaran) }}
-                                    </div>
-                                </div> --}}
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="alert alert-light" role="alert">
+                                    <b>Laporan Pertumbuhan Pelanggan</b>
+                                </div>
+
+                                <!-- Pilihan tampilan grafik (harian, bulanan, tahunan) -->
+                                <div class="mb-3">
+                                    <label for="view-option" class="form-label">Pilih Tampilan Grafik</label>
+                                    <select class="form-select" id="view-option">
+                                        <option value="daily">Harian</option>
+                                        <option value="monthly">Bulanan</option>
+                                        <option value="yearly">Tahunan</option>
+                                    </select>
+                                </div>
+                                <div id="myChart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </section>
     </div>
 @endsection
+
+@push('css')
+    <link href="{{ asset('mazer/css/daterangepicker.min.css') }}" rel="stylesheet" />
+@endpush
+
+
+@push('js')
+    @push('css')
+        <link href="{{ asset('mazer/css/daterangepicker.min.css') }}" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/apexcharts@3.35.3/dist/apexcharts.css" rel="stylesheet" />
+    @endpush
+
+    @push('js')
+        <script type="text/javascript" src="{{ asset('mazer/js/moment.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('mazer/js/daterangepicker.min.js') }}"></script>
+        <!-- Tambahkan ApexCharts JS -->
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.35.3/dist/apexcharts.min.js"></script>
+        <script>
+            var start = {{ $microFrom }};
+            var end = {{ $microTo }};
+            var label = '';
+
+            $('#daterange-btn').daterangepicker({
+                locale: {
+                    format: 'DD MMM YYYY'
+                },
+                startDate: moment(start),
+                endDate: moment(end),
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf(
+                        'month')],
+                }
+            }, function(start, end, label) {
+                $('#start_date').val(Date.parse(start));
+                $('#end_date').val(Date.parse(end));
+                if (isDate(start)) {
+                    $('#daterange-btn span').html(start.format('DD MMM YYYY') + ' - ' + end.format('DD MMM YYYY'));
+                }
+            });
+
+            function isDate(val) {
+                var d = Date.parse(val);
+                return Date.parse(val);
+            }
+        </script>
+
+
+        <!-- Your custom JavaScript code -->
+        <script>
+            $(document).ready(function() {
+                fetchDataAndRenderChart('daily'); // Load chart with default 'daily' view
+            });
+
+            function fetchDataAndRenderChart(viewOption) {
+                var startDate = $('#start_date').val(); // Get start date
+                var endDate = $('#end_date').val(); // Get end date
+
+                // Call API to fetch data based on viewOption
+                $.ajax({
+                    url: '/pelanggan-data', // Adjust to your API URL
+                    method: 'GET',
+                    data: {
+                        view_option: viewOption,
+                        start_date: startDate,
+                        end_date: endDate
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        renderChart(response, viewOption);
+                    },
+                    error: function(error) {
+                        console.error('Error fetching data:', error);
+                    }
+                });
+            }
+
+            function renderChart(data, viewOption) {
+                var labels = [];
+                var counts = [];
+
+                // Process data according to viewOption
+                if (viewOption === 'daily') {
+                    data.forEach(item => {
+                        labels.push(item.date);
+                        counts.push(item.count);
+                    });
+                } else if (viewOption === 'monthly') {
+                    data.forEach(item => {
+                        labels.push(item.year + '-' + item.month);
+                        counts.push(item.count);
+                    });
+                } else if (viewOption === 'yearly') {
+                    data.forEach(item => {
+                        labels.push(item.year);
+                        counts.push(item.count);
+                    });
+                }
+
+                // Remove the previous chart if it exists
+                if (typeof chart !== 'undefined') {
+                    chart.destroy();
+                }
+
+                // Render new chart
+                var options = {
+                    chart: {
+                        type: 'line',
+                        height: 350
+                    },
+                    series: [{
+                        name: 'Jumlah Pelanggan',
+                        data: counts
+                    }],
+                    xaxis: {
+                        categories: labels,
+                        title: {
+                            text: viewOption === 'daily' ? 'Tanggal' : (viewOption === 'monthly' ? 'Bulan' : 'Tahun')
+                        }
+                    },
+                    yaxis: {
+                        title: {
+                            text: 'Jumlah Pelanggan'
+                        }
+                    }
+                };
+
+                chart = new ApexCharts(document.querySelector("#myChart"), options);
+                chart.render();
+            }
+
+            // Trigger chart update on view option change
+            $('#view-option').change(function() {
+                var viewOption = $(this).val();
+                fetchDataAndRenderChart(viewOption);
+            });
+        </script>
+    @endpush
+
+@endpush
