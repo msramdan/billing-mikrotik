@@ -35,7 +35,7 @@
                                 </div>
                                 <form action="{{ route('laporans.index') }}" method="GET">
                                     <div class="row mb-2 align-items-center">
-                                        <div class="col-md-12 d-flex justify-content-between">
+                                        <div class="col-md-3 d-flex justify-content-between">
                                             <div class="input-group me-2">
                                                 <span class="input-group-text" id="addon-wrapping">
                                                     <i class="fa fa-calendar"></i>
@@ -65,8 +65,7 @@
 
                                 <!-- Pilihan tampilan grafik (harian, bulanan, tahunan) -->
                                 <div class="mb-3">
-                                    <label for="view-option" class="form-label">Pilih Tampilan Grafik</label>
-                                    <select class="form-select" id="view-option">
+                                    <select class="form-select" id="view-option" style="width: 200px;">
                                         <option value="daily">Harian</option>
                                         <option value="monthly">Bulanan</option>
                                         <option value="yearly">Tahunan</option>
