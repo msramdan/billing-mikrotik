@@ -30,9 +30,6 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
-                                <div class="alert alert-light" role="alert">
-                                    <b>Laporan Keuangan</b>
-                                </div>
                                 <form action="{{ route('laporans.index') }}" method="GET">
                                     <div class="row mb-2 align-items-center">
                                         <div class="col-md-3 d-flex justify-content-between">
