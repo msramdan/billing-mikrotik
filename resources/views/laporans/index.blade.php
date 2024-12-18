@@ -61,7 +61,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="alert alert-light" role="alert">
-                                    <b>Laporan Pertumbuhan Pelanggan</b>
+                                    <b>Laporan Keuangan</b>
                                 </div>
                                 <div class="row">
 

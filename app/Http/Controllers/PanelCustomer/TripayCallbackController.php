@@ -132,6 +132,7 @@ class TripayCallbackController extends Controller
                     'company_id' => $invoice->company_id,
                     'tanggal' => date('Y-m-d H:i:s'),
                     'category_pemasukan_id' => 1,
+                    'metode_bayar' => 'Payment Tripay',
                     'keterangan' => 'Pembayaran Tagihan no Tagihan ' . $invoice->no_tagihan . ' a/n ' . $invoice->nama_pelanggan . ' Periode ' . $invoice->periode,
                     'created_at' => date('Y-m-d H:i:s'),
                     'updated_at' => date('Y-m-d H:i:s'),
