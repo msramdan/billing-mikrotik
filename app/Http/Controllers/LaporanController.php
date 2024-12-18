@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Carbon\Carbon;
+use App\Models\Tagihan;
 use Illuminate\Support\Facades\DB;
+use App\Models\Pemasukan;
+use App\Models\Pengeluaran;
+use Carbon\Carbon;
+
 
 class LaporanController extends Controller
 {
@@ -15,15 +19,161 @@ class LaporanController extends Controller
 
     public function index(Request $request)
     {
-        $from = date('Y-m-01') . " 00:00:00";
-        $to = date('Y-m-d') . " 23:59:59";
-        $microFrom = strtotime($from) * 1000;
-        $microTo = strtotime($to) * 1000;
-        $start_date = $request->query('start_date') !== null ? intval($request->query('start_date')) : $microFrom;
-        $end_date = $request->query('end_date') !== null ? intval($request->query('end_date')) : $microTo;
+        if (isset($request->start_date)) {
+            $start_date = intval($request->query('start_date'));
+            $end_date = intval($request->query('end_date'));
+        } else {
+            $from = date('Y-m-01') . " 00:00:00";
+            $to = date('Y-m-d') . " 23:59:59";
+            $start_date = strtotime($from) * 1000;
+            $end_date = strtotime($to) * 1000;
+        }
+
+        // Mengubah milidetik ke format Y-m-d
+        $start = date('Y-m-d', $start_date / 1000);
+        $end = date('Y-m-d', $end_date / 1000);
+
+        $tagiahnBayar = DB::table('tagihans')
+            ->whereBetween('tanggal_create_tagihan', [
+                $start . ' 00:00:00',
+                $end . ' 23:59:59'
+            ])
+            ->where('status_bayar', 'Sudah Bayar')
+            ->where('company_id', '=', session('sessionCompany'))
+            ->count();
+
+        $nominalTagiahnBayar = DB::table('tagihans')
+            ->whereBetween('tanggal_create_tagihan', [
+                $start . ' 00:00:00',
+                $end . ' 23:59:59'
+            ])
+            ->where('status_bayar', 'Sudah Bayar')
+            ->where('company_id', '=', session('sessionCompany'))
+            ->sum('tagihans.total_bayar');
+
+        $nominalTagiahnBayarCash = DB::table('tagihans')
+            ->whereBetween('tanggal_create_tagihan', [
+                $start . ' 00:00:00',
+                $end . ' 23:59:59'
+            ])
+            ->where('status_bayar', 'Sudah Bayar')
+            ->where('metode_bayar', 'Cash')
+            ->where('company_id', '=', session('sessionCompany'))
+            ->sum('tagihans.total_bayar');
+
+        $nominalTagiahnBayarPayment = DB::table('tagihans')
+            ->whereBetween('tanggal_create_tagihan', [
+                $start . ' 00:00:00',
+                $end . ' 23:59:59'
+            ])
+            ->where('status_bayar', 'Sudah Bayar')
+            ->where('metode_bayar', 'Payment Tripay')
+            ->where('company_id', '=', session('sessionCompany'))
+            ->sum('tagihans.total_bayar');
+
+        $nominalTagiahnBayarTrf = DB::table('tagihans')
+            ->whereBetween('tanggal_create_tagihan', [
+                $start . ' 00:00:00',
+                $end . ' 23:59:59'
+            ])
+            ->where('status_bayar', 'Sudah Bayar')
+            ->where('metode_bayar', 'Transfer Bank')
+            ->where('company_id', '=', session('sessionCompany'))
+            ->sum('tagihans.total_bayar');
+
+        $tagiahnBelumBayar =  DB::table('tagihans')
+            ->whereBetween('tanggal_create_tagihan', [
+                $start . ' 00:00:00',
+                $end . ' 23:59:59'
+            ])
+            ->where('status_bayar', 'Belum Bayar')
+            ->where('company_id', '=', session('sessionCompany'))
+            ->count();
+        $nominalTtagiahnBayar = DB::table('tagihans')
+            ->whereBetween('tanggal_create_tagihan', [
+                $start . ' 00:00:00',
+                $end . ' 23:59:59'
+            ])
+            ->where('status_bayar', 'Belum Bayar')
+            ->where('company_id', '=', session('sessionCompany'))
+            ->sum('tagihans.total_bayar');
+        // =============================================================
+        $totalpemasukan = DB::table('pemasukans')
+            ->where('company_id', '=', session('sessionCompany'))
+            ->whereBetween('tanggal', [
+                $start . ' 00:00:00',
+                $end . ' 23:59:59'
+            ])
+            ->count();
+        $nominalpemasukan = DB::table('pemasukans')
+            ->where('company_id', '=', session('sessionCompany'))
+            ->whereBetween('tanggal', [
+                $start . ' 00:00:00',
+                $end . ' 23:59:59'
+            ])
+            ->sum('pemasukans.nominal');
+
+        $totalpengeluaran = DB::table('pengeluarans')
+            ->where('company_id', '=', session('sessionCompany'))
+            ->whereBetween('tanggal', [
+                $start . ' 00:00:00',
+                $end . ' 23:59:59'
+            ])
+            ->count();
+        $nominalpengeluaran = DB::table('pengeluarans')
+            ->where('company_id', '=', session('sessionCompany'))
+            ->whereBetween('tanggal', [
+                $start . ' 00:00:00',
+                $end . ' 23:59:59'
+            ])
+            ->sum('pengeluarans.nominal');
+
+        $pemasukans = DB::table('pemasukans')
+            ->leftJoin('category_pemasukans', 'pemasukans.category_pemasukan_id', '=', 'category_pemasukans.id')
+            ->select(
+                'pemasukans.category_pemasukan_id',
+                'category_pemasukans.nama_kategori_pemasukan',
+                DB::raw('COUNT(pemasukans.id) as total_transaksi'),
+                DB::raw('SUM(pemasukans.nominal) as total_nominal')
+            )
+            ->where('company_id', '=', session('sessionCompany'))
+            ->whereBetween('tanggal', [
+                $start . ' 00:00:00',
+                $end . ' 23:59:59'
+            ])
+            ->groupBy('pemasukans.category_pemasukan_id', 'category_pemasukans.nama_kategori_pemasukan')
+            ->get();
+
+        $pengeluarans = DB::table('pengeluarans')
+            ->leftJoin('category_pengeluarans', 'pengeluarans.category_pengeluaran_id', '=', 'category_pengeluarans.id')
+            ->select(
+                'pengeluarans.category_pengeluaran_id',
+                'category_pengeluarans.nama_kategori_pengeluaran',
+                DB::raw('COUNT(pengeluarans.id) as total_transaksi'),
+                DB::raw('SUM(pengeluarans.nominal) as total_nominal')
+            )
+            ->where('company_id', '=', session('sessionCompany'))
+            ->whereBetween('pengeluarans.tanggal', [$start, $end])
+            ->groupBy('pengeluarans.category_pengeluaran_id', 'category_pengeluarans.nama_kategori_pengeluaran')
+            ->get();
         return view('laporans.index', [
             'microFrom' => $start_date,
             'microTo' => $end_date,
+            'start' => $start,
+            'end' => $end,
+            'tagiahnBayar' => $tagiahnBayar,
+            'nominalTagiahnBayarCash' => $nominalTagiahnBayarCash,
+            'nominalTagiahnBayarPayment' => $nominalTagiahnBayarPayment,
+            'nominalTagiahnBayarTrf' => $nominalTagiahnBayarTrf,
+            'nominalTagiahnBayar' => $nominalTagiahnBayar,
+            'tagiahnBelumBayar' => $tagiahnBelumBayar,
+            'nominalTtagiahnBayar' => $nominalTtagiahnBayar,
+            'totalpemasukan' => $totalpemasukan,
+            'nominalpemasukan' => $nominalpemasukan,
+            'pemasukans' => $pemasukans,
+            'pengeluarans' => $pengeluarans,
+            'totalpengeluaran' => $totalpengeluaran,
+            'nominalpengeluaran' => $nominalpengeluaran,
         ]);
     }
 
@@ -66,5 +216,4 @@ class LaporanController extends Controller
         // Mengembalikan data dalam format JSON untuk frontend
         return response()->json($data);
     }
-
 }
