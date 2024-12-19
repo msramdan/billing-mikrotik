@@ -58,10 +58,124 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="alert alert-light" role="alert">
+                                    <b>Laporan Tagihan</b>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="alert alert-dark" role="alert">
+                                        <b>Tagihan Sudah Bayar</b>
+                                        <hr>
+                                        Total : {{ $tagiahnBayar }} Tagihan<br>
+                                        Nominal : {{ rupiah($nominalTagiahnBayar) }}
+                                        <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal"
+                                            data-bs-target="#myModal">
+                                            Detail
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- Modal -->
+                                <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Detail Tagihan Periode :
+                                                </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <table class="table">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Cash</td>
+                                                            <td>{{ rupiah($nominalTagiahnBayarCash) }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Payment Tripay</td>
+                                                            <td>{{ rupiah($nominalTagiahnBayarPayment) }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Transfer Bank</td>
+                                                            <td>
+                                                                {{ rupiah($nominalTagiahnBayarTrf) }}
+                                                                @php
+                                                                    $bankAccounts = DB::table('bank_accounts')
+                                                                        ->leftJoin(
+                                                                            'banks',
+                                                                            'bank_accounts.bank_id',
+                                                                            '=',
+                                                                            'banks.id',
+                                                                        )
+                                                                        ->where(
+                                                                            'bank_accounts.company_id',
+                                                                            '=',
+                                                                            session('sessionCompany'),
+                                                                        )
+                                                                        ->select('bank_accounts.*', 'banks.nama_bank')
+                                                                        ->get();
+                                                                @endphp
+                                                                @foreach ($bankAccounts as $bankAccount)
+                                                                    <li>{{ $bankAccount->nama_bank }} -
+                                                                        {{ $bankAccount->nomor_rekening }} :
+                                                                        @php
+                                                                            $nominal = DB::table('tagihans')
+                                                                                ->whereBetween(
+                                                                                    'tanggal_create_tagihan',
+                                                                                    [
+                                                                                        $start . ' 00:00:00',
+                                                                                        $end . ' 23:59:59',
+                                                                                    ],
+                                                                                )
+                                                                                ->where('status_bayar', 'Sudah Bayar')
+                                                                                ->where(
+                                                                                    'tagihans.bank_account_id',
+                                                                                    $bankAccount->id,
+                                                                                )
+                                                                                ->where(
+                                                                                    'company_id',
+                                                                                    '=',
+                                                                                    session('sessionCompany'),
+                                                                                )
+                                                                                ->sum('tagihans.total_bayar');
+                                                                        @endphp
+                                                                        {{ rupiah($nominal) }}
+                                                                    </li>
+                                                                @endforeach
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Tutup</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="alert alert-dark" role="alert">
+                                        <b>Tagihan Belum Bayar</b>
+                                        <hr>
+                                        Total : {{ $tagiahnBelumBayar }} Tagihan <br>
+                                        Nominal : {{ rupiah($nominalTtagiahnBayar) }}
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="alert alert-light" role="alert">
                                     <b>Laporan Keuangan</b>
                                 </div>
                                 <div class="row">
-
                                     <div class="accordion" id="accordionExample">
                                         <div class="accordion-item">
                                             <h2 class="accordion-header" id="headingOne">
@@ -94,7 +208,8 @@
                                                                         $totalNominal += $pemasukan->total_nominal;
                                                                     @endphp
                                                                     <tr>
-                                                                        <td><b>{{ $pemasukan->nama_kategori_pemasukan }}</b></td>
+                                                                        <td><b>{{ $pemasukan->nama_kategori_pemasukan }}</b>
+                                                                        </td>
                                                                         <td>{{ $pemasukan->total_transaksi }}</td>
                                                                         <td>{{ rupiah($pemasukan->total_nominal) }}</td>
                                                                     </tr>

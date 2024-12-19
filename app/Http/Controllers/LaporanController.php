@@ -33,6 +33,66 @@ class LaporanController extends Controller
         $start = date('Y-m-d', $start_date / 1000);
         $end = date('Y-m-d', $end_date / 1000);
         // =============================================================
+        $tagiahnBayar = DB::table('tagihans')
+            ->whereBetween('tanggal_create_tagihan', [
+                $start . ' 00:00:00',
+                $end . ' 23:59:59'
+            ])
+            ->where('status_bayar', 'Sudah Bayar')
+            ->where('company_id', '=', session('sessionCompany'))
+            ->count();
+        $nominalTagiahnBayar = DB::table('tagihans')
+            ->whereBetween('tanggal_create_tagihan', [
+                $start . ' 00:00:00',
+                $end . ' 23:59:59'
+            ])
+            ->where('status_bayar', 'Sudah Bayar')
+            ->where('company_id', '=', session('sessionCompany'))
+            ->sum('tagihans.total_bayar');
+        $nominalTagiahnBayarCash = DB::table('tagihans')
+            ->whereBetween('tanggal_create_tagihan', [
+                $start . ' 00:00:00',
+                $end . ' 23:59:59'
+            ])
+            ->where('status_bayar', 'Sudah Bayar')
+            ->where('metode_bayar', 'Cash')
+            ->where('company_id', '=', session('sessionCompany'))
+            ->sum('tagihans.total_bayar');
+        $nominalTagiahnBayarPayment = DB::table('tagihans')
+            ->whereBetween('tanggal_create_tagihan', [
+                $start . ' 00:00:00',
+                $end . ' 23:59:59'
+            ])
+            ->where('status_bayar', 'Sudah Bayar')
+            ->where('metode_bayar', 'Payment Tripay')
+            ->where('company_id', '=', session('sessionCompany'))
+            ->sum('tagihans.total_bayar');
+        $nominalTagiahnBayarTrf = DB::table('tagihans')
+            ->whereBetween('tanggal_create_tagihan', [
+                $start . ' 00:00:00',
+                $end . ' 23:59:59'
+            ])
+            ->where('status_bayar', 'Sudah Bayar')
+            ->where('metode_bayar', 'Transfer Bank')
+            ->where('company_id', '=', session('sessionCompany'))
+            ->sum('tagihans.total_bayar');
+        $tagiahnBelumBayar =  DB::table('tagihans')
+            ->whereBetween('tanggal_create_tagihan', [
+                $start . ' 00:00:00',
+                $end . ' 23:59:59'
+            ])
+            ->where('status_bayar', 'Belum Bayar')
+            ->where('company_id', '=', session('sessionCompany'))
+            ->count();
+        $nominalTtagiahnBayar = DB::table('tagihans')
+            ->whereBetween('tanggal_create_tagihan', [
+                $start . ' 00:00:00',
+                $end . ' 23:59:59'
+            ])
+            ->where('status_bayar', 'Belum Bayar')
+            ->where('company_id', '=', session('sessionCompany'))
+            ->sum('tagihans.total_bayar');
+        // =============================================================
         $nominalpemasukan = DB::table('pemasukans')
             ->where('company_id', '=', session('sessionCompany'))
             ->whereBetween('tanggal', [
@@ -100,6 +160,13 @@ class LaporanController extends Controller
             'pengeluarans' => $pengeluarans,
             'nominalpengeluaran' => $nominalpengeluaran,
             'pemasukansBySumber' => $pemasukansBySumber,
+            'tagiahnBayar' => $tagiahnBayar,
+            'nominalTagiahnBayarCash' => $nominalTagiahnBayarCash,
+            'nominalTagiahnBayarPayment' => $nominalTagiahnBayarPayment,
+            'nominalTagiahnBayarTrf' => $nominalTagiahnBayarTrf,
+            'nominalTagiahnBayar' => $nominalTagiahnBayar,
+            'tagiahnBelumBayar' => $tagiahnBelumBayar,
+            'nominalTtagiahnBayar' => $nominalTtagiahnBayar,
         ]);
     }
 
