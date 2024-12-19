@@ -147,7 +147,10 @@ class LaporanController extends Controller
                 DB::raw('SUM(pengeluarans.nominal) as total_nominal')
             )
             ->where('company_id', '=', session('sessionCompany'))
-            ->whereBetween('pengeluarans.tanggal', [$start, $end])
+            ->whereBetween('tanggal', [
+                $start . ' 00:00:00',
+                $end . ' 23:59:59'
+            ])
             ->groupBy('pengeluarans.category_pengeluaran_id', 'category_pengeluarans.nama_kategori_pengeluaran')
             ->get();
         return view('laporans.index', [
