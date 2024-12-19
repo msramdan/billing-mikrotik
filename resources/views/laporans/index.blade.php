@@ -32,17 +32,15 @@
                             <div class="row">
                                 <form action="{{ route('laporans.index') }}" method="GET">
                                     <div class="row mb-2 align-items-center">
-                                        <div class="col-md-3 d-flex justify-content-between">
+                                        <div class="col-md-4 d-flex justify-content-between">
                                             <div class="input-group me-2">
                                                 <span class="input-group-text" id="addon-wrapping">
                                                     <i class="fa fa-calendar"></i>
                                                 </span>
-                                                <input type="text" class="form-control" aria-describedby="addon-wrapping"
-                                                    id="daterange-btn" value="">
-                                                <input type="hidden" name="start_date" id="start_date"
-                                                    value="{{ $microFrom ?? '' }}">
-                                                <input type="hidden" name="end_date" id="end_date"
-                                                    value="{{ $microTo ?? '' }}">
+                                                <input type="date" class="form-control" name="start_date" id="start_date"
+                                                       value="{{ $start ?? '' }}" aria-describedby="addon-wrapping">
+                                                <input type="date" class="form-control ms-2" name="end_date" id="end_date"
+                                                       value="{{ $end ?? '' }}" aria-describedby="addon-wrapping">
                                             </div>
                                             <button type="submit" class="btn btn-success">Filter</button>
                                         </div>
@@ -357,14 +355,10 @@
     </div>
 @endsection
 
-@push('css')
-    <link href="{{ asset('mazer/css/daterangepicker.min.css') }}" rel="stylesheet" />
-@endpush
 
 
 @push('js')
     @push('css')
-        <link href="{{ asset('mazer/css/daterangepicker.min.css') }}" rel="stylesheet" />
         <link href="https://cdn.jsdelivr.net/npm/apexcharts@3.35.3/dist/apexcharts.css" rel="stylesheet" />
     @endpush
 
@@ -373,40 +367,6 @@
         <script type="text/javascript" src="{{ asset('mazer/js/daterangepicker.min.js') }}"></script>
         <!-- Tambahkan ApexCharts JS -->
         <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.35.3/dist/apexcharts.min.js"></script>
-        <script>
-            var start = {{ $microFrom }};
-            var end = {{ $microTo }};
-            var label = '';
-
-            $('#daterange-btn').daterangepicker({
-                locale: {
-                    format: 'DD MMM YYYY'
-                },
-                startDate: moment(start),
-                endDate: moment(end),
-                ranges: {
-                    'Today': [moment(), moment()],
-                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                    'This Month': [moment().startOf('month'), moment().endOf('month')],
-                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf(
-                        'month')],
-                }
-            }, function(start, end, label) {
-                $('#start_date').val(Date.parse(start));
-                $('#end_date').val(Date.parse(end));
-                if (isDate(start)) {
-                    $('#daterange-btn span').html(start.format('DD MMM YYYY') + ' - ' + end.format('DD MMM YYYY'));
-                }
-            });
-
-            function isDate(val) {
-                var d = Date.parse(val);
-                return Date.parse(val);
-            }
-        </script>
-
 
         <!-- Your custom JavaScript code -->
         <script>

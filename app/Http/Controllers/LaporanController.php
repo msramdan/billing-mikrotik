@@ -19,19 +19,10 @@ class LaporanController extends Controller
 
     public function index(Request $request)
     {
-        if (isset($request->start_date)) {
-            $start_date = intval($request->query('start_date'));
-            $end_date = intval($request->query('end_date'));
-        } else {
-            $from = date('Y-m-01') . " 00:00:00";
-            $to = date('Y-m-d') . " 23:59:59";
-            $start_date = strtotime($from) * 1000;
-            $end_date = strtotime($to) * 1000;
-        }
+        // Cek apakah parameter start_date dan end_date ada dalam request
+        $start = $request->has('start_date') ? $request->query('start_date') : date('Y-m-01');
+        $end = $request->has('end_date') ? $request->query('end_date') : date('Y-m-d');
 
-        // Mengubah milidetik ke format Y-m-d
-        $start = date('Y-m-d', $start_date / 1000);
-        $end = date('Y-m-d', $end_date / 1000);
         // =============================================================
         $tagiahnBayar = DB::table('tagihans')
             ->whereBetween('tanggal_create_tagihan', [
@@ -41,6 +32,7 @@ class LaporanController extends Controller
             ->where('status_bayar', 'Sudah Bayar')
             ->where('company_id', '=', session('sessionCompany'))
             ->count();
+
         $nominalTagiahnBayar = DB::table('tagihans')
             ->whereBetween('tanggal_create_tagihan', [
                 $start . ' 00:00:00',
@@ -49,6 +41,7 @@ class LaporanController extends Controller
             ->where('status_bayar', 'Sudah Bayar')
             ->where('company_id', '=', session('sessionCompany'))
             ->sum('tagihans.total_bayar');
+
         $nominalTagiahnBayarCash = DB::table('tagihans')
             ->whereBetween('tanggal_create_tagihan', [
                 $start . ' 00:00:00',
@@ -58,6 +51,7 @@ class LaporanController extends Controller
             ->where('metode_bayar', 'Cash')
             ->where('company_id', '=', session('sessionCompany'))
             ->sum('tagihans.total_bayar');
+
         $nominalTagiahnBayarPayment = DB::table('tagihans')
             ->whereBetween('tanggal_create_tagihan', [
                 $start . ' 00:00:00',
@@ -67,6 +61,7 @@ class LaporanController extends Controller
             ->where('metode_bayar', 'Payment Tripay')
             ->where('company_id', '=', session('sessionCompany'))
             ->sum('tagihans.total_bayar');
+
         $nominalTagiahnBayarTrf = DB::table('tagihans')
             ->whereBetween('tanggal_create_tagihan', [
                 $start . ' 00:00:00',
@@ -76,7 +71,8 @@ class LaporanController extends Controller
             ->where('metode_bayar', 'Transfer Bank')
             ->where('company_id', '=', session('sessionCompany'))
             ->sum('tagihans.total_bayar');
-        $tagiahnBelumBayar =  DB::table('tagihans')
+
+        $tagiahnBelumBayar = DB::table('tagihans')
             ->whereBetween('tanggal_create_tagihan', [
                 $start . ' 00:00:00',
                 $end . ' 23:59:59'
@@ -84,6 +80,7 @@ class LaporanController extends Controller
             ->where('status_bayar', 'Belum Bayar')
             ->where('company_id', '=', session('sessionCompany'))
             ->count();
+
         $nominalTtagiahnBayar = DB::table('tagihans')
             ->whereBetween('tanggal_create_tagihan', [
                 $start . ' 00:00:00',
@@ -93,6 +90,7 @@ class LaporanController extends Controller
             ->where('company_id', '=', session('sessionCompany'))
             ->sum('tagihans.total_bayar');
         // =============================================================
+
         $nominalpemasukan = DB::table('pemasukans')
             ->where('company_id', '=', session('sessionCompany'))
             ->whereBetween('tanggal', [
@@ -124,6 +122,7 @@ class LaporanController extends Controller
             ])
             ->groupBy('pemasukans.category_pemasukan_id', 'category_pemasukans.nama_kategori_pemasukan')
             ->get();
+
         $pemasukansBySumber = DB::table('pemasukans')
             ->select(
                 'pemasukans.metode_bayar',
@@ -153,9 +152,8 @@ class LaporanController extends Controller
             ])
             ->groupBy('pengeluarans.category_pengeluaran_id', 'category_pengeluarans.nama_kategori_pengeluaran')
             ->get();
+
         return view('laporans.index', [
-            'microFrom' => $start_date,
-            'microTo' => $end_date,
             'start' => $start,
             'end' => $end,
             'nominalpemasukan' => $nominalpemasukan,
@@ -173,11 +171,11 @@ class LaporanController extends Controller
         ]);
     }
 
+
     public function getPelangganData(Request $request)
     {
-        // Mengambil start_date dan end_date dari request
-        $startDate = Carbon::createFromTimestampMs($request->input('start_date'))->format('Y-m-d');
-        $endDate = Carbon::createFromTimestampMs($request->input('end_date'))->format('Y-m-d');
+        $startDate = $request->has('start_date') ? $request->query('start_date') : date('Y-m-01');
+        $endDate = $request->has('end_date') ? $request->query('end_date') : date('Y-m-d');
         $viewOption = $request->input('view_option', 'daily'); // Default ke 'daily'
 
         // Mulai query dasar
