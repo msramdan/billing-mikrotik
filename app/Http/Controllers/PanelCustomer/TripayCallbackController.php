@@ -48,6 +48,7 @@ class TripayCallbackController extends Controller
                 ->where('tagihans.status_bayar', '=', 'Belum Bayar')
                 ->select(
                     'tagihans.*',
+                    'tagihans.*id as tagihan_id',
                     'tagihans.total_bayar as nominal',
                     'companies.private_key',
                     'companies.is_active',
