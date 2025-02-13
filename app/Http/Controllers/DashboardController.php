@@ -8,62 +8,64 @@ use \RouterOS\Query;
 use App\Models\Pemasukan;
 use App\Models\Settingmikrotik;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\Cache;
 
 class DashboardController extends Controller
 {
     public function index()
     {
+        $companyId = session('sessionCompany');
         $currentMonthStart = Carbon::now()->startOfMonth();
-        $newPelanggan = Pelanggan::where('company_id', '=', session('sessionCompany'))
-            ->where('tanggal_daftar', '>=', $currentMonthStart)->count();
-        $pelanggan = Pelanggan::where('company_id', '=', session('sessionCompany'))->get();
-        $countAreaCoverage = AreaCoverage::where('company_id', '=', session('sessionCompany'))->count();
-        $countPelanggan = Pelanggan::where('company_id', '=', session('sessionCompany'))->count();
-        $countRouter = Settingmikrotik::where('company_id', '=', session('sessionCompany'))->count();
-        $countPelangganAktif = Pelanggan::where('company_id', '=', session('sessionCompany'))
-            ->where('status_berlangganan', 'Aktif')->count();
-        $countPelangganNon = Pelanggan::where('company_id', '=', session('sessionCompany'))
-            ->where('status_berlangganan', 'Non Aktif')->count();
-        $client = setRoute();
-        $query = new Query('/ip/hotspot/active/print');
-        $hotspotactives = $client->query($query)->read();
+        $todayStart = Carbon::today()->startOfDay();
+        $todayEnd = Carbon::today()->endOfDay();
 
-        $queryactivePpps = new Query('/ppp/active/print');
-        $activePpps = $client->query($queryactivePpps)->read();
-
-        $querysecretPpps = new Query('/ppp/secret/print');
-        $nonactivePpps = $client->query($querysecretPpps)->read();
-        // static
-        $staticAktif = (new Query('/tool/netwatch/print'))
-            ->where('status', 'up');
-        $staticAktif = $client->query($staticAktif)->read();
-
-        $staticNonAktif = (new Query('/tool/netwatch/print'))
-            ->where('status', 'down');
-        $staticNonAktif = $client->query($staticNonAktif)->read();
-
-        $tanggalHariIniMulai = Carbon::today()->startOfDay();
-        $tanggalHariIniAkhir = Carbon::today()->endOfDay();
-
-        $pemasukans = Pemasukan::where('company_id', '=', session('sessionCompany'))
-            ->whereBetween('tanggal', [$tanggalHariIniMulai, $tanggalHariIniAkhir])
+        // Ambil data pelanggan sekali saja
+        $pelanggan = Pelanggan::select('id', 'status_berlangganan', 'tanggal_daftar')
+            ->where('company_id', $companyId)
             ->get();
 
-        return view('dashboard', [
-            'pelanggan' => $pelanggan,
-            'countAreaCoverage' => $countAreaCoverage,
-            'countPelanggan' => $countPelanggan,
-            'countRouter' => $countRouter,
-            'countPelangganAktif' => $countPelangganAktif,
-            'countPelangganNon' => $countPelangganNon,
-            'hotspotactives' => count($hotspotactives),
-            'activePpps' => count($activePpps),
-            'nonactivePpps' => count($nonactivePpps) - count($activePpps),
-            'staticAktif' => count($staticAktif),
-            'staticNonAktif' => count($staticNonAktif),
-            'pemasukans' => $pemasukans,
-            'newPelanggan' => $newPelanggan,
-        ]);
+        // Hitung pelanggan baru, aktif, dan non-aktif tanpa query tambahan
+        $newPelanggan = $pelanggan->where('tanggal_daftar', '>=', $currentMonthStart)->count();
+        $countPelanggan = $pelanggan->count();
+        $countPelangganAktif = $pelanggan->where('status_berlangganan', 'Aktif')->count();
+        $countPelangganNon = $countPelanggan - $countPelangganAktif;
+
+        // Gunakan caching untuk data statis
+        $countAreaCoverage = Cache::remember("count_area_coverage_{$companyId}", 600, function () use ($companyId) {
+            return AreaCoverage::where('company_id', $companyId)->count();
+        });
+
+        $countRouter = Cache::remember("count_router_{$companyId}", 600, function () use ($companyId) {
+            return Settingmikrotik::where('company_id', $companyId)->count();
+        });
+
+        // Ambil data pemasukan hari ini
+        $pemasukans = Pemasukan::where('company_id', $companyId)
+            ->whereBetween('tanggal', [$todayStart, $todayEnd])
+            ->get();
+
+        // Mikrotik Queries
+        $client = setRoute();
+        $hotspotactives = count($client->query(new Query('/ip/hotspot/active/print'))->read());
+        $activePpps = count($client->query(new Query('/ppp/active/print'))->read());
+        $nonactivePpps = count($client->query(new Query('/ppp/secret/print'))->read()) - $activePpps;
+        $staticAktif = count($client->query((new Query('/tool/netwatch/print'))->where('status', 'up'))->read());
+        $staticNonAktif = count($client->query((new Query('/tool/netwatch/print'))->where('status', 'down'))->read());
+
+        return view('dashboard', compact(
+            'pelanggan',
+            'countAreaCoverage',
+            'countPelanggan',
+            'countRouter',
+            'countPelangganAktif',
+            'countPelangganNon',
+            'hotspotactives',
+            'activePpps',
+            'nonactivePpps',
+            'staticAktif',
+            'staticNonAktif',
+            'pemasukans',
+            'newPelanggan'
+        ));
     }
 }
